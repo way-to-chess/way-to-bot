@@ -1,0 +1,9 @@
+# server
+/server/node_modules
+/server/.env
+
+# webapp
+/webapp/node_modules
+
+#shared
+/shared/node_modules
