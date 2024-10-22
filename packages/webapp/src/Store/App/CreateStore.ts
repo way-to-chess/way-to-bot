@@ -1,16 +1,16 @@
 import { Action, configureStore } from "@reduxjs/toolkit";
-import { userSlice } from "../User/UserSlice.ts";
-import { appEpic } from "./Epics/AppEpic.ts";
+import { userSlice } from "../User/UserSlice";
+import { appEpic } from "./Epics/AppEpic";
 import { createEpicMiddleware } from "redux-observable";
-import { httpApi } from "../../HttpApi/HttpApi.ts";
+import { httpApi } from "../../HttpApi/HttpApi";
 import {
   createRouterMiddleware,
   createRouterReducerMapObject,
 } from "@lagunovsky/redux-react-router";
 import { createBrowserHistory } from "history";
-import { locationsSlice } from "../Locations/LocationsSlice.ts";
-import { requestManagerSlice } from "../RequestManager/RequestManagerSlice.ts";
-import { eventsSlice } from "../Events/EventsSlice.ts";
+import { locationsSlice } from "../Locations/LocationsSlice";
+import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
+import { eventsSlice } from "../Events/EventsSlice";
 
 const history = createBrowserHistory();
 const routerMiddleware = createRouterMiddleware(history);

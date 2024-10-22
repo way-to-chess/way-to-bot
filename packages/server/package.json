@@ -5,7 +5,7 @@
   "main": "src/app.ts",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "lint": "eslint src --fix"
   },
   "keywords": [],
   "author": "",
@@ -20,8 +20,7 @@
     "pg": "^8.13.0",
     "swagger-ui-express": "^5.0.1",
     "tsoa": "^6.5.1",
-    "typeorm": "^0.3.20",
-    "typescript": "^5.6.3"
+    "typeorm": "^0.3.20"
   },
   "devDependencies": {
     "@types/express": "^5.0.0",

@@ -1,4 +1,4 @@
-import { createRequestSymbol } from "../RequestManager/CreateRequestSymbol.ts";
+import { createRequestSymbol } from "../RequestManager/CreateRequestSymbol";
 
 const EVENTS_GET_ALL_REQUEST_SYMBOL = createRequestSymbol("EVENTS_GET_ALL");
 const EVENTS_GET_BY_ID_REQUEST_SYMBOL = createRequestSymbol("EVENTS_GET_BY_ID");

@@ -1,13 +1,13 @@
-import { withProps } from "../../../Utils/WithProps.ts";
-import { RequestStatusToComponent } from "../../../Components/RequestStatusToComponent.tsx";
-import { CREATE_EVENT_GAME_REQUEST_SYMBOL } from "../../../Store/Events/EventsVariables.ts";
+import { withProps } from "../../../Utils/WithProps";
+import { RequestStatusToComponent } from "../../../Components/RequestStatusToComponent";
+import { CREATE_EVENT_GAME_REQUEST_SYMBOL } from "../../../Store/Events/EventsVariables";
 import {
   type ISingleEventGameFormFinishValues,
   type ISingleEventGameFormInitialValues,
   SingleEventGameForm,
-} from "./SingleEventGameForm.tsx";
+} from "./SingleEventGameForm";
 import { useDispatch } from "react-redux";
-import { eventsSlice } from "../../../Store/Events/EventsSlice.ts";
+import { eventsSlice } from "../../../Store/Events/EventsSlice";
 
 const initialValues: ISingleEventGameFormInitialValues = {
   name: "",

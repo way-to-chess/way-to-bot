@@ -1,4 +1,4 @@
-import { createRequestSymbol } from "../RequestManager/CreateRequestSymbol.ts";
+import { createRequestSymbol } from "../RequestManager/CreateRequestSymbol";
 
 const LOCATIONS_GET_ALL_REQUEST_SYMBOL = createRequestSymbol("LOCATIONS");
 

@@ -1,12 +1,13 @@
-import { AppDispatch } from "../../Store/App/CreateStore.ts";
-import { TeamParticipant } from "../../../../src/database/entities/TeamParticipant.ts";
-import { eventsSlice } from "../../Store/Events/EventsSlice.ts";
+import { AppDispatch } from "../../Store/App/CreateStore";
+import { eventsSlice } from "../../Store/Events/EventsSlice";
 import { Avatar, List } from "antd";
 import { DeleteOutlined } from "@ant-design/icons";
 import { FC } from "react";
 import { ListItemProps } from "antd/es/list";
-import { getNotNil } from "../../Utils/GetNotNil.ts";
-import { TUser } from "../../Models/TUser.ts";
+import { getNotNil } from "../../Utils/GetNotNil";
+import { TUser } from "../../Models/TUser";
+
+type TeamParticipant = any;
 
 const UserItem: FC<TUser & { actions?: ListItemProps["actions"] }> = ({
   id,

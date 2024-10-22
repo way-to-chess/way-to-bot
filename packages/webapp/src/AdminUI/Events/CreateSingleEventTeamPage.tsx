@@ -1,13 +1,13 @@
-import { eventsSlice } from "../../Store/Events/EventsSlice.ts";
-import { useAppDispatch } from "../../Hooks/UseAppDispatch.ts";
+import { eventsSlice } from "../../Store/Events/EventsSlice";
+import { useAppDispatch } from "../../Hooks/UseAppDispatch";
 import {
   ISingleEventTeamFromFinishValues,
   ISingleEventTeamFromInitialValues,
   SingleEventTeamPageFactory,
-} from "./SingleEventTeamPageFactory.tsx";
-import { RequestStatusToComponent } from "../../Components/RequestStatusToComponent.tsx";
-import { withProps } from "../../Utils/WithProps.ts";
-import { CREATE_EVENT_TEAM_REQUEST_SYMBOL } from "../../Store/Events/EventsVariables.ts";
+} from "./SingleEventTeamPageFactory";
+import { RequestStatusToComponent } from "../../Components/RequestStatusToComponent";
+import { withProps } from "../../Utils/WithProps";
+import { CREATE_EVENT_TEAM_REQUEST_SYMBOL } from "../../Store/Events/EventsVariables";
 
 const initialValues: ISingleEventTeamFromInitialValues = {
   name: "",

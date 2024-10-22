@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux";
-import { AppState } from "../Store/App/CreateStore.ts";
+import { AppState } from "../Store/App/CreateStore";
 
 const useAppSelector = useSelector.withTypes<AppState>();
 

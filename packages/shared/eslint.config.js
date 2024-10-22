@@ -20,6 +20,7 @@ export default [
     },
     rules: {
       "react/react-in-jsx-scope": "off",
+      "react/display-name": "off",
       "prettier/prettier": [
         "error",
         {
@@ -37,7 +38,7 @@ export default [
       "@typescript-eslint/no-unused-vars": [
         "warn",
         {
-          argsIgnorePattern: "next|res|req|err",
+          argsIgnorePattern: "next|res|req|err|_",
         },
       ],
       "@typescript-eslint/ban-ts-comment": "warn",

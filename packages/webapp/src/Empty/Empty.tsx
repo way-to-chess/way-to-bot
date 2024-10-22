@@ -1,6 +1,6 @@
 import { FC } from "react";
 import classes from "./Empty.module.css";
-import { withProps } from "../Utils/WithProps.ts";
+import { withProps } from "../Utils/WithProps";
 
 interface IEmptyProps {
   title: string;

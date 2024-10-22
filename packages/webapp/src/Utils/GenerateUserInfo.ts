@@ -1,4 +1,4 @@
-import { getRandomInt } from "./GetRandomInt.ts";
+import { getRandomInt } from "./GetRandomInt";
 
 function capFirst(s: string) {
   return s.charAt(0).toUpperCase() + s.slice(1);

@@ -1,5 +1,5 @@
-import { TEvent } from "../Models/TEvent.ts";
-import { Location } from "../../../src/database/entities/Location.ts";
+import { TEvent } from "../Models/TEvent";
+import { Location } from "../../../src/database/entities/Location";
 
 interface IGetAllEventsResponse {
   events: TEvent[];

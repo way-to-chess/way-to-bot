@@ -1,7 +1,7 @@
-import { TAppEpic } from "../App/Epics/TAppEpic.ts";
-import { httpRequestEpicFactory } from "../Utils/HttpRequestEpicFactory.ts";
-import { EVENTS_GET_BY_ID_REQUEST_SYMBOL } from "./EventsVariables.ts";
-import { eventsSlice } from "./EventsSlice.ts";
+import { TAppEpic } from "../App/Epics/TAppEpic";
+import { httpRequestEpicFactory } from "../Utils/HttpRequestEpicFactory";
+import { EVENTS_GET_BY_ID_REQUEST_SYMBOL } from "./EventsVariables";
+import { eventsSlice } from "./EventsSlice";
 
 const loadEventByIdEpic =
   (eventId: string): TAppEpic =>

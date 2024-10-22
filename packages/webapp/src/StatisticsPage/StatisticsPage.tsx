@@ -1,4 +1,4 @@
-import { Leaderboard } from "../Leaderboard/Leaderboard.tsx";
+import { Leaderboard } from "../Leaderboard/Leaderboard";
 
 const StatisticsPage = () => {
   return <Leaderboard />;

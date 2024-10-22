@@ -1,6 +1,6 @@
-import baseConfig from "@way-to-bot/shared/eslint.config.js";
+import baseConfig from "@way-to-bot/shared/src/eslint.config.js";
 
 export default [
-  ...baseConfig,
-  //overrides
+    ...baseConfig,
+    //overrides
 ];

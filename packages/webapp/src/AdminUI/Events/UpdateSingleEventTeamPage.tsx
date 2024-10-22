@@ -1,15 +1,15 @@
 import { useParams } from "react-router-dom";
-import { eventsSlice } from "../../Store/Events/EventsSlice.ts";
-import { withProps } from "../../Utils/WithProps.ts";
-import { RequestStatusToComponent } from "../../Components/RequestStatusToComponent.tsx";
-import { UPDATE_EVENT_TEAM_REQUEST_SYMBOL } from "../../Store/Events/EventsVariables.ts";
+import { eventsSlice } from "../../Store/Events/EventsSlice";
+import { withProps } from "../../Utils/WithProps";
+import { RequestStatusToComponent } from "../../Components/RequestStatusToComponent";
+import { UPDATE_EVENT_TEAM_REQUEST_SYMBOL } from "../../Store/Events/EventsVariables";
 import {
   ISingleEventTeamFromFinishValues,
   ISingleEventTeamFromInitialValues,
   SingleEventTeamPageFactory,
-} from "./SingleEventTeamPageFactory.tsx";
+} from "./SingleEventTeamPageFactory";
 import { useDispatch } from "react-redux";
-import { useAppSelector } from "../../Hooks/UseAppSelector.ts";
+import { useAppSelector } from "../../Hooks/UseAppSelector";
 
 const UpdateSingleEventTeamPageIdle = () => {
   const { teamId } = useParams();

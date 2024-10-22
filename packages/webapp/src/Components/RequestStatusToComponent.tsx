@@ -5,15 +5,15 @@ import {
   Fragment,
   PropsWithChildren,
 } from "react";
-import { useAppSelector } from "../Hooks/UseAppSelector.ts";
-import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice.ts";
+import { useAppSelector } from "../Hooks/UseAppSelector";
+import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { Flex, Result, Skeleton } from "antd";
-import { BackButton } from "./BackButton.tsx";
-import { withProps } from "../Utils/WithProps.ts";
+import { BackButton } from "./BackButton";
+import { withProps } from "../Utils/WithProps";
 import {
   ERequestStatus,
   IWithRequestSymbol,
-} from "../Store/RequestManager/RequestManagerModels.ts";
+} from "../Store/RequestManager/RequestManagerModels";
 
 interface IWithBackButtonPath {
   backButtonPath?: string;

@@ -1,7 +1,7 @@
-import { createPropertySelectors } from "../Utils/CreatePropertySelectors.ts";
-import { AppState } from "../App/CreateStore.ts";
-import { getNotNil } from "../../Utils/GetNotNil.ts";
-import { TLocationUpdatePayload } from "../../../../src/types/location.types.ts";
+import { createPropertySelectors } from "../Utils/CreatePropertySelectors";
+import { AppState } from "../App/CreateStore";
+import { getNotNil } from "../../Utils/GetNotNil";
+import { TLocationUpdatePayload } from "../../../../src/types/location.types";
 
 const locationsSelectors = createPropertySelectors(
   (state: AppState) => state.locations,

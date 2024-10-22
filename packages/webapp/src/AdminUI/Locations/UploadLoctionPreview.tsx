@@ -1,6 +1,6 @@
-import { BASE_API_URL } from "../../HttpApi/RequestUtils.ts";
+import { BASE_API_URL } from "../../HttpApi/RequestUtils";
 import { Button, FormInstance, message, Upload, UploadProps } from "antd";
-import { getNotNil } from "../../Utils/GetNotNil.ts";
+import { getNotNil } from "../../Utils/GetNotNil";
 import { UploadOutlined } from "@ant-design/icons";
 import { FC } from "react";
 

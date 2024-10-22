@@ -1,8 +1,8 @@
 import "dayjs/locale/ru.js";
-import { EventFormFactory } from "./EventFormFactory.tsx";
-import { eventsSlice } from "../../Store/Events/EventsSlice.ts";
+import { EventFormFactory } from "./EventFormFactory";
+import { eventsSlice } from "../../Store/Events/EventsSlice";
 import { useDispatch } from "react-redux";
-import { IEventFormFinishValues } from "./EventsCommon.ts";
+import { IEventFormFinishValues } from "./EventsCommon";
 
 const initialValues = {
   price: "5 BYN",

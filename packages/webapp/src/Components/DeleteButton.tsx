@@ -1,6 +1,6 @@
 import { DeleteOutlined } from "@ant-design/icons";
-import { useActionCreator } from "../Hooks/UseActionCreator.ts";
-import { useConfirmAction } from "../Hooks/UseConfirmAction.ts";
+import { useActionCreator } from "../Hooks/UseActionCreator";
+import { useConfirmAction } from "../Hooks/UseConfirmAction";
 import { ActionCreatorWithPayload } from "@reduxjs/toolkit";
 import { FC } from "react";
 

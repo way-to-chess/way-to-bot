@@ -1,4 +1,4 @@
-import { type TUserController } from "../../../src/routers/user.router.ts";
+import { type TUserController } from "../../../src/routers/user.router";
 
 type TUser = Omit<
   Awaited<ReturnType<TUserController["getAllUsers"]>>[number],

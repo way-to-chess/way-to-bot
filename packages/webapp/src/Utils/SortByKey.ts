@@ -1,4 +1,4 @@
-import { ESortDirection } from "../Models/ESortDirection.ts";
+import { ESortDirection } from "../Models/ESortDirection";
 
 const sortByKey = <T>(
   array: T[],

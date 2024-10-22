@@ -1,12 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { Location } from "../../../../src/database/entities/Location.ts";
-import {
-  TLocationCreatePayload,
-  TLocationDeletePayload,
-  TLocationUpdatePayload,
-} from "../../../../src/types/location.types.ts";
-import { IGetAllLocationsResponse } from "../../HttpApi/HttpApiTypes.ts";
-import { ERequestStatus } from "../RequestManager/RequestManagerModels.ts";
+
+import { IGetAllLocationsResponse } from "../../HttpApi/HttpApiTypes";
+import { ERequestStatus } from "../RequestManager/RequestManagerModels";
+
+type Location = any;
 
 interface ILocationsState {
   updateStatus: ERequestStatus;
@@ -27,7 +24,7 @@ const locationsSlice = createSlice({
     received: (state, { payload }: PayloadAction<IGetAllLocationsResponse>) => {
       state.data = payload.locations;
     },
-    update: (state, _: PayloadAction<TLocationUpdatePayload>) => {
+    update: (state) => {
       state.updateStatus = ERequestStatus.loading;
     },
     updateSuccess: (state) => {
@@ -39,7 +36,7 @@ const locationsSlice = createSlice({
     updateClear: (state) => {
       state.updateStatus = ERequestStatus.idle;
     },
-    create: (state, _: PayloadAction<TLocationCreatePayload>) => {
+    create: (state) => {
       state.createStatus = ERequestStatus.loading;
     },
     createSuccess: (state) => {
@@ -51,7 +48,7 @@ const locationsSlice = createSlice({
     createClear: (state) => {
       state.createStatus = ERequestStatus.idle;
     },
-    delete: (__, _: PayloadAction<TLocationDeletePayload>) => {},
+    delete: () => {},
   },
 });
 

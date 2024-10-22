@@ -1,8 +1,8 @@
 import { ColumnsType } from "antd/es/table";
-import { Participant } from "../../../../src/database/entities/Participant.ts";
+import { Participant } from "../../../../src/database/entities/Participant";
 import { Avatar, Typography } from "antd";
-import { getUserFullName } from "../../Utils/GetUserFullName.ts";
-import { Team } from "../../../../src/database/entities/Team.ts";
+import { getUserFullName } from "../../Utils/GetUserFullName";
+import { Team } from "../../../../src/database/entities/Team";
 import { UserOutlined } from "@ant-design/icons";
 
 const PARTICIPANT_TABLE_COLUMNS: ColumnsType<Participant> = [

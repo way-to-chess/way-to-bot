@@ -1,7 +1,7 @@
 import { distinctUntilChanged, EMPTY, map, switchMap } from "rxjs";
-import { routerLocationPathnameSelector } from "../Router/RouterSelectors.ts";
+import { routerLocationPathnameSelector } from "../Router/RouterSelectors";
 import { matchPath, PathMatch } from "react-router-dom";
-import { TAppEpic } from "../App/Epics/TAppEpic.ts";
+import { TAppEpic } from "../App/Epics/TAppEpic";
 
 type TRouterEpicCallback = (match: PathMatch) => TAppEpic;
 

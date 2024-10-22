@@ -1,4 +1,4 @@
-import { getClientLocale } from "./GetClientLocale.ts";
+import { getClientLocale } from "./GetClientLocale";
 
 const dateOptions: Intl.DateTimeFormatOptions = {
   weekday: "long",

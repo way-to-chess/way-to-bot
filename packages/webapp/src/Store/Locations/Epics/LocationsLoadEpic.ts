@@ -1,7 +1,7 @@
-import { TAppEpic } from "../../App/Epics/TAppEpic.ts";
-import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory.ts";
-import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../LocationsVariables.ts";
-import { locationsSlice } from "../LocationsSlice.ts";
+import { TAppEpic } from "../../App/Epics/TAppEpic";
+import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory";
+import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../LocationsVariables";
+import { locationsSlice } from "../LocationsSlice";
 
 const locationsLoadEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({

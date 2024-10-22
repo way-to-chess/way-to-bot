@@ -1,46 +1,46 @@
-import { TUser } from "../Models/TUser.ts";
-import { IWithError } from "../Models/IError.ts";
+import { TUser } from "../Models/TUser";
+import { IWithError } from "../Models/IError";
 import {
   TUserInitResponse,
   TUserInitResponseData,
   TUserUpdatePayload,
-} from "../../../src/types/user.types.ts";
-import { Location } from "../../../src/database/entities/Location.ts";
+} from "../../../src/types/user.types";
+import { Location } from "../../../src/database/entities/Location";
 import {
   TLocationCreatePayload,
   TLocationDeletePayload,
   TLocationUpdatePayload,
-} from "../../../src/types/location.types.ts";
+} from "../../../src/types/location.types";
 import {
   BASE_API_URL,
   requestWithPayload,
   simpleGetRequest,
-} from "./RequestUtils.ts";
+} from "./RequestUtils";
 import type {
   IGetAllEventsResponse,
   IUpdateEventResponse,
-} from "./HttpApiTypes.ts";
-import { IWithEvent } from "../Models/TEvent.ts";
+} from "./HttpApiTypes";
+import { IWithEvent } from "../Models/TEvent";
 import {
   TEventCreatePayload,
   TEventDeletePayload,
   TEventUpdatePayload,
-} from "../../../src/types/event.types.ts";
-import { TTeamParticipantDeletePayload } from "../../../src/types/team-participant.types.ts";
+} from "../../../src/types/event.types";
+import { TTeamParticipantDeletePayload } from "../../../src/types/team-participant.types";
 import {
   TTeamCreatePayload,
   TTeamDeletePayload,
   TTeamUpdatePayload,
-} from "../../../src/types/team.types.ts";
+} from "../../../src/types/team.types";
 import {
   TGameCreatePayload,
   TGameDeletePayload,
   TGameUpdatePayload,
-} from "../../../src/types/game.types.ts";
+} from "../../../src/types/game.types";
 import {
   TGameStatAddPayload,
   TGameStatDeletePayload,
-} from "../../../src/types/game-stat.types.ts";
+} from "../../../src/types/game-stat.types";
 
 const httpApi = {
   getAllEvents: simpleGetRequest<IGetAllEventsResponse>("event/all"),

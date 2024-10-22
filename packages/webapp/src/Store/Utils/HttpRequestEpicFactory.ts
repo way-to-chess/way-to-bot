@@ -1,6 +1,6 @@
 import { concat, EMPTY, from, merge, Observable, of, switchMap } from "rxjs";
-import { requestManagerSlice } from "../RequestManager/RequestManagerSlice.ts";
-import { IWithError } from "../../Models/IError.ts";
+import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
+import { IWithError } from "../../Models/IError";
 import { PayloadActionCreator } from "@reduxjs/toolkit";
 
 interface IHttpRequestEpicFactoryProps<T> {

@@ -1,13 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { type TUser } from "../../Models/TUser.ts";
-import {
-  TUserInitResponse,
-  TUserInitResponseData,
-  TUserUpdatePayload,
-} from "../../../../src/types/user.types.ts";
-import { IWithError } from "../../Models/IError.ts";
+import { type TUser } from "../../Models/TUser";
+import { IWithError } from "../../Models/IError";
 
-import { ERequestStatus } from "../RequestManager/RequestManagerModels.ts";
+import { ERequestStatus } from "../RequestManager/RequestManagerModels";
+
+type TUserInitResponse = any;
+type TUserInitResponseData = any;
 
 interface IUserState {
   status: ERequestStatus;
@@ -70,7 +68,7 @@ const userSlice = createSlice({
       state.profilePage = payload.user;
       state.profilePageStatus = ERequestStatus.success;
     },
-    update: (state, _: PayloadAction<TUserUpdatePayload>) => {
+    update: (state) => {
       state.updateStatus = ERequestStatus.loading;
     },
     updateResult: (state, { payload }: PayloadAction<IWithError>) => {

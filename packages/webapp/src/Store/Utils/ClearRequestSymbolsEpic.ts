@@ -1,5 +1,5 @@
 import { of } from "rxjs";
-import { requestManagerSlice } from "../RequestManager/RequestManagerSlice.ts";
+import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
 
 const clearRequestSymbolsEpic =
   (...symbols: symbol[]) =>

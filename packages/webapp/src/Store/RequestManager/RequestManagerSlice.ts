@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IWithError } from "../../Models/IError.ts";
-import { ERequestStatus } from "./RequestManagerModels.ts";
+import { IWithError } from "../../Models/IError";
+import { ERequestStatus } from "./RequestManagerModels";
 
 interface IRequestManagerSlice {
   [key: symbol]: {

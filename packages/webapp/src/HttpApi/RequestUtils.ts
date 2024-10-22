@@ -1,4 +1,4 @@
-import { IWithError } from "../Models/IError.ts";
+import { IWithError } from "../Models/IError";
 
 const BASE_API_URL = import.meta.env.VITE_API_URL;
 
