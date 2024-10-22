@@ -1,30 +1,8 @@
 {
+  "extends": "../../../typescript/tsconfig.core.json",
   "compilerOptions": {
-    "target": "es2020",
-    "lib": [
-      "es2020"
-    ],
-    "experimentalDecorators": true,
-    "emitDecoratorMetadata": true,
-    "module": "esnext",
-    "rootDir": "src",
-    "typeRoots": [
-      "./src/global.d.ts",
-      "./node_modules/@types"
-    ],
-     "types": ["node"],
-    "resolveJsonModule": true,
-    "allowJs": true,
-    "outDir": "build",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "noImplicitAny": true,
-  },
-  "include": [
-    "./src/**/*.ts"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+    "types": [
+      "node"
+    ]
+  }
 }

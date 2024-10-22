@@ -1,33 +1,33 @@
-import ReactDOM from "react-dom/client";
+import { createRoot } from "react-dom/client";
 import { Route, Routes } from "react-router-dom";
-import { EventsPage } from "./EventsPage/EventsPage.tsx";
-import { SingleEventPage } from "./SingleEventPage/SingleEventPage.tsx";
-import { Layout } from "./Layout/Layout.tsx";
+import { EventsPage } from "./EventsPage/EventsPage";
+import { SingleEventPage } from "./SingleEventPage/SingleEventPage";
+import { Layout } from "./Layout/Layout";
 import "./main.css";
-import { StatisticsPage } from "./StatisticsPage/StatisticsPage.tsx";
-import { ProfilePage } from "./ProfilePage/ProfilePage.tsx";
-import { isDev } from "./Utils/OneLineUtils.ts";
+import { StatisticsPage } from "./StatisticsPage/StatisticsPage";
+import { ProfilePage } from "./ProfilePage/ProfilePage";
+import { isDev } from "./Utils/OneLineUtils";
 import { Provider } from "react-redux";
-import { WelcomePage } from "./WelcomePage/WelcomePage.tsx";
-import { history, store } from "./Store/App/CreateStore.ts";
+import { WelcomePage } from "./WelcomePage/WelcomePage";
+import { history, store } from "./Store/App/CreateStore";
 import { ReduxRouter } from "@lagunovsky/redux-react-router";
-import { LocationsPage } from "./AdminUI/Locations/LocationsPage/LocationsPage.tsx";
-import { UpdateLocationPage } from "./AdminUI/Locations/UpdateLocationPage/UpdateLocationPage.tsx";
-import { CreateLocationPage } from "./AdminUI/Locations/CreateLocationPage/CreateLocationPage.tsx";
-import { UpdateProfilePage } from "./UpdateProfilePage/UpdateProfilePage.tsx";
-import { ManageEventsPage } from "./AdminUI/Events/ManageEventsPage.tsx";
-import { CreateEventForm } from "./AdminUI/Events/CreateEventForm.tsx";
-import { UpdateEventForm } from "./AdminUI/Events/UpdateEventForm.tsx";
-import { ManageSingleEventPage } from "./AdminUI/Events/ManageSingleEventPage.tsx";
-import { UpdateSingleEventTeamPage } from "./AdminUI/Events/UpdateSingleEventTeamPage.tsx";
-import { CreateSingleEventTeamPage } from "./AdminUI/Events/CreateSingleEventTeamPage.tsx";
-import { CreateSingleEventGamePage } from "./AdminUI/Events/SingleEventGame/CreateSingleEventGamePage.tsx";
-import { UpdateSingleEventGamePage } from "./AdminUI/Events/SingleEventGame/UpdateSingleEventGamePage.tsx";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes.ts"
+import { LocationsPage } from "./AdminUI/Locations/LocationsPage/LocationsPage";
+import { UpdateLocationPage } from "./AdminUI/Locations/UpdateLocationPage/UpdateLocationPage";
+import { CreateLocationPage } from "./AdminUI/Locations/CreateLocationPage/CreateLocationPage";
+import { UpdateProfilePage } from "./UpdateProfilePage/UpdateProfilePage";
+import { ManageEventsPage } from "./AdminUI/Events/ManageEventsPage";
+import { CreateEventForm } from "./AdminUI/Events/CreateEventForm";
+import { UpdateEventForm } from "./AdminUI/Events/UpdateEventForm";
+import { ManageSingleEventPage } from "./AdminUI/Events/ManageSingleEventPage";
+import { UpdateSingleEventTeamPage } from "./AdminUI/Events/UpdateSingleEventTeamPage";
+import { CreateSingleEventTeamPage } from "./AdminUI/Events/CreateSingleEventTeamPage";
+import { CreateSingleEventGamePage } from "./AdminUI/Events/SingleEventGame/CreateSingleEventGamePage";
+import { UpdateSingleEventGamePage } from "./AdminUI/Events/SingleEventGame/UpdateSingleEventGamePage";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 
 document.body.setAttribute("data-dev", String(isDev));
 
-ReactDOM.createRoot(document.getElementById("root")!).render(
+createRoot(document.getElementById("root")!).render(
   <Provider store={store}>
     <ReduxRouter history={history}>
       <Routes>
@@ -83,7 +83,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
           element={<CreateSingleEventGamePage />}
         />
 
-        <Route path={WEBAPP_ROUTES.locationsRoute} element={<LocationsPage />} />
+        <Route
+          path={WEBAPP_ROUTES.locationsRoute}
+          element={<LocationsPage />}
+        />
 
         <Route
           path={WEBAPP_ROUTES.updateLocationRoute}
