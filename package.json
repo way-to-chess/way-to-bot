@@ -5,13 +5,14 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "webapp:dev": "npm run dev --workspace=@way-to-bot/webapp"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "workspaces": [
     "packages/webapp",
-    "packages/server"
+    "packages/server",
+    "packages/shared"
   ]
 }

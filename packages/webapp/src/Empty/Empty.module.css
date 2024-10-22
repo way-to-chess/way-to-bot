@@ -1,0 +1,25 @@
+.empty {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 100%;
+    overflow: hidden;
+    padding: 16px;
+}
+
+.title {
+    text-transform: capitalize;
+    font-size: 20px;
+    font-weight: 500;
+    line-height: 30px;
+    color: #1b1b1b;
+    text-align: center;
+}
+
+.subtitle {
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 20px;
+    opacity: .7;
+    text-align: center;
+}
