@@ -19,6 +19,8 @@ const updateSingleEventTeamRoute = `${manageSingleEventRoute}/team/update/:teamI
 const createSingleEventGameRoute = `${manageSingleEventRoute}/game/create`;
 const updateSingleEventGameRoute = `${manageSingleEventRoute}/game/update/:gameId`;
 
+const manageUsersRoute = "/manage-users";
+
 const WEBAPP_ROUTES = {
   emptyRoute,
   eventsRoute,
@@ -39,6 +41,8 @@ const WEBAPP_ROUTES = {
   createSingleEventTeamRoute,
   createSingleEventGameRoute,
   updateSingleEventGameRoute,
+
+  manageUsersRoute,
 };
 
 export { WEBAPP_ROUTES };
