@@ -3,7 +3,11 @@
     "./index.d.ts"
   ],
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "..",
+    "paths": {
+      "@enums": ["packages/shared/src/enums"],
+      "@constants/*": ["packages/shared/src/constants/*"],
+    },
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "node",

@@ -1,4 +1,4 @@
-import { EEventStatus } from "@way-to-bot/shared/src/enums/eventStatus";
+import { EEventStatus } from "@enums";
 
 interface IFile {
   id: number;

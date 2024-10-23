@@ -22,7 +22,7 @@
     "vite": "^5.0.0"
   },
   "dependencies": {
-    "@way-to-bot/shared/src": "*",
+    "@way-to-bot/shared": "*",
     "@ant-design/icons": "^5.2.6",
     "@lagunovsky/redux-react-router": "^4.3.2",
     "@reduxjs/toolkit": "^2.2.1",
