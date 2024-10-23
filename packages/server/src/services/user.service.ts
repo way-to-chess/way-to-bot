@@ -7,11 +7,35 @@ import { User } from "../database/entities/user.entity";
 import { File } from "../database/entities/file.entity";
 
 export class UserService {
+  private userRepository = dbInstance.getRepository(User);
+
+  getUserById = async (userId: number) => {
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: {
+        photo: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error(`User with id ${userId} not found`);
+    }
+
+    return user;
+  };
+
+  getAllUsers = async () => {
+    return this.userRepository.find({
+      relations: {
+        photo: true,
+      },
+    });
+  };
+
   createUser = async (user: IUserCreatePayload) => {
-    const userRepository = dbInstance.getRepository(User);
     const fileRepository = dbInstance.getRepository(File);
 
-    const newUser = userRepository.create(user);
+    const newUser = this.userRepository.create(user);
     if (user.photoId) {
       const photo = await fileRepository.findOneBy({ id: user.photoId });
       if (!photo) {
@@ -21,14 +45,13 @@ export class UserService {
     } else if (user.photoId === null) {
       newUser.photo = null;
     }
-    return userRepository.save(newUser);
+    return this.userRepository.save(newUser);
   };
 
   updateUser = async (user: IUserUpdatePayload) => {
-    const userRepository = dbInstance.getRepository(User);
     const fileRepository = dbInstance.getRepository(File);
 
-    const existingUser = await userRepository.findOneBy({ id: user.id });
+    const existingUser = await this.userRepository.findOneBy({ id: user.id });
 
     if (!existingUser) {
       throw new Error("User not found");
@@ -44,20 +67,19 @@ export class UserService {
       existingUser.photo = null;
     }
 
-    const updatedUser = userRepository.merge(existingUser, user);
+    const updatedUser = this.userRepository.merge(existingUser, user);
 
-    return userRepository.save(updatedUser);
+    return this.userRepository.save(updatedUser);
   };
 
   deleteUser = async (id: number) => {
-    const userRepository = dbInstance.getRepository(User);
-    const existingUser = await userRepository.findOneBy({ id });
+    const existingUser = await this.userRepository.findOneBy({ id });
 
     if (!existingUser) {
       throw new Error("User not found");
     }
 
-    const userDeleted = await userRepository.delete(id);
+    const userDeleted = await this.userRepository.delete(id);
 
     return userDeleted.affected === 1;
   };
