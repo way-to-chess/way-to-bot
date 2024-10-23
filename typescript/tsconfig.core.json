@@ -7,6 +7,8 @@
     "paths": {
       "@enums": ["packages/shared/src/enums"],
       "@constants/*": ["packages/shared/src/constants/*"],
+      "@interfaces/*": ["packages/shared/src/interfaces/*"],
+      "@entities/*": ["packages/server/src/database/entities/*"],
     },
     "target": "ES2022",
     "module": "ES2022",

@@ -23,11 +23,11 @@ export class User {
   @Column()
   username!: string;
 
-  @Column({ nullable: true, type: "varchar" })
-  public firstName?: string | null;
+  @Column({ type: "varchar" })
+  firstName!: string;
 
-  @Column({ nullable: true, type: "varchar" })
-  public lastName?: string | null;
+  @Column({ type: "varchar" })
+  lastName!: string;
 
   @Column("enum", {
     nullable: false,

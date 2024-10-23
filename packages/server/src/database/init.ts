@@ -1,6 +1,6 @@
-import { DataSourceOptions } from "typeorm";
+import { DataSource, DataSourceOptions } from "typeorm";
 
-export const dbInstance: DataSourceOptions = {
+const dbOptions: DataSourceOptions = {
   type: process.env.DB_TYPE,
   host: process.env.DB_HOST,
   port: process.env.DB_PORT,
@@ -11,3 +11,5 @@ export const dbInstance: DataSourceOptions = {
   entities: [process.env.DB_ENTITIES_PATH],
   migrations: [process.env.DB_MIGRATIONS_PATH],
 };
+
+export const dbInstance = new DataSource(dbOptions);
