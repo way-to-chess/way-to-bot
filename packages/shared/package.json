@@ -3,6 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
+  "private": true,
+  "sideEffects": false,
+  "exports": {
+    "./*": "./src/*",
+    "./eslint.config.js": "./eslint.config.js"
+  },
   "main": "index.js",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
