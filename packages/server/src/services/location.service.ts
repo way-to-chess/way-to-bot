@@ -2,17 +2,15 @@ import { dbInstance } from "../database/init";
 import { File } from "../database/entities/file.entity";
 import { Location } from "../database/entities/location.entity";
 import {
-  ILocationByIdPayload,
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "@interfaces/location.interface";
+} from "packages/shared/src/interfaces/location.interface";
 
 export class LocationService {
   private locationRepository = dbInstance.getRepository(Location);
 
-  getLocationById = async (payload: ILocationByIdPayload) => {
-    const { locationId } = payload;
+  getLocationById = async (locationId: number) => {
     const location = await this.locationRepository.findOne({
       where: { id: locationId },
       relations: {

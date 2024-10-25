@@ -1,5 +1,5 @@
-import { EUserRole } from "@enums";
-import { User } from "@entities/user.entity";
+import { EUserRole } from "packages/shared/src/enums";
+import { User } from "packages/server/src/database/entities/user.entity";
 
 export interface IUserCreatePayload {
   username: string;
@@ -15,9 +15,5 @@ export interface IUserUpdatePayload
 }
 
 export interface IUserDeletePayload {
-  userId: number;
-}
-
-export interface IUserByIdPayload {
   userId: number;
 }

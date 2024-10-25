@@ -1,4 +1,4 @@
-import { Location } from "@entities/location.entity";
+import { Location } from "packages/server/src/database/entities/location.entity";
 
 export interface ILocationCreatePayload {
   title: string;
@@ -16,6 +16,3 @@ export interface ILocationDeletePayload {
   locationId: number;
 }
 
-export interface ILocationByIdPayload {
-  locationId: number;
-}

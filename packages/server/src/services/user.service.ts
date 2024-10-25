@@ -1,18 +1,16 @@
-import {
-  IUserByIdPayload,
-  IUserCreatePayload,
-  IUserDeletePayload,
-  IUserUpdatePayload,
-} from "@interfaces/user.interface";
 import { dbInstance } from "../database/init";
 import { User } from "../database/entities/user.entity";
 import { File } from "../database/entities/file.entity";
+import {
+  IUserCreatePayload,
+  IUserDeletePayload,
+  IUserUpdatePayload,
+} from "packages/shared/src/interfaces/user.interface";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(User);
 
-  getUserById = async (payload: IUserByIdPayload) => {
-    const { userId } = payload;
+  getUserById = async (userId: number) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: {

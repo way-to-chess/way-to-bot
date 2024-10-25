@@ -21,10 +21,6 @@ export interface IEventDeletePayload {
   eventId: number;
 }
 
-export interface IEventByIdPayload {
-  eventId: number;
-}
-
 export interface IAddUsersToEventPayload {
   eventId: number;
   userIds: number[];

@@ -2,7 +2,6 @@ import { dbInstance } from "../database/init";
 import { Event as EventEntity } from "../database/entities/event.entity";
 import {
   IAddUsersToEventPayload,
-  IEventByIdPayload,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
@@ -15,8 +14,7 @@ import { In } from "typeorm";
 export class EventService {
   private eventRepository = dbInstance.getRepository(EventEntity);
 
-  getEventById = async (payload: IEventByIdPayload) => {
-    const { eventId } = payload;
+  getEventById = async (eventId: number) => {
     const event = await this.eventRepository.findOne({
       where: { id: eventId },
       relations: {
