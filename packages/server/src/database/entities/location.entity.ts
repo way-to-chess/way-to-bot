@@ -14,8 +14,8 @@ export class Location {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: true, type: "varchar" })
-  title?: string | null;
+  @Column({ type: "varchar" })
+  title!: string;
 
   @Column({ nullable: true, type: "varchar" })
   url?: string | null;

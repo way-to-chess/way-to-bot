@@ -6,10 +6,18 @@ export interface IUserCreatePayload {
   firstName: string;
   lastName: string;
   roles?: EUserRole[];
-  photoId?: number;
+  fileId?: number;
 }
 
 export interface IUserUpdatePayload
   extends Partial<Omit<User, "createdAt" | "updatedAt" | "winRate" | "photo">> {
-  photoId?: number;
+  fileId?: number | null;
+}
+
+export interface IUserDeletePayload {
+  userId: number;
+}
+
+export interface IUserByIdPayload {
+  userId: number;
 }

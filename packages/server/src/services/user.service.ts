@@ -1,5 +1,7 @@
 import {
+  IUserByIdPayload,
   IUserCreatePayload,
+  IUserDeletePayload,
   IUserUpdatePayload,
 } from "@interfaces/user.interface";
 import { dbInstance } from "../database/init";
@@ -9,11 +11,13 @@ import { File } from "../database/entities/file.entity";
 export class UserService {
   private userRepository = dbInstance.getRepository(User);
 
-  getUserById = async (userId: number) => {
+  getUserById = async (payload: IUserByIdPayload) => {
+    const { userId } = payload;
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: {
         photo: true,
+        events: true,
       },
     });
 
@@ -36,15 +40,14 @@ export class UserService {
     const fileRepository = dbInstance.getRepository(File);
 
     const newUser = this.userRepository.create(user);
-    if (user.photoId) {
-      const photo = await fileRepository.findOneBy({ id: user.photoId });
+    if (user.fileId) {
+      const photo = await fileRepository.findOneBy({ id: user.fileId });
       if (!photo) {
-        throw new Error("Photo not found");
+        throw new Error(`File with id ${user.fileId} not found`);
       }
       newUser.photo = photo;
-    } else if (user.photoId === null) {
-      newUser.photo = null;
     }
+
     return this.userRepository.save(newUser);
   };
 
@@ -54,16 +57,16 @@ export class UserService {
     const existingUser = await this.userRepository.findOneBy({ id: user.id });
 
     if (!existingUser) {
-      throw new Error("User not found");
+      throw new Error(`User with id ${user.id} not found`);
     }
 
-    if (user.photoId) {
-      const photo = await fileRepository.findOneBy({ id: user.photoId });
+    if (user.fileId) {
+      const photo = await fileRepository.findOneBy({ id: user.fileId });
       if (!photo) {
-        throw new Error("Photo not found");
+        throw new Error(`File with id ${user.fileId} not found`);
       }
       existingUser.photo = photo;
-    } else if (user.photoId === null) {
+    } else if (user.fileId === null) {
       existingUser.photo = null;
     }
 
@@ -72,14 +75,15 @@ export class UserService {
     return this.userRepository.save(updatedUser);
   };
 
-  deleteUser = async (id: number) => {
-    const existingUser = await this.userRepository.findOneBy({ id });
+  deleteUser = async (payload: IUserDeletePayload) => {
+    const { userId } = payload;
+    const existingUser = await this.userRepository.findOneBy({ id: userId });
 
     if (!existingUser) {
-      throw new Error("User not found");
+      throw new Error(`User with id ${userId} not found`);
     }
 
-    const userDeleted = await this.userRepository.delete(id);
+    const userDeleted = await this.userRepository.delete(userId);
 
     return userDeleted.affected === 1;
   };

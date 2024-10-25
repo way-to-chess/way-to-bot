@@ -18,29 +18,28 @@ export class Event {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ type: "timestamp", nullable: true, name: "date_time" })
-  dateTime?: Date | null;
-
-  @ManyToOne(() => Location)
-  @JoinColumn({ name: "location_id" })
-  location?: Location | null;
+  @Column({ type: "timestamp", name: "date_time" })
+  dateTime!: Date;
 
   @Column({ type: "varchar", nullable: true })
   price?: string | null;
 
   @Column({
-    nullable: true,
     default: EEventStatus.WAITING,
     type: "enum",
     enum: EEventStatus,
   })
-  status?: EEventStatus;
+  status!: EEventStatus;
 
   @Column({ type: "int", nullable: true, name: "participants_limit" })
   participantsLimit?: number | null;
 
   @Column({ type: "varchar", nullable: true, name: "link_to_table" })
   linkToTable?: string | null;
+
+  @ManyToOne(() => Location)
+  @JoinColumn({ name: "location_id" })
+  location?: Location | null;
 
   @ManyToMany(() => User, (user) => user.events)
   @JoinTable()
