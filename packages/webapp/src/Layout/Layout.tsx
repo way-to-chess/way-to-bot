@@ -1,33 +1,18 @@
 import classes from "./Layout.module.css";
-import { generatePath, NavLink, Outlet } from "react-router-dom";
+import { NavLink, Outlet, Route, Routes } from "react-router-dom";
 import { FC } from "react";
-import { EMOJI } from "@way-to-bot/shared/constants/emoji";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { MenuOutlined } from "@ant-design/icons";
+import { MenuOutlined, PlusOutlined } from "@ant-design/icons";
 import { Drawer } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 interface ILink {
   to: string;
   title: string;
 }
-
-const getLinks = (userId: number | undefined): ILink[] => [
-  {
-    title: EMOJI.calendar,
-    to: WEBAPP_ROUTES.eventsRoute,
-  },
-  {
-    title: EMOJI.barChart,
-    to: WEBAPP_ROUTES.statisticsRoute,
-  },
-  {
-    title: EMOJI.clipboard,
-    to: generatePath(WEBAPP_ROUTES.profileRoute, { id: userId ?? 1 }),
-  },
-];
 
 const LinkComponent: FC<ILink> = ({ title, to }) => {
   const closeDrawer = useActionCreator(
@@ -59,7 +44,14 @@ const MenuDrawer = () => {
       onClose={closeDrawer}
       getContainer={false}
     >
-      <LinkComponent title={"Users"} to={WEBAPP_ROUTES.manageUsersRoute} />
+      <LinkComponent
+        title={TEXT.mainMenu.users}
+        to={WEBAPP_ROUTES.manageUsersRoute}
+      />
+      <LinkComponent
+        title={TEXT.mainMenu.events}
+        to={WEBAPP_ROUTES.manageEventsRoute}
+      />
     </Drawer>
   );
 };
@@ -70,7 +62,16 @@ const MenuButton = () => {
     true,
   );
 
-  return <MenuOutlined className={classes.menuButton} onClick={openDrawer} />;
+  return <MenuOutlined className={classes.headerButton} onClick={openDrawer} />;
+};
+
+const AddUserButton = () => {
+  const openDrawer = useActionCreator(
+    appSlice.actions.mainMenuDrawerVisibilityChanged,
+    true,
+  );
+
+  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
 const Layout = () => {
@@ -80,6 +81,13 @@ const Layout = () => {
 
       <header className={classes.header}>
         <MenuButton />
+
+        <Routes>
+          <Route
+            path={WEBAPP_ROUTES.manageUsersRoute}
+            element={<AddUserButton />}
+          />
+        </Routes>
       </header>
 
       <div className={classes.content}>
