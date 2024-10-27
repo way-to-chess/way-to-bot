@@ -8,6 +8,7 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { userSlice } from "../Store/User/UserSlice";
 
 interface ILink {
   to: string;
@@ -16,7 +17,7 @@ interface ILink {
 
 const LinkComponent: FC<ILink> = ({ title, to }) => {
   const closeDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibilityChanged,
+    appSlice.actions.mainMenuDrawerVisibleChanged,
     false,
   );
 
@@ -30,14 +31,14 @@ const LinkComponent: FC<ILink> = ({ title, to }) => {
 const MenuDrawer = () => {
   const open = useSelector(appSlice.selectors.mainMenuDrawerVisible);
   const closeDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibilityChanged,
+    appSlice.actions.mainMenuDrawerVisibleChanged,
     false,
   );
 
   return (
     <Drawer
+      title={TEXT.mainMenu.title}
       styles={{ body: { padding: 0 } }}
-      title="Basic Drawer"
       placement={"left"}
       closable={false}
       open={open}
@@ -58,7 +59,7 @@ const MenuDrawer = () => {
 
 const MenuButton = () => {
   const openDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibilityChanged,
+    appSlice.actions.mainMenuDrawerVisibleChanged,
     true,
   );
 
@@ -67,7 +68,7 @@ const MenuButton = () => {
 
 const AddUserButton = () => {
   const openDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibilityChanged,
+    userSlice.actions.createUserDrawerVisibilityChanged,
     true,
   );
 

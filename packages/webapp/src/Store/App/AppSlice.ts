@@ -12,7 +12,7 @@ const appSlice = createSlice({
   name: "app",
   initialState: APP_SLICE_INITIAL_STATE,
   reducers: {
-    mainMenuDrawerVisibilityChanged: (
+    mainMenuDrawerVisibleChanged: (
       state,
       { payload }: { payload: boolean },
     ) => {

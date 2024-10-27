@@ -3,6 +3,7 @@ import { type TUser } from "../../Models/TUser";
 import { IWithError } from "../../Models/IError";
 
 import { ERequestStatus } from "../RequestManager/RequestManagerModels";
+import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
 
 type TUserInitResponse = any;
 type TUserInitResponseData = any;
@@ -16,6 +17,8 @@ interface IUserState {
   profilePageStatus: ERequestStatus;
   profilePageError: string | null;
   updateStatus: ERequestStatus;
+
+  createUserDrawerVisible: boolean;
 }
 
 const initialState: IUserState = {
@@ -27,6 +30,8 @@ const initialState: IUserState = {
   profilePageError: null,
   profilePageStatus: ERequestStatus.idle,
   updateStatus: ERequestStatus.idle,
+
+  createUserDrawerVisible: false,
 };
 
 const userSlice = createSlice({
@@ -81,6 +86,20 @@ const userSlice = createSlice({
     updateClear: (state) => {
       state.updateStatus = ERequestStatus.idle;
     },
+
+    createUserDrawerVisibilityChanged: (
+      state,
+      { payload }: { payload: boolean },
+    ) => {
+      state.createUserDrawerVisible = payload;
+    },
+    createUserFormSubmitted: (
+      _state,
+      _action: PayloadAction<IUserCreatePayload>,
+    ) => {},
+  },
+  selectors: {
+    createUserDrawerVisible: (sliceState) => sliceState.createUserDrawerVisible,
   },
 });
 

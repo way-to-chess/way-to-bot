@@ -41,6 +41,7 @@ import {
   TGameStatAddPayload,
   TGameStatDeletePayload,
 } from "../../../src/types/game-stat.types";
+import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
 
 const httpApi = {
   getAllEvents: simpleGetRequest<IGetAllEventsResponse>("event/all"),
@@ -208,6 +209,11 @@ const httpApi = {
   deleteEventGameStat: requestWithPayload<TGameStatDeletePayload, boolean>(
     "DELETE",
     "game/stat/delete",
+  ),
+
+  createUser: requestWithPayload<IUserCreatePayload, boolean>(
+    "POST",
+    "user/create",
   ),
 };
 

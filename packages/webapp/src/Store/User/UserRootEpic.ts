@@ -7,6 +7,11 @@ import { getNotNil } from "../../Utils/GetNotNil";
 import { routerEpic } from "../Utils/RouterEpic";
 import { isDev } from "../../Utils/OneLineUtils";
 import { PathMatch } from "react-router-dom";
+import { fromActionCreator } from "../../Store/Utils/FromActionCreator";
+import { httpRequestEpicFactory } from "../../Store/Utils/HttpRequestEpicFactory";
+import { USER_CREATE_REQUEST_SYMBOL } from "../../Store/User/UserVariables";
+import { message } from "antd";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const userInitLoadEpic: TAppEpic = (_, state$, { httpApi }) =>
   state$.pipe(
@@ -62,10 +67,32 @@ const updateProfileRouterEpic = routerEpic(
     combineEpics(userLoadProfilePageByIdEpic(match), userUpdateProfileEpic),
 );
 
+const createUserEpic: TAppEpic = (action$, _, { httpApi }) =>
+  action$.pipe(
+    fromActionCreator(userSlice.actions.createUserFormSubmitted),
+    switchMap(({ payload }) =>
+      httpRequestEpicFactory({
+        input: httpApi.createUser(payload),
+        requestSymbol: USER_CREATE_REQUEST_SYMBOL,
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return of(userSlice.actions.createUserDrawerVisibilityChanged(false));
+        },
+        onError: () => {
+          message.error(TEXT.api.error);
+
+          return EMPTY;
+        },
+      }),
+    ),
+  );
+
 const userRootEpic = combineEpics(
   userInitLoadEpic,
   userRouterEpic,
   updateProfileRouterEpic,
+  createUserEpic,
 );
 
 export { userRootEpic };
