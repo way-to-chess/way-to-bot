@@ -10,6 +10,11 @@ export default defineConfig({
     host: "0.0.0.0",
   },
   resolve: {
-    alias: [{ find: "@way-to-bot", replacement: resolve(__dirname, "../") }],
+    alias: [
+      {
+        find: "@way-to-bot/shared",
+        replacement: resolve(__dirname, "../shared/src"),
+      },
+    ],
   },
 });

@@ -1,13 +1,13 @@
 import { FC } from "react";
 import { TEvent } from "../Models/TEvent";
 import { generatePath, Link } from "react-router-dom";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/src/constants/webappRoutes";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import classes from "../EventsPage/EventsPage.module.css";
 import {
   getReadableEventDate,
   getReadableEventTime,
 } from "../Utils/GetReadableEventDate";
-import { EMOJI } from "@way-to-bot/shared/src/constants/emoji";
+import { EMOJI } from "@way-to-bot/shared/constants/emoji";
 
 const getEventInfo = (
   participants: any[],

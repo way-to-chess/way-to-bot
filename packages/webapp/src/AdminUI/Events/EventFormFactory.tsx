@@ -14,7 +14,7 @@ import { FC } from "react";
 import { withProps } from "../../Utils/WithProps";
 import { RequestStatusToComponent } from "../../Components/RequestStatusToComponent";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../../Store/Locations/LocationsVariables";
-import { EEventStatus } from "@way-to-bot/shared/src/enums/eventStatus";
+import { EEventStatus } from "@way-to-bot/shared/enums/eventStatus";
 import {
   EVENT_STATUSES,
   IEventFormFinishValues,

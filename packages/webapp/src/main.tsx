@@ -5,7 +5,7 @@ import { isDev } from "./Utils/OneLineUtils";
 import { Provider } from "react-redux";
 import { history, store } from "./Store/App/CreateStore";
 import { ReduxRouter } from "@lagunovsky/redux-react-router";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/src/constants/webappRoutes";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
 import { Layout } from "./Layout/Layout";
 
