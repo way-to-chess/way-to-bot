@@ -1,0 +1,31 @@
+{
+  "extends": "./tsconfig.core.json",
+  "compilerOptions": {
+    "baseUrl": ".",
+    "paths": {
+      "@way-to-bot/shared/*": [
+        "../packages/shared/src/*"
+      ],
+      "@way-to-bot/webapp/*": [
+        "../packages/webapp/src/*"
+      ],
+      "@way-to-bot/server/*": [
+        "../packages/server/src/*"
+      ]
+    }
+  },
+  "references": [
+    {
+      "path": "../packages/shared/tsconfig.json"
+    },
+    {
+      "path": "../packages/server/tsconfig.json"
+    },
+    {
+      "path": "../packages/webapp/tsconfig.json"
+    }
+  ],
+  "include": [
+    "../packages/**/*"
+  ]
+}

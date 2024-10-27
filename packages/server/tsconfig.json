@@ -1,5 +1,5 @@
 {
-  "extends": "../../typescript/tsconfig.core.json",
+  "extends": "../../typescript/tsconfig.lib.json",
   "compilerOptions": {
     "types": [
       "node"

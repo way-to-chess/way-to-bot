@@ -3,18 +3,6 @@
     "./index.d.ts"
   ],
   "compilerOptions": {
-    "baseUrl": "..",
-    "paths": {
-      "@way-to-bot/shared/*": [
-        "../packages/shared/src/*"
-      ],
-      "@way-to-bot/webapp/*": [
-        "../packages/webapp/src/*"
-      ],
-      "@way-to-bot/server/*": [
-        "../packages/server/src/*"
-      ]
-    },
     "target": "ES2022",
     "module": "ES2022",
     "moduleResolution": "node",
@@ -31,16 +19,5 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "preserveConstEnums": true
-  },
-  "references": [
-    {
-      "path": "../packages/shared/tsconfig.json"
-    },
-    {
-      "path": "../packages/server/tsconfig.json"
-    },
-    {
-      "path": "../packages/webapp/tsconfig.json"
-    }
-  ]
+  }
 }

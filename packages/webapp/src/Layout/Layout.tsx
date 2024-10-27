@@ -4,7 +4,7 @@ import { FC } from "react";
 import { EMOJI } from "@way-to-bot/shared/src/constants/emoji";
 import { useSelector } from "react-redux";
 import { userInfoUserIdSelector } from "../Store/User/UserSelectors";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/src/constants/webappRoutes";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 
 interface ILink {
   to: string;

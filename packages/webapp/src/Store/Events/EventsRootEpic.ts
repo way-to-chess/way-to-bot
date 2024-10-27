@@ -1,6 +1,5 @@
 import { combineEpics } from "redux-observable";
 import { routerEpic } from "../Utils/RouterEpic";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/src/constants/webappRoutes";
 import { httpRequestEpicFactory } from "../Utils/HttpRequestEpicFactory";
 import { TAppEpic } from "../App/Epics/TAppEpic";
 import {
@@ -26,6 +25,7 @@ import {
   deleteSingleEventGameEpicFactory,
   singleEventGameRootEpic,
 } from "./SingleEventGameRootEpic";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 
 const loadEventsEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({

@@ -1,9 +1,9 @@
 {
-  "extends": "../../typescript/tsconfig.core.json",
+  "extends": "../../typescript/tsconfig.lib.json",
   "compilerOptions": {
     "noEmit": true,
     "jsx": "react-jsx",
-    "resolveJsonModule": true
+    "resolveJsonModule": true,
   },
   "references": [
     {

@@ -9,7 +9,6 @@
     "./*": "./src/*",
     "./eslint.config.js": "./eslint.config.js"
   },
-  "main": "index.js",
   "devDependencies": {
     "@eslint/js": "^9.13.0",
     "@typescript-eslint/eslint-plugin": "^8.11.0",
