@@ -5,6 +5,6 @@ export class File {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false })
+  @Column({type: "text", nullable: false })
   url!: string;
 }

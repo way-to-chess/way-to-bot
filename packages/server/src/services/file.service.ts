@@ -1,7 +1,7 @@
 import { dbInstance } from "packages/server/src/database/init";
 import { File } from "../database/entities/file.entity";
 import * as path from "path";
-import { IFileDeletePayload } from "packages/shared/src/interfaces/file.interface";
+import { IFileDeletePayload } from "@way-to-bot/shared/src/interfaces/file.interface";
 import { rm } from "fs/promises";
 
 export class FileService {

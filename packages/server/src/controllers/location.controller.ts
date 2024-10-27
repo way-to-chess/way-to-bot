@@ -4,7 +4,7 @@ import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "packages/shared/src/interfaces/location.interface";
+} from "@way-to-bot/shared/src/interfaces/location.interface";
 
 @Route("/api/location")
 @Tags("Locations")

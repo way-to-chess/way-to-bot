@@ -6,7 +6,7 @@ import {
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "packages/shared/src/interfaces/event.interface";
+} from "@way-to-bot/shared/src/interfaces/event.interface";
 import { Location } from "packages/server/src/database/entities/location.entity";
 import { User } from "packages/server/src/database/entities/user.entity";
 import { In } from "typeorm";

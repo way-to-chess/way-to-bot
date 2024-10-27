@@ -1,7 +1,6 @@
 import { Request, Router } from "express";
 import { FileController } from "../controllers/file.controller";
-import { uploadMiddleware } from "packages/server/src/middlewares/upload.mddw";
-import { IFileDeletePayload } from "packages/shared/src/interfaces/file.interface";
+import { IFileDeletePayload } from "@way-to-bot/shared/src/interfaces/file.interface";
 
 export const FileRouter = Router();
 const fileController = new FileController();

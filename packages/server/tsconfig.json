@@ -1,8 +1,17 @@
 {
   "extends": "../../typescript/tsconfig.lib.json",
   "compilerOptions": {
-    "types": [
-      "node"
-    ],
+    "types": ["node"],
+    "allowImportingTsExtensions": true,
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "module": "NodeNext",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
+    "paths": {
+      "@way-to-bot/shared/*": ["../packages/shared/src/*"]
+    }
   }
 }

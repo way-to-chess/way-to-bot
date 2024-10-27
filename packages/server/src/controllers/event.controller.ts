@@ -6,7 +6,7 @@ import {
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "packages/shared/src/interfaces/event.interface";
+} from "@way-to-bot/shared/src/interfaces/event.interface";
 
 @Route("/api/event")
 @Tags("Events")

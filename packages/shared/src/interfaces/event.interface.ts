@@ -1,5 +1,5 @@
-import { Event as EventEntity } from "packages/server/src/database/entities/event.entity";
-import { EEventStatus } from "packages/shared/src/enums";
+import { Event as EventEntity } from "@way-to-bot/server/src/database/entities/event.entity";
+import { EEventStatus } from "../enums/index";
 
 export interface IEventCreatePayload {
   dateTime: Date;

@@ -5,7 +5,7 @@ import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "packages/shared/src/interfaces/location.interface";
+} from "@way-to-bot/shared/src/interfaces/location.interface";
 
 export class LocationService {
   private locationRepository = dbInstance.getRepository(Location);

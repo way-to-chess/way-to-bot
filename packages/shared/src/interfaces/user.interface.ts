@@ -1,5 +1,5 @@
-import { EUserRole } from "packages/shared/src/enums";
-import { User } from "packages/server/src/database/entities/user.entity";
+import { EUserRole } from "../enums/index";
+import { User } from "@way-to-bot/server/src/database/entities/user.entity";
 
 export interface IUserCreatePayload {
   username: string;

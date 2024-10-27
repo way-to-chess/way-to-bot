@@ -1,4 +1,4 @@
-import { Location } from "packages/server/src/database/entities/location.entity";
+import { Location } from "@way-to-bot/server/src/database/entities/location.entity";
 
 export interface ILocationCreatePayload {
   title: string;

@@ -12,15 +12,15 @@ import {
   JoinTable,
 } from "typeorm";
 import { File } from "./file.entity";
-import { EUserRole } from "@enums";
 import { Event as EventModel } from "./event.entity";
+import { EUserRole } from "@way-to-bot/shared/src/enums";
 
 @Entity("users")
 export class User {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column()
+  @Column("varchar")
   username!: string;
 
   @Column({ type: "varchar" })
@@ -41,22 +41,22 @@ export class User {
   @JoinColumn({ name: "file_id" })
   photo?: File | null;
 
-  @Column({ nullable: false, default: 0 })
+  @Column("int", { nullable: false, default: 0 })
   wins: number = 0;
 
-  @Column({ nullable: false, default: 0 })
+  @Column("int", { nullable: false, default: 0 })
   losses: number = 0;
 
-  @Column({ nullable: false, default: 0 })
+  @Column("int", { nullable: false, default: 0 })
   draws: number = 0;
 
-  @Column({ nullable: false, default: 0 })
+  @Column("int", { nullable: false, default: 0 })
   total: number = 0;
 
   @Column({ nullable: false, default: 0, name: "win_rate", type: "float" })
   winRate: number = 0;
 
-  @Column({ nullable: false, default: 0 })
+  @Column("int", { nullable: false, default: 0 })
   rating: number = 0;
 
   @CreateDateColumn({ name: "created_at" })
@@ -67,7 +67,7 @@ export class User {
 
   @ManyToMany(() => EventModel, (event) => event.users)
   @JoinTable()
-  events: EventModel[];
+  events?: EventModel[];
 
   @BeforeInsert()
   @BeforeUpdate()

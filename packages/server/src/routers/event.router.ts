@@ -4,7 +4,7 @@ import {
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
-} from "packages/shared/src/interfaces/event.interface";
+} from "@way-to-bot/shared/src/interfaces/event.interface";
 
 export const EventRouter = Router();
 

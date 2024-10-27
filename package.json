@@ -6,8 +6,9 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "lint": "npm run lint --workspaces --if-present",
-    "weabapp:dev": "npm run dev --workspace=@way-to-bot/webapp"
+    "server:dev": "nodemon --exec 'ts-node -r tsconfig-paths/register' --project packages/server/tsconfig.json packages/server/src/app.ts",
+    "weabapp:dev": "npm run dev --workspace=@way-to-bot/webapp",
+    "lint": "npm run lint --workspaces --if-present"
   },
   "keywords": [],
   "author": "",

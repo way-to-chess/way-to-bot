@@ -5,7 +5,7 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "packages/shared/src/interfaces/user.interface";
+} from "@way-to-bot/shared/src/interfaces/user.interface";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(User);

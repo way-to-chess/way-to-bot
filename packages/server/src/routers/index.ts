@@ -1,8 +1,8 @@
 import { Router } from "express";
-import { UserRouter } from "packages/server/src/routers/user.router";
-import { EventRouter } from "packages/server/src/routers/event.router";
-import { LocationRouter } from "packages/server/src/routers/location.router";
-import { FileRouter } from "packages/server/src/routers/file.router";
+import { UserRouter } from "./user.router";
+import { EventRouter } from "./event.router";
+import { LocationRouter } from "./location.router";
+import { FileRouter } from "./file.router";
 
 export const MainRouter = Router();
 

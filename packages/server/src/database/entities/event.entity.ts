@@ -9,9 +9,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { EEventStatus } from "@enums";
 import { Location } from "./location.entity";
 import { User } from "./user.entity";
+import {EEventStatus} from "@way-to-bot/shared/enums/index.ts";
 
 @Entity("events")
 export class Event {
@@ -43,7 +43,7 @@ export class Event {
 
   @ManyToMany(() => User, (user) => user.events)
   @JoinTable()
-  users: User[];
+  users?: User[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
