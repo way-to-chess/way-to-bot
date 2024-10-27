@@ -40,4 +40,5 @@ body,
     border-radius: 16px;
     border: 1px solid black;
     margin: 15px auto;
+    overflow: hidden;
 }

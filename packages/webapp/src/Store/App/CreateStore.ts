@@ -11,6 +11,7 @@ import { createBrowserHistory } from "history";
 import { locationsSlice } from "../Locations/LocationsSlice";
 import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Events/EventsSlice";
+import { appSlice } from "./AppSlice";
 
 const history = createBrowserHistory();
 const routerMiddleware = createRouterMiddleware(history);
@@ -23,6 +24,7 @@ export const createStore = () => {
   const store = configureStore({
     reducer: {
       ...createRouterReducerMapObject(history),
+      app: appSlice.reducer,
       user: userSlice.reducer,
       locations: locationsSlice.reducer,
       requestManager: requestManagerSlice.reducer,
