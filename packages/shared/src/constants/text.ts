@@ -1,9 +1,12 @@
 const TEXT = {
+  common: {
+    yes: "Да",
+    no: "Нет",
+  },
   api: {
     success: "Успех",
     error: "Что-то пошло не так",
   },
-
   mainMenu: {
     title: "Главное Меню",
     users: "Пользователи",
@@ -16,6 +19,11 @@ const TEXT = {
     roles: "Роли",
     submit: "Создать",
     required: "Обязательное поле",
+  },
+  usersList: {
+    edit: "Изменить",
+    delete: "Удалить",
+    deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
 };
 

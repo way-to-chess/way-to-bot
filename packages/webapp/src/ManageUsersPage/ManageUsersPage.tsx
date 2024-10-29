@@ -1,29 +1,60 @@
-import { Avatar, List, Space } from "antd";
-import { LikeOutlined, MessageOutlined, StarOutlined } from "@ant-design/icons";
-import { createElement, FC } from "react";
+import { Avatar, Button, List, Modal } from "antd";
 import { CreateUserDrawer } from "../CreateUserDrawer/CreateUserDrawer";
+import { TEXT } from "@way-to-bot/shared/constants/text";
+import { userSlice } from "../Store/User/UserSlice";
+import { useActionCreator } from "../Hooks/UseActionCreator";
+import { FC, useCallback } from "react";
+import { IUserDeletePayload } from "@way-to-bot/shared/interfaces/user.interface";
+import { ExclamationCircleFilled } from "@ant-design/icons";
 
 const data = [
   {
     title: "Ant Design Title 1",
+    userId: 1,
   },
   {
     title: "Ant Design Title 2",
+    userId: 2,
   },
   {
     title: "Ant Design Title 3",
+    userId: 3,
   },
   {
     title: "Ant Design Title 4",
+    userId: 4,
   },
 ];
 
-const IconText = ({ icon, text }: { icon: FC; text: string }) => (
-  <Space>
-    {createElement(icon)}
-    {text}
-  </Space>
-);
+const EditButton = () => {
+  const open = useActionCreator(
+    userSlice.actions.createUserDrawerVisibilityChanged,
+    true,
+  );
+
+  return <Button onClick={open}>{TEXT.usersList.edit}</Button>;
+};
+
+const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
+  const deleteUser = useActionCreator(userSlice.actions.deleteUser, { userId });
+
+  const showDeleteConfirm = useCallback(() => {
+    return Modal.confirm({
+      title: TEXT.usersList.deleteWarn,
+      icon: <ExclamationCircleFilled />,
+      okText: TEXT.common.yes,
+      okType: "danger",
+      cancelText: TEXT.common.no,
+      onOk: deleteUser,
+    });
+  }, [deleteUser]);
+
+  return (
+    <Button onClick={showDeleteConfirm} danger>
+      {TEXT.usersList.delete}
+    </Button>
+  );
+};
 
 const ManageUsersPage = () => {
   return (
@@ -36,21 +67,8 @@ const ManageUsersPage = () => {
         renderItem={(item, index) => (
           <List.Item
             actions={[
-              <IconText
-                icon={StarOutlined}
-                text="156"
-                key="list-vertical-star-o"
-              />,
-              <IconText
-                icon={LikeOutlined}
-                text="156"
-                key="list-vertical-like-o"
-              />,
-              <IconText
-                icon={MessageOutlined}
-                text="2"
-                key="list-vertical-message"
-              />,
+              <EditButton key={1} />,
+              <DeleteButton key={2} userId={item.userId} />,
             ]}
           >
             <List.Item.Meta

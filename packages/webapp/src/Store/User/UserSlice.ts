@@ -3,7 +3,10 @@ import { type TUser } from "../../Models/TUser";
 import { IWithError } from "../../Models/IError";
 
 import { ERequestStatus } from "../RequestManager/RequestManagerModels";
-import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
+import {
+  IUserCreatePayload,
+  IUserDeletePayload,
+} from "@way-to-bot/shared/interfaces/user.interface";
 
 type TUserInitResponse = any;
 type TUserInitResponseData = any;
@@ -97,6 +100,7 @@ const userSlice = createSlice({
       _state,
       _action: PayloadAction<IUserCreatePayload>,
     ) => {},
+    deleteUser: (_state, _action: PayloadAction<IUserDeletePayload>) => {},
   },
   selectors: {
     createUserDrawerVisible: (sliceState) => sliceState.createUserDrawerVisible,

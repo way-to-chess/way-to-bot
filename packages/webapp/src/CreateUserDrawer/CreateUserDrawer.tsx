@@ -55,7 +55,7 @@ const CreateUserDrawer = memo(() => {
   return (
     <Drawer
       placement={"right"}
-      closable={false}
+      closable
       open={open}
       onClose={closeDrawer}
       getContainer={false}
