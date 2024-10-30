@@ -9,6 +9,7 @@ import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
 import { Layout } from "./Layout/Layout";
 import { ManageEventsPage } from "./AdminUI/Events/ManageEventsPage";
+import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
 
 document.body.setAttribute("data-dev", String(isDev));
 
@@ -24,6 +25,10 @@ createRoot(document.getElementById("root")!).render(
           <Route
             path={WEBAPP_ROUTES.manageEventsRoute}
             element={<ManageEventsPage />}
+          ></Route>
+          <Route
+            path={WEBAPP_ROUTES.manageLocationsRoute}
+            element={<ManageLocationsPage />}
           ></Route>
         </Route>
       </Routes>

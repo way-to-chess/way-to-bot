@@ -20,6 +20,7 @@ const createSingleEventGameRoute = `${manageSingleEventRoute}/game/create`;
 const updateSingleEventGameRoute = `${manageSingleEventRoute}/game/update/:gameId`;
 
 const manageUsersRoute = "manage-users";
+const manageLocationsRoute = "manage-locations";
 
 const WEBAPP_ROUTES = {
   emptyRoute,
@@ -43,6 +44,7 @@ const WEBAPP_ROUTES = {
 
   manageUsersRoute,
   manageEventsRoute,
+  manageLocationsRoute,
 };
 
 export { WEBAPP_ROUTES };

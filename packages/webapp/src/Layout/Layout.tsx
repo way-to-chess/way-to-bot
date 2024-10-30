@@ -53,6 +53,10 @@ const MenuDrawer = () => {
         title={TEXT.mainMenu.events}
         to={WEBAPP_ROUTES.manageEventsRoute}
       />
+      <LinkComponent
+        title={TEXT.mainMenu.locations}
+        to={WEBAPP_ROUTES.manageLocationsRoute}
+      />
     </Drawer>
   );
 };

@@ -8,6 +8,7 @@ const TEXT = {
     error: "Что-то пошло не так",
   },
   mainMenu: {
+    locations: "Локации",
     title: "Главное Меню",
     users: "Пользователи",
     events: "События",

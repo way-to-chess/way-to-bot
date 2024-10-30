@@ -15,4 +15,3 @@ export interface ILocationUpdatePayload
 export interface ILocationDeletePayload {
   locationId: number;
 }
-
