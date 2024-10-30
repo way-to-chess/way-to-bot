@@ -79,6 +79,15 @@ const AddUserButton = () => {
   return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
+const AddLocationButton = () => {
+  const openDrawer = useActionCreator(
+    userSlice.actions.createUserDrawerVisibilityChanged,
+    true,
+  );
+
+  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+};
+
 const Layout = () => {
   return (
     <div className={classes.layout}>
@@ -91,6 +100,11 @@ const Layout = () => {
           <Route
             path={WEBAPP_ROUTES.manageUsersRoute}
             element={<AddUserButton />}
+          />
+
+          <Route
+            path={WEBAPP_ROUTES.manageLocationsRoute}
+            element={<AddLocationButton />}
           />
         </Routes>
       </header>

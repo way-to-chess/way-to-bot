@@ -1,4 +1,5 @@
 import { EUserRole } from "../enums/index";
+import { TDate } from "./date.inteface";
 import { IEvent } from "./event.interface";
 import { IFile } from "./file.interface";
 
@@ -15,8 +16,8 @@ export interface IUser {
   total: number;
   winRate: number;
   rating: number;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: TDate;
+  updatedAt: TDate;
   events?: IEvent[];
 }
 

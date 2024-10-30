@@ -1,22 +1,23 @@
 import { EEventStatus } from "../enums/index";
+import { TDate } from "./date.inteface";
 import { ILocation } from "./location.interface";
 import { IUser } from "./user.interface";
 
 export interface IEvent {
   id: number;
-  dateTime: Date;
+  dateTime: TDate;
   price?: string | null;
   status: EEventStatus;
   participantsLimit?: number | null;
   linkToTable?: string | null;
   location?: ILocation | null;
   users?: IUser[];
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: TDate;
+  updatedAt: TDate;
 }
 
 export interface IEventCreatePayload {
-  dateTime: Date;
+  dateTime: TDate;
   price?: string | null;
   status: EEventStatus;
   participantsLimit?: number;

@@ -1,3 +1,4 @@
+import { TDate } from "./date.inteface";
 import { IFile } from "./file.interface";
 
 export interface ILocation {
@@ -6,8 +7,8 @@ export interface ILocation {
   url?: string | null;
   address?: string | null;
   preview?: IFile | null;
-  createdAt: Date;
-  updatedAt: Date;
+  createdAt: TDate;
+  updatedAt: TDate;
 }
 
 export interface ILocationCreatePayload {
