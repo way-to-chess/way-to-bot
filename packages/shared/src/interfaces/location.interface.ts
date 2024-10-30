@@ -1,4 +1,14 @@
-import { Location } from "@way-to-bot/server/src/database/entities/location.entity";
+import { IFile } from "./file.interface";
+
+export interface ILocation {
+  id: number;
+  title: string;
+  url?: string | null;
+  address?: string | null;
+  preview?: IFile | null;
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface ILocationCreatePayload {
   title: string;
@@ -8,7 +18,7 @@ export interface ILocationCreatePayload {
 }
 
 export interface ILocationUpdatePayload
-  extends Partial<Omit<Location, "createdAt" | "updatedAt" | "preview">> {
+  extends Partial<Omit<ILocation, "createdAt" | "updatedAt" | "preview">> {
   fileId?: number;
 }
 

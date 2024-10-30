@@ -1,5 +1,19 @@
-import { Event as EventEntity } from "@way-to-bot/server/src/database/entities/event.entity";
 import { EEventStatus } from "../enums/index";
+import { ILocation } from "./location.interface";
+import { IUser } from "./user.interface";
+
+export interface IEvent {
+  id: number;
+  dateTime: Date;
+  price?: string | null;
+  status: EEventStatus;
+  participantsLimit?: number | null;
+  linkToTable?: string | null;
+  location?: ILocation | null;
+  users?: IUser[];
+  createdAt: Date;
+  updatedAt: Date;
+}
 
 export interface IEventCreatePayload {
   dateTime: Date;
@@ -12,7 +26,7 @@ export interface IEventCreatePayload {
 
 export interface IEventUpdatePayload
   extends Partial<
-    Omit<EventEntity, "createdAt" | "updatedAt" | "location" | "users">
+    Omit<IEvent, "createdAt" | "updatedAt" | "location" | "users">
   > {
   locationId?: number | null;
 }

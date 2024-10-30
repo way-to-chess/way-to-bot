@@ -1,5 +1,24 @@
 import { EUserRole } from "../enums/index";
-import { User } from "@way-to-bot/server/src/database/entities/user.entity";
+import { IEvent } from "./event.interface";
+import { IFile } from "./file.interface";
+
+export interface IUser {
+  id: number;
+  username: string;
+  firstName: string;
+  lastName: string;
+  roles: EUserRole[];
+  photo?: IFile | null;
+  wins: number;
+  losses: number;
+  draws: number;
+  total: number;
+  winRate: number;
+  rating: number;
+  createdAt: Date;
+  updatedAt: Date;
+  events?: IEvent[];
+}
 
 export interface IUserCreatePayload {
   username: string;
@@ -10,7 +29,9 @@ export interface IUserCreatePayload {
 }
 
 export interface IUserUpdatePayload
-  extends Partial<Omit<User, "createdAt" | "updatedAt" | "winRate" | "photo">> {
+  extends Partial<
+    Omit<IUser, "createdAt" | "updatedAt" | "winRate" | "photo">
+  > {
   fileId?: number | null;
 }
 
