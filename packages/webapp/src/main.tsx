@@ -8,7 +8,7 @@ import { ReduxRouter } from "@lagunovsky/redux-react-router";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
 import { Layout } from "./Layout/Layout";
-import { ManageEventsPage } from "./AdminUI/Events/ManageEventsPage";
+import { ManageEventsPage } from "./ManageEventsPage/ManageEventsPage";
 import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
 
 document.body.setAttribute("data-dev", String(isDev));
