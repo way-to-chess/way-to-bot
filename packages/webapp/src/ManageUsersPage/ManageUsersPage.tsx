@@ -1,5 +1,5 @@
 import { Avatar, Button, List, Modal } from "antd";
-import { CreateUserDrawer } from "../CreateUserDrawer/CreateUserDrawer";
+import { MangeUserDrawer } from "./MangeUserDrawer";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { useActionCreator } from "../Hooks/UseActionCreator";
@@ -28,7 +28,7 @@ const data = [
 
 const EditButton = () => {
   const open = useActionCreator(
-    userSlice.actions.createUserDrawerVisibilityChanged,
+    userSlice.actions.manageUsersDrawerVisibilityChanged,
     true,
   );
 
@@ -59,7 +59,7 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 const ManageUsersPage = () => {
   return (
     <>
-      <CreateUserDrawer />
+      <MangeUserDrawer />
       <List
         style={{ padding: 16 }}
         itemLayout="vertical"

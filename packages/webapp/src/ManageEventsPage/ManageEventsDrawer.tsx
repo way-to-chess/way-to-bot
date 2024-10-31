@@ -122,7 +122,7 @@ const ManageEventsDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.createUserForm.submit}
+            {TEXT.common.create}
           </Button>
         </Form.Item>
       </Form>

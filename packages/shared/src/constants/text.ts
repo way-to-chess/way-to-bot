@@ -3,6 +3,7 @@ const TEXT = {
     yes: "Да",
     no: "Нет",
     requiredField: "Обязательное поле",
+    create: "Создать",
   },
   api: {
     success: "Успех",
@@ -19,7 +20,6 @@ const TEXT = {
     firstName: "Имя",
     lastName: "Фамилия",
     roles: "Роли",
-    submit: "Создать",
   },
   usersList: {
     edit: "Изменить",
@@ -33,6 +33,12 @@ const TEXT = {
     participantsLimit: "Количество участников",
     linkToTable: "Ссылка на таблицу",
     locationId: "Локация",
+  },
+  manageLocationsForm: {
+    title: "Название",
+    url: "Ссылка",
+    address: "Адрес",
+    fileId: "Изображение",
   },
 };
 

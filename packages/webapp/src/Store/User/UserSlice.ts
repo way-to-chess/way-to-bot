@@ -21,7 +21,7 @@ interface IUserState {
   profilePageError: string | null;
   updateStatus: ERequestStatus;
 
-  createUserDrawerVisible: boolean;
+  manageUsersDrawerVisible: boolean;
 }
 
 const initialState: IUserState = {
@@ -34,7 +34,7 @@ const initialState: IUserState = {
   profilePageStatus: ERequestStatus.idle,
   updateStatus: ERequestStatus.idle,
 
-  createUserDrawerVisible: false,
+  manageUsersDrawerVisible: false,
 };
 
 const userSlice = createSlice({
@@ -90,20 +90,18 @@ const userSlice = createSlice({
       state.updateStatus = ERequestStatus.idle;
     },
 
-    createUserDrawerVisibilityChanged: (
+    manageUsersDrawerVisibilityChanged: (
       state,
       { payload }: { payload: boolean },
     ) => {
-      state.createUserDrawerVisible = payload;
+      state.manageUsersDrawerVisible = payload;
     },
-    createUserFormSubmitted: (
-      _state,
-      _action: PayloadAction<IUserCreatePayload>,
-    ) => {},
+    createUser: (_state, _action: PayloadAction<IUserCreatePayload>) => {},
     deleteUser: (_state, _action: PayloadAction<IUserDeletePayload>) => {},
   },
   selectors: {
-    createUserDrawerVisible: (sliceState) => sliceState.createUserDrawerVisible,
+    manageUsersDrawerVisible: (sliceState) =>
+      sliceState.manageUsersDrawerVisible,
   },
 });
 

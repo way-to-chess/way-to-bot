@@ -69,7 +69,7 @@ const updateProfileRouterEpic = routerEpic(
 
 const createUserEpic: TAppEpic = (action$, _, { httpApi }) =>
   action$.pipe(
-    fromActionCreator(userSlice.actions.createUserFormSubmitted),
+    fromActionCreator(userSlice.actions.createUser),
     switchMap(({ payload }) =>
       httpRequestEpicFactory({
         input: httpApi.createUser(payload),
@@ -77,7 +77,9 @@ const createUserEpic: TAppEpic = (action$, _, { httpApi }) =>
         onSuccess: () => {
           message.success(TEXT.api.success);
 
-          return of(userSlice.actions.createUserDrawerVisibilityChanged(false));
+          return of(
+            userSlice.actions.manageUsersDrawerVisibilityChanged(false),
+          );
         },
         onError: () => {
           message.error(TEXT.api.error);

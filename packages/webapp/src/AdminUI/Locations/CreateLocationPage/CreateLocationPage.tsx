@@ -31,7 +31,7 @@ const CreateLocationForm = () => {
   const dispatch = useDispatch();
   const onFinish = (values: TLocationCreatePayload) => {
     console.log(values);
-    dispatch(locationsSlice.actions.create(values));
+    dispatch(locationsSlice.actions.createLocation(values));
   };
 
   return (

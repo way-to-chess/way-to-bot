@@ -2,6 +2,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 import { IGetAllLocationsResponse } from "../../HttpApi/HttpApiTypes";
 import { ERequestStatus } from "../RequestManager/RequestManagerModels";
+import { ILocationCreatePayload } from "@way-to-bot/shared/interfaces/location.interface";
 
 type Location = any;
 
@@ -9,12 +10,16 @@ interface ILocationsState {
   updateStatus: ERequestStatus;
   createStatus: ERequestStatus;
   data: Location[];
+
+  manageLocationsDrawerVisible: boolean;
 }
 
 const initialState: ILocationsState = {
   updateStatus: ERequestStatus.idle,
   createStatus: ERequestStatus.idle,
   data: [],
+
+  manageLocationsDrawerVisible: true,
 };
 
 const locationsSlice = createSlice({
@@ -36,9 +41,7 @@ const locationsSlice = createSlice({
     updateClear: (state) => {
       state.updateStatus = ERequestStatus.idle;
     },
-    create: (state) => {
-      state.createStatus = ERequestStatus.loading;
-    },
+    createLocation: (_, __: PayloadAction<ILocationCreatePayload>) => {},
     createSuccess: (state) => {
       state.createStatus = ERequestStatus.success;
     },
@@ -49,6 +52,17 @@ const locationsSlice = createSlice({
       state.createStatus = ERequestStatus.idle;
     },
     delete: () => {},
+
+    manageLocationsDrawerVisibilityChanged: (
+      state,
+      { payload }: { payload: boolean },
+    ) => {
+      state.manageLocationsDrawerVisible = payload;
+    },
+  },
+  selectors: {
+    manageLocationsDrawerVisible: (sliceState) =>
+      sliceState.manageLocationsDrawerVisible,
   },
 });
 

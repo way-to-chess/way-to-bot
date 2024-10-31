@@ -18,10 +18,10 @@ const USER_ROLES_SELECT_OPTIONS = Object.values(EUserRole).map((value) => ({
   value,
 }));
 
-const CreateUserDrawer = memo(() => {
-  const open = useSelector(userSlice.selectors.createUserDrawerVisible);
+const MangeUserDrawer = memo(() => {
+  const open = useSelector(userSlice.selectors.manageUsersDrawerVisible);
   const closeDrawer = useActionCreator(
-    userSlice.actions.createUserDrawerVisibilityChanged,
+    userSlice.actions.manageUsersDrawerVisibilityChanged,
     false,
   );
 
@@ -33,7 +33,7 @@ const CreateUserDrawer = memo(() => {
   );
 
   const onFinish: FormProps<IUserCreatePayload>["onFinish"] = (values) => {
-    dispatch(userSlice.actions.createUserFormSubmitted(values));
+    dispatch(userSlice.actions.createUser(values));
   };
 
   const [form] = Form.useForm<IUserCreatePayload>();
@@ -107,13 +107,13 @@ const CreateUserDrawer = memo(() => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.createUserForm.submit}
+            {TEXT.common.create}
           </Button>
         </Form.Item>
       </Form>
     </Drawer>
   );
 });
-CreateUserDrawer.displayName = "CreateUserDrawer";
+MangeUserDrawer.displayName = "CreateUserDrawer";
 
-export { CreateUserDrawer };
+export { MangeUserDrawer };
