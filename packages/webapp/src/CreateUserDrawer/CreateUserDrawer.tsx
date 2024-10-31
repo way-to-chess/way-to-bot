@@ -14,7 +14,7 @@ import { useFileUpload } from "../Hooks/UseFileUpload";
 import { UploadOutlined } from "@ant-design/icons";
 
 const USER_ROLES_SELECT_OPTIONS = Object.values(EUserRole).map((value) => ({
-  title: value,
+  label: value,
   value,
 }));
 
@@ -69,7 +69,7 @@ const CreateUserDrawer = memo(() => {
         <Form.Item
           name={"username"}
           label={TEXT.createUserForm.username}
-          rules={[{ required: true, message: TEXT.createUserForm.required }]}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
         </Form.Item>
@@ -77,14 +77,14 @@ const CreateUserDrawer = memo(() => {
         <Form.Item
           name={"firstName"}
           label={TEXT.createUserForm.firstName}
-          rules={[{ required: true, message: TEXT.createUserForm.required }]}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name={"lastName"}
           label={TEXT.createUserForm.lastName}
-          rules={[{ required: true, message: TEXT.createUserForm.required }]}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
         </Form.Item>
@@ -96,7 +96,7 @@ const CreateUserDrawer = memo(() => {
         </Form.Item>
         <Form.Item
           name={"roles"}
-          rules={[{ required: true, message: TEXT.createUserForm.required }]}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select options={USER_ROLES_SELECT_OPTIONS} mode={"multiple"} />
         </Form.Item>

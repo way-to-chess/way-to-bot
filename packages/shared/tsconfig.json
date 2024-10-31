@@ -1,6 +1,6 @@
 {
   "extends": "../../typescript/tsconfig.lib.json",
   "include": [
-    "src"
+    "src/**/*"
   ]
 }

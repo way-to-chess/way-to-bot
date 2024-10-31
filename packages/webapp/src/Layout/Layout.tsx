@@ -9,6 +9,7 @@ import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
+import { eventsSlice } from "../Store/Events/EventsSlice";
 
 interface ILink {
   to: string;
@@ -81,7 +82,16 @@ const AddUserButton = () => {
 
 const AddLocationButton = () => {
   const openDrawer = useActionCreator(
-    userSlice.actions.createUserDrawerVisibilityChanged,
+    eventsSlice.actions.manageEventsDrawerVisibilityChanged,
+    true,
+  );
+
+  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+};
+
+const AddEventsButton = () => {
+  const openDrawer = useActionCreator(
+    eventsSlice.actions.manageEventsDrawerVisibilityChanged,
     true,
   );
 
@@ -100,6 +110,11 @@ const Layout = () => {
           <Route
             path={WEBAPP_ROUTES.manageUsersRoute}
             element={<AddUserButton />}
+          />
+
+          <Route
+            path={WEBAPP_ROUTES.manageEventsRoute}
+            element={<AddEventsButton />}
           />
 
           <Route

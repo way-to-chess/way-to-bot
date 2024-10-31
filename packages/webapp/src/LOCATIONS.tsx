@@ -16,7 +16,7 @@ const LOCATIONS: ILocation[] = [
   {
     id: 2,
     address: "ТЦ GREENCITY, улица Притыцкого, 156, эт. 1",
-    title: "Ресторан современной белорусской кухни «Литвины»",
+    title: "Ресторан «Литвины»",
     url: "https://restoran-litviny-1.relax.by/",
     preview: {
       id: 2,

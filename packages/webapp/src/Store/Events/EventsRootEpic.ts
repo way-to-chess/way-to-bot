@@ -36,7 +36,7 @@ const loadEventsEpic: TAppEpic = (_, __, { httpApi }) =>
 
 const createEventEpic: TAppEpic = (action$) =>
   action$.pipe(
-    fromActionCreator(eventsSlice.actions.create),
+    fromActionCreator(eventsSlice.actions.createEvent),
     tap((action) => {
       Telegram.WebApp.sendData(JSON.stringify(action.payload));
     }),

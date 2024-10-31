@@ -2,6 +2,7 @@ const TEXT = {
   common: {
     yes: "Да",
     no: "Нет",
+    requiredField: "Обязательное поле",
   },
   api: {
     success: "Успех",
@@ -19,12 +20,19 @@ const TEXT = {
     lastName: "Фамилия",
     roles: "Роли",
     submit: "Создать",
-    required: "Обязательное поле",
   },
   usersList: {
     edit: "Изменить",
     delete: "Удалить",
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
+  },
+  manageEventsForm: {
+    dateTime: "Дата и время",
+    price: "Взнос",
+    status: "Статус",
+    participantsLimit: "Количество участников",
+    linkToTable: "Ссылка на таблицу",
+    locationId: "Локация",
   },
 };
 

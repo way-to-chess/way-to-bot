@@ -13,6 +13,7 @@ import { DeleteButton } from "../Components/DeleteButton";
 import { IEvent } from "@way-to-bot/shared/interfaces/event.interface";
 import { EEventStatus, EUserRole } from "@way-to-bot/shared/enums";
 import { LOCATIONS } from "../LOCATIONS";
+import { ManageEventsDrawer } from "./ManageEventsDrawer";
 
 const DELETE_EVENT_TITLE = "Delete Event?";
 
@@ -108,33 +109,40 @@ const EVENTS: IEvent[] = [
 
 const ManageEventsPage = () => {
   return (
-    <List
-      style={{ padding: 16 }}
-      dataSource={EVENTS}
-      renderItem={({ location }) => {
-        return (
-          <List.Item>
-            <Card
-              styles={{ cover: { height: 200 } }}
-              style={{ width: "100%" }}
-              hoverable
-              cover={
-                <img
-                  alt="example"
-                  src={location?.preview?.url}
-                  style={{ width: "100%", height: "100%", objectFit: "cover" }}
+    <>
+      <ManageEventsDrawer />
+      <List
+        style={{ padding: 16 }}
+        dataSource={EVENTS}
+        renderItem={({ location }) => {
+          return (
+            <List.Item>
+              <Card
+                styles={{ cover: { height: 200 } }}
+                style={{ width: "100%" }}
+                hoverable
+                cover={
+                  <img
+                    alt="example"
+                    src={location?.preview?.url}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      objectFit: "cover",
+                    }}
+                  />
+                }
+              >
+                <Card.Meta
+                  title={location?.title}
+                  description={location?.address}
                 />
-              }
-            >
-              <Card.Meta
-                title={location?.title}
-                description={location?.address}
-              />
-            </Card>
-          </List.Item>
-        );
-      }}
-    />
+              </Card>
+            </List.Item>
+          );
+        }}
+      />
+    </>
   );
 };
 

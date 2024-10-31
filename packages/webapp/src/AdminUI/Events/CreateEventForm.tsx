@@ -13,7 +13,7 @@ const CreateEventForm = () => {
   const dispatch = useDispatch();
 
   const onFormFinish = ({ status, ...values }: IEventFormFinishValues) => {
-    dispatch(eventsSlice.actions.create(values));
+    dispatch(eventsSlice.actions.createEvent(values));
   };
 
   return (
