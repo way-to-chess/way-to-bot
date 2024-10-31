@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class InitDbModels1730408630004 implements MigrationInterface {
-  name = "InitDbModels1730408630004";
+export class InitDbModels1730413308847 implements MigrationInterface {
+  name = "InitDbModels1730413308847";
 
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(
@@ -11,7 +11,13 @@ export class InitDbModels1730408630004 implements MigrationInterface {
       `CREATE TABLE "locations" ("id" SERIAL NOT NULL, "title" character varying NOT NULL, "url" character varying, "address" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "file_id" integer, CONSTRAINT "PK_7cc1c9e3853b94816c094825e74" PRIMARY KEY ("id"))`,
     );
     await queryRunner.query(
+      `CREATE TYPE "public"."events_status_enum" AS ENUM('waiting', 'started', 'finished')`,
+    );
+    await queryRunner.query(
       `CREATE TABLE "events" ("id" SERIAL NOT NULL, "name" character varying, "date_time" TIMESTAMP NOT NULL, "price" character varying, "status" "public"."events_status_enum" NOT NULL DEFAULT 'waiting', "participants_limit" integer, "link_to_table" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "location_id" integer, CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`,
+    );
+    await queryRunner.query(
+      `CREATE TYPE "public"."users_roles_enum" AS ENUM('admin', 'user')`,
     );
     await queryRunner.query(
       `CREATE TABLE "users" ("id" SERIAL NOT NULL, "username" character varying NOT NULL, "firstName" character varying NOT NULL, "lastName" character varying NOT NULL, "roles" "public"."users_roles_enum" array NOT NULL DEFAULT '{user}', "wins" integer NOT NULL DEFAULT '0', "losses" integer NOT NULL DEFAULT '0', "draws" integer NOT NULL DEFAULT '0', "total" integer NOT NULL DEFAULT '0', "win_rate" double precision NOT NULL DEFAULT '0', "rating" integer NOT NULL DEFAULT '0', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "file_id" integer, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`,
@@ -66,7 +72,9 @@ export class InitDbModels1730408630004 implements MigrationInterface {
     );
     await queryRunner.query(`DROP TABLE "events_users"`);
     await queryRunner.query(`DROP TABLE "users"`);
+    await queryRunner.query(`DROP TYPE "public"."users_roles_enum"`);
     await queryRunner.query(`DROP TABLE "events"`);
+    await queryRunner.query(`DROP TYPE "public"."events_status_enum"`);
     await queryRunner.query(`DROP TABLE "locations"`);
     await queryRunner.query(`DROP TABLE "files"`);
   }
