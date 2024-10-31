@@ -1,13 +1,12 @@
 import "express-async-errors";
 import "reflect-metadata";
+import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
-import { MainRouter } from "./routers/index.ts";
-import dotenv from "dotenv";
+import { MainRouter } from "./routers";
 import chalk from "chalk";
 import cors from "cors";
-import { tgBotInit } from "./tg-bot/index.ts";
-
-dotenv.config();
+import { TgBotService } from "./tg-bot/init";
+import { dbInstance } from "./database/init";
 
 const app = express();
 
@@ -35,13 +34,10 @@ const errorHandler = (
 app.use("/api", MainRouter);
 app.use(errorHandler);
 
-// dbInstance.initialize().then(() => {
-tgBotInit();
-const expressAppPort = process.env.API_PORT!;
-app.listen(expressAppPort, () => {
-  console.log(
-    chalk.bgBlue("EXPRESS STARTED"),
-    chalk.blue(`port -> "${expressAppPort}"`),
-  );
+dbInstance.initialize().then(() => {
+  TgBotService.getInstance();
+  const expressAppPort = process.env.API_PORT!;
+  app.listen(expressAppPort, () => {
+    console.log(chalk.green(`EXPRESS STARTED: port -> ${expressAppPort}`));
+  });
 });
-// });

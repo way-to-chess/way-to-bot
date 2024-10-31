@@ -1,15 +1,15 @@
 import { dbInstance } from "../database/init";
 import { Event as EventEntity } from "../database/entities/event.entity";
+import { DeepPartial, In } from "typeorm";
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "@way-to-bot/shared/src/interfaces/event.interface";
-import { Location } from "packages/server/src/database/entities/location.entity";
-import { User } from "packages/server/src/database/entities/user.entity";
-import { In } from "typeorm";
+} from "../interfaces/event.interface";
+import { Location } from "../database/entities/location.entity";
+import { User } from "../database/entities/user.entity";
 
 export class EventService {
   private eventRepository = dbInstance.getRepository(EventEntity);
@@ -50,7 +50,9 @@ export class EventService {
   createEvent = async (event: IEventCreatePayload) => {
     const locationRepository = dbInstance.getRepository(Location);
 
-    const newEvent = this.eventRepository.create(event);
+    const newEvent = this.eventRepository.create(
+      event as DeepPartial<EventEntity>,
+    );
     if (event.locationId) {
       const location = await locationRepository.findOneBy({
         id: event.locationId,
@@ -87,7 +89,10 @@ export class EventService {
       existingEvent.location = null;
     }
 
-    const updatedEvent = this.eventRepository.merge(existingEvent, event);
+    const updatedEvent = this.eventRepository.merge(
+      existingEvent,
+      event as DeepPartial<EventEntity>,
+    );
 
     return this.eventRepository.save(updatedEvent);
   };

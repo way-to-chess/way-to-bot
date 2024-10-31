@@ -1,6 +1,7 @@
 import { Request, Router } from "express";
 import { FileController } from "../controllers/file.controller";
-import { IFileDeletePayload } from "@way-to-bot/shared/src/interfaces/file.interface";
+import { uploadMiddleware } from "../middlewares/upload.mddw";
+import { IFileDeletePayload } from "../interfaces/file.interface";
 
 export const FileRouter = Router();
 const fileController = new FileController();
@@ -9,10 +10,11 @@ FileRouter.post(
   "/upload",
   uploadMiddleware.single("file"),
   async (req, res) => {
-    if (!req.file) {
+    const file = req.file;
+
+    if (!file) {
       throw new Error("file not uploaded");
     }
-    const { file } = req.file;
     const data = await fileController.addFile(file);
     res.status(200).json({ data });
   },

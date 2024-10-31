@@ -4,7 +4,7 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "@way-to-bot/shared/src/interfaces/user.interface";
+} from "../interfaces/user.interface";
 
 export const UserRouter = Router();
 const userController = new UserController();
@@ -21,6 +21,17 @@ UserRouter.get("/getById/:id", async (req: Request<{ id: number }>, res) => {
   const data = await userController.getUserById(req.params.id);
   res.status(200).json({ data });
 });
+
+UserRouter.get(
+  "/getByUserName/:username",
+  async (req: Request<{ username: string }>, res) => {
+    if (!req.params?.username) {
+      throw new Error("Param username is not found");
+    }
+    const data = await userController.getUserByUserName(req.params.username);
+    res.status(200).json({ data });
+  },
+);
 
 UserRouter.post(
   "/create",

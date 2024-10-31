@@ -3,9 +3,9 @@ import { mkdir, access } from "node:fs/promises";
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {
-    const uploadFolder = process.env.UPLOAD_FOLDER;
+    const uploadFolder = process.env.UPLOAD_FOLDER || "";
     if (!uploadFolder) {
-      cb(new Error("Cannot get upload folder path"));
+      cb(new Error("Cannot get upload folder path"), "");
     }
     access(uploadFolder)
       .then(() => {

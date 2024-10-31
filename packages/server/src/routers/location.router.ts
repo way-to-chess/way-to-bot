@@ -4,7 +4,7 @@ import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "@way-to-bot/shared/src/interfaces/location.interface";
+} from "../interfaces/location.interface";
 
 export const LocationRouter = Router();
 const locationController = new LocationController();

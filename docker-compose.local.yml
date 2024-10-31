@@ -1,0 +1,50 @@
+version: "3.9"
+services:
+  postgres:
+    container_name: wtb_postgres
+    image: postgres
+    env_file:
+      - packages/server/.env
+    restart: on-failure
+    volumes:
+      - ./docker_data/pg_data:/var/lib/postgresql/data
+    ports:
+      - "6543:5432"
+
+  app:
+    container_name: wtb_app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "3000:3000"
+      - "4434:4434"
+    depends_on:
+      - postgres
+    env_file:
+      - packages/server/.env
+      - packages/webapp/.env
+    volumes:
+      - ./packages/server/.:/app/packages/server
+      - ./packages/shared/.:/app/packages/shared
+      - ./packages/webapp/.:/app/packages/webapp
+      - /app/node_modules
+      - ./docker_data/uploads:/app/uploads
+    restart: on-failure
+    command: >
+      sh -c "
+        npm run typeorm:migrate --workspace @way-to-bot/server && 
+        npm run dev:all
+      "
+
+  nginx:
+    container_name: wtb_nginx
+    image: nginx
+    volumes:
+      - ./nginx/nginx-local.conf:/etc/nginx/nginx.conf
+      - ./packages/webapp/public:/app/packages/webapp/public
+      - ./docker_data/uploads:/usr/share/nginx/html/uploads
+    ports:
+      - "80:80"
+    depends_on:
+      - app

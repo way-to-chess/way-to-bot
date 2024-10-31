@@ -3,8 +3,6 @@
   "version": "1.0.0",
   "description": "",
   "type": "module",
-  "private": true,
-  "sideEffects": false,
   "exports": {
     "./*": "./src/*",
     "./eslint.config.js": "./eslint.config.js"

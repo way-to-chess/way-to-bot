@@ -5,7 +5,8 @@ import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "@way-to-bot/shared/src/interfaces/location.interface";
+} from "../interfaces/location.interface";
+import { DeepPartial } from "typeorm";
 
 export class LocationService {
   private locationRepository = dbInstance.getRepository(Location);
@@ -36,7 +37,9 @@ export class LocationService {
   createLocation = async (location: ILocationCreatePayload) => {
     const fileRepository = dbInstance.getRepository(File);
 
-    const newLocation = this.locationRepository.create(location);
+    const newLocation = this.locationRepository.create(
+      location as DeepPartial<Location>,
+    );
     if (location.fileId) {
       const preview = await fileRepository.findOneBy({ id: location.fileId });
       if (!preview) {
@@ -52,7 +55,7 @@ export class LocationService {
     const fileRepository = dbInstance.getRepository(File);
 
     const existingLocation = await this.locationRepository.findOneBy({
-      id: location.id,
+      id: location.id!,
     });
 
     if (!existingLocation) {
@@ -71,7 +74,7 @@ export class LocationService {
 
     const updatedLocation = this.locationRepository.merge(
       existingLocation,
-      location,
+      location as DeepPartial<Location>,
     );
 
     return this.locationRepository.save(updatedLocation);

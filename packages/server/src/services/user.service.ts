@@ -5,7 +5,8 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "@way-to-bot/shared/src/interfaces/user.interface";
+} from "../interfaces/user.interface";
+import { DeepPartial } from "typeorm";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(User);
@@ -26,6 +27,22 @@ export class UserService {
     return user;
   };
 
+  getUserByUserName = async (username: string) => {
+    const user = await this.userRepository.findOne({
+      where: { username },
+      relations: {
+        photo: true,
+        events: true,
+      },
+    });
+
+    if (!user) {
+      throw new Error(`User with username ${username} not found`);
+    }
+
+    return user;
+  };
+
   getAllUsers = async () => {
     return this.userRepository.find({
       relations: {
@@ -36,8 +53,7 @@ export class UserService {
 
   createUser = async (user: IUserCreatePayload) => {
     const fileRepository = dbInstance.getRepository(File);
-
-    const newUser = this.userRepository.create(user);
+    const newUser = this.userRepository.create(user as DeepPartial<User>);
     if (user.fileId) {
       const photo = await fileRepository.findOneBy({ id: user.fileId });
       if (!photo) {
@@ -68,7 +84,10 @@ export class UserService {
       existingUser.photo = null;
     }
 
-    const updatedUser = this.userRepository.merge(existingUser, user);
+    const updatedUser = this.userRepository.merge(
+      existingUser,
+      user as DeepPartial<User>,
+    );
 
     return this.userRepository.save(updatedUser);
   };

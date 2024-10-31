@@ -4,7 +4,7 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "@way-to-bot/shared/src/interfaces/user.interface";
+} from "../interfaces/user.interface";
 
 @Route("/api/user")
 @Tags("User")
@@ -19,6 +19,11 @@ export class UserController {
   @Get("/getById/{id}")
   async getUserById(@Path() id: number) {
     return this.userService.getUserById(id);
+  }
+
+  @Get("/getByUserName/{username}")
+  async getUserByUserName(@Path() username: string) {
+    return this.userService.getUserByUserName(username);
   }
 
   @Post("/create")

@@ -1,0 +1,1 @@
+npx typeorm-ts-node-commonjs migration:run -d ./src/database/init.ts

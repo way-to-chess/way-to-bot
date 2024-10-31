@@ -9,11 +9,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
   ManyToMany,
-  JoinTable,
 } from "typeorm";
 import { File } from "./file.entity";
 import { Event as EventModel } from "./event.entity";
-import { EUserRole } from "@way-to-bot/shared/src/enums";
+import { EUserRole } from "../../enums";
 
 @Entity("users")
 export class User {
@@ -39,7 +38,7 @@ export class User {
 
   @ManyToOne(() => File, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  photo?: File | null;
+  photo!: File | null;
 
   @Column("int", { nullable: false, default: 0 })
   wins: number = 0;
@@ -66,8 +65,7 @@ export class User {
   updatedAt!: Date;
 
   @ManyToMany(() => EventModel, (event) => event.users)
-  @JoinTable()
-  events?: EventModel[];
+  events!: EventModel[];
 
   @BeforeInsert()
   @BeforeUpdate()

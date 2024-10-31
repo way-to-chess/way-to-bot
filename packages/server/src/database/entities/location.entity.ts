@@ -25,7 +25,7 @@ export class Location {
 
   @ManyToOne(() => File, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  preview?: File | null;
+  preview!: File | null;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

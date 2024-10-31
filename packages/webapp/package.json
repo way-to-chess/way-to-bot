@@ -4,8 +4,6 @@
   "description": "",
   "main": "src/main.tsx",
   "type": "module",
-  "private": true,
-  "sideEffects": false,
   "scripts": {
     "dev": "vite",
     "lint": "eslint src --fix",

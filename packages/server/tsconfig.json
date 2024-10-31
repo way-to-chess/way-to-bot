@@ -1,19 +1,17 @@
 {
-  "extends": "../../typescript/tsconfig.lib.json",
   "compilerOptions": {
-    "types": [
-      "node"
-    ],
-    "allowImportingTsExtensions": true,
+    "target": "esnext",
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "module": "NodeNext",
-    "esModuleInterop": true,
+    "module": "commonjs",
+    "rootDir": "./src",
     "resolveJsonModule": true,
-    "noUnusedLocals": false,
-    "noUnusedParameters": false
+    "outDir": "build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "skipDefaultLibCheck": true,
+    "skipLibCheck": true,
   },
-  "include": [
-    "src/**/*"
-  ]
+  "include": ["src/**/*"]
 }

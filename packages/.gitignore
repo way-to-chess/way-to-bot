@@ -1,6 +1,8 @@
 # server
 /server/node_modules
 /server/.env
+/server/.env.*
+/server/build
 
 # webapp
 /webapp/node_modules

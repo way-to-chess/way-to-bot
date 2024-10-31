@@ -11,12 +11,15 @@ import {
 } from "typeorm";
 import { Location } from "./location.entity";
 import { User } from "./user.entity";
-import {EEventStatus} from "@way-to-bot/shared/enums/index.ts";
+import { EEventStatus } from "../../enums";
 
 @Entity("events")
 export class Event {
   @PrimaryGeneratedColumn()
   id!: number;
+
+  @Column({ type: "varchar", nullable: true })
+  name?: string | null;
 
   @Column({ type: "timestamp", name: "date_time" })
   dateTime!: Date;
@@ -39,11 +42,15 @@ export class Event {
 
   @ManyToOne(() => Location)
   @JoinColumn({ name: "location_id" })
-  location?: Location | null;
+  location!: Location | null;
 
   @ManyToMany(() => User, (user) => user.events)
-  @JoinTable()
-  users?: User[];
+  @JoinTable({
+    name: "events_users",
+    joinColumn: { name: "event_id" },
+    inverseJoinColumn: { name: "user_id" },
+  })
+  users!: User[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
