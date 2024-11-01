@@ -7,8 +7,6 @@ services:
       dockerfile: Dockerfile
     ports:
       - "3000:3000"
-    depends_on:
-      - postgres
     env_file:
       - packages/server/.env
       - packages/webapp/.env
@@ -35,5 +33,3 @@ services:
     ports:
       - "80:80"
       - "443:443"
-    depends_on:
-      - app
