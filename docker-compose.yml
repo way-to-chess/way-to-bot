@@ -1,16 +1,5 @@
 version: "3.9"
 services:
-  postgres:
-    container_name: wtb_postgres
-    image: postgres
-    env_file:
-      - packages/server/.env
-    restart: on-failure
-    volumes:
-      - ./docker_data/pg_data:/var/lib/postgresql/data
-    ports:
-      - "5432:5432"
-
   app:
     container_name: wtb_app
     build:
@@ -31,7 +20,8 @@ services:
       sh -c "
         npm run build --workspace @way-to-bot/webapp &&
         npm run typeorm:migrate --workspace @way-to-bot/server &&
-        npm run build --workspace @way-to-bot/server
+        npm run build --workspace @way-to-bot/server && 
+        npm run production --workspace @way-to-bot/server
       "
 
   nginx:
