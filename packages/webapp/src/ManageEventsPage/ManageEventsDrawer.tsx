@@ -16,7 +16,7 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
-import { LOCATIONS } from "../LOCATIONS";
+import { LOCATIONS } from "../Store/Locations/LOCATIONS";
 import { EVENTS_CREATE_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(

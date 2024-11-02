@@ -1,30 +1,15 @@
-import { Avatar, Button, List, Modal } from "antd";
-import { MangeUserDrawer } from "./MangeUserDrawer";
+import { Avatar, Button, Flex, List, Modal } from "antd";
+import { MangeUsersDrawer } from "./MangeUsersDrawer";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { FC, useCallback } from "react";
 import { IUserDeletePayload } from "@way-to-bot/shared/interfaces/user.interface";
-import { ExclamationCircleFilled } from "@ant-design/icons";
-
-const data = [
-  {
-    title: "Ant Design Title 1",
-    userId: 1,
-  },
-  {
-    title: "Ant Design Title 2",
-    userId: 2,
-  },
-  {
-    title: "Ant Design Title 3",
-    userId: 3,
-  },
-  {
-    title: "Ant Design Title 4",
-    userId: 4,
-  },
-];
+import { ExclamationCircleFilled, UserOutlined } from "@ant-design/icons";
+import { generatePath, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { withProps } from "../Utils/WithProps";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 
 const EditButton = () => {
   const open = useActionCreator(
@@ -57,30 +42,49 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 };
 
 const ManageUsersPage = () => {
+  const users = useSelector(userSlice.selectors.users);
+
   return (
     <>
-      <MangeUserDrawer />
+      <MangeUsersDrawer />
       <List
         style={{ padding: 16 }}
-        itemLayout="vertical"
-        dataSource={data}
+        dataSource={users}
+        itemLayout={"vertical"}
         renderItem={(item, index) => (
-          <List.Item
-            actions={[
-              <EditButton key={1} />,
-              <DeleteButton key={2} userId={item.userId} />,
-            ]}
-          >
-            <List.Item.Meta
-              avatar={
+          <List.Item>
+            <Flex vertical gap={8}>
+              <Flex
+                gap={8}
+                align={"center"}
+                component={withProps(Link)({
+                  to: `/${generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId: item.id })}`,
+                })}
+                style={{ color: "black" }}
+              >
+                <div style={{ fontWeight: "bold" }}>{index + 1}</div>
+
                 <Avatar
-                  size={"small"}
-                  src={`https://api.dicebear.com/7.x/miniavs/svg?seed=${index}`}
+                  size={"large"}
+                  src={item.photo?.url}
+                  icon={<UserOutlined />}
                 />
-              }
-              title={<a href="https://ant.design">{item.title}</a>}
-              description="Ant Design, a design language for background applications, is refined by Ant UED Team"
-            />
+
+                <Flex vertical flex={1}>
+                  <div style={{ fontWeight: "bold" }}>
+                    {item.firstName + " " + item.lastName}
+                  </div>
+
+                  <div style={{ color: "grey" }}>{item.username}</div>
+                </Flex>
+
+                <div>{item.rating}</div>
+              </Flex>
+              <Flex gap={8} justify={"flex-end"}>
+                <EditButton key={1} />
+                <DeleteButton key={2} userId={item.id} />
+              </Flex>
+            </Flex>
           </List.Item>
         )}
       />

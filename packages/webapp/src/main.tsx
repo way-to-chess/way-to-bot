@@ -10,6 +10,8 @@ import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
 import { Layout } from "./Layout/Layout";
 import { ManageEventsPage } from "./ManageEventsPage/ManageEventsPage";
 import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
+import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
+import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
 
 document.body.setAttribute("data-dev", String(isDev));
 
@@ -23,8 +25,16 @@ createRoot(document.getElementById("root")!).render(
             element={<ManageUsersPage />}
           ></Route>
           <Route
+            element={<ManageUsersIdPage />}
+            path={WEBAPP_ROUTES.manageUsersIdRoute}
+          ></Route>
+          <Route
             path={WEBAPP_ROUTES.manageEventsRoute}
             element={<ManageEventsPage />}
+          ></Route>
+          <Route
+            path={WEBAPP_ROUTES.manageEventsIdRoute}
+            element={<ManageEventsIdPage />}
           ></Route>
           <Route
             path={WEBAPP_ROUTES.manageLocationsRoute}

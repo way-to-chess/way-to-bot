@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Card, List } from "antd";
-import { LOCATIONS } from "../LOCATIONS";
+import { LOCATIONS } from "../Store/Locations/LOCATIONS";
 import { ManageLocationsDrawer } from "./ManageLocationsDrawer";
 
 const ManageLocationsPage = memo(() => {

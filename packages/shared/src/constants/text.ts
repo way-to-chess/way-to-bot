@@ -4,6 +4,8 @@ const TEXT = {
     no: "Нет",
     requiredField: "Обязательное поле",
     create: "Создать",
+    events: "События",
+    users: "Пользователи",
   },
   api: {
     success: "Успех",

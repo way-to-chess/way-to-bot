@@ -4,9 +4,11 @@ import { IWithError } from "../../Models/IError";
 
 import { ERequestStatus } from "../RequestManager/RequestManagerModels";
 import {
+  IUser,
   IUserCreatePayload,
   IUserDeletePayload,
 } from "@way-to-bot/shared/interfaces/user.interface";
+import { USERS } from "./USERS";
 
 type TUserInitResponse = any;
 type TUserInitResponseData = any;
@@ -22,6 +24,7 @@ interface IUserState {
   updateStatus: ERequestStatus;
 
   manageUsersDrawerVisible: boolean;
+  users: IUser[];
 }
 
 const initialState: IUserState = {
@@ -35,6 +38,7 @@ const initialState: IUserState = {
   updateStatus: ERequestStatus.idle,
 
   manageUsersDrawerVisible: false,
+  users: USERS,
 };
 
 const userSlice = createSlice({
@@ -102,6 +106,9 @@ const userSlice = createSlice({
   selectors: {
     manageUsersDrawerVisible: (sliceState) =>
       sliceState.manageUsersDrawerVisible,
+    users: (sliceState) => sliceState.users,
+    userById: (sliceState, userId: number) =>
+      sliceState.users.find((it) => it.id === userId),
   },
 });
 

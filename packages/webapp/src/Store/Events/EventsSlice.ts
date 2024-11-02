@@ -2,18 +2,26 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IWithEvent, TEvent } from "../../Models/TEvent";
 import { IGetAllEventsResponse } from "../../HttpApi/HttpApiTypes";
 import { getNotNil } from "../../Utils/GetNotNil";
-import { IEventCreatePayload } from "@way-to-bot/shared/interfaces/event.interface";
+import {
+  IEvent,
+  IEventCreatePayload,
+} from "@way-to-bot/shared/interfaces/event.interface";
+import { EVENTS } from "./EVENTS";
 
 interface IEventsSlice {
   edges: TEvent[];
   singleEvent: TEvent | null;
   manageEventsDrawerVisible: boolean;
+
+  events: IEvent[];
 }
 
 const initialState: IEventsSlice = {
   edges: [],
   singleEvent: null,
   manageEventsDrawerVisible: false,
+
+  events: EVENTS,
 };
 
 const eventsSlice = createSlice({
@@ -94,6 +102,10 @@ const eventsSlice = createSlice({
         "singleEventGameByIdNotNil -> event.games.find",
       );
     },
+
+    events: (sliceState) => sliceState.events,
+    eventById: (sliceState, eventId: number) =>
+      sliceState.events.find((it) => it.id === eventId),
   },
 });
 

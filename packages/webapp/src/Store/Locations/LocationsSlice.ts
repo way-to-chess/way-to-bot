@@ -19,7 +19,7 @@ const initialState: ILocationsState = {
   createStatus: ERequestStatus.idle,
   data: [],
 
-  manageLocationsDrawerVisible: true,
+  manageLocationsDrawerVisible: false,
 };
 
 const locationsSlice = createSlice({

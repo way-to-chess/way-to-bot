@@ -18,7 +18,7 @@ const USER_ROLES_SELECT_OPTIONS = Object.values(EUserRole).map((value) => ({
   value,
 }));
 
-const MangeUserDrawer = memo(() => {
+const MangeUsersDrawer = memo(() => {
   const open = useSelector(userSlice.selectors.manageUsersDrawerVisible);
   const closeDrawer = useActionCreator(
     userSlice.actions.manageUsersDrawerVisibilityChanged,
@@ -114,6 +114,6 @@ const MangeUserDrawer = memo(() => {
     </Drawer>
   );
 });
-MangeUserDrawer.displayName = "CreateUserDrawer";
+MangeUsersDrawer.displayName = "CreateUserDrawer";
 
-export { MangeUserDrawer };
+export { MangeUsersDrawer };

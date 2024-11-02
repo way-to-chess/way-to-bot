@@ -9,6 +9,7 @@ const updateProfileRoute = `${profileRoute}/update`;
 const welcomeRoute = "/welcome";
 const locationsRoute = "/location";
 const manageEventsRoute = "manage-events";
+const manageEventsIdRoute = `${manageEventsRoute}/:eventId`;
 const createEventRoute = `${manageEventsRoute}/create`;
 const updateEventRoute = `${manageEventsRoute}/update/:eventId`;
 const updateLocationRoute = `${adminRoute}${locationsRoute}/update/:locationId`;
@@ -20,6 +21,7 @@ const createSingleEventGameRoute = `${manageSingleEventRoute}/game/create`;
 const updateSingleEventGameRoute = `${manageSingleEventRoute}/game/update/:gameId`;
 
 const manageUsersRoute = "manage-users";
+const manageUsersIdRoute = `${manageUsersRoute}/:userId`;
 const manageLocationsRoute = "manage-locations";
 
 const WEBAPP_ROUTES = {
@@ -43,7 +45,9 @@ const WEBAPP_ROUTES = {
   updateSingleEventGameRoute,
 
   manageUsersRoute,
+  manageUsersIdRoute,
   manageEventsRoute,
+  manageEventsIdRoute,
   manageLocationsRoute,
 };
 

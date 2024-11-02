@@ -1,75 +1,20 @@
-import { Card, List } from "antd";
-import { IEvent } from "@way-to-bot/shared/interfaces/event.interface";
-import { EEventStatus, EUserRole } from "@way-to-bot/shared/enums";
-import { LOCATIONS } from "../LOCATIONS";
+import { List } from "antd";
 import { ManageEventsDrawer } from "./ManageEventsDrawer";
-
-const EVENTS: IEvent[] = [
-  {
-    id: 1,
-    dateTime: Date.now(),
-    location: LOCATIONS[0],
-    participantsLimit: 20,
-    price: "40 BYN",
-    status: EEventStatus.WAITING,
-    users: [
-      {
-        id: 1,
-        events: [],
-        firstName: "Sasha",
-        lastName: "Nuke",
-        username: "privetenn",
-        total: 3,
-        wins: 1,
-        draws: 1,
-        losses: 1,
-        rating: 123,
-        roles: [EUserRole.USER],
-        winRate: 0.5,
-        photo: null,
-        createdAt: 123,
-        updatedAt: 123,
-      },
-    ],
-    updatedAt: 123,
-    createdAt: 123,
-  },
-];
+import { EventsListItem } from "./EventsListItem";
+import { useSelector } from "react-redux";
+import { eventsSlice } from "../Store/Events/EventsSlice";
 
 const ManageEventsPage = () => {
+  const events = useSelector(eventsSlice.selectors.events);
+
   return (
     <>
       <ManageEventsDrawer />
       <List
+        itemLayout={"vertical"}
         style={{ padding: 16 }}
-        dataSource={EVENTS}
-        renderItem={({ location }) => {
-          return (
-            <List.Item>
-              <Card
-                styles={{ cover: { height: 200 } }}
-                style={{ width: "100%" }}
-                hoverable
-                cover={
-                  <img
-                    alt="example"
-                    src={location?.preview?.url}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                }
-              >
-                <Card.Meta
-                  title={location?.title}
-                  description={location?.address}
-                />
-              </Card>
-            </List.Item>
-          );
-        }}
+        dataSource={events}
+        renderItem={(event) => <EventsListItem {...event} key={event.id} />}
       />
     </>
   );
