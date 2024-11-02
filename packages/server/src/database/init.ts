@@ -11,9 +11,7 @@ const dbOptions: DataSourceOptions = {
   logging: true,
   entities: [process.env.DB_ENTITIES_PATH!],
   migrations: [process.env.DB_MIGRATIONS_PATH!],
-  ssl: {
-    rejectUnauthorized: false,
-  },
+  ssl: process.env.NODE_ENV === "production",
 };
 
 export const dbInstance = new DataSource(dbOptions);

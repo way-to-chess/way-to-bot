@@ -1,18 +1,18 @@
-import { File } from "../database/entities/file.entity";
+import { FileEntity } from "../database/entities/file.entity";
 import * as path from "path";
 import { rm } from "fs/promises";
 import { dbInstance } from "../database/init";
 import { IFileDeletePayload } from "../interfaces/file.interface";
 
 export class FileService {
-  private fileRepository = dbInstance.getRepository(File);
+  private fileRepository = dbInstance.getRepository(FileEntity);
 
   async addFile(file: Express.Multer.File) {
     if (!file.destination || !file.filename) {
       throw new Error("No destination or filename, data corrupted");
     }
 
-    const newFile = new File();
+    const newFile = new FileEntity();
     newFile.url = path.join(file.destination, file.filename);
 
     const savedFile = await this.fileRepository.save(newFile);

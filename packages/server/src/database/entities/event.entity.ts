@@ -6,26 +6,28 @@ import {
   JoinTable,
   ManyToMany,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
-import { Location } from "./location.entity";
-import { User } from "./user.entity";
+import { LocationEntity } from "./location.entity";
 import { EEventStatus } from "../../enums";
+import { EventUserLeagueEntity } from "./events_users_leagues";
+import { FileEntity } from "./file.entity";
 
 @Entity("events")
-export class Event {
+export class EventEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
   @Column({ type: "varchar", nullable: true })
-  name?: string | null;
+  name?: string | null = null;
 
   @Column({ type: "timestamp", name: "date_time" })
   dateTime!: Date;
 
   @Column({ type: "varchar", nullable: true })
-  price?: string | null;
+  price: string | null = null;
 
   @Column({
     default: EEventStatus.WAITING,
@@ -35,22 +37,21 @@ export class Event {
   status!: EEventStatus;
 
   @Column({ type: "int", nullable: true, name: "participants_limit" })
-  participantsLimit?: number | null;
+  participantsLimit: number | null = null;
 
   @Column({ type: "varchar", nullable: true, name: "link_to_table" })
-  linkToTable?: string | null;
+  linkToTable: string | null = null;
 
-  @ManyToOne(() => Location)
+  @ManyToOne(() => LocationEntity, { nullable: true })
   @JoinColumn({ name: "location_id" })
-  location!: Location | null;
+  location: LocationEntity | null = null;
 
-  @ManyToMany(() => User, (user) => user.events)
-  @JoinTable({
-    name: "events_users",
-    joinColumn: { name: "event_id" },
-    inverseJoinColumn: { name: "user_id" },
-  })
-  users!: User[];
+  @ManyToOne(() => FileEntity, { nullable: true })
+  @JoinColumn({ name: "file_id" })
+  preview: FileEntity | null = null;
+
+  @OneToMany(() => EventUserLeagueEntity, (eul) => eul.event)
+  eventsUsersLeagues!: EventUserLeagueEntity[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

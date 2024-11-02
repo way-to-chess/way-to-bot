@@ -7,10 +7,10 @@ import {
   UpdateDateColumn,
   ManyToOne,
 } from "typeorm";
-import { File } from "./file.entity";
+import { FileEntity } from "./file.entity";
 
 @Entity("locations")
-export class Location {
+export class LocationEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -18,14 +18,14 @@ export class Location {
   title!: string;
 
   @Column({ nullable: true, type: "varchar" })
-  url?: string | null;
+  url: string | null = null;
 
   @Column({ nullable: true, type: "varchar" })
-  address?: string | null;
+  address: string | null = null;
 
-  @ManyToOne(() => File, { nullable: true })
+  @ManyToOne(() => FileEntity, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  preview!: File | null;
+  preview: FileEntity | null = null;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

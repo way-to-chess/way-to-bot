@@ -1,5 +1,5 @@
 import { dbInstance } from "../database/init";
-import { Event as EventEntity } from "../database/entities/event.entity";
+import { EventEntity } from "../database/entities/event.entity";
 import { DeepPartial, In } from "typeorm";
 import {
   IAddUsersToEventPayload,
@@ -8,8 +8,11 @@ import {
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
 } from "../interfaces/event.interface";
-import { Location } from "../database/entities/location.entity";
-import { User } from "../database/entities/user.entity";
+import { LocationEntity } from "../database/entities/location.entity";
+import { UserEntity } from "../database/entities/user.entity";
+import { LeagueEntity } from "../database/entities/league.entity";
+import { EventUserLeagueEntity } from "../database/entities/events_users_leagues";
+import { FileEntity } from "../database/entities/file.entity";
 
 export class EventService {
   private eventRepository = dbInstance.getRepository(EventEntity);
@@ -21,8 +24,9 @@ export class EventService {
         location: {
           preview: true,
         },
-        users: {
-          photo: true,
+        eventsUsersLeagues: {
+          user: { photo: true },
+          league: true,
         },
       },
     });
@@ -30,7 +34,6 @@ export class EventService {
     if (!event) {
       throw new Error(`Event with id ${eventId} not found`);
     }
-
     return event;
   };
 
@@ -40,19 +43,22 @@ export class EventService {
         location: {
           preview: true,
         },
-        users: {
-          photo: true,
+        eventsUsersLeagues: {
+          user: { photo: true },
+          league: true,
         },
       },
     });
   };
 
   createEvent = async (event: IEventCreatePayload) => {
-    const locationRepository = dbInstance.getRepository(Location);
+    const locationRepository = dbInstance.getRepository(LocationEntity);
+    const fileRepository = dbInstance.getRepository(FileEntity);
 
     const newEvent = this.eventRepository.create(
       event as DeepPartial<EventEntity>,
     );
+
     if (event.locationId) {
       const location = await locationRepository.findOneBy({
         id: event.locationId,
@@ -63,11 +69,22 @@ export class EventService {
       newEvent.location = location;
     }
 
+    if (event.fileId) {
+      const file = await fileRepository.findOneBy({
+        id: event.fileId,
+      });
+      if (!file) {
+        throw new Error(`File with id ${event.fileId} not found`);
+      }
+      newEvent.preview = file;
+    }
+
     return this.eventRepository.save(newEvent);
   };
 
   updateEvent = async (event: IEventUpdatePayload) => {
-    const locationRepository = dbInstance.getRepository(Location);
+    const locationRepository = dbInstance.getRepository(LocationEntity);
+    const fileRepository = dbInstance.getRepository(FileEntity);
 
     const existingEvent = await this.eventRepository.findOneBy({
       id: event.id,
@@ -87,6 +104,18 @@ export class EventService {
       existingEvent.location = location;
     } else if (event.locationId === null) {
       existingEvent.location = null;
+    }
+
+    if (event.fileId) {
+      const file = await fileRepository.findOneBy({
+        id: event.fileId,
+      });
+      if (!file) {
+        throw new Error(`File with id ${event.fileId} not found`);
+      }
+      existingEvent.preview = file;
+    } else if (event.fileId === null) {
+      existingEvent.preview = null;
     }
 
     const updatedEvent = this.eventRepository.merge(
@@ -113,13 +142,19 @@ export class EventService {
   };
 
   addUsersToEvent = async (payload: IAddUsersToEventPayload) => {
-    const { userIds, eventId } = payload;
-    const userRepository = dbInstance.getRepository(User);
+    const { userIds, eventId, leagueId } = payload;
+    const userRepository = dbInstance.getRepository(UserEntity);
+    const leagueRepository = dbInstance.getRepository(LeagueEntity);
+    const eventUserLeagueRepository = dbInstance.getRepository(
+      EventUserLeagueEntity,
+    );
 
     const event = await this.eventRepository.findOne({
       where: { id: eventId },
       relations: {
-        users: true,
+        eventsUsersLeagues: {
+          user: true,
+        },
       },
     });
 
@@ -127,36 +162,43 @@ export class EventService {
       throw new Error(`Event with id ${eventId} not found`);
     }
 
-    const existingUserIds = event.users.map((user) => user.id);
+    const league = await leagueRepository.findOneBy({ id: leagueId });
+
+    if (!league) {
+      throw new Error(`League with id ${leagueId} not found`);
+    }
+
+    const existingUserIds = event.eventsUsersLeagues.map((eul) => eul.user.id);
     const newUsers = await userRepository.find({
       where: {
         id: In(userIds.filter((userId) => !existingUserIds.includes(userId))),
       },
     });
 
-    event.users = [...event.users, ...newUsers];
+    const eulList = newUsers.map((user) => {
+      const eul = new EventUserLeagueEntity();
+      eul.event = event;
+      eul.league = league;
+      eul.user = user;
+      return eul;
+    });
 
-    await this.eventRepository.save(event);
-    return event.users;
+    await eventUserLeagueRepository.save(eulList);
+    return true;
   };
 
   removeUsersFromEvent = async (payload: IRemoveUsersFromEventPayload) => {
-    const { userIds, eventId } = payload;
+    const { userIds, eventId, leagueId } = payload;
+    const eventUserLeagueRepository = dbInstance.getRepository(
+      EventUserLeagueEntity,
+    );
 
-    const event = await this.eventRepository.findOne({
-      where: { id: eventId },
-      relations: {
-        users: true,
-      },
+    const result = await eventUserLeagueRepository.delete({
+      league: { id: leagueId },
+      event: { id: eventId },
+      user: { id: In(userIds) },
     });
 
-    if (!event) {
-      throw new Error(`Event with id ${eventId} not found`);
-    }
-
-    event.users = event.users.filter((user) => !userIds.includes(user.id));
-    await this.eventRepository.save(event);
-
-    return event.users;
+    return !!result.affected;
   };
 }

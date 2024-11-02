@@ -8,14 +8,14 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  ManyToMany,
+  OneToMany,
 } from "typeorm";
-import { File } from "./file.entity";
-import { Event as EventModel } from "./event.entity";
+import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
+import { EventUserLeagueEntity } from "./events_users_leagues";
 
 @Entity("users")
-export class User {
+export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
@@ -36,9 +36,9 @@ export class User {
   })
   roles!: EUserRole[];
 
-  @ManyToOne(() => File, { nullable: true })
+  @ManyToOne(() => FileEntity, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  photo!: File | null;
+  photo!: FileEntity | null;
 
   @Column("int", { nullable: false, default: 0 })
   wins: number = 0;
@@ -64,8 +64,8 @@ export class User {
   @UpdateDateColumn({ name: "updated_at" })
   updatedAt!: Date;
 
-  @ManyToMany(() => EventModel, (event) => event.users)
-  events!: EventModel[];
+  @OneToMany(() => EventUserLeagueEntity, (eul) => eul.user)
+  eventsUsersLeagues!: EventUserLeagueEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()

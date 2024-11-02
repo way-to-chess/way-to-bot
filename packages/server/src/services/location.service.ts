@@ -1,6 +1,6 @@
 import { dbInstance } from "../database/init";
-import { File } from "../database/entities/file.entity";
-import { Location } from "../database/entities/location.entity";
+import { FileEntity } from "../database/entities/file.entity";
+import { LocationEntity } from "../database/entities/location.entity";
 import {
   ILocationCreatePayload,
   ILocationDeletePayload,
@@ -9,7 +9,7 @@ import {
 import { DeepPartial } from "typeorm";
 
 export class LocationService {
-  private locationRepository = dbInstance.getRepository(Location);
+  private locationRepository = dbInstance.getRepository(LocationEntity);
 
   getLocationById = async (locationId: number) => {
     const location = await this.locationRepository.findOne({
@@ -35,10 +35,10 @@ export class LocationService {
   };
 
   createLocation = async (location: ILocationCreatePayload) => {
-    const fileRepository = dbInstance.getRepository(File);
+    const fileRepository = dbInstance.getRepository(FileEntity);
 
     const newLocation = this.locationRepository.create(
-      location as DeepPartial<Location>,
+      location as DeepPartial<LocationEntity>,
     );
     if (location.fileId) {
       const preview = await fileRepository.findOneBy({ id: location.fileId });
@@ -52,7 +52,7 @@ export class LocationService {
   };
 
   updateLocation = async (location: ILocationUpdatePayload) => {
-    const fileRepository = dbInstance.getRepository(File);
+    const fileRepository = dbInstance.getRepository(FileEntity);
 
     const existingLocation = await this.locationRepository.findOneBy({
       id: location.id!,
@@ -74,7 +74,7 @@ export class LocationService {
 
     const updatedLocation = this.locationRepository.merge(
       existingLocation,
-      location as DeepPartial<Location>,
+      location as DeepPartial<LocationEntity>,
     );
 
     return this.locationRepository.save(updatedLocation);

@@ -1,6 +1,6 @@
 import { dbInstance } from "../database/init";
-import { User } from "../database/entities/user.entity";
-import { File } from "../database/entities/file.entity";
+import { UserEntity } from "../database/entities/user.entity";
+import { FileEntity } from "../database/entities/file.entity";
 import {
   IUserCreatePayload,
   IUserDeletePayload,
@@ -9,14 +9,17 @@ import {
 import { DeepPartial } from "typeorm";
 
 export class UserService {
-  private userRepository = dbInstance.getRepository(User);
+  private userRepository = dbInstance.getRepository(UserEntity);
 
   getUserById = async (userId: number) => {
     const user = await this.userRepository.findOne({
       where: { id: userId },
       relations: {
         photo: true,
-        events: true,
+        eventsUsersLeagues: {
+          event: true,
+          league: true,
+        },
       },
     });
 
@@ -32,7 +35,10 @@ export class UserService {
       where: { username },
       relations: {
         photo: true,
-        events: true,
+        eventsUsersLeagues: {
+          event: true,
+          league: true,
+        },
       },
     });
 
@@ -52,8 +58,8 @@ export class UserService {
   };
 
   createUser = async (user: IUserCreatePayload) => {
-    const fileRepository = dbInstance.getRepository(File);
-    const newUser = this.userRepository.create(user as DeepPartial<User>);
+    const fileRepository = dbInstance.getRepository(FileEntity);
+    const newUser = this.userRepository.create(user as DeepPartial<UserEntity>);
     if (user.fileId) {
       const photo = await fileRepository.findOneBy({ id: user.fileId });
       if (!photo) {
@@ -66,7 +72,7 @@ export class UserService {
   };
 
   updateUser = async (user: IUserUpdatePayload) => {
-    const fileRepository = dbInstance.getRepository(File);
+    const fileRepository = dbInstance.getRepository(FileEntity);
 
     const existingUser = await this.userRepository.findOneBy({ id: user.id });
 
@@ -86,7 +92,7 @@ export class UserService {
 
     const updatedUser = this.userRepository.merge(
       existingUser,
-      user as DeepPartial<User>,
+      user as DeepPartial<UserEntity>,
     );
 
     return this.userRepository.save(updatedUser);

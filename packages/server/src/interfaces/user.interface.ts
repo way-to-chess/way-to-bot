@@ -1,14 +1,14 @@
-import { User } from "../database/entities/user.entity";
+import { UserEntity } from "../database/entities/user.entity";
 
 export interface IUserCreatePayload
   extends Partial<
-    Omit<User, "id" | "createdAt" | "updatedAt" | "winRate" | "photo">
+    Omit<UserEntity, "id" | "createdAt" | "updatedAt" | "winRate" | "photo">
   > {
   fileId?: number;
 }
 
 export interface IUserUpdatePayload
-  extends Partial<Omit<User, "createdAt" | "updatedAt" | "winRate" | "photo">> {
+  extends Partial<Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">> {
   id: number;
   fileId?: number | null;
 }
