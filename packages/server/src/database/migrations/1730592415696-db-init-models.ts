@@ -1,7 +1,7 @@
 import { MigrationInterface, QueryRunner } from "typeorm";
 
-export class DbInitModels1730591111511 implements MigrationInterface {
-    name = 'DbInitModels1730591111511'
+export class DbInitModels1730592415696 implements MigrationInterface {
+    name = 'DbInitModels1730592415696'
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.query(`CREATE TABLE "files" ("id" SERIAL NOT NULL, "url" text NOT NULL, CONSTRAINT "PK_6c16b9093a142e0e7613b04a3d9" PRIMARY KEY ("id"))`);
@@ -9,7 +9,7 @@ export class DbInitModels1730591111511 implements MigrationInterface {
         await queryRunner.query(`CREATE TYPE "public"."events_status_enum" AS ENUM('waiting', 'started', 'finished')`);
         await queryRunner.query(`CREATE TABLE "events" ("id" SERIAL NOT NULL, "name" character varying, "date_time" TIMESTAMP NOT NULL, "price" character varying, "status" "public"."events_status_enum" NOT NULL DEFAULT 'waiting', "participants_limit" integer, "link_to_table" character varying, "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "location_id" integer, "file_id" integer, CONSTRAINT "PK_40731c7151fe4be3116e45ddf73" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TABLE "leagues" ("id" SERIAL NOT NULL, "name" character varying NOT NULL, CONSTRAINT "PK_2275e1e3e32e9223298c3a0b514" PRIMARY KEY ("id"))`);
-        await queryRunner.query(`CREATE TABLE "event_user_league" ("id" SERIAL NOT NULL, "event_id" integer NOT NULL, "user_id" integer NOT NULL, "league_id" integer NOT NULL, CONSTRAINT "PK_daa5e465cdb8eb574ea3cfc299c" PRIMARY KEY ("id"))`);
+        await queryRunner.query(`CREATE TABLE "event_user_league" ("id" SERIAL NOT NULL, "event_id" integer NOT NULL, "user_id" integer NOT NULL, "league_id" integer NOT NULL, CONSTRAINT "UQ_87dbc8e4fcfbb6126113c3fed1e" UNIQUE ("event_id", "user_id", "league_id"), CONSTRAINT "PK_daa5e465cdb8eb574ea3cfc299c" PRIMARY KEY ("id"))`);
         await queryRunner.query(`CREATE TYPE "public"."users_roles_enum" AS ENUM('admin', 'user')`);
         await queryRunner.query(`CREATE TABLE "users" ("id" SERIAL NOT NULL, "username" character varying NOT NULL, "firstName" character varying NOT NULL, "lastName" character varying NOT NULL, "roles" "public"."users_roles_enum" array NOT NULL DEFAULT '{user}', "wins" integer NOT NULL DEFAULT '0', "losses" integer NOT NULL DEFAULT '0', "draws" integer NOT NULL DEFAULT '0', "total" integer NOT NULL DEFAULT '0', "win_rate" double precision NOT NULL DEFAULT '0', "rating" integer NOT NULL DEFAULT '0', "created_at" TIMESTAMP NOT NULL DEFAULT now(), "updated_at" TIMESTAMP NOT NULL DEFAULT now(), "file_id" integer, CONSTRAINT "PK_a3ffb1c0c8416b9fc6f907b7433" PRIMARY KEY ("id"))`);
         await queryRunner.query(`ALTER TABLE "locations" ADD CONSTRAINT "FK_700e411e1f6f1395d5283b64b46" FOREIGN KEY ("file_id") REFERENCES "files"("id") ON DELETE NO ACTION ON UPDATE NO ACTION`);
