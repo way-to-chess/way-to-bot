@@ -12,6 +12,7 @@ import {
   UserOutlined,
 } from "@ant-design/icons";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { UsersListItem } from "../ManageUsersPage/UsersListItem";
 
 const ManageEventsIdPage = () => {
   const { eventId } = useParams();
@@ -107,6 +108,17 @@ const ManageEventsIdPage = () => {
           items={event.eventsUsersLeagues.map(({ league }) => ({
             key: 1,
             label: league.name,
+            children: (
+              <List
+                dataSource={league.eventsUsersLeagues.map(({ user }) => user)}
+                itemLayout={"vertical"}
+                renderItem={(user, index) => (
+                  <List.Item key={user.id}>
+                    <UsersListItem {...user} index={index} />
+                  </List.Item>
+                )}
+              />
+            ),
           }))}
         />
       </List.Item>
