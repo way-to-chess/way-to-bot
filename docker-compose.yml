@@ -12,7 +12,7 @@ services:
       - packages/webapp/.env
     volumes:
       - ./docker_data/uploads:/app/uploads
-      - ./packages/webapp/dist:/app/webapp/dist
+      - ./packages/webapp/dist:/app/packages/webapp/dist
     restart: on-failure
     command: >
       sh -c "

@@ -1,2 +1,3 @@
 node_modules
-packages/webapp/node_modules
+packages/webapp/dist
+packages/server/build
