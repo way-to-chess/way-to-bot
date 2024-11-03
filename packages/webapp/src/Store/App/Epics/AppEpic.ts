@@ -1,8 +1,10 @@
-import { catchError, EMPTY } from "rxjs";
+import { catchError } from "rxjs";
 import { TAppEpic } from "./TAppEpic";
+import { combineEpics } from "redux-observable";
+import { userRootEpic } from "../../User/UserRootEpic";
 
 const appEpic: TAppEpic = (action$, store$, dependencies) =>
-  EMPTY.pipe(
+  combineEpics(userRootEpic)(action$, store$, dependencies).pipe(
     catchError((error, source) => {
       console.error(error);
       return source;

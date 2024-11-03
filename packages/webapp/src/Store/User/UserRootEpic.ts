@@ -1,5 +1,5 @@
 import type { TAppEpic } from "../App/Epics/TAppEpic";
-import { concat, EMPTY, from, of, switchMap, take } from "rxjs";
+import { concat, EMPTY, from, merge, of, switchMap, take } from "rxjs";
 import { userSlice } from "./UserSlice";
 import { combineEpics, ofType } from "redux-observable";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
@@ -9,7 +9,11 @@ import { isDev } from "../../Utils/OneLineUtils";
 import { PathMatch } from "react-router-dom";
 import { fromActionCreator } from "../../Store/Utils/FromActionCreator";
 import { httpRequestEpicFactory } from "../../Store/Utils/HttpRequestEpicFactory";
-import { USER_CREATE_REQUEST_SYMBOL } from "../../Store/User/UserVariables";
+import {
+  USER_CREATE_REQUEST_SYMBOL,
+  USER_DELETE_REQUEST_SYMBOL,
+  USERS_LOAD_REQUEST_SYMBOL,
+} from "../../Store/User/UserVariables";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 
@@ -67,18 +71,26 @@ const updateProfileRouterEpic = routerEpic(
     combineEpics(userLoadProfilePageByIdEpic(match), userUpdateProfileEpic),
 );
 
-const createUserEpic: TAppEpic = (action$, _, { httpApi }) =>
+const loadUsersEpic: TAppEpic = (action$, state$, dependencies) =>
+  httpRequestEpicFactory({
+    input: dependencies.httpApi.getAllUsers(),
+    requestSymbol: USERS_LOAD_REQUEST_SYMBOL,
+    receivedActionCreator: userSlice.actions.usersReceived,
+  });
+
+const createUserEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
     fromActionCreator(userSlice.actions.createUser),
     switchMap(({ payload }) =>
       httpRequestEpicFactory({
-        input: httpApi.createUser(payload),
+        input: dependencies.httpApi.createUser(payload),
         requestSymbol: USER_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
           message.success(TEXT.api.success);
 
-          return of(
-            userSlice.actions.manageUsersDrawerVisibilityChanged(false),
+          return merge(
+            loadUsersEpic(action$, state$, dependencies),
+            of(userSlice.actions.manageUsersDrawerVisibilityChanged(false)),
           );
         },
         onError: () => {
@@ -90,11 +102,36 @@ const createUserEpic: TAppEpic = (action$, _, { httpApi }) =>
     ),
   );
 
+const deleteUserEpic: TAppEpic = (action$, state$, dependencies) =>
+  action$.pipe(
+    fromActionCreator(userSlice.actions.deleteUser),
+    switchMap(({ payload }) =>
+      httpRequestEpicFactory({
+        input: dependencies.httpApi.deleteUser(payload),
+        requestSymbol: USER_DELETE_REQUEST_SYMBOL,
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return loadUsersEpic(action$, state$, dependencies);
+        },
+        onError: () => {
+          message.error(TEXT.api.error);
+
+          return EMPTY;
+        },
+      }),
+    ),
+  );
+
+const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () =>
+  combineEpics(loadUsersEpic, createUserEpic, deleteUserEpic),
+);
+
 const userRootEpic = combineEpics(
   userInitLoadEpic,
   userRouterEpic,
   updateProfileRouterEpic,
-  createUserEpic,
+  manageUsersRouterEpic,
 );
 
 export { userRootEpic };

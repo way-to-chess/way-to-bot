@@ -4,6 +4,7 @@ import { BASE_API_URL } from "../HttpApi/RequestUtils";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { useCallback, useMemo } from "react";
 import { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
+import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
 interface IUseFileUploadProps {
   onRemove?: VoidFunction;
@@ -13,7 +14,9 @@ interface IUseFileUploadProps {
 
 const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
   const onChange = useCallback(
-    (info: UploadChangeParam<UploadFile<{ addedFiles: { id: number }[] }>>) => {
+    (
+      info: UploadChangeParam<UploadFile<IResponseWithData<{ id: number }>>>,
+    ) => {
       switch (info.file.status) {
         case "removed":
           onRemove?.();
@@ -21,9 +24,11 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
         case "done":
           message.success(TEXT.api.success);
 
+          console.dir(info);
+
           onDone?.(
             getNotNil(
-              info.file?.response?.addedFiles[0].id,
+              info.file?.response?.data.id,
               "useFileUpload -> onChange -> done",
             ),
           );
@@ -39,7 +44,7 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
   return useMemo(
     () => ({
       onChange,
-      action: `${BASE_API_URL}/file/add`,
+      action: `${BASE_API_URL}/file/upload`,
       accept: "image/png, image/jpeg",
     }),
     [onChange],

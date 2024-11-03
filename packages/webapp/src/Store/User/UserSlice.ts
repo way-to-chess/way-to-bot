@@ -8,7 +8,7 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
 } from "@way-to-bot/shared/interfaces/user.interface";
-import { USERS } from "./USERS";
+import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
 type TUserInitResponse = any;
 type TUserInitResponseData = any;
@@ -38,7 +38,7 @@ const initialState: IUserState = {
   updateStatus: ERequestStatus.idle,
 
   manageUsersDrawerVisible: false,
-  users: USERS,
+  users: [],
 };
 
 const userSlice = createSlice({
@@ -99,6 +99,12 @@ const userSlice = createSlice({
       { payload }: { payload: boolean },
     ) => {
       state.manageUsersDrawerVisible = payload;
+    },
+    usersReceived: (
+      state,
+      { payload }: PayloadAction<IResponseWithData<IUser[]>>,
+    ) => {
+      state.users = payload.data;
     },
     createUser: (_state, _action: PayloadAction<IUserCreatePayload>) => {},
     deleteUser: (_state, _action: PayloadAction<IUserDeletePayload>) => {},
