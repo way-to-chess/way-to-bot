@@ -1,19 +1,22 @@
 import { EEventStatus } from "../enums/index";
 import { TDate } from "./date.inteface";
 import { ILocation } from "./location.interface";
-import { IUser } from "./user.interface";
+import { IEventUserLeague } from "./eventUserLeague.interface";
+import { IFile } from "./file.interface";
 
 export interface IEvent {
   id: number;
+  name?: string | null;
   dateTime: TDate;
   price?: string | null;
   status: EEventStatus;
   participantsLimit?: number | null;
   linkToTable?: string | null;
   location?: ILocation | null;
-  users?: IUser[];
   createdAt: TDate;
   updatedAt: TDate;
+  eventsUsersLeagues: IEventUserLeague[];
+  preview: IFile | null;
 }
 
 export interface IEventCreatePayload {

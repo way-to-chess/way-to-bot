@@ -17,7 +17,7 @@ const EditButton = () => {
     true,
   );
 
-  return <Button onClick={open}>{TEXT.usersList.edit}</Button>;
+  return <Button onClick={open}>{TEXT.users.edit}</Button>;
 };
 
 const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
@@ -25,7 +25,7 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 
   const showDeleteConfirm = useCallback(() => {
     return Modal.confirm({
-      title: TEXT.usersList.deleteWarn,
+      title: TEXT.users.deleteWarn,
       icon: <ExclamationCircleFilled />,
       okText: TEXT.common.yes,
       okType: "danger",
@@ -36,7 +36,7 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 
   return (
     <Button onClick={showDeleteConfirm} danger>
-      {TEXT.usersList.delete}
+      {TEXT.users.delete}
     </Button>
   );
 };

@@ -2,8 +2,14 @@ import classes from "./Layout.module.css";
 import { NavLink, Outlet, Route, Routes } from "react-router-dom";
 import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { MenuOutlined, PlusOutlined } from "@ant-design/icons";
-import { Drawer } from "antd";
+import {
+  MenuOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  UserAddOutlined,
+  UsergroupAddOutlined,
+} from "@ant-design/icons";
+import { Drawer, Dropdown, MenuProps } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
@@ -99,6 +105,43 @@ const AddEventButton = () => {
   return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
+const AddUserToEventButton = () => {
+  return (
+    <span>
+      <UserAddOutlined />
+      &nbsp;
+      {TEXT.manageEvents.addUser}
+    </span>
+  );
+};
+
+const AddLeagueToEventButton = () => {
+  return (
+    <span>
+      <UsergroupAddOutlined />
+      &nbsp;
+      {TEXT.manageEvents.addLeague}
+    </span>
+  );
+};
+
+const EVENT_MENU_ITEMS: MenuProps["items"] = [
+  { key: 1, label: <AddUserToEventButton /> },
+  { key: 2, label: <AddLeagueToEventButton /> },
+];
+
+const EventMenuButton = () => {
+  return (
+    <Dropdown
+      menu={{ items: EVENT_MENU_ITEMS }}
+      placement="bottomRight"
+      trigger={"click"}
+    >
+      <MoreOutlined className={classes.headerButton} />
+    </Dropdown>
+  );
+};
+
 const Layout = () => {
   return (
     <div className={classes.layout}>
@@ -116,6 +159,11 @@ const Layout = () => {
           <Route
             path={WEBAPP_ROUTES.manageEventsRoute}
             element={<AddEventButton />}
+          />
+
+          <Route
+            path={WEBAPP_ROUTES.manageEventsIdRoute}
+            element={<EventMenuButton />}
           />
 
           <Route

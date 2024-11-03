@@ -62,7 +62,7 @@ const ManageEventsDrawer = () => {
       >
         <Form.Item
           name={"dateTime"}
-          label={TEXT.manageEventsForm.dateTime}
+          label={TEXT.manageEvents.dateTime}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <DatePicker style={{ width: "100%" }} placeholder={""} showTime />
@@ -70,7 +70,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"price"}
-          label={TEXT.manageEventsForm.price}
+          label={TEXT.manageEvents.price}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
@@ -78,7 +78,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"status"}
-          label={TEXT.manageEventsForm.status}
+          label={TEXT.manageEvents.status}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select
@@ -90,21 +90,18 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"participantsLimit"}
-          label={TEXT.manageEventsForm.participantsLimit}
+          label={TEXT.manageEvents.participantsLimit}
         >
           <Input type={"number"} />
         </Form.Item>
 
-        <Form.Item
-          name={"linkToTable"}
-          label={TEXT.manageEventsForm.linkToTable}
-        >
+        <Form.Item name={"linkToTable"} label={TEXT.manageEvents.linkToTable}>
           <Input />
         </Form.Item>
 
         <Form.Item
           name={"locationId"}
-          label={TEXT.manageEventsForm.locationId}
+          label={TEXT.manageEvents.locationId}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select

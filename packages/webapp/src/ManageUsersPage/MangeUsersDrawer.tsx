@@ -68,7 +68,7 @@ const MangeUsersDrawer = memo(() => {
       >
         <Form.Item
           name={"username"}
-          label={TEXT.createUserForm.username}
+          label={TEXT.users.username}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
@@ -76,14 +76,14 @@ const MangeUsersDrawer = memo(() => {
 
         <Form.Item
           name={"firstName"}
-          label={TEXT.createUserForm.firstName}
+          label={TEXT.users.firstName}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name={"lastName"}
-          label={TEXT.createUserForm.lastName}
+          label={TEXT.users.lastName}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />

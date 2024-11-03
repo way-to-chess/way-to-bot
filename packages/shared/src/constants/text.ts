@@ -17,18 +17,19 @@ const TEXT = {
     users: "Пользователи",
     events: "События",
   },
-  createUserForm: {
+  users: {
+    statistics: "Статистика",
     username: "Ник в телеграмм",
     firstName: "Имя",
     lastName: "Фамилия",
     roles: "Роли",
-  },
-  usersList: {
     edit: "Изменить",
     delete: "Удалить",
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
-  manageEventsForm: {
+  manageEvents: {
+    addUser: "Добавить пользователя",
+    addLeague: "Добавить лигу",
     dateTime: "Дата и время",
     price: "Взнос",
     status: "Статус",
