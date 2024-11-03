@@ -1,0 +1,28 @@
+name: CI/CD
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    environment: production
+
+    steps:
+    - name: SSH Remote Commands
+      uses: appleboy/ssh-action@v1.0.3
+            
+      with:
+        host: 165.227.149.122
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_PRIVATE_KEY }}
+        script: |
+          cd /home/way-to-bot
+          git pull origin master
+          . ~/.nvm/nvm.sh
+          nvm use default
+          docker compose down app
+          docker rmi way-to-bot-app
+          docker compose up app --build -d
