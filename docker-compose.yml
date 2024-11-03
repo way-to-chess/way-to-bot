@@ -29,7 +29,13 @@ services:
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf
       - ./packages/webapp/dist:/webapp
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
-      - ./cert:/etc/nginx/snippets
+      - ./docker_data/certbot/www/:/var/www/certbot/:ro
+      - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       - "443:443"
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./docker_data/certbot/www/:/var/www/certbot/:rw
+      - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
