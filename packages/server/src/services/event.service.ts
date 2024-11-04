@@ -21,6 +21,7 @@ export class EventService {
     const event = await this.eventRepository.findOne({
       where: { id: eventId },
       relations: {
+        preview: true,
         location: {
           preview: true,
         },
@@ -40,6 +41,7 @@ export class EventService {
   getAllEvents = async () => {
     return this.eventRepository.find({
       relations: {
+        preview: true,
         location: {
           preview: true,
         },
