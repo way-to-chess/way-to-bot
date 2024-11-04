@@ -25,4 +25,5 @@ jobs:
           nvm use default
           docker compose down app
           docker rmi way-to-bot-app
+          docker builder prune -a -f
           docker compose up app --build -d
