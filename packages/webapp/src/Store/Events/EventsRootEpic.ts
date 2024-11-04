@@ -16,7 +16,7 @@ import {
 } from "./EventsVariables";
 import { eventsSlice } from "./EventsSlice";
 import { locationsLoadEpic } from "../Locations/Epics/LocationsLoadEpic";
-import { EMPTY, switchMap, tap } from "rxjs";
+import { EMPTY, merge, of, switchMap, tap } from "rxjs";
 import { fromActionCreator } from "../Utils/FromActionCreator";
 import { getNotNil } from "../../Utils/GetNotNil";
 import { message } from "antd";
@@ -24,6 +24,7 @@ import { clearRequestSymbolsEpic } from "../Utils/ClearRequestSymbolsEpic";
 import { loadEventByIdEpic } from "./LoadEventByIdEpic";
 import { deleteSingleEventGameEpicFactory } from "./SingleEventGameRootEpic";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const loadEventsEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({
@@ -42,6 +43,19 @@ const createEventEpic: TAppEpic = (action$, state$, dependencies) =>
       return httpRequestEpicFactory({
         input: dependencies.httpApi.createEvent(action.payload),
         requestSymbol: EVENTS_CREATE_REQUEST_SYMBOL,
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return merge(
+            of(eventsSlice.actions.manageEventsDrawerVisibilityChanged(false)),
+            loadEventsEpic(action$, state$, dependencies),
+          );
+        },
+        onError: () => {
+          message.error(TEXT.api.error);
+
+          return EMPTY;
+        },
       });
     }),
   );

@@ -21,7 +21,7 @@ const simpleGetRequest = <Response>(
   endpoint: string,
 ): (() => Promise<Response | IWithError>) => {
   return () =>
-    fetch(`${BASE_API_URL}/api/${endpoint}`)
+    fetch(`${BASE_API_URL}/${endpoint}`)
       .then((response) => {
         if (response.ok) {
           return response.json();
@@ -37,7 +37,7 @@ const requestWithPayload = <P extends Record<string, any>, R>(
   endpoint: string,
 ) => {
   return (payload: P): Promise<R | IWithError> =>
-    fetch(`${BASE_API_URL}/api/${endpoint}`, {
+    fetch(`${BASE_API_URL}/${endpoint}`, {
       body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",

@@ -79,7 +79,7 @@ const ManageLocationsDrawer = () => {
 
         <Form.Item name={"fileId"} label={TEXT.manageLocationsForm.fileId}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
           </Upload>
         </Form.Item>
 

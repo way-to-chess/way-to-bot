@@ -1,10 +1,10 @@
 import { message } from "antd";
 import { getNotNil } from "../Utils/GetNotNil";
-import { BASE_API_URL } from "../HttpApi/RequestUtils";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { useCallback, useMemo } from "react";
 import { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import { BASE_API_URL } from "../HttpApi/RequestUtils";
 
 interface IUseFileUploadProps {
   onRemove?: VoidFunction;

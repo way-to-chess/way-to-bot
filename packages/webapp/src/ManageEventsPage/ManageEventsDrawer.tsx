@@ -6,6 +6,7 @@ import {
   FormProps,
   Input,
   Select,
+  Upload,
 } from "antd";
 import { EEventStatus } from "@way-to-bot/shared/enums";
 import { TEXT } from "@way-to-bot/shared/constants/text";
@@ -19,6 +20,9 @@ import { eventsSlice } from "../Store/Events/EventsSlice";
 import { EVENTS_CREATE_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
+import { useFileUpload } from "../Hooks/UseFileUpload";
+import { useCallback } from "react";
+import { UploadOutlined } from "@ant-design/icons";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
   (value) => ({
@@ -59,6 +63,20 @@ const ManageEventsDrawer = () => {
 
   const [form] = Form.useForm<IEventCreatePayload>();
 
+  const uploadProps = useFileUpload({
+    onRemove: useCallback(
+      () => form.setFieldValue("fileId", undefined),
+      [form],
+    ),
+    onDone: useCallback(
+      (fileId: number) => form.setFieldValue("fileId", fileId),
+      [form],
+    ),
+    onError: useCallback(() => {
+      form.setFieldValue("fileId", undefined);
+    }, [form]),
+  });
+
   return (
     <Drawer
       placement={"right"}
@@ -73,6 +91,14 @@ const ManageEventsDrawer = () => {
         onFinish={onFinish}
         initialValues={{ status: EEventStatus.WAITING }}
       >
+        <Form.Item
+          name={"name"}
+          label={TEXT.manageEvents.name}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
+        >
+          <Input />
+        </Form.Item>
+
         <Form.Item
           name={"dateTime"}
           label={TEXT.manageEvents.dateTime}
@@ -124,6 +150,16 @@ const ManageEventsDrawer = () => {
               label: title,
             }))}
           />
+        </Form.Item>
+
+        <Form.Item
+          name={"fileId"}
+          label={TEXT.manageEvents.fileId}
+          rules={[{ required: true, message: TEXT.common.requiredField }]}
+        >
+          <Upload {...uploadProps}>
+            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
+          </Upload>
         </Form.Item>
 
         <Form.Item>

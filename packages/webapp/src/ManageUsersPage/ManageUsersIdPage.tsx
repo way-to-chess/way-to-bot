@@ -8,6 +8,7 @@ import { EventsListItem } from "../ManageEventsPage/EventsListItem";
 import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 
 const ManageUsersIdPage = () => {
   const { userId } = useParams();
@@ -36,7 +37,11 @@ const ManageUsersIdPage = () => {
 
       <List.Item>
         <Flex gap={8}>
-          <Avatar size={80} icon={<UserOutlined />} src={user.photo?.url} />
+          <Avatar
+            size={80}
+            icon={<UserOutlined />}
+            src={getPreviewSrc(user.photo?.url)}
+          />
 
           <Flex vertical style={{ fontSize: 16 }}>
             <div style={{ fontWeight: "bold" }}>

@@ -91,7 +91,7 @@ const MangeUsersDrawer = memo(() => {
 
         <Form.Item name={"fileId"}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>Upload</Button>
+            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
           </Upload>
         </Form.Item>
         <Form.Item
