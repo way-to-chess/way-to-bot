@@ -16,8 +16,9 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
-import { LOCATIONS } from "../Store/Locations/LOCATIONS";
 import { EVENTS_CREATE_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
+import { locationsSlice } from "../Store/Locations/LocationsSlice";
+import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
   (value) => ({
@@ -33,6 +34,13 @@ const ManageEventsDrawer = () => {
     false,
   );
 
+  const locations = useSelector(locationsSlice.selectors.locations);
+
+  const status = useParamSelector(
+    requestManagerSlice.selectors.statusBySymbol,
+    LOCATIONS_GET_ALL_REQUEST_SYMBOL,
+  );
+
   const dispatch = useDispatch();
 
   const requestStatus = useParamSelector(
@@ -41,7 +49,12 @@ const ManageEventsDrawer = () => {
   );
 
   const onFinish: FormProps<IEventCreatePayload>["onFinish"] = (values) => {
-    dispatch(eventsSlice.actions.createEvent(values));
+    dispatch(
+      eventsSlice.actions.createEvent({
+        ...values,
+        dateTime: values.dateTime.toString(),
+      }),
+    );
   };
 
   const [form] = Form.useForm<IEventCreatePayload>();
@@ -82,7 +95,7 @@ const ManageEventsDrawer = () => {
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select
-            inputValue={EEventStatus.WAITING}
+            value={EEventStatus.WAITING}
             options={EVENT_STATUS_SELECT_OPTIONS}
             disabled
           />
@@ -105,7 +118,8 @@ const ManageEventsDrawer = () => {
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select
-            options={LOCATIONS.map(({ id, title }) => ({
+            loading={status === ERequestStatus.loading}
+            options={locations.map(({ id, title }) => ({
               value: id,
               label: title,
             }))}

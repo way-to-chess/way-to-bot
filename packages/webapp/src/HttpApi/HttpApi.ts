@@ -18,18 +18,19 @@ import {
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import {
+  IEvent,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import {
+  ILocation,
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
 } from "@way-to-bot/shared/interfaces/location.interface";
 
 const httpApi = {
-  getAllEvents: simpleGetRequest<IGetAllEventsResponse>("event/all"),
   getEventById: (eventId: string) =>
     simpleGetRequest<IWithEvent>(`/event/getById/${eventId}`)(),
   createEvent: requestWithPayload<IEventCreatePayload, undefined>(
@@ -106,15 +107,7 @@ const httpApi = {
     });
     console.log(response);
   },
-  getAllLocations: async (): Promise<{ locations: Location[] }> => {
-    const response = await fetch(`${BASE_API_URL}/location/all`);
-    if (!response.ok) {
-      console.error(response.statusText);
 
-      return { locations: [] };
-    }
-    return await response.json();
-  },
   updateLocation: async (payload: ILocationUpdatePayload) => {
     const response = await fetch(`${BASE_API_URL}/location/update`, {
       body: JSON.stringify(payload),
@@ -126,17 +119,7 @@ const httpApi = {
 
     console.log(response);
   },
-  createLocation: async (payload: ILocationCreatePayload) => {
-    const response = await fetch(`${BASE_API_URL}/location/create`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
 
-    console.log(response);
-  },
   deleteLocation: async (payload: ILocationDeletePayload) => {
     const response = await fetch(`${BASE_API_URL}/location/delete`, {
       body: JSON.stringify(payload),
@@ -173,6 +156,13 @@ const httpApi = {
     "DELETE",
     "user/delete",
   ),
+  getAllLocations:
+    simpleGetRequest<IResponseWithData<ILocation[]>>("location/all"),
+  createLocation: requestWithPayload<ILocationCreatePayload, boolean>(
+    "POST",
+    "location/create",
+  ),
+  getAllEvents: simpleGetRequest<IResponseWithData<IEvent[]>>("event/all"),
 };
 
 type THttpApi = typeof httpApi;
