@@ -5,6 +5,7 @@ import { generatePath, Link } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { Avatar, Flex } from "antd";
 import { UserOutlined } from "@ant-design/icons";
+import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 
 const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
   return (
@@ -18,7 +19,11 @@ const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
     >
       <div style={{ fontWeight: "bold" }}>{index + 1}</div>
 
-      <Avatar size={"large"} src={user.photo?.url} icon={<UserOutlined />} />
+      <Avatar
+        size={"large"}
+        src={getPreviewSrc(user.photo?.url)}
+        icon={<UserOutlined />}
+      />
 
       <Flex vertical flex={1}>
         <div style={{ fontWeight: "bold" }}>

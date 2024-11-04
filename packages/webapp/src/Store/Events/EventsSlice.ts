@@ -1,12 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { IWithEvent, TEvent } from "../../Models/TEvent";
-import { IGetAllEventsResponse } from "../../HttpApi/HttpApiTypes";
 import { getNotNil } from "../../Utils/GetNotNil";
 import {
   IEvent,
   IEventCreatePayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
-import { EVENTS } from "./EVENTS";
+import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
 interface IEventsSlice {
   edges: TEvent[];
@@ -21,15 +20,18 @@ const initialState: IEventsSlice = {
   singleEvent: null,
   manageEventsDrawerVisible: false,
 
-  events: EVENTS,
+  events: [],
 };
 
 const eventsSlice = createSlice({
   name: "events",
   initialState,
   reducers: {
-    received: (state, { payload }: PayloadAction<IGetAllEventsResponse>) => {
-      state.edges = payload.events;
+    eventsReceived: (
+      state,
+      { payload }: PayloadAction<IResponseWithData<IEvent[]>>,
+    ) => {
+      state.events = payload.data;
     },
     singleEventReceived: (state, { payload }: PayloadAction<IWithEvent>) => {
       state.singleEvent = payload.event;

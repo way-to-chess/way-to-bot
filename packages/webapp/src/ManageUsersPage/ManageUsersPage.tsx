@@ -8,6 +8,10 @@ import { IUserDeletePayload } from "@way-to-bot/shared/interfaces/user.interface
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { UsersListItem } from "./UsersListItem";
+import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
+import { USERS_LOAD_REQUEST_SYMBOL } from "../Store/User/UserVariables";
+import { useParamSelector } from "../Hooks/UseParamSelector";
+import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 
 const EditButton = () => {
   const open = useActionCreator(
@@ -41,11 +45,16 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 
 const ManageUsersPage = () => {
   const users = useSelector(userSlice.selectors.users);
+  const status = useParamSelector(
+    requestManagerSlice.selectors.statusBySymbol,
+    USERS_LOAD_REQUEST_SYMBOL,
+  );
 
   return (
     <>
       <MangeUsersDrawer />
       <List
+        loading={status === ERequestStatus.loading}
         style={{ padding: 16 }}
         dataSource={users}
         itemLayout={"vertical"}

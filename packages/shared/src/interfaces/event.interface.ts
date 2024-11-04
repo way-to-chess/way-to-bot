@@ -20,12 +20,14 @@ export interface IEvent {
 }
 
 export interface IEventCreatePayload {
+  name: string;
   dateTime: TDate;
   price?: string | null;
   status: EEventStatus;
   participantsLimit?: number;
   linkToTable?: string;
   locationId?: number;
+  fileId?: number | null;
 }
 
 export interface IEventUpdatePayload

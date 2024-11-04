@@ -1,16 +1,5 @@
-import { TUser } from "../Models/TUser";
 import { IWithError } from "../Models/IError";
-import {
-  TUserInitResponse,
-  TUserInitResponseData,
-  TUserUpdatePayload,
-} from "../../../src/types/user.types";
-import { Location } from "../../../src/database/entities/Location";
-import {
-  TLocationCreatePayload,
-  TLocationDeletePayload,
-  TLocationUpdatePayload,
-} from "../../../src/types/location.types";
+
 import {
   BASE_API_URL,
   requestWithPayload,
@@ -22,56 +11,44 @@ import type {
 } from "./HttpApiTypes";
 import { IWithEvent } from "../Models/TEvent";
 import {
-  TEventCreatePayload,
-  TEventDeletePayload,
-  TEventUpdatePayload,
-} from "../../../src/types/event.types";
-import { TTeamParticipantDeletePayload } from "../../../src/types/team-participant.types";
+  IUser,
+  IUserCreatePayload,
+  IUserDeletePayload,
+  IUserUpdatePayload,
+} from "@way-to-bot/shared/interfaces/user.interface";
+import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import {
-  TTeamCreatePayload,
-  TTeamDeletePayload,
-  TTeamUpdatePayload,
-} from "../../../src/types/team.types";
+  IEvent,
+  IEventCreatePayload,
+  IEventDeletePayload,
+  IEventUpdatePayload,
+} from "@way-to-bot/shared/interfaces/event.interface";
 import {
-  TGameCreatePayload,
-  TGameDeletePayload,
-  TGameUpdatePayload,
-} from "../../../src/types/game.types";
-import {
-  TGameStatAddPayload,
-  TGameStatDeletePayload,
-} from "../../../src/types/game-stat.types";
-import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
+  ILocation,
+  ILocationCreatePayload,
+  ILocationDeletePayload,
+  ILocationUpdatePayload,
+} from "@way-to-bot/shared/interfaces/location.interface";
 
 const httpApi = {
-  getAllEvents: simpleGetRequest<IGetAllEventsResponse>("event/all"),
   getEventById: (eventId: string) =>
     simpleGetRequest<IWithEvent>(`/event/getById/${eventId}`)(),
-  createEvent: requestWithPayload<TEventCreatePayload, undefined>(
+  createEvent: requestWithPayload<IEventCreatePayload, undefined>(
     "POST",
     "event/create",
   ),
-  updateEvent: requestWithPayload<TEventUpdatePayload, IUpdateEventResponse>(
+  updateEvent: requestWithPayload<IEventUpdatePayload, IUpdateEventResponse>(
     "PUT",
     "event/update",
   ),
-  deleteEvent: requestWithPayload<TEventDeletePayload, boolean>(
+  deleteEvent: requestWithPayload<IEventDeletePayload, boolean>(
     "DELETE",
     "event/delete",
   ),
   getEventsLocations: simpleGetRequest<IGetAllEventsResponse>("location/all"),
-  getAllUsers: async (): Promise<{ users: TUser[] }> => {
-    const response = await fetch(`${BASE_API_URL}/user/all`);
-    if (!response.ok) {
-      console.error(response.statusText);
-
-      return { users: [] };
-    }
-    return await response.json();
-  },
   getOrCreateUserByUsername: async (
     username: string,
-  ): Promise<TUserInitResponse | IWithError> => {
+  ): Promise<any | IWithError> => {
     const response = await fetch(`${BASE_API_URL}/user/init`, {
       body: JSON.stringify({ username }),
       headers: {
@@ -86,9 +63,7 @@ const httpApi = {
 
     return await response.json();
   },
-  getUserById: async (
-    id: number,
-  ): Promise<TUserInitResponseData | IWithError> => {
+  getUserById: async (id: number): Promise<IUser | IWithError> => {
     const response = await fetch(`${BASE_API_URL}/user/getById/${id}`);
 
     if (!response.ok) {
@@ -97,7 +72,7 @@ const httpApi = {
 
     return await response.json();
   },
-  updateUser: async (payload: TUserUpdatePayload) => {
+  updateUser: async (payload: IUserUpdatePayload) => {
     const response = await fetch(`${BASE_API_URL}/user/update`, {
       body: JSON.stringify(payload),
       headers: {
@@ -132,16 +107,8 @@ const httpApi = {
     });
     console.log(response);
   },
-  getAllLocations: async (): Promise<{ locations: Location[] }> => {
-    const response = await fetch(`${BASE_API_URL}/location/all`);
-    if (!response.ok) {
-      console.error(response.statusText);
 
-      return { locations: [] };
-    }
-    return await response.json();
-  },
-  updateLocation: async (payload: TLocationUpdatePayload) => {
+  updateLocation: async (payload: ILocationUpdatePayload) => {
     const response = await fetch(`${BASE_API_URL}/location/update`, {
       body: JSON.stringify(payload),
       headers: {
@@ -152,18 +119,8 @@ const httpApi = {
 
     console.log(response);
   },
-  createLocation: async (payload: TLocationCreatePayload) => {
-    const response = await fetch(`${BASE_API_URL}/location/create`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
 
-    console.log(response);
-  },
-  deleteLocation: async (payload: TLocationDeletePayload) => {
+  deleteLocation: async (payload: ILocationDeletePayload) => {
     const response = await fetch(`${BASE_API_URL}/location/delete`, {
       body: JSON.stringify(payload),
       headers: {
@@ -174,47 +131,38 @@ const httpApi = {
 
     console.log(response);
   },
-  deleteTeamParticipant: requestWithPayload<
-    TTeamParticipantDeletePayload,
-    boolean
-  >("DELETE", "/team-participant/delete"),
-  createEventTeam: requestWithPayload<TTeamCreatePayload, boolean>(
-    "POST",
-    "team/create",
-  ),
-  updateEventTeam: requestWithPayload<TTeamUpdatePayload, boolean>(
-    "PUT",
-    "team/update",
-  ),
-  deleteEventTeam: requestWithPayload<TTeamDeletePayload, boolean>(
+  deleteTeamParticipant: requestWithPayload<any, boolean>(
     "DELETE",
-    "team/delete",
+    "/team-participant/delete",
   ),
-  createEventGame: requestWithPayload<TGameCreatePayload, boolean>(
-    "POST",
-    "game/create",
-  ),
-  updateEventGame: requestWithPayload<TGameUpdatePayload, boolean>(
-    "PUT",
-    "game/update",
-  ),
-  deleteEventGame: requestWithPayload<TGameDeletePayload, boolean>(
-    "DELETE",
-    "game/delete",
-  ),
-  addEventGameStat: requestWithPayload<TGameStatAddPayload, boolean>(
-    "POST",
-    "game/stat/add",
-  ),
-  deleteEventGameStat: requestWithPayload<TGameStatDeletePayload, boolean>(
+  createEventTeam: requestWithPayload<any, boolean>("POST", "team/create"),
+  updateEventTeam: requestWithPayload<any, boolean>("PUT", "team/update"),
+  deleteEventTeam: requestWithPayload<any, boolean>("DELETE", "team/delete"),
+  createEventGame: requestWithPayload<any, boolean>("POST", "game/create"),
+  updateEventGame: requestWithPayload<any, boolean>("PUT", "game/update"),
+  deleteEventGame: requestWithPayload<any, boolean>("DELETE", "game/delete"),
+  addEventGameStat: requestWithPayload<any, boolean>("POST", "game/stat/add"),
+  deleteEventGameStat: requestWithPayload<any, boolean>(
     "DELETE",
     "game/stat/delete",
   ),
 
+  getAllUsers: simpleGetRequest<IResponseWithData<IUser[]>>("user/all"),
   createUser: requestWithPayload<IUserCreatePayload, boolean>(
     "POST",
     "user/create",
   ),
+  deleteUser: requestWithPayload<IUserDeletePayload, boolean>(
+    "DELETE",
+    "user/delete",
+  ),
+  getAllLocations:
+    simpleGetRequest<IResponseWithData<ILocation[]>>("location/all"),
+  createLocation: requestWithPayload<ILocationCreatePayload, boolean>(
+    "POST",
+    "location/create",
+  ),
+  getAllEvents: simpleGetRequest<IResponseWithData<IEvent[]>>("event/all"),
 };
 
 type THttpApi = typeof httpApi;

@@ -7,6 +7,7 @@ import {
   CREATE_EVENT_TEAM_REQUEST_SYMBOL,
   DELETE_EVENT_TEAM_REQUEST_SYMBOL,
   DELETE_TEAM_PARTICIPANT_REQUEST_SYMBOL,
+  EVENTS_CREATE_REQUEST_SYMBOL,
   EVENTS_DELETE_REQUEST_SYMBOL,
   EVENTS_GET_ALL_REQUEST_SYMBOL,
   EVENTS_UPDATE_REQUEST_SYMBOL,
@@ -15,38 +16,48 @@ import {
 } from "./EventsVariables";
 import { eventsSlice } from "./EventsSlice";
 import { locationsLoadEpic } from "../Locations/Epics/LocationsLoadEpic";
-import { EMPTY, switchMap, tap } from "rxjs";
+import { EMPTY, merge, of, switchMap, tap } from "rxjs";
 import { fromActionCreator } from "../Utils/FromActionCreator";
 import { getNotNil } from "../../Utils/GetNotNil";
 import { message } from "antd";
 import { clearRequestSymbolsEpic } from "../Utils/ClearRequestSymbolsEpic";
 import { loadEventByIdEpic } from "./LoadEventByIdEpic";
-import {
-  deleteSingleEventGameEpicFactory,
-  singleEventGameRootEpic,
-} from "./SingleEventGameRootEpic";
+import { deleteSingleEventGameEpicFactory } from "./SingleEventGameRootEpic";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const loadEventsEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({
     input: httpApi.getAllEvents(),
     requestSymbol: EVENTS_GET_ALL_REQUEST_SYMBOL,
-    receivedActionCreator: eventsSlice.actions.received,
+    receivedActionCreator: eventsSlice.actions.eventsReceived,
   });
 
-const createEventEpic: TAppEpic = (action$) =>
+const createEventEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
     fromActionCreator(eventsSlice.actions.createEvent),
     tap((action) => {
       Telegram.WebApp.sendData(JSON.stringify(action.payload));
     }),
-    switchMap(
-      () => EMPTY,
-      // httpRequestEpicFactory({
-      //   input: httpApi.createEvent(action.payload),
-      //   requestSymbol: EVENTS_CREATE_REQUEST_SYMBOL,
-      // }),
-    ),
+    switchMap((action) => {
+      return httpRequestEpicFactory({
+        input: dependencies.httpApi.createEvent(action.payload),
+        requestSymbol: EVENTS_CREATE_REQUEST_SYMBOL,
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return merge(
+            of(eventsSlice.actions.manageEventsDrawerVisibilityChanged(false)),
+            loadEventsEpic(action$, state$, dependencies),
+          );
+        },
+        onError: () => {
+          message.error(TEXT.api.error);
+
+          return EMPTY;
+        },
+      });
+    }),
   );
 
 const updateEventEpicFactory =
@@ -110,12 +121,13 @@ const updateEventRouterEpic = routerEpic(
     ),
 );
 
-const createEventRouterEpic = routerEpic(WEBAPP_ROUTES.createEventRoute, () =>
-  combineEpics(locationsLoadEpic, createEventEpic),
-);
-
 const manageEventsRouterEpic = routerEpic(WEBAPP_ROUTES.manageEventsRoute, () =>
-  combineEpics(loadEventsEpic, deleteEventEpic),
+  combineEpics(
+    loadEventsEpic,
+    deleteEventEpic,
+    locationsLoadEpic,
+    createEventEpic,
+  ),
 );
 
 const deleteTeamParticipantEpic =
@@ -249,15 +261,6 @@ const clientEventsRouterEpic = routerEpic(
   () => loadEventsEpic,
 );
 
-const eventsRootEpic = combineEpics(
-  manageEventsRouterEpic,
-  createEventRouterEpic,
-  clientEventsRouterEpic,
-  updateEventRouterEpic,
-  manageSingleEventRouterEpic,
-  updateSingleEventTeamRouterEpic,
-  createSingleEventTeamRouterEpic,
-  singleEventGameRootEpic,
-);
+const eventsRootEpic = combineEpics(manageEventsRouterEpic);
 
 export { eventsRootEpic };

@@ -1,6 +1,6 @@
-import { BASE_API_URL } from "../HttpApi/RequestUtils";
+const FILE_API_URL = import.meta.env.VITE_FILE_API_URL;
 
 const getPreviewSrc = (previewUrl?: string) =>
-  previewUrl ? `${BASE_API_URL}/${previewUrl}` : undefined;
+  previewUrl ? `${FILE_API_URL}${previewUrl}` : undefined;
 
 export { getPreviewSrc };

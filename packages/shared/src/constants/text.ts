@@ -6,6 +6,7 @@ const TEXT = {
     create: "Создать",
     events: "События",
     users: "Пользователи",
+    upload: "Загрузить",
   },
   api: {
     success: "Успех",
@@ -28,6 +29,8 @@ const TEXT = {
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
   manageEvents: {
+    name: "Название",
+    fileId: "Изображение",
     addUser: "Добавить пользователя",
     addLeague: "Добавить лигу",
     dateTime: "Дата и время",

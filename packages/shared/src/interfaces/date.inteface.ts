@@ -1,1 +1,1 @@
-export type TDate = number;
+export type TDate = string;

@@ -7,7 +7,7 @@ const locationsLoadEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({
     input: httpApi.getAllLocations(),
     requestSymbol: LOCATIONS_GET_ALL_REQUEST_SYMBOL,
-    receivedActionCreator: locationsSlice.actions.received,
+    receivedActionCreator: locationsSlice.actions.locationsReceived,
   });
 
 export { locationsLoadEpic };

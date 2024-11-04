@@ -9,18 +9,19 @@ import {
   EnvironmentOutlined,
   UserOutlined,
 } from "@ant-design/icons";
+import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 
 const EventsListItem = memo<IEvent>(
   ({
-    id,
-    preview,
-    name,
-    participantsLimit,
     eventsUsersLeagues,
     price,
     status,
     location,
     dateTime,
+    preview,
+    id,
+    name,
+    participantsLimit,
   }) => {
     return (
       <List.Item>
@@ -35,7 +36,7 @@ const EventsListItem = memo<IEvent>(
               cover={
                 <img
                   alt="example"
-                  src={preview?.url}
+                  src={getPreviewSrc(preview?.url)}
                   style={{
                     width: "100%",
                     height: "100%",
