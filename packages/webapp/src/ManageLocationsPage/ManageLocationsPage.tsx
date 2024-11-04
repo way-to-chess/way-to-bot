@@ -7,6 +7,7 @@ import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
+import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 
 const ManageLocationsPage = memo(() => {
   const locations = useSelector(locationsSlice.selectors.locations);
@@ -31,7 +32,7 @@ const ManageLocationsPage = memo(() => {
               cover={
                 <img
                   alt="preview"
-                  src={preview?.url}
+                  src={getPreviewSrc(preview?.url)}
                   style={{
                     width: "100%",
                     height: "100%",

@@ -76,6 +76,11 @@ const loadUsersEpic: TAppEpic = (action$, state$, dependencies) =>
     input: dependencies.httpApi.getAllUsers(),
     requestSymbol: USERS_LOAD_REQUEST_SYMBOL,
     receivedActionCreator: userSlice.actions.usersReceived,
+    onError: () => {
+      message.error(TEXT.api.error);
+
+      return EMPTY;
+    },
   });
 
 const createUserEpic: TAppEpic = (action$, state$, dependencies) =>

@@ -20,36 +20,39 @@ try {
 const simpleGetRequest = <Response>(
   endpoint: string,
 ): (() => Promise<Response | IWithError>) => {
-  return async () => {
-    const response = await fetch(`${BASE_API_URL}/${endpoint}`);
-    if (!response.ok) {
-      console.error(response.statusText);
+  return () =>
+    fetch(`${BASE_API_URL}/api/${endpoint}`)
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
 
-      return { error: response.statusText };
-    }
-    return (await response.json()) as Response;
-  };
+        return { error: response.statusText };
+      })
+      .catch((reason) => ({ error: reason }));
 };
 
 const requestWithPayload = <P extends Record<string, any>, R>(
   method: RequestInit["method"],
   endpoint: string,
 ) => {
-  return async (payload: P): Promise<R | IWithError> => {
-    const response = await fetch(`${BASE_API_URL}/${endpoint}`, {
+  return (payload: P): Promise<R | IWithError> =>
+    fetch(`${BASE_API_URL}/api/${endpoint}`, {
       body: JSON.stringify(payload),
       headers: {
         "Content-Type": "application/json",
       },
       method,
-    });
-    if (!response.ok) {
-      console.error(response.statusText);
-
-      return { error: response.statusText };
-    }
-    return await response.json();
-  };
+    })
+      .then((response) => {
+        if (response.ok) {
+          return response.json();
+        }
+        return { error: response.statusText };
+      })
+      .catch((reason) => {
+        return { error: reason };
+      });
 };
 
 export { simpleGetRequest, requestWithPayload, BASE_API_URL };
