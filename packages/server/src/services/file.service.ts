@@ -3,6 +3,7 @@ import * as path from "path";
 import { rm } from "fs/promises";
 import { dbInstance } from "../database/init";
 import { IFileDeletePayload } from "../interfaces/file.interface";
+import { FileDTO } from "../DTO/file.DTO";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
@@ -20,7 +21,7 @@ export class FileService {
       throw new Error("File was not saved, please try again");
     }
 
-    return savedFile;
+    return new FileDTO(savedFile);
   }
 
   async deleteFile(payload: IFileDeletePayload) {
@@ -31,7 +32,7 @@ export class FileService {
       throw new Error(`File with id ${fileId} not found}`);
     }
 
-    await this.fileRepository.delete(file);
+    await this.fileRepository.delete(file.id);
     await rm(file.url, { force: true });
     return true;
   }
