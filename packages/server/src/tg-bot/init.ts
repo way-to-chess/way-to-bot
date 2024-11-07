@@ -50,7 +50,7 @@ export class TgBotService {
 
           const dbUser = await dbInstance
             .getRepository(UserEntity)
-            .findOneBy({ username: user.username });
+            .findOneBy({ username: `@${user.username}` });
 
           if (!dbUser) {
             return this.bot.sendMessage(
