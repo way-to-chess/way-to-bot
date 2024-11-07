@@ -13,6 +13,7 @@ import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
 import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
 import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
 import { ConfigProvider, theme } from "antd";
+import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 
 document.body.setAttribute("data-dev", String(isDev));
 
@@ -52,6 +53,10 @@ const App = () => {
                 path={WEBAPP_ROUTES.manageLocationsRoute}
                 element={<ManageLocationsPage />}
               ></Route>
+              <Route
+                path={WEBAPP_ROUTES.manageLeaguesRoute}
+                element={<ManageLeaguesPage />}
+              />
             </Route>
           </Routes>
         </ConfigProvider>

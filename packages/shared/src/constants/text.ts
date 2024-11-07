@@ -17,6 +17,7 @@ const TEXT = {
     title: "Главное Меню",
     users: "Пользователи",
     events: "События",
+    leagues: "Лиги",
   },
   users: {
     statistics: "Статистика",
@@ -45,6 +46,9 @@ const TEXT = {
     url: "Ссылка",
     address: "Адрес",
     fileId: "Изображение",
+  },
+  leagues: {
+    name: "Название",
   },
 };
 
