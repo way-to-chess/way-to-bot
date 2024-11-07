@@ -12,6 +12,11 @@ export class FileController {
     return this.fileService.addFile(payload);
   }
 
+  @Post("importCSV")
+  async importCSV(payload: Express.Multer.File) {
+    return this.fileService.importCsv(payload);
+  }
+
   @Delete("/delete")
   async deleteFile(@Body() payload: IFileDeletePayload) {
     return this.fileService.deleteFile(payload);
