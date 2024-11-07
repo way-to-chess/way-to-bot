@@ -5,7 +5,7 @@ import { PayloadActionCreator } from "@reduxjs/toolkit";
 
 interface IHttpRequestEpicFactoryProps<T> {
   input: Promise<T | IWithError>;
-  requestSymbol: symbol;
+  requestSymbol: string;
   receivedActionCreator?: PayloadActionCreator<T>;
   onSuccess?: () => Observable<any>;
   onError?: (error: string) => Observable<any>;

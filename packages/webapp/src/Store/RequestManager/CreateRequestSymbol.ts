@@ -1,4 +1,4 @@
-const createRequestSymbol = (requestName: string): symbol =>
-  Symbol(`REQUEST_${requestName}`);
+const createRequestSymbol = (requestName: string): string =>
+  `REQUEST_${requestName}`;
 
 export { createRequestSymbol };

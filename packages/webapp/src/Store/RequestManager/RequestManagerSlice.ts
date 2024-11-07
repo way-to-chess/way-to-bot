@@ -3,7 +3,7 @@ import { IWithError } from "../../Models/IError";
 import { ERequestStatus } from "./RequestManagerModels";
 
 interface IRequestManagerSlice {
-  [key: symbol]: {
+  [key: string]: {
     status: ERequestStatus;
     error?: string;
   };
@@ -12,7 +12,7 @@ interface IRequestManagerSlice {
 const initialState: IRequestManagerSlice = {};
 
 interface IWithSymbol {
-  symbol: symbol;
+  symbol: string;
 }
 
 const requestManagerSlice = createSlice({
@@ -42,7 +42,7 @@ const requestManagerSlice = createSlice({
       state,
       {
         payload: { symbol },
-      }: PayloadAction<IWithSymbol | { symbol: symbol[] }>,
+      }: PayloadAction<IWithSymbol | { symbol: string[] }>,
     ) => {
       const symbols = Array.isArray(symbol) ? symbol : [symbol];
 
@@ -52,10 +52,10 @@ const requestManagerSlice = createSlice({
     },
   },
   selectors: {
-    statusBySymbol: (sliceState, symbol: symbol) =>
+    statusBySymbol: (sliceState, symbol: string) =>
       sliceState[symbol]?.status ?? ERequestStatus.idle,
-    errorBySymbol: (sliceState, symbol: symbol) =>
-      sliceState[symbol].error ?? "Unknown Error",
+    errorBySymbol: (sliceState, symbol: string) =>
+      sliceState[symbol]?.error ?? "Unknown Error",
   },
 });
 
