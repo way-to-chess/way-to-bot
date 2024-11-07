@@ -1,15 +1,4 @@
-import { IWithError } from "../Models/IError";
-
-import {
-  BASE_API_URL,
-  requestWithPayload,
-  simpleGetRequest,
-} from "./RequestUtils";
-import type {
-  IGetAllEventsResponse,
-  IUpdateEventResponse,
-} from "./HttpApiTypes";
-import { IWithEvent } from "../Models/TEvent";
+import { requestWithPayload, simpleGetRequest } from "./RequestUtils";
 import {
   IUser,
   IUserCreatePayload,
@@ -31,122 +20,6 @@ import {
 } from "@way-to-bot/shared/interfaces/location.interface";
 
 const httpApi = {
-  getEventById: (eventId: string) =>
-    simpleGetRequest<IWithEvent>(`/event/getById/${eventId}`)(),
-  createEvent: requestWithPayload<IEventCreatePayload, undefined>(
-    "POST",
-    "event/create",
-  ),
-  updateEvent: requestWithPayload<IEventUpdatePayload, IUpdateEventResponse>(
-    "PUT",
-    "event/update",
-  ),
-  deleteEvent: requestWithPayload<IEventDeletePayload, boolean>(
-    "DELETE",
-    "event/delete",
-  ),
-  getEventsLocations: simpleGetRequest<IGetAllEventsResponse>("location/all"),
-  getOrCreateUserByUsername: async (
-    username: string,
-  ): Promise<any | IWithError> => {
-    const response = await fetch(`${BASE_API_URL}/user/init`, {
-      body: JSON.stringify({ username }),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
-
-    if (!response.ok) {
-      return { error: response.statusText };
-    }
-
-    return await response.json();
-  },
-  getUserById: async (id: number): Promise<IUser | IWithError> => {
-    const response = await fetch(`${BASE_API_URL}/user/getById/${id}`);
-
-    if (!response.ok) {
-      return { error: response.statusText };
-    }
-
-    return await response.json();
-  },
-  updateUser: async (payload: IUserUpdatePayload) => {
-    const response = await fetch(`${BASE_API_URL}/user/update`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-    });
-
-    if (!response.ok) {
-      return { error: response.statusText };
-    }
-
-    return await response.json();
-  },
-  joinEvent: async (payload: { username: string; eventId: number }) => {
-    const response = await fetch(`${BASE_API_URL}/event/join-event`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "POST",
-    });
-    console.log(response);
-  },
-  leaveEvent: async (payload: { username: string; eventId: number }) => {
-    const response = await fetch(`${BASE_API_URL}/event/leave-event`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-    });
-    console.log(response);
-  },
-
-  updateLocation: async (payload: ILocationUpdatePayload) => {
-    const response = await fetch(`${BASE_API_URL}/location/update`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "PUT",
-    });
-
-    console.log(response);
-  },
-
-  deleteLocation: async (payload: ILocationDeletePayload) => {
-    const response = await fetch(`${BASE_API_URL}/location/delete`, {
-      body: JSON.stringify(payload),
-      headers: {
-        "Content-Type": "application/json",
-      },
-      method: "DELETE",
-    });
-
-    console.log(response);
-  },
-  deleteTeamParticipant: requestWithPayload<any, boolean>(
-    "DELETE",
-    "/team-participant/delete",
-  ),
-  createEventTeam: requestWithPayload<any, boolean>("POST", "team/create"),
-  updateEventTeam: requestWithPayload<any, boolean>("PUT", "team/update"),
-  deleteEventTeam: requestWithPayload<any, boolean>("DELETE", "team/delete"),
-  createEventGame: requestWithPayload<any, boolean>("POST", "game/create"),
-  updateEventGame: requestWithPayload<any, boolean>("PUT", "game/update"),
-  deleteEventGame: requestWithPayload<any, boolean>("DELETE", "game/delete"),
-  addEventGameStat: requestWithPayload<any, boolean>("POST", "game/stat/add"),
-  deleteEventGameStat: requestWithPayload<any, boolean>(
-    "DELETE",
-    "game/stat/delete",
-  ),
-
   getAllUsers: simpleGetRequest<IResponseWithData<IUser[]>>("user/all"),
   createUser: requestWithPayload<IUserCreatePayload, boolean>(
     "POST",
@@ -156,15 +29,37 @@ const httpApi = {
     "DELETE",
     "user/delete",
   ),
+  updateUser: requestWithPayload<IUserUpdatePayload, boolean>(
+    "UPDATE",
+    "user/update",
+  ),
   getAllLocations:
     simpleGetRequest<IResponseWithData<ILocation[]>>("location/all"),
   createLocation: requestWithPayload<ILocationCreatePayload, boolean>(
     "POST",
     "location/create",
   ),
+  deleteLocation: requestWithPayload<ILocationDeletePayload, boolean>(
+    "DELETE",
+    "location/delete",
+  ),
+  updateLocation: requestWithPayload<ILocationUpdatePayload, boolean>(
+    "PUT",
+    "location/update",
+  ),
   getAllEvents: simpleGetRequest<IResponseWithData<IEvent[]>>("event/all"),
+  createEvent: requestWithPayload<IEventCreatePayload, boolean>(
+    "POST",
+    "event/create",
+  ),
+  updateEvent: requestWithPayload<IEventUpdatePayload, boolean>(
+    "PUT",
+    "event/update",
+  ),
+  deleteEvent: requestWithPayload<IEventDeletePayload, boolean>(
+    "DELETE",
+    "event/delete",
+  ),
 };
 
-type THttpApi = typeof httpApi;
-
-export { httpApi, type THttpApi };
+export { httpApi };

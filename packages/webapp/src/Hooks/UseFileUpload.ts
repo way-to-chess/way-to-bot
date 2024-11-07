@@ -1,5 +1,5 @@
 import { message } from "antd";
-import { getNotNil } from "../Utils/GetNotNil";
+import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { useCallback, useMemo } from "react";
 import { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
