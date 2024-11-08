@@ -18,6 +18,12 @@ import {
   ILocationDeletePayload,
   ILocationUpdatePayload,
 } from "@way-to-bot/shared/interfaces/location.interface";
+import {
+  ILeague,
+  ILeagueCreatePayload,
+  ILeagueDeletePayload,
+  ILeagueUpdatePayload,
+} from "@way-to-bot/shared/interfaces/league.interface";
 
 const httpApi = {
   getUserByUsername: (username: string) =>
@@ -63,6 +69,19 @@ const httpApi = {
   deleteEvent: requestWithPayload<IEventDeletePayload, boolean>(
     "DELETE",
     "event/delete",
+  ),
+  getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),
+  createLeague: requestWithPayload<ILeagueCreatePayload, boolean>(
+    "POST",
+    "league/create",
+  ),
+  updateLeague: requestWithPayload<ILeagueUpdatePayload, boolean>(
+    "PUT",
+    "league/update",
+  ),
+  deleteLeague: requestWithPayload<ILeagueDeletePayload, boolean>(
+    "DELETE",
+    "league/delete",
   ),
 };
 
