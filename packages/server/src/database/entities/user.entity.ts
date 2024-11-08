@@ -9,17 +9,19 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  Unique,
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
 import { EventUserLeagueEntity } from "./events_users_leagues";
 
 @Entity("users")
+@Unique(["username", "firstName", "lastName"])
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column("varchar")
+  @Column("varchar", { unique: true })
   username!: string;
 
   @Column({ type: "varchar" })
