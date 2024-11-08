@@ -19,6 +19,7 @@ import { eventsSlice } from "../Store/Events/EventsSlice";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
+import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 
 interface ILink {
   to: string;
@@ -66,6 +67,10 @@ const MenuDrawer = () => {
       <LinkComponent
         title={TEXT.mainMenu.locations}
         to={WEBAPP_ROUTES.manageLocationsRoute}
+      />
+      <LinkComponent
+        title={TEXT.mainMenu.leagues}
+        to={WEBAPP_ROUTES.manageLeaguesRoute}
       />
     </Drawer>
   );
@@ -144,6 +149,14 @@ const EventMenuButton = () => {
   );
 };
 
+const AddLeagueButton = () => {
+  const openDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
+    drawerType: EDrawerType.MANAGE_LEAGUES_DRAWER,
+  });
+
+  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+};
+
 const Layout = () => {
   return (
     <div className={classes.layout}>
@@ -173,7 +186,15 @@ const Layout = () => {
               path={WEBAPP_ROUTES.manageLocationsRoute}
               element={<AddLocationButton />}
             />
-          </Routes>
+  <Route
+              path={WEBAPP_ROUTES.manageLocationsRoute}
+              element={<AddLocationButton />}
+            />
+
+            <Route
+              path={WEBAPP_ROUTES.manageLeaguesRoute}
+              element={<AddLeagueButton />}
+            />        </Routes>
         </ACL>
       </header>
 

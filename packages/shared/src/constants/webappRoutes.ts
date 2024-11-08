@@ -6,6 +6,7 @@ const manageEventsIdRoute = `${manageEventsRoute}/:eventId`;
 const manageUsersRoute = "manage-users";
 const manageUsersIdRoute = `${manageUsersRoute}/:userId`;
 const manageLocationsRoute = "manage-locations";
+const manageLeaguesRoute = "manage-leagues";
 
 const WEBAPP_ROUTES = {
   emptyRoute,
@@ -16,6 +17,7 @@ const WEBAPP_ROUTES = {
   manageEventsRoute,
   manageEventsIdRoute,
   manageLocationsRoute,
+  manageLeaguesRoute,
 };
 
 export { WEBAPP_ROUTES };

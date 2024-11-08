@@ -4,6 +4,9 @@ import { rm } from "fs/promises";
 import { dbInstance } from "../database/init";
 import { IFileDeletePayload } from "../interfaces/file.interface";
 import { FileDTO } from "../DTO/file.DTO";
+import csvToJson from "convert-csv-to-json";
+import { UserEntity } from "../database/entities/user.entity";
+import { In } from "typeorm";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
@@ -34,6 +37,91 @@ export class FileService {
 
     await this.fileRepository.delete(file.id);
     await rm(file.url, { force: true });
+    return true;
+  }
+
+  async importCsv(file: Express.Multer.File) {
+    if (!file.destination || !file.filename) {
+      throw new Error("No destination or filename, data corrupted");
+    }
+
+    const userRepository = dbInstance.getRepository(UserEntity);
+
+    const csvFilePath = path.join(file.destination, file.filename);
+
+    const results = csvToJson.getJsonFromCsv(csvFilePath) as {
+      Round: string;
+      Board: string;
+      White: string;
+      Black: string;
+      Result: string;
+    }[];
+
+    const participantsData = results.reduce(
+      (accumulator, result) => {
+        const whiteSplitted = result.White.split(" ");
+        const blackSplitted = result.Black.split(" ");
+
+        if (whiteSplitted.length !== 2 || blackSplitted.length !== 2) {
+          return accumulator;
+        }
+
+        const firstNames = [whiteSplitted[1].trim(), blackSplitted[1].trim()];
+        const lastNames = [whiteSplitted[0].trim(), blackSplitted[0].trim()];
+
+        firstNames.forEach((name) => accumulator.firstNames.add(name));
+        lastNames.forEach((name) => accumulator.lastNames.add(name));
+
+        return accumulator;
+      },
+      { firstNames: new Set<string>(), lastNames: new Set<string>() },
+    );
+
+    const users = await userRepository.find({
+      where: {
+        firstName: In(Array.from(participantsData.firstNames)),
+        lastName: In(Array.from(participantsData.lastNames)),
+      },
+    });
+
+    results.forEach((result) => {
+      const whiteSplitted = result.White.split(" ");
+      const blackSplitted = result.Black.split(" ");
+
+      if (whiteSplitted.length !== 2 || blackSplitted.length !== 2) {
+        return;
+      }
+
+      const whiteUser = users.find(
+        (user) =>
+          user.firstName === whiteSplitted[1] &&
+          user.lastName === whiteSplitted[0],
+      );
+      const blackUser = users.find(
+        (user) =>
+          user.firstName === blackSplitted[1] &&
+          user.lastName === blackSplitted[0],
+      );
+
+      if (whiteUser && blackUser) {
+        switch (result.Result) {
+          case "1-0":
+            whiteUser.wins++;
+            blackUser.losses++;
+            break;
+          case "0-1":
+            whiteUser.losses++;
+            blackUser.wins++;
+            break;
+          case "0.5-0.5":
+            whiteUser.draws++;
+            blackUser.draws++;
+            break;
+        }
+      }
+    });
+
+    await userRepository.save(users);
     return true;
   }
 }

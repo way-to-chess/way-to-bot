@@ -9,17 +9,19 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
+  Unique,
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
 import { EventUserLeagueEntity } from "./events_users_leagues";
 
 @Entity("users")
+@Unique(["username", "firstName", "lastName"])
 export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column("varchar")
+  @Column("varchar", { unique: true })
   username!: string;
 
   @Column({ type: "varchar" })
@@ -70,10 +72,16 @@ export class UserEntity {
   @BeforeInsert()
   @BeforeUpdate()
   calculateWinRateAndTotal() {
+    if (this.username) {
+      this.username = this.username.trim();
+      this.username =
+        this.username.charAt(0) === "@" ? this.username : "@" + this.username;
+    }
     this.total = this.wins + this.losses + this.draws;
 
     if (this.wins || this.losses) {
-      this.winRate = this.wins / (this.wins + this.losses);
+      const winRate = (this.wins / (this.wins + this.losses)) * 100;
+      this.winRate = Math.round(winRate * 100) / 100;
     } else {
       this.winRate = 0;
     }

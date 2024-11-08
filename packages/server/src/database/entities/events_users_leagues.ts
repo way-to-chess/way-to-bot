@@ -1,4 +1,10 @@
-import {Entity, JoinColumn, ManyToOne, PrimaryGeneratedColumn, Unique} from "typeorm";
+import {
+  Entity,
+  JoinColumn,
+  ManyToOne,
+  PrimaryGeneratedColumn,
+  Unique,
+} from "typeorm";
 import { EventEntity } from "./event.entity";
 import { UserEntity } from "./user.entity";
 import { LeagueEntity } from "./league.entity";
