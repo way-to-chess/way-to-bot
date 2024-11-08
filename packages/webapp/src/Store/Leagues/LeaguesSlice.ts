@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ILeague } from "@way-to-bot/shared/interfaces/league.interface";
-import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import {
+  ILeague,
   ILeagueCreatePayload,
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
-} from "@way-to-bot/server/interfaces/league.interface";
+} from "@way-to-bot/shared/interfaces/league.interface";
+import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
 interface ILeaguesSliceState {
   leagues: ILeague[];

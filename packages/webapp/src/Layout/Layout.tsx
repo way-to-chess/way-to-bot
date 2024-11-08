@@ -186,7 +186,6 @@ const Layout = () => {
               path={WEBAPP_ROUTES.manageLocationsRoute}
               element={<AddLocationButton />}
             />
-
             <Route
               path={WEBAPP_ROUTES.manageLocationsRoute}
               element={<AddLocationButton />}
