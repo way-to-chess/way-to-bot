@@ -20,6 +20,12 @@ const TEXT = {
     leagues: "Лиги",
   },
   users: {
+    wins: "Победы",
+    loses: "Поражения",
+    draws: "Ничьи",
+    winRate: "Процент побед",
+    total: "Кол-во партий",
+    rating: "Рейтинг",
     statistics: "Статистика",
     username: "Ник в телеграмм",
     firstName: "Имя",

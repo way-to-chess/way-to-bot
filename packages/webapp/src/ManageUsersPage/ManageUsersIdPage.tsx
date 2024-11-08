@@ -54,16 +54,18 @@ const ManageUsersIdPage = () => {
       <List.Item>
         <Flex vertical gap={8}>
           <Flex gap={8} style={{ fontSize: 20 }}>
-            <div style={{ color: "green" }}>W {user.wins}</div>
-            <div>D {user.draws}</div>
-            <div>L {user.losses}</div>
+            <div
+              style={{ color: "green" }}
+            >{`${TEXT.users.wins}: ${user.wins}`}</div>
+            <div>{`${TEXT.users.draws}: ${user.draws}`}</div>
+            <div
+              style={{ color: "red" }}
+            >{`${TEXT.users.loses}: ${user.losses}`}</div>
           </Flex>
 
-          <div>
-            {"WR"}
-            &nbsp;
-            {user.winRate}
-          </div>
+          <div>{`${TEXT.users.total}: ${user.total}`}</div>
+          <div>{`${TEXT.users.winRate}: ${user.winRate}`}</div>
+          <div>{`${TEXT.users.rating}: ${user.rating}`}</div>
         </Flex>
       </List.Item>
 
