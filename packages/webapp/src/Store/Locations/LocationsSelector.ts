@@ -1,6 +1,6 @@
 import { createPropertySelectors } from "../Utils/CreatePropertySelectors";
 import { AppState } from "../App/CreateStore";
-import { getNotNil } from "../../Utils/GetNotNil";
+import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { TLocationUpdatePayload } from "../../../../src/types/location.types";
 
 const locationsSelectors = createPropertySelectors(

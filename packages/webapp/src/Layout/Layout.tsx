@@ -17,6 +17,8 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
+import { ACL } from "../ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 
 interface ILink {
@@ -163,32 +165,39 @@ const Layout = () => {
       <header className={classes.header}>
         <MenuButton />
 
-        <Routes>
-          <Route
-            path={WEBAPP_ROUTES.manageUsersRoute}
-            element={<AddUserButton />}
-          />
+        <ACL roles={[EUserRole.ADMIN]}>
+          <Routes>
+            <Route
+              path={WEBAPP_ROUTES.manageUsersRoute}
+              element={<AddUserButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageEventsRoute}
-            element={<AddEventButton />}
-          />
+            <Route
+              path={WEBAPP_ROUTES.manageEventsRoute}
+              element={<AddEventButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageEventsIdRoute}
-            element={<EventMenuButton />}
-          />
+            <Route
+              path={WEBAPP_ROUTES.manageEventsIdRoute}
+              element={<EventMenuButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageLocationsRoute}
-            element={<AddLocationButton />}
-          />
+            <Route
+              path={WEBAPP_ROUTES.manageLocationsRoute}
+              element={<AddLocationButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageLeaguesRoute}
-            element={<AddLeagueButton />}
-          />
-        </Routes>
+            <Route
+              path={WEBAPP_ROUTES.manageLocationsRoute}
+              element={<AddLocationButton />}
+            />
+
+            <Route
+              path={WEBAPP_ROUTES.manageLeaguesRoute}
+              element={<AddLeagueButton />}
+            />
+          </Routes>
+        </ACL>
       </header>
 
       <div className={classes.content}>

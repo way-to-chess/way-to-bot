@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import "./main.css";
 import { isDev } from "./Utils/OneLineUtils";
 import { Provider } from "react-redux";
@@ -15,7 +15,9 @@ import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
 import { ConfigProvider, theme } from "antd";
 import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 
-document.body.setAttribute("data-dev", String(isDev));
+if (isDev) {
+  document.body.setAttribute("data-dev", "true");
+}
 
 const App = () => {
   const { darkAlgorithm, defaultAlgorithm } = theme;
@@ -34,9 +36,14 @@ const App = () => {
           <Routes>
             <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
               <Route
+                index
+                element={<Navigate to={WEBAPP_ROUTES.manageUsersRoute} />}
+              />
+
+              <Route
                 path={WEBAPP_ROUTES.manageUsersRoute}
                 element={<ManageUsersPage />}
-              ></Route>
+              />
               <Route
                 element={<ManageUsersIdPage />}
                 path={WEBAPP_ROUTES.manageUsersIdRoute}

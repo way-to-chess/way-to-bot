@@ -1,7 +1,7 @@
 import { routerEpic } from "../Utils/RouterEpic";
 import { combineEpics } from "redux-observable";
 import { loadEventByIdEpic } from "./LoadEventByIdEpic";
-import { getNotNil } from "../../Utils/GetNotNil";
+import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { TAppEpic } from "../App/Epics/TAppEpic";
 import { fromActionCreator } from "../Utils/FromActionCreator";
 import { eventsSlice } from "./EventsSlice";

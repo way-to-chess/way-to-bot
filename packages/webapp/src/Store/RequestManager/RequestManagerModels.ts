@@ -1,7 +1,3 @@
-interface IWithRequestSymbol {
-  requestSymbol: symbol;
-}
-
 enum ERequestStatus {
   idle = "IDLE",
   loading = "LOADING",
@@ -10,4 +6,3 @@ enum ERequestStatus {
 }
 
 export { ERequestStatus };
-export type { IWithRequestSymbol };
