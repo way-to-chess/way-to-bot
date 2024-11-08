@@ -70,6 +70,11 @@ export class UserEntity {
   @BeforeInsert()
   @BeforeUpdate()
   calculateWinRateAndTotal() {
+    if (this.username) {
+      this.username = this.username.trim();
+      this.username =
+        this.username.charAt(0) === "@" ? this.username : "@" + this.username;
+    }
     this.total = this.wins + this.losses + this.draws;
 
     if (this.wins || this.losses) {

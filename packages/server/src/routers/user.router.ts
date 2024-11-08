@@ -5,6 +5,7 @@ import {
   IUserDeletePayload,
   IUserUpdatePayload,
 } from "../interfaces/user.interface";
+import { castUserNameMiddleware } from "../middlewares/username.mddwmts";
 
 export const UserRouter = Router();
 const userController = new UserController();
@@ -24,6 +25,7 @@ UserRouter.get("/getById/:id", async (req: Request<{ id: number }>, res) => {
 
 UserRouter.get(
   "/getByUserName/:username",
+  castUserNameMiddleware,
   async (req: Request<{ username: string }>, res) => {
     if (!req.params?.username) {
       throw new Error("Param username is not found");
