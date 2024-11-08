@@ -1,5 +1,12 @@
 import classes from "./Layout.module.css";
-import { NavLink, Outlet, Route, Routes } from "react-router-dom";
+import {
+  generatePath,
+  Link,
+  NavLink,
+  Outlet,
+  Route,
+  Routes,
+} from "react-router-dom";
 import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
@@ -8,6 +15,7 @@ import {
   PlusOutlined,
   UserAddOutlined,
   UsergroupAddOutlined,
+  UserOutlined,
 } from "@ant-design/icons";
 import { Drawer, Dropdown, MenuProps } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
@@ -46,9 +54,11 @@ const MenuDrawer = () => {
     false,
   );
 
+  const userFullName = useSelector(userSlice.selectors.userFullName);
+
   return (
     <Drawer
-      title={TEXT.mainMenu.title}
+      title={userFullName ?? TEXT.mainMenu.title}
       styles={{ body: { padding: 0 } }}
       placement={"left"}
       closable={false}
@@ -157,6 +167,22 @@ const AddLeagueButton = () => {
   return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
+const UserAccountButton = () => {
+  const userId = useSelector(userSlice.selectors.userId);
+
+  if (!userId) {
+    return null;
+  }
+
+  const to = generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId });
+
+  return (
+    <Link to={to}>
+      <UserOutlined className={classes.headerButton} />
+    </Link>
+  );
+};
+
 const Layout = () => {
   return (
     <div className={classes.layout}>
@@ -197,6 +223,8 @@ const Layout = () => {
             />
           </Routes>
         </ACL>
+
+        <UserAccountButton />
       </header>
 
       <div className={classes.content}>

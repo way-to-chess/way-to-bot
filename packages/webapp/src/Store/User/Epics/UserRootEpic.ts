@@ -14,6 +14,7 @@ import {
 } from "../UserVariables";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { getUserByIdEpic } from "../../User/Epics/GetUserByIdEpic";
 
 const loadUsersEpic: TAppEpic = (action$, state$, dependencies) =>
   httpRequestEpicFactory({
@@ -100,4 +101,13 @@ const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () =>
   combineEpics(loadUsersEpic, createUserEpic, deleteUserEpic, updateUserEpic),
 );
 
-export { manageUsersRouterEpic as userRootEpic };
+const manageUsersIdRoute = routerEpic(
+  WEBAPP_ROUTES.manageUsersIdRoute,
+  (match) => {
+    return getUserByIdEpic(Number(match.params.userId));
+  },
+);
+
+const userRootEpic = combineEpics(manageUsersRouterEpic, manageUsersIdRoute);
+
+export { userRootEpic };

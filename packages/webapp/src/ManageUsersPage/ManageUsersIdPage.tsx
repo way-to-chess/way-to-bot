@@ -9,18 +9,29 @@ import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
+import { GET_USER_BY_ID_REQUEST_SYMBOL } from "../Store/User/UserVariables";
+import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 
 const ManageUsersIdPage = () => {
   const { userId } = useParams();
 
   const user = useParamSelector(userSlice.selectors.userById, Number(userId));
+  const status = useParamSelector(
+    requestManagerSlice.selectors.statusBySymbol,
+    GET_USER_BY_ID_REQUEST_SYMBOL,
+  );
 
   if (!user) {
-    return <Empty />;
+    return <Empty style={{ padding: 16 }} />;
   }
 
   return (
-    <List style={{ padding: 16 }} itemLayout={"vertical"}>
+    <List
+      style={{ padding: 16 }}
+      itemLayout={"vertical"}
+      loading={status === ERequestStatus.loading}
+    >
       <List.Item>
         <Flex
           style={{ color: "black" }}

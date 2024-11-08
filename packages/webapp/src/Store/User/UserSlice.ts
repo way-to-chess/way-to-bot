@@ -7,6 +7,7 @@ import {
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import { EUserRole } from "@way-to-bot/shared/enums";
+import { getUserFullName } from "../../Utils/GetUserFullName";
 
 interface IUserState {
   manageUsersDrawerVisible: boolean;
@@ -32,9 +33,9 @@ const userSlice = createSlice({
     },
     usersReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<IUser[]>>,
+      { payload }: PayloadAction<IResponseWithData<IUser[] | IUser>>,
     ) => {
-      state.users = payload.data;
+      state.users = Array.isArray(payload.data) ? payload.data : [payload.data];
     },
     userReceived: (
       state,
@@ -52,13 +53,24 @@ const userSlice = createSlice({
     users: (sliceState) => sliceState.users,
     userById: (sliceState, userId: number) =>
       sliceState.users.find((it) => it.id === userId),
-    userHasAccessRoles: (sliceState, roles: EUserRole[]) => {
+    userHasAccessRoles: (sliceState, roles: EUserRole[], exact = false) => {
       const userRoles = sliceState.user?.roles;
       if (!userRoles) {
         return false;
       }
 
       return roles.some((role) => userRoles.includes(role));
+    },
+    userId: (sliceState) => sliceState.user?.id,
+    userFullName: (sliceState) => {
+      if (!sliceState.user) {
+        return null;
+      }
+
+      return getUserFullName(
+        sliceState.user.firstName,
+        sliceState.user.lastName,
+      );
     },
   },
 });

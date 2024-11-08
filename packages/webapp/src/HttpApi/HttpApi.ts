@@ -26,6 +26,8 @@ import {
 } from "@way-to-bot/shared/interfaces/league.interface";
 
 const httpApi = {
+  getUserById: (userId: number) =>
+    simpleGetRequest<IResponseWithData<IUser>>(`user/getById/${userId}`)(),
   getUserByUsername: (username: string) =>
     simpleGetRequest<IResponseWithData<IUser>>(
       `user/getByUserName/${username}`,
