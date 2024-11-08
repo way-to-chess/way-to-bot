@@ -47,11 +47,12 @@ const TEXT = {
     linkToTable: "Ссылка на таблицу",
     locationId: "Локация",
   },
-  manageLocationsForm: {
+  locations: {
     title: "Название",
     url: "Ссылка",
     address: "Адрес",
     fileId: "Изображение",
+    map: "Показать на карте",
   },
   leagues: {
     name: "Название",
