@@ -20,6 +20,10 @@ import {
 } from "@way-to-bot/shared/interfaces/location.interface";
 
 const httpApi = {
+  getUserByUsername: (username: string) =>
+    simpleGetRequest<IResponseWithData<IUser>>(
+      `user/getByUserName/${username}`,
+    )(),
   getAllUsers: simpleGetRequest<IResponseWithData<IUser[]>>("user/all"),
   createUser: requestWithPayload<IUserCreatePayload, boolean>(
     "POST",

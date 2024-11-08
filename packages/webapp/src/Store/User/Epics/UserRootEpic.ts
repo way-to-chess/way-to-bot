@@ -1,17 +1,17 @@
-import type { TAppEpic } from "../App/Epics/TAppEpic";
+import type { TAppEpic } from "../../App/Epics/TAppEpic";
 import { EMPTY, merge, of, switchMap } from "rxjs";
-import { userSlice } from "./UserSlice";
+import { userSlice } from "../UserSlice";
 import { combineEpics } from "redux-observable";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { routerEpic } from "../Utils/RouterEpic";
-import { fromActionCreator } from "../../Store/Utils/FromActionCreator";
-import { httpRequestEpicFactory } from "../../Store/Utils/HttpRequestEpicFactory";
+import { routerEpic } from "../../Utils/RouterEpic";
+import { fromActionCreator } from "../../Utils/FromActionCreator";
+import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory";
 import {
   USER_CREATE_REQUEST_SYMBOL,
   USER_DELETE_REQUEST_SYMBOL,
   USER_UPDATE_REQUEST_SYMBOL,
   USERS_LOAD_REQUEST_SYMBOL,
-} from "../../Store/User/UserVariables";
+} from "../UserVariables";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 

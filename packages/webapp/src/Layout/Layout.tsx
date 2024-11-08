@@ -17,6 +17,8 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
+import { ACL } from "../ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 
 interface ILink {
   to: string;
@@ -135,7 +137,7 @@ const EventMenuButton = () => {
     <Dropdown
       menu={{ items: EVENT_MENU_ITEMS }}
       placement="bottomRight"
-      trigger={"click"}
+      trigger={["click"]}
     >
       <MoreOutlined className={classes.headerButton} />
     </Dropdown>
@@ -150,27 +152,29 @@ const Layout = () => {
       <header className={classes.header}>
         <MenuButton />
 
-        <Routes>
-          <Route
-            path={WEBAPP_ROUTES.manageUsersRoute}
-            element={<AddUserButton />}
-          />
+        <ACL roles={[EUserRole.ADMIN]}>
+          <Routes>
+            <Route
+              path={WEBAPP_ROUTES.manageUsersRoute}
+              element={<AddUserButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageEventsRoute}
-            element={<AddEventButton />}
-          />
+            <Route
+              path={WEBAPP_ROUTES.manageEventsRoute}
+              element={<AddEventButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageEventsIdRoute}
-            element={<EventMenuButton />}
-          />
+            <Route
+              path={WEBAPP_ROUTES.manageEventsIdRoute}
+              element={<EventMenuButton />}
+            />
 
-          <Route
-            path={WEBAPP_ROUTES.manageLocationsRoute}
-            element={<AddLocationButton />}
-          />
-        </Routes>
+            <Route
+              path={WEBAPP_ROUTES.manageLocationsRoute}
+              element={<AddLocationButton />}
+            />
+          </Routes>
+        </ACL>
       </header>
 
       <div className={classes.content}>
