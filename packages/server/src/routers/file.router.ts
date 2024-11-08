@@ -20,6 +20,20 @@ FileRouter.post(
   },
 );
 
+FileRouter.post(
+  "/importCSV",
+  uploadMiddleware.single("file"),
+  async (req, res) => {
+    const file = req.file;
+
+    if (!file) {
+      throw new Error("file not uploaded");
+    }
+    const data = await fileController.importCSV(file);
+    res.status(200).json({ data });
+  },
+);
+
 FileRouter.delete(
   "/delete",
   async (req: Request<{}, {}, IFileDeletePayload>, res) => {

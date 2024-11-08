@@ -6,4 +6,17 @@ interface ILeague {
   eventsUsersLeagues: IEventUserLeague[];
 }
 
-export { ILeague };
+interface ILeagueCreatePayload extends Partial<Omit<ILeague, "id">> {}
+
+interface ILeagueUpdatePayload extends Partial<ILeague> {}
+
+interface ILeagueDeletePayload {
+  leagueId: number;
+}
+
+export type {
+  ILeague,
+  ILeagueCreatePayload,
+  ILeagueUpdatePayload,
+  ILeagueDeletePayload,
+};
