@@ -187,15 +187,15 @@ const Layout = () => {
               element={<AddLocationButton />}
             />
 
-              <Route
-                  path={WEBAPP_ROUTES.manageLocationsRoute}
-                  element={<AddLocationButton />}
-              />
+            <Route
+              path={WEBAPP_ROUTES.manageLocationsRoute}
+              element={<AddLocationButton />}
+            />
 
-              <Route
-                  path={WEBAPP_ROUTES.manageLeaguesRoute}
-                  element={<AddLeagueButton />}
-              />
+            <Route
+              path={WEBAPP_ROUTES.manageLeaguesRoute}
+              element={<AddLeagueButton />}
+            />
           </Routes>
         </ACL>
       </header>
