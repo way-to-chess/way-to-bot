@@ -73,7 +73,8 @@ export class UserEntity {
     this.total = this.wins + this.losses + this.draws;
 
     if (this.wins || this.losses) {
-      this.winRate = this.wins / (this.wins + this.losses);
+      const winRate = (this.wins / (this.wins + this.losses)) * 100;
+      this.winRate = Math.round(winRate * 100) / 100;
     } else {
       this.winRate = 0;
     }

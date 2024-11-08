@@ -40,7 +40,6 @@ export class FileService {
     return true;
   }
 
-  // TODO dont forget about BYE (no opponent)
   async importCsv(file: Express.Multer.File) {
     if (!file.destination || !file.filename) {
       throw new Error("No destination or filename, data corrupted");
@@ -62,6 +61,11 @@ export class FileService {
       (accumulator, result) => {
         const whiteSplitted = result.White.split(" ");
         const blackSplitted = result.Black.split(" ");
+
+        if (whiteSplitted.length !== 2 || blackSplitted.length !== 2) {
+          return accumulator;
+        }
+
         const firstNames = [whiteSplitted[1].trim(), blackSplitted[1].trim()];
         const lastNames = [whiteSplitted[0].trim(), blackSplitted[0].trim()];
 
@@ -83,6 +87,10 @@ export class FileService {
     results.forEach((result) => {
       const whiteSplitted = result.White.split(" ");
       const blackSplitted = result.Black.split(" ");
+
+      if (whiteSplitted.length !== 2 || blackSplitted.length !== 2) {
+        return;
+      }
 
       const whiteUser = users.find(
         (user) =>
@@ -114,5 +122,6 @@ export class FileService {
     });
 
     await userRepository.save(users);
+    return true;
   }
 }
