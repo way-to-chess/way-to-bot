@@ -25,9 +25,9 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
+import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
-import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 
 interface ILink {
   to: string;
@@ -191,6 +191,8 @@ const Layout = () => {
       <header className={classes.header}>
         <MenuButton />
 
+        <UserAccountButton />
+
         <ACL roles={[EUserRole.ADMIN]}>
           <Routes>
             <Route
@@ -223,8 +225,6 @@ const Layout = () => {
             />
           </Routes>
         </ACL>
-
-        <UserAccountButton />
       </header>
 
       <div className={classes.content}>

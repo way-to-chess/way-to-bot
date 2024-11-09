@@ -7,6 +7,8 @@ const TEXT = {
     events: "События",
     users: "Пользователи",
     upload: "Загрузить",
+    edit: "Изменить",
+    delete: "Удалить",
   },
   api: {
     success: "Успех",
@@ -31,8 +33,6 @@ const TEXT = {
     firstName: "Имя",
     lastName: "Фамилия",
     roles: "Роли",
-    edit: "Изменить",
-    delete: "Удалить",
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
   manageEvents: {

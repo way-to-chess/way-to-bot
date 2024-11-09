@@ -19,7 +19,7 @@ const EditButton = () => {
     true,
   );
 
-  return <Button onClick={open}>{TEXT.users.edit}</Button>;
+  return <Button onClick={open}>{TEXT.common.edit}</Button>;
 };
 
 const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
@@ -38,7 +38,7 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 
   return (
     <Button onClick={showDeleteConfirm} danger>
-      {TEXT.users.delete}
+      {TEXT.common.delete}
     </Button>
   );
 };
@@ -63,8 +63,8 @@ const ManageUsersPage = () => {
             <Flex vertical gap={8}>
               <UsersListItem {...item} index={index} />
               <Flex gap={8} justify={"flex-end"}>
-                <EditButton key={1} />
-                <DeleteButton key={2} userId={item.id} />
+                <EditButton />
+                <DeleteButton userId={item.id} />
               </Flex>
             </Flex>
           </List.Item>
