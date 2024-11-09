@@ -7,6 +7,7 @@ import {
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import {
+  IAddUsersToEventPayload,
   IEvent,
   IEventCreatePayload,
   IEventDeletePayload,
@@ -26,6 +27,7 @@ import {
 } from "@way-to-bot/shared/interfaces/league.interface";
 
 const httpApi = {
+  //USERS
   getUserById: (userId: number) =>
     simpleGetRequest<IResponseWithData<IUser>>(`user/getById/${userId}`)(),
   getUserByUsername: (username: string) =>
@@ -45,6 +47,8 @@ const httpApi = {
     "UPDATE",
     "user/update",
   ),
+
+  //LOCATIONS
   getAllLocations:
     simpleGetRequest<IResponseWithData<ILocation[]>>("location/all"),
   createLocation: requestWithPayload<ILocationCreatePayload, boolean>(
@@ -59,7 +63,11 @@ const httpApi = {
     "PUT",
     "location/update",
   ),
+
+  //EVENTS
   getAllEvents: simpleGetRequest<IResponseWithData<IEvent[]>>("event/all"),
+  getEventById: (eventId: string) =>
+    simpleGetRequest<IResponseWithData<IEvent>>(`event/getById/${eventId}`)(),
   createEvent: requestWithPayload<IEventCreatePayload, boolean>(
     "POST",
     "event/create",
@@ -72,6 +80,12 @@ const httpApi = {
     "DELETE",
     "event/delete",
   ),
+  addUsersToEvent: requestWithPayload<IAddUsersToEventPayload, boolean>(
+    "POST",
+    "event/addUsersToEvent",
+  ),
+
+  //LEAGUES
   getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),
   createLeague: requestWithPayload<ILeagueCreatePayload, boolean>(
     "POST",

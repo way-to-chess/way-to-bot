@@ -10,23 +10,11 @@ import {
   USER_CREATE_REQUEST_SYMBOL,
   USER_DELETE_REQUEST_SYMBOL,
   USER_UPDATE_REQUEST_SYMBOL,
-  USERS_LOAD_REQUEST_SYMBOL,
 } from "../UserVariables";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
-import { getUserByIdEpic } from "../../User/Epics/GetUserByIdEpic";
-
-const loadUsersEpic: TAppEpic = (action$, state$, dependencies) =>
-  httpRequestEpicFactory({
-    input: dependencies.httpApi.getAllUsers(),
-    requestSymbol: USERS_LOAD_REQUEST_SYMBOL,
-    receivedActionCreator: userSlice.actions.usersReceived,
-    onError: () => {
-      message.error(TEXT.api.error);
-
-      return EMPTY;
-    },
-  });
+import { getUserByIdEpic } from "./GetUserByIdEpic";
+import { loadUsersEpic } from "./LoadUsersEpic";
 
 const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(

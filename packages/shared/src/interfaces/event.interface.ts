@@ -44,9 +44,11 @@ export interface IEventDeletePayload {
 export interface IAddUsersToEventPayload {
   eventId: number;
   userIds: number[];
+  leagueId: number;
 }
 
 export interface IRemoveUsersFromEventPayload {
   eventId: number;
   userIds: number[];
+  leagueId: number;
 }

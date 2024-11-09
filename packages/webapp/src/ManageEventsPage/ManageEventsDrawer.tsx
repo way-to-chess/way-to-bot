@@ -23,6 +23,7 @@ import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVa
 import { useFileUpload } from "../Hooks/UseFileUpload";
 import { useCallback } from "react";
 import { UploadOutlined } from "@ant-design/icons";
+import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
   (value) => ({
@@ -32,15 +33,18 @@ const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
 );
 
 const ManageEventsDrawer = () => {
-  const open = useSelector(eventsSlice.selectors.manageEventsDrawerVisible);
-  const closeDrawer = useActionCreator(
-    eventsSlice.actions.manageEventsDrawerVisibilityChanged,
-    false,
+  const open = useParamSelector(
+    drawerSlice.selectors.drawerOpen,
+    EDrawerType.MANAGE_EVENTS_DRAWER,
   );
+
+  const closeDrawer = useActionCreator(drawerSlice.actions.closeDrawer, {
+    drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
+  });
 
   const locations = useSelector(locationsSlice.selectors.locations);
 
-  const status = useParamSelector(
+  const locationsStatus = useParamSelector(
     requestManagerSlice.selectors.statusBySymbol,
     LOCATIONS_GET_ALL_REQUEST_SYMBOL,
   );
@@ -79,11 +83,11 @@ const ManageEventsDrawer = () => {
 
   return (
     <Drawer
+      getContainer={false}
       placement={"right"}
       closable
       open={open}
       onClose={closeDrawer}
-      getContainer={false}
     >
       <Form<IEventCreatePayload>
         form={form}
@@ -93,7 +97,7 @@ const ManageEventsDrawer = () => {
       >
         <Form.Item
           name={"name"}
-          label={TEXT.manageEvents.name}
+          label={TEXT.events.name}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
@@ -101,7 +105,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"dateTime"}
-          label={TEXT.manageEvents.dateTime}
+          label={TEXT.events.dateTime}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <DatePicker style={{ width: "100%" }} placeholder={""} showTime />
@@ -109,7 +113,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"price"}
-          label={TEXT.manageEvents.price}
+          label={TEXT.events.price}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
@@ -117,7 +121,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"status"}
-          label={TEXT.manageEvents.status}
+          label={TEXT.events.status}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select
@@ -129,22 +133,22 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"participantsLimit"}
-          label={TEXT.manageEvents.participantsLimit}
+          label={TEXT.events.participantsLimit}
         >
           <Input type={"number"} />
         </Form.Item>
 
-        <Form.Item name={"linkToTable"} label={TEXT.manageEvents.linkToTable}>
+        <Form.Item name={"linkToTable"} label={TEXT.events.linkToTable}>
           <Input />
         </Form.Item>
 
         <Form.Item
           name={"locationId"}
-          label={TEXT.manageEvents.locationId}
+          label={TEXT.events.locationId}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select
-            loading={status === ERequestStatus.loading}
+            loading={locationsStatus === ERequestStatus.loading}
             options={locations.map(({ id, title }) => ({
               value: id,
               label: title,
@@ -154,7 +158,7 @@ const ManageEventsDrawer = () => {
 
         <Form.Item
           name={"fileId"}
-          label={TEXT.manageEvents.fileId}
+          label={TEXT.events.fileId}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Upload {...uploadProps}>

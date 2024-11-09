@@ -23,7 +23,9 @@ const ManageEventsPage = () => {
         itemLayout={"vertical"}
         style={{ padding: 16 }}
         dataSource={events}
-        renderItem={(event) => <EventsListItem {...event} key={event.id} />}
+        renderItem={(event) => {
+          return <EventsListItem {...event} key={event.id} />;
+        }}
       />
     </>
   );

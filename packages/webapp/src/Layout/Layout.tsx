@@ -6,24 +6,17 @@ import {
   Outlet,
   Route,
   Routes,
+  useParams,
 } from "react-router-dom";
 import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import {
-  MenuOutlined,
-  MoreOutlined,
-  PlusOutlined,
-  UserAddOutlined,
-  UsergroupAddOutlined,
-  UserOutlined,
-} from "@ant-design/icons";
-import { Drawer, Dropdown, MenuProps } from "antd";
+import { MenuOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
+import { Drawer } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
-import { eventsSlice } from "../Store/Events/EventsSlice";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { ACL } from "../ACL/ACL";
@@ -114,49 +107,22 @@ const AddLocationButton = () => {
 };
 
 const AddEventButton = () => {
-  const openDrawer = useActionCreator(
-    eventsSlice.actions.manageEventsDrawerVisibilityChanged,
-    true,
-  );
+  const openDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
+    drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
+  });
 
   return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
-const AddUserToEventButton = () => {
-  return (
-    <span>
-      <UserAddOutlined />
-      &nbsp;
-      {TEXT.manageEvents.addUser}
-    </span>
-  );
-};
+const AddUsersToEventButton = () => {
+  const params = useParams();
 
-const AddLeagueToEventButton = () => {
-  return (
-    <span>
-      <UsergroupAddOutlined />
-      &nbsp;
-      {TEXT.manageEvents.addLeague}
-    </span>
-  );
-};
+  const openDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
+    drawerType: EDrawerType.MANAGE_EVENT_USERS_DRAWER,
+    data: { eventId: params.eventId },
+  });
 
-const EVENT_MENU_ITEMS: MenuProps["items"] = [
-  { key: 1, label: <AddUserToEventButton /> },
-  { key: 2, label: <AddLeagueToEventButton /> },
-];
-
-const EventMenuButton = () => {
-  return (
-    <Dropdown
-      menu={{ items: EVENT_MENU_ITEMS }}
-      placement="bottomRight"
-      trigger={["click"]}
-    >
-      <MoreOutlined className={classes.headerButton} />
-    </Dropdown>
-  );
+  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
 
 const AddLeagueButton = () => {
@@ -207,7 +173,7 @@ const Layout = () => {
 
             <Route
               path={WEBAPP_ROUTES.manageEventsIdRoute}
-              element={<EventMenuButton />}
+              element={<AddUsersToEventButton />}
             />
 
             <Route

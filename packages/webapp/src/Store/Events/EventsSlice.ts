@@ -1,5 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
+  IAddUsersToEventPayload,
   IEvent,
   IEventCreatePayload,
   IEventDeletePayload,
@@ -8,12 +9,10 @@ import {
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
 interface IEventsSlice {
-  manageEventsDrawerVisible: boolean;
   events: IEvent[];
 }
 
 const initialState: IEventsSlice = {
-  manageEventsDrawerVisible: false,
   events: [],
 };
 
@@ -23,25 +22,18 @@ const eventsSlice = createSlice({
   reducers: {
     eventsReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<IEvent[]>>,
+      { payload }: PayloadAction<IResponseWithData<IEvent[] | IEvent>>,
     ) => {
-      state.events = payload.data;
+      state.events = Array.isArray(payload.data)
+        ? payload.data
+        : [payload.data];
     },
     updateEvent: (_, __: PayloadAction<IEventUpdatePayload>) => {},
     deleteEvent: (_, __: PayloadAction<IEventDeletePayload>) => {},
-
-    manageEventsDrawerVisibilityChanged: (
-      state,
-      { payload }: { payload: boolean },
-    ) => {
-      state.manageEventsDrawerVisible = payload;
-    },
-
     createEvent: (_, __: PayloadAction<IEventCreatePayload>) => {},
+    addUsersToEvent: (_, __: PayloadAction<IAddUsersToEventPayload>) => {},
   },
   selectors: {
-    manageEventsDrawerVisible: (sliceState) =>
-      sliceState.manageEventsDrawerVisible,
     events: (sliceState) => sliceState.events,
     eventById: (sliceState, eventId: number) =>
       sliceState.events.find((it) => it.id === eventId),

@@ -35,7 +35,7 @@ const TEXT = {
     roles: "Роли",
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
-  manageEvents: {
+  events: {
     name: "Название",
     fileId: "Изображение",
     addUser: "Добавить пользователя",
@@ -46,6 +46,9 @@ const TEXT = {
     participantsLimit: "Количество участников",
     linkToTable: "Ссылка на таблицу",
     locationId: "Локация",
+    leagueId: "Лига",
+    userIds: "Пользователи",
+    deleteWarn: "Вы уверены, что хотите удалить событие?",
   },
   locations: {
     title: "Название",

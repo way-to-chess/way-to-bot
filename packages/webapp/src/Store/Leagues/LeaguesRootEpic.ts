@@ -6,7 +6,6 @@ import { httpRequestEpicFactory } from "../Utils/HttpRequestEpicFactory";
 import {
   LEAGUES_CREATE_REQUEST_SYMBOL,
   LEAGUES_DELETE_REQUEST_SYMBOL,
-  LEAGUES_LOAD_REQUEST_SYMBOL,
   LEAGUES_UPDATE_REQUEST_SYMBOL,
 } from "../Leagues/LeaguesVariables";
 import { leaguesSlice } from "../Leagues/LeaguesSlice";
@@ -15,14 +14,7 @@ import { EMPTY, merge, of, switchMap } from "rxjs";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { drawerSlice, EDrawerType } from "../Drawer/DrawerSlice";
-
-const loadLeaguesEpic: TAppEpic = (action$, state$, dependencies) => {
-  return httpRequestEpicFactory({
-    input: dependencies.httpApi.getAllLeagues(),
-    requestSymbol: LEAGUES_LOAD_REQUEST_SYMBOL,
-    receivedActionCreator: leaguesSlice.actions.leaguesReceived,
-  });
-};
+import { loadLeaguesEpic } from "../Leagues/LoadLeaguesEpic";
 
 const createLeague: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
