@@ -172,12 +172,16 @@ const ManageEventsIdPage = () => {
               <Avatar
                 shape={"square"}
                 size={"large"}
-                src={event.location?.url}
+                src={getPreviewSrc(event.location?.url)}
                 icon={<EnvironmentOutlined />}
               />
             }
             title={event.location?.title}
-            description={event.location?.address}
+            description={
+              <a href={event.location?.url} target={"_blank"} rel="noreferrer">
+                {event.location?.address}
+              </a>
+            }
           />
         </List.Item>
 
