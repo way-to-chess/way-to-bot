@@ -16,9 +16,7 @@ interface IUserState {
 
 const initialState: IUserState = {
   users: [],
-  user: {
-    roles: [EUserRole.ADMIN],
-  },
+  user: null,
 };
 
 const userSlice = createSlice({
