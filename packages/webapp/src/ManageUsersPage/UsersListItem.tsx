@@ -3,9 +3,10 @@ import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
 import { withProps } from "../Utils/WithProps";
 import { generatePath, Link } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { Avatar, Flex } from "antd";
+import { Avatar, Flex, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { getUserFullName } from "../Utils/GetUserFullName";
 
 const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
   return (
@@ -17,7 +18,9 @@ const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
       })}
       style={{ color: "black" }}
     >
-      <div style={{ fontWeight: "bold" }}>{index + 1}</div>
+      <Typography.Text style={{ fontWeight: "bold" }}>
+        {index + 1}
+      </Typography.Text>
 
       <Avatar
         size={"large"}
@@ -26,14 +29,14 @@ const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
       />
 
       <Flex vertical flex={1}>
-        <div style={{ fontWeight: "bold" }}>
-          {user.firstName + " " + user.lastName}
-        </div>
+        <Typography.Text style={{ fontWeight: "bold" }}>
+          {getUserFullName(user.firstName, user.lastName)}
+        </Typography.Text>
 
         <div style={{ color: "grey" }}>{user.username}</div>
       </Flex>
 
-      <div>{user.rating}</div>
+      <Typography.Text>{user.rating}</Typography.Text>
     </Flex>
   );
 });

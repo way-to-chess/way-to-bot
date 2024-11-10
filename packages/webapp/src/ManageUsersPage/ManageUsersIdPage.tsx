@@ -1,4 +1,4 @@
-import { Avatar, Empty, Flex, List } from "antd";
+import { Avatar, Empty, Flex, List, Typography } from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
@@ -54,9 +54,9 @@ const ManageUsersIdPage = () => {
           />
 
           <Flex vertical style={{ fontSize: 16 }}>
-            <div style={{ fontWeight: "bold" }}>
+            <Typography.Text style={{ fontWeight: "bold" }}>
               {getUserFullName(user.firstName, user.lastName)}
-            </div>
+            </Typography.Text>
             <div style={{ color: "grey" }}>{user.username}</div>
           </Flex>
         </Flex>
