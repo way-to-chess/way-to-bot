@@ -3,6 +3,8 @@
   "version": "1.0.0",
   "description": "",
   "main": "src/app.ts",
+  "type": "module",
+  "private": true,
   "scripts": {
     "build": "tsc",
     "dev": "nodemon src/app.ts",
