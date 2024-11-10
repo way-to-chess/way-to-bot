@@ -8,6 +8,7 @@ import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const ManageLocationsPage = memo(() => {
   const locations = useSelector(locationsSlice.selectors.locations);
@@ -24,11 +25,19 @@ const ManageLocationsPage = memo(() => {
         loading={status === ERequestStatus.loading}
         style={{ padding: 16 }}
         dataSource={locations}
-        renderItem={({ preview, title, address, id }) => (
+        itemLayout={"vertical"}
+        renderItem={({ preview, title, address, url, id }) => (
           <List.Item>
             <Card
               styles={{ cover: { height: 200 } }}
               style={{ width: "100%" }}
+              actions={[
+                url ? (
+                  <a key={1} href={url} target={"_blank"} rel="noreferrer">
+                    {TEXT.locations.map}
+                  </a>
+                ) : undefined,
+              ]}
               cover={
                 <img
                   alt="preview"
@@ -40,7 +49,6 @@ const ManageLocationsPage = memo(() => {
                   }}
                 />
               }
-              hoverable
               key={id}
             >
               <Card.Meta title={title} description={address} />

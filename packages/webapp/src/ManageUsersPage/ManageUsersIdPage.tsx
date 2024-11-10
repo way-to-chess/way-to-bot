@@ -1,38 +1,41 @@
-import { Avatar, Empty, Flex, List } from "antd";
+import { Avatar, Button, Empty, Flex, List, Typography } from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
 import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
 import { getUserFullName } from "../Utils/GetUserFullName";
-import { EventsListItem } from "../ManageEventsPage/EventsListItem";
-import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
+import { GET_USER_BY_ID_REQUEST_SYMBOL } from "../Store/User/UserVariables";
+import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 
 const ManageUsersIdPage = () => {
   const { userId } = useParams();
 
   const user = useParamSelector(userSlice.selectors.userById, Number(userId));
+  const status = useParamSelector(
+    requestManagerSlice.selectors.statusBySymbol,
+    GET_USER_BY_ID_REQUEST_SYMBOL,
+  );
 
   if (!user) {
-    return <Empty />;
+    return <Empty style={{ padding: 16 }} />;
   }
 
   return (
-    <List style={{ padding: 16 }} itemLayout={"vertical"}>
+    <List
+      style={{ padding: 16 }}
+      itemLayout={"vertical"}
+      loading={status === ERequestStatus.loading}
+    >
       <List.Item>
-        <Flex
-          style={{ color: "black" }}
-          gap={8}
-          component={withProps(NavLink)({
-            to: `/${WEBAPP_ROUTES.manageUsersRoute}`,
-          })}
-        >
-          <ArrowLeftOutlined />
-
-          <div>{TEXT.common.users}</div>
-        </Flex>
+        <NavLink to={`/${WEBAPP_ROUTES.manageUsersRoute}`}>
+          <Button icon={<ArrowLeftOutlined />} type={"text"}>
+            {TEXT.common.users}
+          </Button>
+        </NavLink>
       </List.Item>
 
       <List.Item>
@@ -44,9 +47,9 @@ const ManageUsersIdPage = () => {
           />
 
           <Flex vertical style={{ fontSize: 16 }}>
-            <div style={{ fontWeight: "bold" }}>
+            <Typography.Text style={{ fontWeight: "bold" }}>
               {getUserFullName(user.firstName, user.lastName)}
-            </div>
+            </Typography.Text>
             <div style={{ color: "grey" }}>{user.username}</div>
           </Flex>
         </Flex>
@@ -70,11 +73,7 @@ const ManageUsersIdPage = () => {
       </List.Item>
 
       <List.Item>
-        <List
-          itemLayout={"vertical"}
-          dataSource={user.events}
-          renderItem={(event) => <EventsListItem {...event} key={event.id} />}
-        />
+        <Empty description={TEXT.common.underDevelopment} />
       </List.Item>
     </List>
   );

@@ -1,17 +1,21 @@
 import { memo, useCallback } from "react";
 import { Button, Drawer, Form, FormProps, Input, Select, Upload } from "antd";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { userSlice } from "../Store/User/UserSlice";
-import { useActionCreator } from "../Hooks/UseActionCreator";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
-import { USER_CREATE_REQUEST_SYMBOL } from "../Store/User/UserVariables";
+import {
+  USER_CREATE_REQUEST_SYMBOL,
+  USER_UPDATE_REQUEST_SYMBOL,
+} from "../Store/User/UserVariables";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { useFileUpload } from "../Hooks/UseFileUpload";
 import { UploadOutlined } from "@ant-design/icons";
+import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
+import { useDrawer } from "../Hooks/UseDrawer";
 
 const USER_ROLES_SELECT_OPTIONS = Object.values(EUserRole).map((value) => ({
   label: value,
@@ -19,24 +23,44 @@ const USER_ROLES_SELECT_OPTIONS = Object.values(EUserRole).map((value) => ({
 }));
 
 const MangeUsersDrawer = memo(() => {
-  const open = useSelector(userSlice.selectors.manageUsersDrawerVisible);
-  const closeDrawer = useActionCreator(
-    userSlice.actions.manageUsersDrawerVisibilityChanged,
-    false,
+  const data = useParamSelector(
+    drawerSlice.selectors.drawerData,
+    EDrawerType.MANAGE_USERS_DRAWER,
   );
+
+  const drawer = useDrawer(EDrawerType.MANAGE_USERS_DRAWER);
 
   const dispatch = useDispatch();
 
   const requestStatus = useParamSelector(
     requestManagerSlice.selectors.statusBySymbol,
-    USER_CREATE_REQUEST_SYMBOL,
+    data ? USER_UPDATE_REQUEST_SYMBOL : USER_CREATE_REQUEST_SYMBOL,
   );
 
-  const onFinish: FormProps<IUserCreatePayload>["onFinish"] = (values) => {
-    dispatch(userSlice.actions.createUser(values));
-  };
+  const initialValues = data
+    ? {
+        username: data.username,
+        roles: data.roles,
+        firstName: data.firstName,
+        lastName: data.lastName,
+      }
+    : {
+        roles: [EUserRole.USER],
+      };
 
   const [form] = Form.useForm<IUserCreatePayload>();
+
+  const onFinish: FormProps<IUserCreatePayload>["onFinish"] = (values) => {
+    dispatch(
+      data
+        ? userSlice.actions.updateUser({ ...initialValues, ...values })
+        : userSlice.actions.createUser(values),
+    );
+  };
+
+  const afterOpenChange = () => {
+    form.resetFields();
+  };
 
   const uploadProps = useFileUpload({
     onRemove: useCallback(
@@ -56,15 +80,15 @@ const MangeUsersDrawer = memo(() => {
     <Drawer
       placement={"right"}
       closable
-      open={open}
-      onClose={closeDrawer}
       getContainer={false}
+      {...drawer}
+      afterOpenChange={afterOpenChange}
     >
       <Form
         form={form}
         layout={"vertical"}
         onFinish={onFinish}
-        initialValues={{ roles: [EUserRole.USER] }}
+        initialValues={initialValues}
       >
         <Form.Item
           name={"username"}
@@ -107,7 +131,7 @@ const MangeUsersDrawer = memo(() => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {data ? TEXT.common.edit : TEXT.common.create}
           </Button>
         </Form.Item>
       </Form>

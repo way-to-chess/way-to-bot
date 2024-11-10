@@ -11,9 +11,12 @@ import {
 } from "../Leagues/LeaguesVariables";
 import { leaguesSlice } from "../Leagues/LeaguesSlice";
 import { fromActionCreator } from "../Utils/FromActionCreator";
+import { EMPTY, merge, of, switchMap } from "rxjs";
 import { EMPTY, switchMap } from "rxjs";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { drawerSlice, EDrawerType } from "../Drawer/DrawerSlice";
+import { loadLeaguesEpic } from "../Leagues/LoadLeaguesEpic";
 
 const loadLeaguesEpic: TAppEpic = (action$, state$, dependencies) => {
   return httpRequestEpicFactory({
@@ -32,7 +35,15 @@ const createLeague: TAppEpic = (action$, state$, dependencies) =>
         requestSymbol: LEAGUES_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
           message.success(TEXT.api.success);
-          return EMPTY;
+
+          return merge(
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_LEAGUES_DRAWER,
+              }),
+            ),
+            loadLeaguesEpic(action$, state$, dependencies),
+          );
         },
         onError: () => {
           message.error(TEXT.api.error);
@@ -71,8 +82,7 @@ const deleteLeague: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.deleteLeague(payload),
         requestSymbol: LEAGUES_DELETE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
-          return EMPTY;
+          return loadLeaguesEpic(action$, state$, dependencies);
         },
         onError: () => {
           message.error(TEXT.api.error);

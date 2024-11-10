@@ -10,22 +10,12 @@ import {
   USER_CREATE_REQUEST_SYMBOL,
   USER_DELETE_REQUEST_SYMBOL,
   USER_UPDATE_REQUEST_SYMBOL,
-  USERS_LOAD_REQUEST_SYMBOL,
 } from "../UserVariables";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
-
-const loadUsersEpic: TAppEpic = (action$, state$, dependencies) =>
-  httpRequestEpicFactory({
-    input: dependencies.httpApi.getAllUsers(),
-    requestSymbol: USERS_LOAD_REQUEST_SYMBOL,
-    receivedActionCreator: userSlice.actions.usersReceived,
-    onError: () => {
-      message.error(TEXT.api.error);
-
-      return EMPTY;
-    },
-  });
+import { getUserByIdEpic } from "./GetUserByIdEpic";
+import { loadUsersEpic } from "./LoadUsersEpic";
+import { drawerSlice, EDrawerType } from "../../Drawer/DrawerSlice";
 
 const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
@@ -39,7 +29,11 @@ const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
 
           return merge(
             loadUsersEpic(action$, state$, dependencies),
-            of(userSlice.actions.manageUsersDrawerVisibilityChanged(false)),
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+              }),
+            ),
           );
         },
         onError: () => {
@@ -63,7 +57,11 @@ const createUserEpic: TAppEpic = (action$, state$, dependencies) =>
 
           return merge(
             loadUsersEpic(action$, state$, dependencies),
-            of(userSlice.actions.manageUsersDrawerVisibilityChanged(false)),
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+              }),
+            ),
           );
         },
         onError: () => {
@@ -100,4 +98,13 @@ const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () =>
   combineEpics(loadUsersEpic, createUserEpic, deleteUserEpic, updateUserEpic),
 );
 
-export { manageUsersRouterEpic as userRootEpic };
+const manageUsersIdRoute = routerEpic(
+  WEBAPP_ROUTES.manageUsersIdRoute,
+  (match) => {
+    return getUserByIdEpic(Number(match.params.userId));
+  },
+);
+
+const userRootEpic = combineEpics(manageUsersRouterEpic, manageUsersIdRoute);
+
+export { userRootEpic };

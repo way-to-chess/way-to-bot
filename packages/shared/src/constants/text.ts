@@ -7,6 +7,9 @@ const TEXT = {
     events: "События",
     users: "Пользователи",
     upload: "Загрузить",
+    edit: "Изменить",
+    delete: "Удалить",
+    underDevelopment: "В разработке",
   },
   api: {
     success: "Успех",
@@ -31,11 +34,9 @@ const TEXT = {
     firstName: "Имя",
     lastName: "Фамилия",
     roles: "Роли",
-    edit: "Изменить",
-    delete: "Удалить",
     deleteWarn: "Вы уверены, что хотите удалить пользователя?",
   },
-  manageEvents: {
+  events: {
     name: "Название",
     fileId: "Изображение",
     addUser: "Добавить пользователя",
@@ -46,12 +47,19 @@ const TEXT = {
     participantsLimit: "Количество участников",
     linkToTable: "Ссылка на таблицу",
     locationId: "Локация",
+    leagueId: "Лига",
+    userIds: "Пользователи",
+    deleteWarn: "Вы уверены, что хотите удалить событие?",
+    waiting: "Ожидаем начала",
+    finished: "Окончился",
+    started: "Начался",
   },
-  manageLocationsForm: {
+  locations: {
     title: "Название",
     url: "Ссылка",
     address: "Адрес",
     fileId: "Изображение",
+    map: "Показать на карте",
   },
   leagues: {
     name: "Название",

@@ -9,6 +9,6 @@ const loadEventByIdEpic =
     httpRequestEpicFactory({
       input: httpApi.getEventById(eventId),
       requestSymbol: EVENTS_GET_BY_ID_REQUEST_SYMBOL,
-      receivedActionCreator: eventsSlice.actions.singleEventReceived,
+      receivedActionCreator: eventsSlice.actions.eventsReceived,
     });
 export { loadEventByIdEpic };

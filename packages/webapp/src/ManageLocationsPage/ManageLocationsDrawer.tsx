@@ -63,21 +63,21 @@ const ManageLocationsDrawer = () => {
       >
         <Form.Item
           name={"title"}
-          label={TEXT.manageLocationsForm.title}
+          label={TEXT.locations.title}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item name={"url"} label={TEXT.manageLocationsForm.url}>
+        <Form.Item name={"url"} label={TEXT.locations.url}>
           <Input />
         </Form.Item>
 
-        <Form.Item name={"address"} label={TEXT.manageLocationsForm.address}>
+        <Form.Item name={"address"} label={TEXT.locations.address}>
           <Input />
         </Form.Item>
 
-        <Form.Item name={"fileId"} label={TEXT.manageLocationsForm.fileId}>
+        <Form.Item name={"fileId"} label={TEXT.locations.fileId}>
           <Upload {...uploadProps}>
             <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
           </Upload>

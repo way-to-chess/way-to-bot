@@ -3,6 +3,7 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 enum EDrawerType {
   MANAGE_USERS_DRAWER = "manageUsersDrawer",
   MANAGE_EVENTS_DRAWER = "manageEventsDrawer",
+  MANAGE_EVENT_USERS_DRAWER = "manageEventUsersDrawer",
   MANAGE_LOCATIONS_DRAWER = "manageLocationsDrawer",
   MANAGE_LEAGUES_DRAWER = "manageLeaguesDrawer",
 }

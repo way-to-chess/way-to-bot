@@ -13,6 +13,10 @@ body,
     width: 100%;
 }
 
+body {
+    overflow: hidden;
+}
+
 [data-dev="true"] * {
     --tg-color-scheme: light;
     --tg-theme-bg-color: #ffffff;

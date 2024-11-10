@@ -7,10 +7,12 @@ import {
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import {
+  IAddUsersToEventPayload,
   IEvent,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
+  IRemoveUsersFromEventPayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import {
   ILocation,
@@ -26,6 +28,9 @@ import {
 } from "@way-to-bot/shared/interfaces/league.interface";
 
 const httpApi = {
+  //USERS
+  getUserById: (userId: number) =>
+    simpleGetRequest<IResponseWithData<IUser>>(`user/getById/${userId}`)(),
   getUserByUsername: (username: string) =>
     simpleGetRequest<IResponseWithData<IUser>>(
       `user/getByUserName/${username}`,
@@ -40,9 +45,11 @@ const httpApi = {
     "user/delete",
   ),
   updateUser: requestWithPayload<IUserUpdatePayload, boolean>(
-    "UPDATE",
+    "PUT",
     "user/update",
   ),
+
+  //LOCATIONS
   getAllLocations:
     simpleGetRequest<IResponseWithData<ILocation[]>>("location/all"),
   createLocation: requestWithPayload<ILocationCreatePayload, boolean>(
@@ -57,7 +64,11 @@ const httpApi = {
     "PUT",
     "location/update",
   ),
+
+  //EVENTS
   getAllEvents: simpleGetRequest<IResponseWithData<IEvent[]>>("event/all"),
+  getEventById: (eventId: string) =>
+    simpleGetRequest<IResponseWithData<IEvent>>(`event/getById/${eventId}`)(),
   createEvent: requestWithPayload<IEventCreatePayload, boolean>(
     "POST",
     "event/create",
@@ -69,6 +80,29 @@ const httpApi = {
   deleteEvent: requestWithPayload<IEventDeletePayload, boolean>(
     "DELETE",
     "event/delete",
+  ),
+  addUsersToEvent: requestWithPayload<IAddUsersToEventPayload, boolean>(
+    "POST",
+    "event/addUsersToEvent",
+  ),
+  removeUsersFromEvent: requestWithPayload<
+    IRemoveUsersFromEventPayload,
+    boolean
+  >("POST", "event/removeUsersFromEvent"),
+
+  //LEAGUES
+  getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),
+  createLeague: requestWithPayload<ILeagueCreatePayload, boolean>(
+    "POST",
+    "league/create",
+  ),
+  updateLeague: requestWithPayload<ILeagueUpdatePayload, boolean>(
+    "PUT",
+    "league/update",
+  ),
+  deleteLeague: requestWithPayload<ILeagueDeletePayload, boolean>(
+    "DELETE",
+    "league/delete",
   ),
   getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),
   createLeague: requestWithPayload<ILeagueCreatePayload, boolean>(

@@ -5,12 +5,18 @@ import { useParamSelector } from "../Hooks/UseParamSelector";
 
 interface IACLProps {
   roles: EUserRole[];
+  exact?: boolean;
 }
 
-const ACL: FC<PropsWithChildren<IACLProps>> = ({ roles, children }) => {
+const ACL: FC<PropsWithChildren<IACLProps>> = ({
+  roles,
+  children,
+  exact = false,
+}) => {
   const hasAccess = useParamSelector(
     userSlice.selectors.userHasAccessRoles,
     roles,
+    exact,
   );
 
   if (hasAccess) {
