@@ -104,19 +104,6 @@ const httpApi = {
     "DELETE",
     "league/delete",
   ),
-  getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),
-  createLeague: requestWithPayload<ILeagueCreatePayload, boolean>(
-    "POST",
-    "league/create",
-  ),
-  updateLeague: requestWithPayload<ILeagueUpdatePayload, boolean>(
-    "PUT",
-    "league/update",
-  ),
-  deleteLeague: requestWithPayload<ILeagueDeletePayload, boolean>(
-    "DELETE",
-    "league/delete",
-  ),
 };
 
 export { httpApi };

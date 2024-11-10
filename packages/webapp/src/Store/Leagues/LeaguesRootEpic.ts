@@ -12,11 +12,9 @@ import {
 import { leaguesSlice } from "../Leagues/LeaguesSlice";
 import { fromActionCreator } from "../Utils/FromActionCreator";
 import { EMPTY, merge, of, switchMap } from "rxjs";
-import { EMPTY, switchMap } from "rxjs";
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { drawerSlice, EDrawerType } from "../Drawer/DrawerSlice";
-import { loadLeaguesEpic } from "../Leagues/LoadLeaguesEpic";
 
 const loadLeaguesEpic: TAppEpic = (action$, state$, dependencies) => {
   return httpRequestEpicFactory({
