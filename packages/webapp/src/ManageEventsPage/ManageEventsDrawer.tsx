@@ -1,13 +1,4 @@
-import {
-  Button,
-  DatePicker,
-  Drawer,
-  Form,
-  FormProps,
-  Input,
-  Select,
-  Upload,
-} from "antd";
+import { Button, DatePicker, Drawer, Form, Input, Select, Upload } from "antd";
 import { EEventStatus } from "@way-to-bot/shared/enums";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
@@ -17,13 +8,17 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Store/Events/EventsSlice";
-import { EVENTS_CREATE_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
+import {
+  EVENTS_CREATE_REQUEST_SYMBOL,
+  EVENTS_UPDATE_REQUEST_SYMBOL,
+} from "../Store/Events/EventsVariables";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
 import { useFileUpload } from "../Hooks/UseFileUpload";
 import { useCallback } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
+import dayjs from "dayjs";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
   (value) => ({
@@ -33,6 +28,11 @@ const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
 );
 
 const ManageEventsDrawer = () => {
+  const data = useParamSelector(
+    drawerSlice.selectors.drawerData,
+    EDrawerType.MANAGE_EVENTS_DRAWER,
+  );
+
   const open = useParamSelector(
     drawerSlice.selectors.drawerOpen,
     EDrawerType.MANAGE_EVENTS_DRAWER,
@@ -53,15 +53,20 @@ const ManageEventsDrawer = () => {
 
   const requestStatus = useParamSelector(
     requestManagerSlice.selectors.statusBySymbol,
-    EVENTS_CREATE_REQUEST_SYMBOL,
+    data ? EVENTS_UPDATE_REQUEST_SYMBOL : EVENTS_CREATE_REQUEST_SYMBOL,
   );
 
-  const onFinish: FormProps<IEventCreatePayload>["onFinish"] = (values) => {
+  const onFinish = (values: IEventCreatePayload) => {
     dispatch(
-      eventsSlice.actions.createEvent({
-        ...values,
-        dateTime: values.dateTime.toString(),
-      }),
+      data
+        ? eventsSlice.actions.updateEvent({
+            ...data,
+            ...values,
+          })
+        : eventsSlice.actions.createEvent({
+            ...values,
+            dateTime: values.dateTime.toString(),
+          }),
     );
   };
 
@@ -81,6 +86,18 @@ const ManageEventsDrawer = () => {
     }, [form]),
   });
 
+  const initialValues = data
+    ? {
+        name: data.name,
+        linkToTable: data.linkToTable,
+        locationId: data.location?.id,
+        participantsLimit: data.participantsLimit,
+        price: data.price,
+        status: data.status,
+        dateTime: dayjs(data.dateTime),
+      }
+    : { status: EEventStatus.WAITING };
+
   return (
     <Drawer
       getContainer={false}
@@ -93,7 +110,7 @@ const ManageEventsDrawer = () => {
         form={form}
         layout={"vertical"}
         onFinish={onFinish}
-        initialValues={{ status: EEventStatus.WAITING }}
+        initialValues={initialValues}
       >
         <Form.Item
           name={"name"}
@@ -102,7 +119,6 @@ const ManageEventsDrawer = () => {
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           name={"dateTime"}
           label={TEXT.events.dateTime}
@@ -118,7 +134,6 @@ const ManageEventsDrawer = () => {
         >
           <Input />
         </Form.Item>
-
         <Form.Item
           name={"status"}
           label={TEXT.events.status}
@@ -127,21 +142,17 @@ const ManageEventsDrawer = () => {
           <Select
             value={EEventStatus.WAITING}
             options={EVENT_STATUS_SELECT_OPTIONS}
-            disabled
           />
         </Form.Item>
-
         <Form.Item
           name={"participantsLimit"}
           label={TEXT.events.participantsLimit}
         >
           <Input type={"number"} />
         </Form.Item>
-
         <Form.Item name={"linkToTable"} label={TEXT.events.linkToTable}>
           <Input />
         </Form.Item>
-
         <Form.Item
           name={"locationId"}
           label={TEXT.events.locationId}
@@ -155,17 +166,11 @@ const ManageEventsDrawer = () => {
             }))}
           />
         </Form.Item>
-
-        <Form.Item
-          name={"fileId"}
-          label={TEXT.events.fileId}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
-        >
+        <Form.Item name={"fileId"} label={TEXT.events.fileId}>
           <Upload {...uploadProps}>
             <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
           </Upload>
         </Form.Item>
-
         <Form.Item>
           <Button
             loading={requestStatus === ERequestStatus.loading}
@@ -173,7 +178,7 @@ const ManageEventsDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {data ? TEXT.common.edit : TEXT.common.create}
           </Button>
         </Form.Item>
       </Form>

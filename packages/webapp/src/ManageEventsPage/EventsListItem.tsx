@@ -19,9 +19,10 @@ import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { eventsSlice } from "../Store/Events/EventsSlice";
 
-const EditButton = () => {
+const EditButton = (event: IEvent) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
     drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
+    data: event,
   });
 
   return <Button onClick={open}>{TEXT.common.edit}</Button>;
@@ -50,8 +51,8 @@ const DeleteButton: FC<IEventDeletePayload> = ({ eventId }) => {
   );
 };
 
-const EventsListItem = memo<IEvent>(
-  ({
+const EventsListItem = memo<IEvent>((event) => {
+  const {
     eventsUsersLeagues,
     price,
     status,
@@ -61,71 +62,71 @@ const EventsListItem = memo<IEvent>(
     id,
     name,
     participantsLimit,
-  }) => {
-    return (
-      <List.Item>
-        <Flex vertical gap={8}>
-          <Link
-            to={`/${generatePath(WEBAPP_ROUTES.manageEventsIdRoute, { eventId: id })}`}
-          >
-            <Badge.Ribbon text={status}>
-              <Card
-                styles={{ cover: { height: 200 } }}
-                style={{ width: "100%" }}
-                hoverable
-                cover={
-                  <img
-                    alt="example"
-                    src={getPreviewSrc(preview?.url)}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                    }}
-                  />
-                }
-              >
-                <Card.Meta
-                  title={name}
-                  description={
-                    <Flex vertical gap={4}>
-                      <Flex gap={8}>
-                        <span>
-                          <ClockCircleOutlined />
-                          &nbsp;
-                          {new Date(dateTime).toLocaleDateString("ru-RU")}
-                        </span>
-                        <span>
-                          <DollarOutlined />
-                          &nbsp;
-                          {price}
-                        </span>
-                        <span>
-                          <UserOutlined />
-                          &nbsp;
-                          {`${eventsUsersLeagues.length} / ${participantsLimit}`}
-                        </span>
-                      </Flex>
+  } = event;
+
+  return (
+    <List.Item>
+      <Flex vertical gap={8}>
+        <Link
+          to={`/${generatePath(WEBAPP_ROUTES.manageEventsIdRoute, { eventId: id })}`}
+        >
+          <Badge.Ribbon text={status}>
+            <Card
+              styles={{ cover: { height: 200 } }}
+              style={{ width: "100%" }}
+              hoverable
+              cover={
+                <img
+                  alt="example"
+                  src={getPreviewSrc(preview?.url)}
+                  style={{
+                    width: "100%",
+                    height: "100%",
+                    objectFit: "cover",
+                  }}
+                />
+              }
+            >
+              <Card.Meta
+                title={name}
+                description={
+                  <Flex vertical gap={4}>
+                    <Flex gap={8}>
                       <span>
-                        <EnvironmentOutlined />
+                        <ClockCircleOutlined />
                         &nbsp;
-                        {`${location?.title} | ${location?.address}`}
+                        {new Date(dateTime).toLocaleDateString("ru-RU")}
+                      </span>
+                      <span>
+                        <DollarOutlined />
+                        &nbsp;
+                        {price}
+                      </span>
+                      <span>
+                        <UserOutlined />
+                        &nbsp;
+                        {`${eventsUsersLeagues.length} / ${participantsLimit}`}
                       </span>
                     </Flex>
-                  }
-                />
-              </Card>
-            </Badge.Ribbon>
-          </Link>
+                    <span>
+                      <EnvironmentOutlined />
+                      &nbsp;
+                      {`${location?.title} | ${location?.address}`}
+                    </span>
+                  </Flex>
+                }
+              />
+            </Card>
+          </Badge.Ribbon>
+        </Link>
 
-          <Flex gap={8} justify={"flex-end"}>
-            <EditButton />
-            <DeleteButton eventId={id} />
-          </Flex>
+        <Flex gap={8} justify={"flex-end"}>
+          <EditButton {...event} />
+          <DeleteButton eventId={id} />
         </Flex>
-      </List.Item>
-    );
-  },
-);
+      </Flex>
+    </List.Item>
+  );
+});
 
 export { EventsListItem };
