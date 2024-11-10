@@ -47,6 +47,8 @@ const ManageEventUsersDrawer = () => {
     USERS_LOAD_REQUEST_SYMBOL,
   );
 
+  const [form] = Form.useForm();
+
   const dispatch = useDispatch();
 
   const onFinish = (payload: Omit<IAddUsersToEventPayload, "eventId">) => {
@@ -56,11 +58,12 @@ const ManageEventUsersDrawer = () => {
         eventId: data.eventId,
       }),
     );
+    form.resetFields();
   };
 
   return (
     <Drawer {...drawer} getContainer={false} placement={"right"} closable>
-      <Form onFinish={onFinish} layout={"vertical"}>
+      <Form onFinish={onFinish} layout={"vertical"} form={form}>
         <Form.Item
           name={"leagueId"}
           label={TEXT.events.leagueId}
