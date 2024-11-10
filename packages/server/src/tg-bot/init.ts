@@ -1,7 +1,7 @@
 import TelegramApi, {Message} from "node-telegram-bot-api";
 import {tgBotEventErrorHandler} from "../utils/event-error-handler";
 import {dbInstance} from "../database/init";
-import {UserEntity} from "../database/entities/user.entity";
+import {UserEntity} from "@way-to-bot/shared/entities/user.entity";
 import chalk from "chalk";
 
 const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN || "";

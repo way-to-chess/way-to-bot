@@ -1,16 +1,16 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
   IAddUsersToEventPayload,
-  IEvent,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import { EventEntity } from "@way-to-bot/shared/entities/event.entity";
 
 interface IEventsSlice {
-  events: IEvent[];
+  events: EventEntity[];
 }
 
 const initialState: IEventsSlice = {
@@ -23,7 +23,9 @@ const eventsSlice = createSlice({
   reducers: {
     eventsReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<IEvent[] | IEvent>>,
+      {
+        payload,
+      }: PayloadAction<IResponseWithData<EventEntity[] | EventEntity>>,
     ) => {
       state.events = Array.isArray(payload.data)
         ? payload.data

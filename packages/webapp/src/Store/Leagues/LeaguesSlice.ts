@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  ILeague,
   ILeagueCreatePayload,
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
 } from "@way-to-bot/shared/interfaces/league.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import { LeagueEntity } from "@way-to-bot/shared/entities/league.entity";
 
 interface ILeaguesSliceState {
-  leagues: ILeague[];
+  leagues: LeagueEntity[];
 }
 
 const initialState: ILeaguesSliceState = {
@@ -21,7 +21,7 @@ const leaguesSlice = createSlice({
   reducers: {
     leaguesReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<ILeague[]>>,
+      { payload }: PayloadAction<IResponseWithData<LeagueEntity[]>>,
     ) => {
       state.leagues = payload.data;
     },

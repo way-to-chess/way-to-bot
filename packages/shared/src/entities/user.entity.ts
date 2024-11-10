@@ -1,19 +1,19 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
   BeforeInsert,
   BeforeUpdate,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
   Unique,
+  UpdateDateColumn,
 } from "typeorm";
 import { FileEntity } from "./file.entity";
-import { EUserRole } from "../../enums";
 import { EventUserLeagueEntity } from "./events_users_leagues";
+import { EUserRole } from "../enums";
 
 @Entity("users")
 @Unique(["username", "firstName", "lastName"])

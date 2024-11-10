@@ -1,8 +1,5 @@
 import { FC, memo, useCallback } from "react";
-import {
-  IEvent,
-  IEventDeletePayload,
-} from "@way-to-bot/shared/interfaces/event.interface";
+import { IEventDeletePayload } from "@way-to-bot/shared/interfaces/event.interface";
 import { Badge, Button, Card, Flex, List, Modal } from "antd";
 import { generatePath, Link } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
@@ -21,8 +18,9 @@ import { eventsSlice } from "../Store/Events/EventsSlice";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
+import { EventEntity } from "@way-to-bot/shared/entities/event.entity";
 
-const EditButton = (event: IEvent) => {
+const EditButton = (event: EventEntity) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
     drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
     data: event,
@@ -54,7 +52,7 @@ const DeleteButton: FC<IEventDeletePayload> = ({ eventId }) => {
   );
 };
 
-const EventsListItem = memo<IEvent>((event) => {
+const EventsListItem = memo<EventEntity>((event) => {
   const {
     eventsUsersLeagues,
     price,

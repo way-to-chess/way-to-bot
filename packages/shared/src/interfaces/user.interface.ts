@@ -1,25 +1,5 @@
-import { EUserRole } from "../enums/index";
-import { TDate } from "./date.inteface";
-import { IEvent } from "./event.interface";
-import { IFile } from "./file.interface";
-
-export interface IUser {
-  id: number;
-  username: string;
-  firstName: string;
-  lastName: string;
-  roles: EUserRole[];
-  photo?: IFile | null;
-  wins: number;
-  losses: number;
-  draws: number;
-  total: number;
-  winRate: number;
-  rating: number;
-  createdAt: TDate;
-  updatedAt: TDate;
-  events?: IEvent[];
-}
+import { EUserRole } from "../enums";
+import { UserEntity } from "../entities/user.entity";
 
 export interface IUserCreatePayload {
   username: string;
@@ -31,7 +11,7 @@ export interface IUserCreatePayload {
 
 export interface IUserUpdatePayload
   extends Partial<
-    Omit<IUser, "createdAt" | "updatedAt" | "winRate" | "photo">
+    Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">
   > {
   fileId?: number | null;
 }

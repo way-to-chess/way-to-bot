@@ -1,5 +1,5 @@
 import {dbInstance} from "../database/init";
-import {EventEntity} from "../database/entities/event.entity";
+import {EventEntity} from "@way-to-bot/shared/entities/event.entity";
 import {DeepPartial, In} from "typeorm";
 import {
     IAddUsersToEventPayload,
@@ -8,11 +8,11 @@ import {
     IEventUpdatePayload,
     IRemoveUsersFromEventPayload,
 } from "../interfaces/event.interface";
-import {LocationEntity} from "../database/entities/location.entity";
-import {UserEntity} from "../database/entities/user.entity";
-import {LeagueEntity} from "../database/entities/league.entity";
-import {EventUserLeagueEntity} from "../database/entities/events_users_leagues";
-import {FileEntity} from "../database/entities/file.entity";
+import {LocationEntity} from "@way-to-bot/shared/entities/location.entity";
+import {UserEntity} from "@way-to-bot/shared/entities/user.entity";
+import {LeagueEntity} from "@way-to-bot/shared/entities/league.entity";
+import {EventUserLeagueEntity} from "@way-to-bot/shared/entities/events_users_leagues";
+import {FileEntity} from "@way-to-bot/shared/entities/file.entity";
 
 export class EventService {
     private eventRepository = dbInstance.getRepository(EventEntity);

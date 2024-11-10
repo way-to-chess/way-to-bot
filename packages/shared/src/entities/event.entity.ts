@@ -3,17 +3,15 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { LocationEntity } from "./location.entity";
-import { EEventStatus } from "../../enums";
 import { EventUserLeagueEntity } from "./events_users_leagues";
 import { FileEntity } from "./file.entity";
+import { EEventStatus } from "../enums";
 
 @Entity("events")
 export class EventEntity {

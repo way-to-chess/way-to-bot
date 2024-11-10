@@ -1,10 +1,12 @@
-import { LeagueEntity } from "../database/entities/league.entity";
+import {LeagueEntity} from "@way-to-bot/shared/entities/league.entity";
 
 export interface ILeagueCreatePayload
-  extends Partial<Omit<LeagueEntity, "id">> {}
+    extends Partial<Omit<LeagueEntity, "id">> {
+}
 
-export interface ILeagueUpdatePayload extends Partial<LeagueEntity> {}
+export interface ILeagueUpdatePayload extends Partial<LeagueEntity> {
+}
 
 export interface ILeagueDeletePayload {
-  leagueId: number;
+    leagueId: number;
 }

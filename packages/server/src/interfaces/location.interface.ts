@@ -1,17 +1,17 @@
-import { LocationEntity } from "../database/entities/location.entity";
+import {LocationEntity} from "@way-to-bot/shared/entities/location.entity";
 
 export interface ILocationCreatePayload
-  extends Partial<
-    Omit<LocationEntity, "id" | "createdAt" | "updatedAt" | "preview">
-  > {
-  fileId?: number;
+    extends Partial<
+        Omit<LocationEntity, "id" | "createdAt" | "updatedAt" | "preview">
+    > {
+    fileId?: number;
 }
 
 export interface ILocationUpdatePayload
-  extends Partial<Omit<LocationEntity, "createdAt" | "updatedAt" | "preview">> {
-  fileId?: number | null;
+    extends Partial<Omit<LocationEntity, "createdAt" | "updatedAt" | "preview">> {
+    fileId?: number | null;
 }
 
 export interface ILocationDeletePayload {
-  locationId: number;
+    locationId: number;
 }

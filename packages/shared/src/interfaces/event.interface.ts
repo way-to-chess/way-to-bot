@@ -1,23 +1,6 @@
-import { EEventStatus } from "../enums/index";
 import { TDate } from "./date.inteface";
-import { ILocation } from "./location.interface";
-import { IEventUserLeague } from "./eventUserLeague.interface";
-import { IFile } from "./file.interface";
-
-export interface IEvent {
-  id: number;
-  name?: string | null;
-  dateTime: TDate;
-  price?: string | null;
-  status: EEventStatus;
-  participantsLimit?: number | null;
-  linkToTable?: string | null;
-  location?: ILocation | null;
-  createdAt: TDate;
-  updatedAt: TDate;
-  eventsUsersLeagues: IEventUserLeague[];
-  preview: IFile | null;
-}
+import { EEventStatus } from "../enums";
+import { EventEntity } from "../entities/event.entity";
 
 export interface IEventCreatePayload {
   name: string;
@@ -32,7 +15,7 @@ export interface IEventCreatePayload {
 
 export interface IEventUpdatePayload
   extends Partial<
-    Omit<IEvent, "createdAt" | "updatedAt" | "location" | "users">
+    Omit<EventEntity, "createdAt" | "updatedAt" | "location" | "users">
   > {
   locationId?: number | null;
 }

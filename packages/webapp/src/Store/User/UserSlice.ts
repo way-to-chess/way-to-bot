@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  IUser,
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
@@ -8,10 +7,11 @@ import {
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { getUserFullName } from "../../Utils/GetUserFullName";
+import { UserEntity } from "@way-to-bot/shared/entities/user.entity";
 
 interface IUserState {
-  users: IUser[];
-  user: IUser | null;
+  users: UserEntity[];
+  user: UserEntity | null;
 }
 
 const initialState: IUserState = {
@@ -25,13 +25,13 @@ const userSlice = createSlice({
   reducers: {
     usersReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<IUser[] | IUser>>,
+      { payload }: PayloadAction<IResponseWithData<UserEntity[] | UserEntity>>,
     ) => {
       state.users = Array.isArray(payload.data) ? payload.data : [payload.data];
     },
     userReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<IUser>>,
+      { payload }: PayloadAction<IResponseWithData<UserEntity>>,
     ) => {
       state.user = payload.data;
     },
