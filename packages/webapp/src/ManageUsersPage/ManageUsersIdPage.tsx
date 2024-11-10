@@ -1,10 +1,9 @@
-import { Avatar, Empty, Flex, List, Typography } from "antd";
+import { Avatar, Button, Empty, Flex, List, Typography } from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
 import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
 import { getUserFullName } from "../Utils/GetUserFullName";
-import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
@@ -32,17 +31,11 @@ const ManageUsersIdPage = () => {
       loading={status === ERequestStatus.loading}
     >
       <List.Item>
-        <Flex
-          style={{ color: "black" }}
-          gap={8}
-          component={withProps(NavLink)({
-            to: `/${WEBAPP_ROUTES.manageUsersRoute}`,
-          })}
-        >
-          <ArrowLeftOutlined />
-
-          <div>{TEXT.common.users}</div>
-        </Flex>
+        <NavLink to={`/${WEBAPP_ROUTES.manageUsersRoute}`}>
+          <Button icon={<ArrowLeftOutlined />} type={"text"}>
+            {TEXT.common.users}
+          </Button>
+        </NavLink>
       </List.Item>
 
       <List.Item>

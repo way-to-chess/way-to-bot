@@ -12,7 +12,6 @@ import {
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { eventsSlice } from "../Store/Events/EventsSlice";
-import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
   ArrowLeftOutlined,
@@ -109,17 +108,11 @@ const ManageEventsIdPage = () => {
         loading={status === ERequestStatus.loading}
       >
         <List.Item>
-          <Flex
-            style={{ color: "black" }}
-            gap={8}
-            component={withProps(NavLink)({
-              to: `/${WEBAPP_ROUTES.manageEventsRoute}`,
-            })}
-          >
-            <ArrowLeftOutlined />
-
-            <div>{TEXT.common.events}</div>
-          </Flex>
+          <NavLink to={`/${WEBAPP_ROUTES.manageEventsRoute}`}>
+            <Button icon={<ArrowLeftOutlined />} type={"text"}>
+              {TEXT.common.events}
+            </Button>
+          </NavLink>
         </List.Item>
 
         <List.Item>
