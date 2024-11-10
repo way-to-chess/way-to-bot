@@ -12,6 +12,7 @@ import {
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
+  IRemoveUsersFromEventPayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import {
   ILocation,
@@ -84,6 +85,10 @@ const httpApi = {
     "POST",
     "event/addUsersToEvent",
   ),
+  removeUsersFromEvent: requestWithPayload<
+    IRemoveUsersFromEventPayload,
+    boolean
+  >("POST", "event/removeUsersFromEvent"),
 
   //LEAGUES
   getAllLeagues: simpleGetRequest<IResponseWithData<ILeague[]>>("league/all"),

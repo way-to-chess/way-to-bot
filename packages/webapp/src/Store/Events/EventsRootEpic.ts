@@ -8,6 +8,7 @@ import {
   EVENTS_DELETE_REQUEST_SYMBOL,
   EVENTS_GET_ALL_REQUEST_SYMBOL,
   EVENTS_UPDATE_REQUEST_SYMBOL,
+  REMOVE_USERS_FROM_EVENT_REQUEST_SYMBOL,
 } from "./EventsVariables";
 import { eventsSlice } from "./EventsSlice";
 import { locationsLoadEpic } from "../Locations/Epics/LocationsLoadEpic";
@@ -135,6 +136,31 @@ const addUsersToEvent: TAppEpic = (action$, state$, dependencies) =>
     ),
   );
 
+const removeUsersFromEvent: TAppEpic = (action$, state$, dependencies) =>
+  action$.pipe(
+    fromActionCreator(eventsSlice.actions.removeUsersFromEvent),
+    switchMap(({ payload }) =>
+      httpRequestEpicFactory({
+        input: dependencies.httpApi.removeUsersFromEvent(payload),
+        requestSymbol: REMOVE_USERS_FROM_EVENT_REQUEST_SYMBOL,
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return loadEventByIdEpic(payload.eventId.toString())(
+            action$,
+            state$,
+            dependencies,
+          );
+        },
+        onError: () => {
+          message.error(TEXT.api.error);
+
+          return EMPTY;
+        },
+      }),
+    ),
+  );
+
 const manageEventsRouterEpic = routerEpic(WEBAPP_ROUTES.manageEventsRoute, () =>
   combineEpics(
     loadEventsEpic,
@@ -149,6 +175,7 @@ const manageEventsIdRouterEpic = routerEpic(
   WEBAPP_ROUTES.manageEventsIdRoute,
   ({ params }) =>
     combineEpics(
+      removeUsersFromEvent,
       addUsersToEvent,
       loadUsersEpic,
       loadLeaguesEpic,

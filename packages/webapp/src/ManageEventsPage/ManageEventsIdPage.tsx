@@ -1,4 +1,14 @@
-import { Avatar, Badge, Card, Collapse, Empty, Flex, List } from "antd";
+import {
+  Avatar,
+  Badge,
+  Button,
+  Card,
+  Collapse,
+  Empty,
+  Flex,
+  List,
+  Modal,
+} from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { eventsSlice } from "../Store/Events/EventsSlice";
@@ -9,6 +19,7 @@ import {
   ClockCircleOutlined,
   DollarOutlined,
   EnvironmentOutlined,
+  ExclamationCircleFilled,
   UserOutlined,
 } from "@ant-design/icons";
 import { TEXT } from "@way-to-bot/shared/constants/text";
@@ -21,6 +32,33 @@ import { ManageEventUsersDrawer } from "./ManageEventUsersDrawer";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 import { ILeague } from "@way-to-bot/shared/interfaces/league.interface";
 import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
+import { FC, useCallback } from "react";
+import { useActionCreator } from "../Hooks/UseActionCreator";
+import { IRemoveUsersFromEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
+
+const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
+  const removeUserFromEvent = useActionCreator(
+    eventsSlice.actions.removeUsersFromEvent,
+    payload,
+  );
+
+  const showDeleteConfirm = useCallback(() => {
+    return Modal.confirm({
+      title: TEXT.users.deleteWarn,
+      icon: <ExclamationCircleFilled />,
+      okText: TEXT.common.yes,
+      okType: "danger",
+      cancelText: TEXT.common.no,
+      onOk: removeUserFromEvent,
+    });
+  }, [removeUserFromEvent]);
+
+  return (
+    <Button onClick={showDeleteConfirm} danger>
+      {TEXT.common.delete}
+    </Button>
+  );
+};
 
 interface INormalizedLeague extends Pick<ILeague, "name" | "id"> {
   users: IUser[];
@@ -144,23 +182,35 @@ const ManageEventsIdPage = () => {
         </List.Item>
 
         <List.Item>
-          <Collapse
-            items={leagues.map(({ name, id, users }) => ({
-              key: id,
-              label: name,
-              children: (
-                <List
-                  itemLayout={"vertical"}
-                  dataSource={users}
-                  renderItem={(user, index) => (
-                    <List.Item>
-                      <UsersListItem {...user} index={index} />
-                    </List.Item>
-                  )}
-                />
-              ),
-            }))}
-          />
+          {leagues.length ? (
+            <Collapse
+              items={leagues.map(({ name, id, users }) => ({
+                key: id,
+                label: name,
+                children: (
+                  <List
+                    itemLayout={"vertical"}
+                    dataSource={users}
+                    renderItem={(user, index) => (
+                      <Flex vertical gap={8}>
+                        <List.Item>
+                          <UsersListItem {...user} index={index} />
+                        </List.Item>
+
+                        <DeleteButton
+                          leagueId={id}
+                          eventId={event.id}
+                          userIds={[user.id]}
+                        />
+                      </Flex>
+                    )}
+                  />
+                ),
+              }))}
+            />
+          ) : (
+            <Empty />
+          )}
         </List.Item>
       </List>
     </>

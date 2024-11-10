@@ -5,6 +5,7 @@ import {
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
+  IRemoveUsersFromEventPayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 
@@ -32,6 +33,10 @@ const eventsSlice = createSlice({
     deleteEvent: (_, __: PayloadAction<IEventDeletePayload>) => {},
     createEvent: (_, __: PayloadAction<IEventCreatePayload>) => {},
     addUsersToEvent: (_, __: PayloadAction<IAddUsersToEventPayload>) => {},
+    removeUsersFromEvent: (
+      _,
+      __: PayloadAction<IRemoveUsersFromEventPayload>,
+    ) => {},
   },
   selectors: {
     events: (sliceState) => sliceState.events,
