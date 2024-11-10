@@ -15,6 +15,7 @@ import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getUserByIdEpic } from "./GetUserByIdEpic";
 import { loadUsersEpic } from "./LoadUsersEpic";
+import { drawerSlice, EDrawerType } from "../../Drawer/DrawerSlice";
 
 const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
@@ -28,7 +29,11 @@ const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
 
           return merge(
             loadUsersEpic(action$, state$, dependencies),
-            of(userSlice.actions.manageUsersDrawerVisibilityChanged(false)),
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+              }),
+            ),
           );
         },
         onError: () => {
@@ -52,7 +57,11 @@ const createUserEpic: TAppEpic = (action$, state$, dependencies) =>
 
           return merge(
             loadUsersEpic(action$, state$, dependencies),
-            of(userSlice.actions.manageUsersDrawerVisibilityChanged(false)),
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+              }),
+            ),
           );
         },
         onError: () => {

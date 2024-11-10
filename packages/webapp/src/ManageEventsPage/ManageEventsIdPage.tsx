@@ -35,7 +35,7 @@ import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
 import { FC, useCallback } from "react";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { IRemoveUsersFromEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
-import { ACL } from "@way-to-bot/webapp/ACL/ACL";
+import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
 
 const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {

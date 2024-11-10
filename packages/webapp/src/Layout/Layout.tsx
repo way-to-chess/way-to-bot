@@ -96,10 +96,9 @@ const MenuButton = () => {
 };
 
 const AddUserButton = () => {
-  const openDrawer = useActionCreator(
-    userSlice.actions.manageUsersDrawerVisibilityChanged,
-    true,
-  );
+  const openDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
+    drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+  });
 
   return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
 };
