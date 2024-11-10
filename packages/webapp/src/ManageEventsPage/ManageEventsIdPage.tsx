@@ -18,14 +18,18 @@ import { EVENTS_GET_BY_ID_REQUEST_SYMBOL } from "../Store/Events/EventsVariables
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 import { ManageEventUsersDrawer } from "./ManageEventUsersDrawer";
+import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
+import { ILeague } from "@way-to-bot/shared/interfaces/league.interface";
+import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
+
+interface INormalizedLeague extends Pick<ILeague, "name" | "id"> {
+  users: IUser[];
+}
 
 const ManageEventsIdPage = () => {
   const { eventId } = useParams();
 
-  const event = useParamSelector(
-    eventsSlice.selectors.eventById,
-    Number(eventId),
-  );
+  const event = useParamSelector(eventsSlice.selectors.eventById, eventId);
 
   const status = useParamSelector(
     requestManagerSlice.selectors.statusBySymbol,
@@ -35,6 +39,26 @@ const ManageEventsIdPage = () => {
   if (!event) {
     return <Empty style={{ padding: 16 }} />;
   }
+
+  const leagues = event.eventsUsersLeagues.reduce<INormalizedLeague[]>(
+    (acc, { league, user }) => {
+      const leagueIndex = acc.findIndex((it) => it.id === league.id);
+
+      if (leagueIndex !== -1) {
+        acc[leagueIndex].users.push(user);
+        return acc;
+      }
+
+      acc.push({
+        id: league.id,
+        name: league.name,
+        users: [user],
+      });
+
+      return acc;
+    },
+    [],
+  );
 
   return (
     <>
@@ -59,7 +83,7 @@ const ManageEventsIdPage = () => {
         </List.Item>
 
         <List.Item>
-          <Badge.Ribbon text={event.status}>
+          <Badge.Ribbon text={EVENT_STATUS_TO_TEXT_MAP[event.status]}>
             <Card
               bordered={false}
               styles={{ cover: { height: 200 } }}
@@ -121,10 +145,20 @@ const ManageEventsIdPage = () => {
 
         <List.Item>
           <Collapse
-            items={event.eventsUsersLeagues.map(({ league, user }, index) => ({
-              key: league.id,
-              label: league.name,
-              children: <UsersListItem {...user} index={index} />,
+            items={leagues.map(({ name, id, users }) => ({
+              key: id,
+              label: name,
+              children: (
+                <List
+                  itemLayout={"vertical"}
+                  dataSource={users}
+                  renderItem={(user, index) => (
+                    <List.Item>
+                      <UsersListItem {...user} index={index} />
+                    </List.Item>
+                  )}
+                />
+              ),
             }))}
           />
         </List.Item>

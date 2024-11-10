@@ -12,6 +12,8 @@ import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice
 import { USERS_LOAD_REQUEST_SYMBOL } from "../Store/User/UserVariables";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
+import { ACL } from "../ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 
 const EditButton = () => {
   const open = useActionCreator(
@@ -62,10 +64,12 @@ const ManageUsersPage = () => {
           <List.Item key={item.id}>
             <Flex vertical gap={8}>
               <UsersListItem {...item} index={index} />
-              <Flex gap={8} justify={"flex-end"}>
-                <EditButton />
-                <DeleteButton userId={item.id} />
-              </Flex>
+              <ACL roles={[EUserRole.ADMIN]}>
+                <Flex gap={8} justify={"flex-end"}>
+                  <EditButton />
+                  <DeleteButton userId={item.id} />
+                </Flex>
+              </ACL>
             </Flex>
           </List.Item>
         )}

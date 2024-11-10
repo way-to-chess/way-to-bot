@@ -9,6 +9,7 @@ const TEXT = {
     upload: "Загрузить",
     edit: "Изменить",
     delete: "Удалить",
+    underDevelopment: "В разработке",
   },
   api: {
     success: "Успех",
@@ -49,6 +50,9 @@ const TEXT = {
     leagueId: "Лига",
     userIds: "Пользователи",
     deleteWarn: "Вы уверены, что хотите удалить событие?",
+    waiting: "Ожидаем начала",
+    finished: "Окончился",
+    started: "Начался",
   },
   locations: {
     title: "Название",

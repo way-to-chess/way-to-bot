@@ -28,6 +28,11 @@ const ManageEventUsersDrawer = () => {
     EDrawerType.MANAGE_EVENT_USERS_DRAWER,
   );
 
+  const event = useParamSelector(
+    eventsSlice.selectors.eventById,
+    data?.eventId,
+  );
+
   const leagues = useSelector(leaguesSlice.selectors.leagues);
 
   const leaguesStatus = useParamSelector(
@@ -78,10 +83,20 @@ const ManageEventUsersDrawer = () => {
           <Select
             mode={"multiple"}
             loading={usersStatus === ERequestStatus.loading}
-            options={users.map(({ id, firstName, lastName }) => ({
-              value: id,
-              label: getUserFullName(firstName, lastName),
-            }))}
+            options={users
+              .filter(({ id }) => {
+                if (!event) {
+                  return true;
+                }
+
+                return !event.eventsUsersLeagues.find((it) => {
+                  return it.user.id === id;
+                });
+              })
+              .map(({ id, firstName, lastName }) => ({
+                value: id,
+                label: getUserFullName(firstName, lastName),
+              }))}
           />
         </Form.Item>
 

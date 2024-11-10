@@ -18,6 +18,9 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { eventsSlice } from "../Store/Events/EventsSlice";
+import { ACL } from "../ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
+import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 
 const EditButton = (event: IEvent) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
@@ -70,7 +73,7 @@ const EventsListItem = memo<IEvent>((event) => {
         <Link
           to={`/${generatePath(WEBAPP_ROUTES.manageEventsIdRoute, { eventId: id })}`}
         >
-          <Badge.Ribbon text={status}>
+          <Badge.Ribbon text={EVENT_STATUS_TO_TEXT_MAP[status]}>
             <Card
               styles={{ cover: { height: 200 } }}
               style={{ width: "100%" }}
@@ -120,10 +123,12 @@ const EventsListItem = memo<IEvent>((event) => {
           </Badge.Ribbon>
         </Link>
 
-        <Flex gap={8} justify={"flex-end"}>
-          <EditButton {...event} />
-          <DeleteButton eventId={id} />
-        </Flex>
+        <ACL roles={[EUserRole.ADMIN]}>
+          <Flex gap={8} justify={"flex-end"}>
+            <EditButton {...event} />
+            <DeleteButton eventId={id} />
+          </Flex>
+        </ACL>
       </Flex>
     </List.Item>
   );

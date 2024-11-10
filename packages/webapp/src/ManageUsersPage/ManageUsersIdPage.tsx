@@ -4,7 +4,6 @@ import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
 import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
 import { getUserFullName } from "../Utils/GetUserFullName";
-import { EventsListItem } from "../ManageEventsPage/EventsListItem";
 import { withProps } from "../Utils/WithProps";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
@@ -81,11 +80,7 @@ const ManageUsersIdPage = () => {
       </List.Item>
 
       <List.Item>
-        <List
-          itemLayout={"vertical"}
-          dataSource={user.events}
-          renderItem={(event) => <EventsListItem {...event} key={event.id} />}
-        />
+        <Empty description={TEXT.common.underDevelopment} />
       </List.Item>
     </List>
   );

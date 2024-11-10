@@ -19,10 +19,11 @@ import { useCallback } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import dayjs from "dayjs";
+import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 
 const EVENT_STATUS_SELECT_OPTIONS = Object.values(EEventStatus).map(
   (value) => ({
-    label: value,
+    label: EVENT_STATUS_TO_TEXT_MAP[value],
     value,
   }),
 );

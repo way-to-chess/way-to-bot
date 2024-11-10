@@ -11,7 +11,7 @@ import {
 import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { MenuOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
-import { Drawer } from "antd";
+import { Button, Drawer } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
@@ -35,7 +35,12 @@ const LinkComponent: FC<ILink> = ({ title, to }) => {
 
   return (
     <NavLink to={to} className={classes.link} onClick={closeDrawer}>
-      {title}
+      <Button
+        type={"text"}
+        style={{ width: "100%", justifyContent: "left", height: "100%" }}
+      >
+        {title}
+      </Button>
     </NavLink>
   );
 };
@@ -71,10 +76,12 @@ const MenuDrawer = () => {
         title={TEXT.mainMenu.locations}
         to={WEBAPP_ROUTES.manageLocationsRoute}
       />
-      <LinkComponent
-        title={TEXT.mainMenu.leagues}
-        to={WEBAPP_ROUTES.manageLeaguesRoute}
-      />
+      <ACL roles={[EUserRole.ADMIN]}>
+        <LinkComponent
+          title={TEXT.mainMenu.leagues}
+          to={WEBAPP_ROUTES.manageLeaguesRoute}
+        />
+      </ACL>
     </Drawer>
   );
 };

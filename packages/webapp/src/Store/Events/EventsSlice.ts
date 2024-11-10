@@ -35,8 +35,9 @@ const eventsSlice = createSlice({
   },
   selectors: {
     events: (sliceState) => sliceState.events,
-    eventById: (sliceState, eventId: number) =>
-      sliceState.events.find((it) => it.id === eventId),
+    eventById: (sliceState, eventId: number | string) => {
+      return sliceState.events.find((it) => it.id === Number(eventId)) ?? null;
+    },
   },
 });
 
