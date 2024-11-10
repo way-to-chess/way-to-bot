@@ -1,11 +1,9 @@
-import { EUserRole } from "../enums";
 import { UserEntity } from "../entities/user.entity";
 
-export interface IUserCreatePayload {
-  username: string;
-  firstName: string;
-  lastName: string;
-  roles?: EUserRole[];
+export interface IUserCreatePayload
+  extends Partial<
+    Omit<UserEntity, "id" | "createdAt" | "updatedAt" | "winRate" | "photo">
+  > {
   fileId?: number;
 }
 
@@ -13,6 +11,7 @@ export interface IUserUpdatePayload
   extends Partial<
     Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">
   > {
+  id: number;
   fileId?: number | null;
 }
 

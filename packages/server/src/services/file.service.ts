@@ -2,11 +2,11 @@ import {FileEntity} from "@way-to-bot/shared/entities/file.entity";
 import * as path from "path";
 import {rm} from "fs/promises";
 import {dbInstance} from "../database/init";
-import {IFileDeletePayload} from "../interfaces/file.interface";
 import {FileDTO} from "../DTO/file.DTO";
 import csvToJson from "convert-csv-to-json";
 import {UserEntity} from "@way-to-bot/shared/entities/user.entity";
 import {In} from "typeorm";
+import {IFileDeletePayload} from "@way-to-bot/shared/interfaces/file.interface";
 
 export class FileService {
     private fileRepository = dbInstance.getRepository(FileEntity);

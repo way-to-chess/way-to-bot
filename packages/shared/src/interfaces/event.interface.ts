@@ -1,23 +1,20 @@
-import { TDate } from "./date.inteface";
-import { EEventStatus } from "../enums";
 import { EventEntity } from "../entities/event.entity";
 
-export interface IEventCreatePayload {
-  name: string;
-  dateTime: TDate;
-  price?: string | null;
-  status: EEventStatus;
-  participantsLimit?: number;
-  linkToTable?: string;
+export interface IEventCreatePayload
+  extends Partial<
+    Omit<EventEntity, "createdAt" | "updatedAt" | "location" | "users">
+  > {
   locationId?: number;
   fileId?: number | null;
 }
 
 export interface IEventUpdatePayload
   extends Partial<
-    Omit<EventEntity, "createdAt" | "updatedAt" | "location" | "users">
+    Omit<EventEntity, "id" | "createdAt" | "updatedAt" | "location" | "users">
   > {
+  id: number;
   locationId?: number | null;
+  fileId?: number | null;
 }
 
 export interface IEventDeletePayload {

@@ -1,50 +1,51 @@
-import { Body, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
-import { EventService } from "../services/event.service";
+import {Body, Delete, Get, Path, Post, Put, Route, Tags} from "tsoa";
+import {EventService} from "../services/event.service";
+
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
-  IRemoveUsersFromEventPayload,
-} from "../interfaces/event.interface";
+  IRemoveUsersFromEventPayload
+} from "@way-to-bot/shared/interfaces/event.interface";
 
 @Route("/api/event")
 @Tags("Events")
 export class EventController {
-  private eventService = new EventService();
+    private eventService = new EventService();
 
-  @Get("/all")
-  async getAllEvents() {
-    return this.eventService.getAllEvents();
-  }
+    @Get("/all")
+    async getAllEvents() {
+        return this.eventService.getAllEvents();
+    }
 
-  @Get("/getById/{id}")
-  async getEventById(@Path() id: number) {
-    return this.eventService.getEventById(id);
-  }
+    @Get("/getById/{id}")
+    async getEventById(@Path() id: number) {
+        return this.eventService.getEventById(id);
+    }
 
-  @Post("/create")
-  async createEvent(@Body() payload: IEventCreatePayload) {
-    return this.eventService.createEvent(payload);
-  }
+    @Post("/create")
+    async createEvent(@Body() payload: IEventCreatePayload) {
+        return this.eventService.createEvent(payload);
+    }
 
-  @Put("/update")
-  async updateEvent(@Body() payload: IEventUpdatePayload) {
-    return this.eventService.updateEvent(payload);
-  }
+    @Put("/update")
+    async updateEvent(@Body() payload: IEventUpdatePayload) {
+        return this.eventService.updateEvent(payload);
+    }
 
-  @Delete("/delete")
-  async deleteEvent(@Body() payload: IEventDeletePayload) {
-    return this.eventService.deleteEvent(payload);
-  }
+    @Delete("/delete")
+    async deleteEvent(@Body() payload: IEventDeletePayload) {
+        return this.eventService.deleteEvent(payload);
+    }
 
-  @Post("/addUsersToEvent")
-  async addUsersToEvent(@Body() payload: IAddUsersToEventPayload) {
-    return this.eventService.addUsersToEvent(payload);
-  }
+    @Post("/addUsersToEvent")
+    async addUsersToEvent(@Body() payload: IAddUsersToEventPayload) {
+        return this.eventService.addUsersToEvent(payload);
+    }
 
-  @Delete("/removeUsersFromEvent")
-  async removeUsersFromEvent(@Body() payload: IRemoveUsersFromEventPayload) {
-    return this.eventService.removeUsersFromEvent(payload);
-  }
+    @Delete("/removeUsersFromEvent")
+    async removeUsersFromEvent(@Body() payload: IRemoveUsersFromEventPayload) {
+        return this.eventService.removeUsersFromEvent(payload);
+    }
 }

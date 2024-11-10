@@ -1,7 +1,12 @@
 import {dbInstance} from "../database/init";
 import {DeepPartial} from "typeorm";
 import {LeagueEntity} from "@way-to-bot/shared/entities/league.entity";
-import {ILeagueCreatePayload, ILeagueDeletePayload, ILeagueUpdatePayload,} from "../interfaces/league.interface";
+
+import {
+    ILeagueCreatePayload,
+    ILeagueDeletePayload,
+    ILeagueUpdatePayload
+} from "@way-to-bot/shared/interfaces/league.interface";
 
 export class LeagueService {
     private leagueRepository = dbInstance.getRepository(LeagueEntity);

@@ -1,12 +1,12 @@
 import {dbInstance} from "../database/init";
 import {FileEntity} from "@way-to-bot/shared/entities/file.entity";
 import {LocationEntity} from "@way-to-bot/shared/entities/location.entity";
+import {DeepPartial} from "typeorm";
 import {
   ILocationCreatePayload,
   ILocationDeletePayload,
-  ILocationUpdatePayload,
-} from "../interfaces/location.interface";
-import {DeepPartial} from "typeorm";
+  ILocationUpdatePayload
+} from "@way-to-bot/shared/interfaces/location.interface";
 
 export class LocationService {
     private locationRepository = dbInstance.getRepository(LocationEntity);
