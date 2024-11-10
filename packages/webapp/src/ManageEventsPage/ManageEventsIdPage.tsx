@@ -35,6 +35,8 @@ import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
 import { FC, useCallback } from "react";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { IRemoveUsersFromEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
+import { ACL } from "@way-to-bot/webapp/ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 
 const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
   const removeUserFromEvent = useActionCreator(
@@ -201,11 +203,13 @@ const ManageEventsIdPage = () => {
                           <UsersListItem {...user} index={index} />
                         </List.Item>
 
-                        <DeleteButton
-                          leagueId={id}
-                          eventId={event.id}
-                          userIds={[user.id]}
-                        />
+                        <ACL roles={[EUserRole.ADMIN]}>
+                          <DeleteButton
+                            leagueId={id}
+                            eventId={event.id}
+                            userIds={[user.id]}
+                          />
+                        </ACL>
                       </Flex>
                     )}
                   />
