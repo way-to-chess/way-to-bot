@@ -45,7 +45,7 @@ const httpApi = {
     "user/delete",
   ),
   updateUser: requestWithPayload<IUserUpdatePayload, boolean>(
-    "UPDATE",
+    "PUT",
     "user/update",
   ),
 

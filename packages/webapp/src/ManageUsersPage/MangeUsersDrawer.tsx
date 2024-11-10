@@ -48,6 +48,8 @@ const MangeUsersDrawer = memo(() => {
         roles: [EUserRole.USER],
       };
 
+  const [form] = Form.useForm<IUserCreatePayload>();
+
   const onFinish: FormProps<IUserCreatePayload>["onFinish"] = (values) => {
     dispatch(
       data
@@ -56,7 +58,9 @@ const MangeUsersDrawer = memo(() => {
     );
   };
 
-  const [form] = Form.useForm<IUserCreatePayload>();
+  const afterOpenChange = () => {
+    form.resetFields();
+  };
 
   const uploadProps = useFileUpload({
     onRemove: useCallback(
@@ -73,7 +77,13 @@ const MangeUsersDrawer = memo(() => {
   });
 
   return (
-    <Drawer placement={"right"} closable getContainer={false} {...drawer}>
+    <Drawer
+      placement={"right"}
+      closable
+      getContainer={false}
+      {...drawer}
+      afterOpenChange={afterOpenChange}
+    >
       <Form
         form={form}
         layout={"vertical"}
