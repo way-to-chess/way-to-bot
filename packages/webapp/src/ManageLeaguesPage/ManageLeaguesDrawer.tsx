@@ -1,27 +1,29 @@
 import { Button, Drawer, Form, Input } from "antd";
-import { useParamSelector } from "../Hooks/UseParamSelector";
-import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
-import { useActionCreator } from "../Hooks/UseActionCreator";
 import { TEXT } from "@way-to-bot/shared/constants/text";
-import { useDispatch } from "react-redux";
-import { leaguesSlice } from "../Store/Leagues/LeaguesSlice";
+import { EDrawerType } from "../Store/Drawer/DrawerSlice";
+import { leaguesApi } from "../Store/Leagues/LeaguesSlice";
+import { useCallback } from "react";
 import { ILeagueCreatePayload } from "@way-to-bot/shared/interfaces/league.interface";
+import { useDrawer } from "../Hooks/UseDrawer";
+import { REQUIRED_RULES } from "../Variables";
+
+const BUTTON_STYLE = { float: "right" } as const;
 
 const ManageLeaguesDrawer = () => {
-  const open = useParamSelector(
-    drawerSlice.selectors.drawerOpen,
-    EDrawerType.MANAGE_LEAGUES_DRAWER,
-  );
+  const { open, onClose } = useDrawer(EDrawerType.MANAGE_LEAGUES_DRAWER);
 
-  const onClose = useActionCreator(drawerSlice.actions.closeDrawer, {
-    drawerType: EDrawerType.MANAGE_LEAGUES_DRAWER,
-  });
+  const [createLeague, { isLoading }] = leaguesApi.useCreateLeagueMutation();
 
-  const dispatch = useDispatch();
+  const { refetch } = leaguesApi.useGetAllQuery(void 0);
 
-  const onFinish = (payload: ILeagueCreatePayload) => {
-    dispatch(leaguesSlice.actions.createLeague(payload));
-  };
+  const [form] = Form.useForm();
+
+  const onFinish = useCallback((payload: ILeagueCreatePayload) => {
+    createLeague(payload).then(() => {
+      form.resetFields();
+      refetch();
+    });
+  }, []);
 
   return (
     <Drawer
@@ -31,8 +33,12 @@ const ManageLeaguesDrawer = () => {
       closable
       getContainer={false}
     >
-      <Form layout={"vertical"} onFinish={onFinish}>
-        <Form.Item name={"name"} label={TEXT.leagues.name}>
+      <Form layout={"vertical"} onFinish={onFinish} form={form}>
+        <Form.Item
+          name={"name"}
+          label={TEXT.leagues.name}
+          rules={REQUIRED_RULES}
+        >
           <Input />
         </Form.Item>
 
@@ -40,7 +46,8 @@ const ManageLeaguesDrawer = () => {
           <Button
             type={"primary"}
             htmlType={"submit"}
-            style={{ float: "right" }}
+            style={BUTTON_STYLE}
+            loading={isLoading}
           >
             {TEXT.common.create}
           </Button>
