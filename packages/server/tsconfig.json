@@ -1,16 +1,14 @@
 {
   "extends": "../../typescript/tsconfig.lib.json",
   "compilerOptions": {
-    "target": "esnext",
-    "emitDecoratorMetadata": true,
-    "module": "commonjs",
-    "resolveJsonModule": true,
-    "outDir": "build",
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "skipDefaultLibCheck": true,
-    "skipLibCheck": true
+    "outDir": "build"
+  },
+  "ts-node": {
+    "transpileOnly": true,
+    "esm": true,
+    "require": [
+      "tsconfig-paths/register"
+    ]
   },
   "include": [
     "src/**/*"

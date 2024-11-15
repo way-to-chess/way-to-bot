@@ -1,1 +1,1 @@
-npx typeorm-ts-node-commonjs migration:run -d ./src/database/init.ts
+npx typeorm-ts-node-esm migration:run -d ./src/database/init.ts

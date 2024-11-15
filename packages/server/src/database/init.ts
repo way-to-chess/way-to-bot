@@ -1,4 +1,8 @@
 import { DataSource, DataSourceOptions } from "typeorm";
+import * as process from "node:process";
+import { dbEntitiesPath } from "@way-to-bot/shared/entities/path";
+
+console.log(dbEntitiesPath);
 
 const dbOptions: DataSourceOptions = {
   type: "postgres",
@@ -9,7 +13,7 @@ const dbOptions: DataSourceOptions = {
   database: process.env.DB_DATABASE,
   synchronize: false,
   logging: true,
-  entities: [process.env.DB_ENTITIES_PATH!],
+  entities: [`${dbEntitiesPath}/*.ts`],
   migrations: [process.env.DB_MIGRATIONS_PATH!],
   ssl:
     process.env.NODE_ENV === "production"
