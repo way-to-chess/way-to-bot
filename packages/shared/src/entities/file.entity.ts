@@ -1,5 +1,5 @@
-import { Entity, PrimaryGeneratedColumn, Column, AfterLoad } from "typeorm";
-import { setFileUrlForClient } from "../../utils/set-file-url-for-client";
+import { AfterLoad, Column, Entity, PrimaryGeneratedColumn } from "typeorm";
+import { setFileUrlForClient } from "../utils/setFileUrlForClient";
 
 @Entity("files")
 export class FileEntity {

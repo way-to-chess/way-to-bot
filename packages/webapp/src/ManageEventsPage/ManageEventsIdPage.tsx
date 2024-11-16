@@ -29,13 +29,13 @@ import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 import { ManageEventUsersDrawer } from "./ManageEventUsersDrawer";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
-import { ILeague } from "@way-to-bot/shared/interfaces/league.interface";
-import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
 import { FC, useCallback } from "react";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { IRemoveUsersFromEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
+import { LeagueEntity } from "@way-to-bot/shared/entities/league.entity";
+import { UserEntity } from "@way-to-bot/shared/entities/user.entity";
 
 const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
   const removeUserFromEvent = useActionCreator(
@@ -61,8 +61,8 @@ const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
   );
 };
 
-interface INormalizedLeague extends Pick<ILeague, "name" | "id"> {
-  users: IUser[];
+interface INormalizedLeague extends Pick<LeagueEntity, "name" | "id"> {
+  users: UserEntity[];
 }
 
 const ManageEventsIdPage = () => {

@@ -2,11 +2,11 @@ import "express-async-errors";
 import "reflect-metadata";
 import "dotenv/config";
 import express, { NextFunction, Request, Response } from "express";
-import { MainRouter } from "./routers";
 import chalk from "chalk";
 import cors from "cors";
 import { TgBotService } from "./tg-bot/init";
 import { dbInstance } from "./database/init";
+import { MainRouter } from "./routers";
 
 const app = express();
 

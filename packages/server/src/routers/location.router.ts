@@ -1,10 +1,11 @@
 import { Request, Router } from "express";
 import { LocationController } from "../controllers/location.controller";
+
 import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "../interfaces/location.interface";
+} from "@way-to-bot/shared/interfaces/location.interface";
 
 export const LocationRouter = Router();
 const locationController = new LocationController();

@@ -1,10 +1,11 @@
 import { Request, Router } from "express";
 import { LeagueController } from "../controllers/league.controller";
+
 import {
   ILeagueCreatePayload,
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
-} from "../interfaces/league.interface";
+} from "@way-to-bot/shared/interfaces/league.interface";
 
 export const LeagueRouter = Router();
 const leagueController = new LeagueController();

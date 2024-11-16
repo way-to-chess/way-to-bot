@@ -1,6 +1,7 @@
 import { Body, Delete, Post, Route, Tags } from "tsoa";
 import { FileService } from "../services/file.service";
-import { IFileDeletePayload } from "../interfaces/file.interface";
+
+import { IFileDeletePayload } from "@way-to-bot/shared/interfaces/file.interface";
 
 @Route("/api/file")
 @Tags("Files")

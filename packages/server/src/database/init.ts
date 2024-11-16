@@ -1,4 +1,5 @@
 import { DataSource, DataSourceOptions } from "typeorm";
+import * as process from "node:process";
 
 const dbOptions: DataSourceOptions = {
   type: "postgres",
@@ -9,7 +10,7 @@ const dbOptions: DataSourceOptions = {
   database: process.env.DB_DATABASE,
   synchronize: false,
   logging: true,
-  entities: [process.env.DB_ENTITIES_PATH!],
+  entities: ["../../../shared/src/entities/*.ts"],
   migrations: [process.env.DB_MIGRATIONS_PATH!],
   ssl:
     process.env.NODE_ENV === "production"

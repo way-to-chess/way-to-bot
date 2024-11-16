@@ -1,26 +1,15 @@
-import { TDate } from "./date.inteface";
-import { IFile } from "./file.interface";
+import { LocationEntity } from "../entities/location.entity";
 
-export interface ILocation {
-  id: number;
-  title: string;
-  url?: string | null;
-  address?: string | null;
-  preview?: IFile | null;
-  createdAt: TDate;
-  updatedAt: TDate;
-}
-
-export interface ILocationCreatePayload {
-  title: string;
-  url?: string;
-  address?: string;
+export interface ILocationCreatePayload
+  extends Partial<
+    Omit<LocationEntity, "id" | "createdAt" | "updatedAt" | "preview">
+  > {
   fileId?: number;
 }
 
 export interface ILocationUpdatePayload
-  extends Partial<Omit<ILocation, "createdAt" | "updatedAt" | "preview">> {
-  fileId?: number;
+  extends Partial<Omit<LocationEntity, "createdAt" | "updatedAt" | "preview">> {
+  fileId?: number | null;
 }
 
 export interface ILocationDeletePayload {

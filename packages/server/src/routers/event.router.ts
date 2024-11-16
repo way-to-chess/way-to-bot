@@ -1,12 +1,13 @@
 import { EventController } from "../controllers/event.controller";
 import { Request, Router } from "express";
+
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "../interfaces/event.interface";
+} from "@way-to-bot/shared/interfaces/event.interface";
 
 export const EventRouter = Router();
 

@@ -1,10 +1,11 @@
 import { UserService } from "../services/user.service";
 import { Body, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
+
 import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "../interfaces/user.interface";
+} from "@way-to-bot/shared/interfaces/user.interface";
 
 @Route("/api/user")
 @Tags("User")

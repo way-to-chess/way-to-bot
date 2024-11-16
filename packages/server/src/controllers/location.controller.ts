@@ -1,10 +1,11 @@
 import { Body, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
 import { LocationService } from "../services/location.service";
+
 import {
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "../interfaces/location.interface";
+} from "@way-to-bot/shared/interfaces/location.interface";
 
 @Route("/api/location")
 @Tags("Locations")

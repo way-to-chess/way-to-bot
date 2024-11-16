@@ -1,11 +1,11 @@
 import { Request, Router } from "express";
 import { UserController } from "../controllers/user.controller";
+import { castUserNameMiddleware } from "../middlewares/username.mddwmts";
 import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "../interfaces/user.interface";
-import { castUserNameMiddleware } from "../middlewares/username.mddwmts";
+} from "@way-to-bot/shared/interfaces/user.interface";
 
 export const UserRouter = Router();
 const userController = new UserController();

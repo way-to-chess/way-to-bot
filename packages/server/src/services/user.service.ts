@@ -1,12 +1,12 @@
 import { dbInstance } from "../database/init";
-import { UserEntity } from "../database/entities/user.entity";
-import { FileEntity } from "../database/entities/file.entity";
+import { UserEntity } from "@way-to-bot/shared/entities/user.entity";
+import { FileEntity } from "@way-to-bot/shared/entities/file.entity";
+import { DeepPartial } from "typeorm";
 import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-} from "../interfaces/user.interface";
-import { DeepPartial } from "typeorm";
+} from "@way-to-bot/shared/interfaces/user.interface";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(UserEntity);

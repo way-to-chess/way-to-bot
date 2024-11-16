@@ -1,5 +1,5 @@
-import { FileEntity } from "../database/entities/file.entity";
-import { setFileUrlForClient } from "../utils/set-file-url-for-client";
+import { FileEntity } from "@way-to-bot/shared/entities/file.entity";
+import { setFileUrlForClient } from "@way-to-bot/shared/utils/setFileUrlForClient";
 
 export class FileDTO {
   id: number;

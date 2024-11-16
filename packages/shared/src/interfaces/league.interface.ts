@@ -1,22 +1,10 @@
-import { IEventUserLeague } from "./eventUserLeague.interface";
+import { LeagueEntity } from "../entities/league.entity";
 
-interface ILeague {
-  id: number;
-  name: string;
-  eventsUsersLeagues: IEventUserLeague[];
-}
+export interface ILeagueCreatePayload
+  extends Partial<Omit<LeagueEntity, "id">> {}
 
-interface ILeagueCreatePayload extends Partial<Omit<ILeague, "id">> {}
+export interface ILeagueUpdatePayload extends Partial<LeagueEntity> {}
 
-interface ILeagueUpdatePayload extends Partial<ILeague> {}
-
-interface ILeagueDeletePayload {
+export interface ILeagueDeletePayload {
   leagueId: number;
 }
-
-export type {
-  ILeague,
-  ILeagueCreatePayload,
-  ILeagueUpdatePayload,
-  ILeagueDeletePayload,
-};

@@ -4,10 +4,7 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { FC, useCallback } from "react";
-import {
-  IUser,
-  IUserDeletePayload,
-} from "@way-to-bot/shared/interfaces/user.interface";
+import { IUserDeletePayload } from "@way-to-bot/shared/interfaces/user.interface";
 import { ExclamationCircleFilled } from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { UsersListItem } from "./UsersListItem";
@@ -18,8 +15,9 @@ import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
+import { UserEntity } from "@way-to-bot/shared/entities/user.entity";
 
-const EditButton: FC<IUser> = (user) => {
+const EditButton: FC<UserEntity> = (user) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
     drawerType: EDrawerType.MANAGE_USERS_DRAWER,
     data: user,

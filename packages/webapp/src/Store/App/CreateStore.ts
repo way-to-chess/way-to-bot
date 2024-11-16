@@ -12,7 +12,7 @@ import { locationsSlice } from "../Locations/LocationsSlice";
 import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Events/EventsSlice";
 import { appSlice } from "./AppSlice";
-import { leaguesSlice } from "../Leagues/LeaguesSlice";
+import { leaguesApi, leaguesSlice } from "../Leagues/LeaguesSlice";
 import { drawerSlice } from "../Drawer/DrawerSlice";
 
 const history = createBrowserHistory();
@@ -33,9 +33,12 @@ export const createStore = () => {
       events: eventsSlice.reducer,
       leagues: leaguesSlice.reducer,
       drawer: drawerSlice.reducer,
+      [leaguesApi.reducerPath]: leaguesApi.reducer,
     },
     middleware: (getDefaultMiddleware) =>
-      getDefaultMiddleware().prepend(routerMiddleware).concat(epicMiddleware),
+      getDefaultMiddleware()
+        .prepend(routerMiddleware)
+        .concat(epicMiddleware, leaguesApi.middleware),
   });
 
   epicMiddleware.run(appEpic);

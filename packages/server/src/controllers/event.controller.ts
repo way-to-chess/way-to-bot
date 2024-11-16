@@ -1,12 +1,13 @@
 import { Body, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
 import { EventService } from "../services/event.service";
+
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "../interfaces/event.interface";
+} from "@way-to-bot/shared/interfaces/event.interface";
 
 @Route("/api/event")
 @Tags("Events")

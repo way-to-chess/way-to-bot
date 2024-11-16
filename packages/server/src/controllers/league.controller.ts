@@ -1,10 +1,11 @@
 import { Body, Delete, Get, Post, Put, Route, Tags } from "tsoa";
 import { LeagueService } from "../services/league.service";
+
 import {
   ILeagueCreatePayload,
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
-} from "../interfaces/league.interface";
+} from "@way-to-bot/shared/interfaces/league.interface";
 
 @Route("/api/league")
 @Tags("Leagues")

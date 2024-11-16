@@ -1,14 +1,14 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import {
-  ILocation,
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
 } from "@way-to-bot/shared/interfaces/location.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import { LocationEntity } from "@way-to-bot/shared/entities/location.entity";
 
 interface ILocationsState {
-  locations: ILocation[];
+  locations: LocationEntity[];
   manageLocationsDrawerVisible: boolean;
 }
 
@@ -26,7 +26,7 @@ const locationsSlice = createSlice({
     deleteLocation: (_, __: PayloadAction<ILocationDeletePayload>) => {},
     locationsReceived: (
       state,
-      { payload }: PayloadAction<IResponseWithData<ILocation[]>>,
+      { payload }: PayloadAction<IResponseWithData<LocationEntity[]>>,
     ) => {
       state.locations = payload.data;
     },
