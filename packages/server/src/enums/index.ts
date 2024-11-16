@@ -8,3 +8,7 @@ export enum EUserRole {
   ADMIN = "admin",
   USER = "user",
 }
+
+export enum EImageAssigment {
+  AVATAR = "avatar",
+}

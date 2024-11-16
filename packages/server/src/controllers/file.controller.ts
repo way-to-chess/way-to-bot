@@ -1,6 +1,9 @@
 import { Body, Delete, Post, Route, Tags } from "tsoa";
 import { FileService } from "../services/file.service";
-import { IFileDeletePayload } from "../interfaces/file.interface";
+import {
+  IFileDeletePayload,
+  IFileUploadPayload,
+} from "../interfaces/file.interface";
 
 @Route("/api/file")
 @Tags("Files")
@@ -8,8 +11,8 @@ export class FileController {
   private fileService = new FileService();
 
   @Post("/upload")
-  async addFile(payload: Express.Multer.File) {
-    return this.fileService.addFile(payload);
+  async addFile(file: Express.Multer.File, payload: IFileUploadPayload) {
+    return this.fileService.addFile(file, payload);
   }
 
   @Post("importCSV")

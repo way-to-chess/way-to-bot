@@ -2,22 +2,33 @@ import { FileEntity } from "../database/entities/file.entity";
 import * as path from "path";
 import { rm } from "fs/promises";
 import { dbInstance } from "../database/init";
-import { IFileDeletePayload } from "../interfaces/file.interface";
+import {
+  IFileDeletePayload,
+  IFileUploadPayload,
+} from "../interfaces/file.interface";
 import { FileDTO } from "../DTO/file.DTO";
 import csvToJson from "convert-csv-to-json";
 import { UserEntity } from "../database/entities/user.entity";
 import { In } from "typeorm";
+import { compressImage } from "../utils/format-images";
+import { EImageAssigment } from "../enums";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
 
-  async addFile(file: Express.Multer.File) {
+  async addFile(file: Express.Multer.File, payload: IFileUploadPayload) {
     if (!file.destination || !file.filename) {
       throw new Error("No destination or filename, data corrupted");
     }
 
+    const uploadedFileUrl = path.join(file.destination, file.filename);
+    const savingFileUrl =
+      payload?.assigment === EImageAssigment.AVATAR
+        ? await compressImage(uploadedFileUrl, EImageAssigment.AVATAR)
+        : uploadedFileUrl;
+
     const newFile = new FileEntity();
-    newFile.url = path.join(file.destination, file.filename);
+    newFile.url = savingFileUrl;
 
     const savedFile = await this.fileRepository.save(newFile);
     if (!savedFile) {
