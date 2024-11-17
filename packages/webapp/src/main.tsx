@@ -1,7 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./main.css";
-import { isDev } from "./Utils/OneLineUtils";
+import { isDev, isHttps } from "./Utils/OneLineUtils";
 import { Provider } from "react-redux";
 import { history, store } from "./Store/App/CreateStore";
 import { ReduxRouter } from "@lagunovsky/redux-react-router";
@@ -15,7 +15,7 @@ import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
 import { ConfigProvider, theme } from "antd";
 import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 
-if (isDev) {
+if (isDev && !isHttps) {
   document.body.setAttribute("data-dev", "true");
 }
 
