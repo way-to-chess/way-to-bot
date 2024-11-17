@@ -1,40 +1,74 @@
 import { createRoot } from "react-dom/client";
-import { Navigate, Route, Routes } from "react-router-dom";
 import "./main.css";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
-import { Provider } from "react-redux";
-import { history, store } from "./Store/App/CreateStore";
+import { Provider as ReduxProvider } from "react-redux";
+import { store } from "./Store/App/CreateStore";
+import { ThemeProvider as NextThemesProvider } from "next-themes";
+import { NextUIProvider } from "@nextui-org/react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
+import {
+  Navigate,
+  Route,
+  Routes,
+  useHref,
+  useNavigate,
+} from "react-router-dom";
 import { ReduxRouter } from "@lagunovsky/redux-react-router";
+import { createBrowserHistory } from "history";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
-import { Layout } from "./Layout/Layout";
-import { ManageEventsPage } from "./ManageEventsPage/ManageEventsPage";
-import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
-import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
-import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
-import { ConfigProvider, theme } from "antd";
-import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 
 if (isDev && !isHttps) {
   document.body.setAttribute("data-dev", "true");
 }
 
-const App = () => {
-  const { darkAlgorithm, defaultAlgorithm } = theme;
+const useTheme = () => {
+  const [theme, setTheme] = useState(Telegram.WebApp.colorScheme);
+
+  useEffect(() => {
+    const handler = () => {
+      setTheme(Telegram.WebApp.colorScheme);
+    };
+
+    Telegram.WebApp.onEvent("themeChanged", handler);
+
+    return () => {
+      Telegram.WebApp.offEvent("themeChanged", handler);
+    };
+  }, [setTheme]);
+
+  return theme;
+};
+
+const ThemeProvider: FC<PropsWithChildren> = ({ children }) => {
+  const theme = useTheme();
 
   return (
-    <Provider store={store}>
-      <ReduxRouter history={history}>
-        <ConfigProvider
-          theme={{
-            algorithm:
-              Telegram.WebApp.colorScheme === "dark"
-                ? darkAlgorithm
-                : defaultAlgorithm,
-          }}
-        >
+    <NextThemesProvider attribute="class" forcedTheme={theme}>
+      {children}
+    </NextThemesProvider>
+  );
+};
+
+const UIProvider: FC<PropsWithChildren> = ({ children }) => {
+  const navigate = useNavigate();
+
+  return (
+    <NextUIProvider navigate={navigate} useHref={useHref}>
+      {children}
+    </NextUIProvider>
+  );
+};
+
+const history = createBrowserHistory();
+
+createRoot(document.getElementById("root")!).render(
+  <ReduxProvider store={store}>
+    <ReduxRouter history={history}>
+      <UIProvider>
+        <ThemeProvider>
           <Routes>
-            <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
+            <Route path={WEBAPP_ROUTES.anyRoute}>
               <Route
                 index
                 element={<Navigate to={WEBAPP_ROUTES.manageUsersRoute} />}
@@ -44,32 +78,10 @@ const App = () => {
                 path={WEBAPP_ROUTES.manageUsersRoute}
                 element={<ManageUsersPage />}
               />
-              <Route
-                element={<ManageUsersIdPage />}
-                path={WEBAPP_ROUTES.manageUsersIdRoute}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageEventsRoute}
-                element={<ManageEventsPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageEventsIdRoute}
-                element={<ManageEventsIdPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageLocationsRoute}
-                element={<ManageLocationsPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageLeaguesRoute}
-                element={<ManageLeaguesPage />}
-              />
             </Route>
           </Routes>
-        </ConfigProvider>
-      </ReduxRouter>
-    </Provider>
-  );
-};
-
-createRoot(document.getElementById("root")!).render(<App />);
+        </ThemeProvider>
+      </UIProvider>
+    </ReduxRouter>
+  </ReduxProvider>,
+);

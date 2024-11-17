@@ -7,8 +7,17 @@ import { Avatar, Flex, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 import { getUserFullName } from "../Utils/GetUserFullName";
+import { User } from "@nextui-org/react";
 
 const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
+  return (
+    <User
+      name={getUserFullName(user.firstName, user.lastName)}
+      description={user.username}
+      avatarProps={{ src: getPreviewSrc(user.photo?.url) }}
+    />
+  );
+
   return (
     <Flex
       gap={8}
@@ -29,9 +38,7 @@ const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
       />
 
       <Flex vertical flex={1}>
-        <Typography.Text style={{ fontWeight: "bold" }}>
-          {getUserFullName(user.firstName, user.lastName)}
-        </Typography.Text>
+        <Typography.Text style={{ fontWeight: "bold" }}>{}</Typography.Text>
 
         <div style={{ color: "grey" }}>{user.username}</div>
       </Flex>
