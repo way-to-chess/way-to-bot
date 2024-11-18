@@ -12,25 +12,46 @@ import { ManageEventsPage } from "./ManageEventsPage/ManageEventsPage";
 import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
 import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
 import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
-import { ConfigProvider, theme } from "antd";
+import { ConfigProvider, theme as antdTheme } from "antd";
 import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
+import { useEffect, useState } from "react";
+import ru from "antd/locale/ru_RU";
 
 if (isDev && !isHttps) {
   document.body.setAttribute("data-dev", "true");
 }
 
+const useTheme = () => {
+  const [theme, setTheme] = useState(Telegram.WebApp.colorScheme);
+
+  useEffect(() => {
+    const handler = () => {
+      setTheme(Telegram.WebApp.colorScheme);
+    };
+
+    Telegram.WebApp.onEvent("themeChanged", handler);
+
+    return () => {
+      Telegram.WebApp.offEvent("themeChanged", handler);
+    };
+  }, [setTheme]);
+
+  return theme;
+};
+
 const App = () => {
-  const { darkAlgorithm, defaultAlgorithm } = theme;
+  const theme = useTheme();
 
   return (
     <Provider store={store}>
       <ReduxRouter history={history}>
         <ConfigProvider
+          locale={ru}
           theme={{
             algorithm:
-              Telegram.WebApp.colorScheme === "dark"
-                ? darkAlgorithm
-                : defaultAlgorithm,
+              antdTheme[
+                theme === "dark" ? "darkAlgorithm" : "defaultAlgorithm"
+              ],
           }}
         >
           <Routes>

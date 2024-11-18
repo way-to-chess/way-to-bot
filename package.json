@@ -8,6 +8,7 @@
   "scripts": {
     "server:dev": "npm run dev --workspace=@way-to-bot/server",
     "webapp:dev": "npm run dev --workspace=@way-to-bot/webapp",
+    "webapp:dev:local": "npm run dev:local --workspace=@way-to-bot/webapp",
     "dev:all": "npm-run-all --parallel server:dev webapp:dev",
     "lint": "npm run lint --workspaces --if-present"
   },
