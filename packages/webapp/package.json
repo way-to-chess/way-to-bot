@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
+    "dev:local": "vite -c vite.config.https.ts -m https",
     "lint": "eslint src --fix",
     "build": "vite build"
   },
