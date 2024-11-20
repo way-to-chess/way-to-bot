@@ -1,4 +1,4 @@
-import { Button, Flex, List, Modal } from "antd";
+import { Button, Flex, Input, List, Modal } from "antd";
 import { MangeUsersDrawer } from "./MangeUsersDrawer";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
@@ -8,7 +8,11 @@ import {
   IUser,
   IUserDeletePayload,
 } from "@way-to-bot/shared/interfaces/user.interface";
-import { ExclamationCircleFilled } from "@ant-design/icons";
+import {
+  ExclamationCircleFilled,
+  SearchOutlined,
+  SwapOutlined,
+} from "@ant-design/icons";
 import { useSelector } from "react-redux";
 import { UsersListItem } from "./UsersListItem";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
@@ -18,6 +22,7 @@ import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
+import { LAYOUT_STYLE } from "../Variables";
 
 const EditButton: FC<IUser> = (user) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
@@ -59,25 +64,30 @@ const ManageUsersPage = () => {
   return (
     <>
       <MangeUsersDrawer />
-      <List
-        loading={status === ERequestStatus.loading}
-        style={{ padding: 16 }}
-        dataSource={users}
-        itemLayout={"vertical"}
-        renderItem={(item, index) => (
-          <List.Item key={item.id}>
-            <Flex vertical gap={8}>
-              <UsersListItem {...item} index={index} />
-              <ACL roles={[EUserRole.ADMIN]}>
-                <Flex gap={8} justify={"flex-end"}>
-                  <EditButton {...item} />
-                  <DeleteButton userId={item.id} />
-                </Flex>
-              </ACL>
-            </Flex>
-          </List.Item>
-        )}
-      />
+      <Flex style={LAYOUT_STYLE} vertical gap={8}>
+        <Flex gap={8}>
+          <Input prefix={<SearchOutlined />} />
+          <Button icon={<SwapOutlined />} style={{}} />
+        </Flex>
+        <List
+          loading={status === ERequestStatus.loading}
+          dataSource={users}
+          itemLayout={"vertical"}
+          renderItem={(item, index) => (
+            <List.Item key={item.id}>
+              <Flex vertical gap={8}>
+                <UsersListItem {...item} index={index} />
+                <ACL roles={[EUserRole.ADMIN]}>
+                  <Flex gap={8} justify={"flex-end"}>
+                    <EditButton {...item} />
+                    <DeleteButton userId={item.id} />
+                  </Flex>
+                </ACL>
+              </Flex>
+            </List.Item>
+          )}
+        />
+      </Flex>
     </>
   );
 };
