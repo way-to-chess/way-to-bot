@@ -39,6 +39,7 @@ const MangeUsersDrawer = memo(() => {
 
   const initialValues = data
     ? {
+        id: data.id,
         username: data.username,
         roles: data.roles,
         firstName: data.firstName,
