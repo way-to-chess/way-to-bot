@@ -1,4 +1,5 @@
 import {
+  Column,
   Entity,
   JoinColumn,
   ManyToOne,
@@ -35,4 +36,7 @@ export class EventUserLeagueEntity {
   })
   @JoinColumn({ name: "league_id" })
   league!: LeagueEntity;
+
+  @Column({ type: "int", nullable: true })
+  place?: number;
 }
