@@ -192,7 +192,7 @@ const ManageUsersPage = () => {
       <MangeUsersDrawer />
       <Flex style={LAYOUT_STYLE} vertical gap={8}>
         <Flex gap={8}>
-          <Input prefix={<SearchOutlined />} />
+          <Input prefix={<SearchOutlined />} disabled />
           <SortUsersButton />
         </Flex>
         <UsersList />
