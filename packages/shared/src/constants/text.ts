@@ -10,6 +10,9 @@ const TEXT = {
     edit: "Изменить",
     delete: "Удалить",
     underDevelopment: "В разработке",
+    apply: "Применить",
+    asc: "От меньшего к большему",
+    desc: "От большего к меньшему",
   },
   api: {
     success: "Успех",
@@ -23,6 +26,10 @@ const TEXT = {
     leagues: "Лиги",
   },
   users: {
+    sortByUsername: "По имени пользователя",
+    sortByRating: "По рейтингу",
+    sortByWinRate: "По проценту побед",
+    sortBy: "Сортировать",
     wins: "Победы",
     loses: "Поражения",
     draws: "Ничьи",

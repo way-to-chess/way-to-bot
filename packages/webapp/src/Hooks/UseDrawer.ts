@@ -9,7 +9,11 @@ const useDrawer = (drawerType: EDrawerType) => {
     drawerType,
   });
 
-  return { open, onClose };
+  const trigger = useActionCreator(drawerSlice.actions.openDrawer, {
+    drawerType,
+  });
+
+  return { open, onClose, trigger };
 };
 
 export { useDrawer };

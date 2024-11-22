@@ -8,15 +8,21 @@ import {
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { getUserFullName } from "../../Utils/GetUserFullName";
+import { EUserSortType } from "../../Models/EUserSortType";
+import { ESortDirection } from "../../Models/ESortDirection";
 
 interface IUserState {
   users: IUser[];
   user: IUser | null;
+  sortType: EUserSortType;
+  sortDirection: ESortDirection;
 }
 
 const initialState: IUserState = {
   users: [],
   user: null,
+  sortType: EUserSortType.rating,
+  sortDirection: ESortDirection.desc,
 };
 
 const userSlice = createSlice({
@@ -38,8 +44,19 @@ const userSlice = createSlice({
     createUser: (_state, _action: PayloadAction<IUserCreatePayload>) => {},
     deleteUser: (_state, _action: PayloadAction<IUserDeletePayload>) => {},
     updateUser: (_state, _action: PayloadAction<IUserUpdatePayload>) => {},
+    changeSortType: (state, { payload }: PayloadAction<EUserSortType>) => {
+      state.sortType = payload;
+    },
+    changeSortDirection: (
+      state,
+      { payload }: PayloadAction<ESortDirection>,
+    ) => {
+      state.sortDirection = payload;
+    },
   },
   selectors: {
+    sortType: (sliceState) => sliceState.sortType,
+    sortDirection: (sliceState) => sliceState.sortDirection,
     users: (sliceState) => sliceState.users,
     userById: (sliceState, userId: number) =>
       sliceState.users.find((it) => it.id === userId),
