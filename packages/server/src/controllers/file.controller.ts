@@ -1,9 +1,12 @@
 import { Body, Delete, Post, Route, Tags } from "tsoa";
 import { FileService } from "../services/file.service";
 import {
+  ICsvFileUploadPayload,
   IFileDeletePayload,
   IFileUploadPayload,
 } from "../interfaces/file.interface";
+import { ECsvAssigment } from "../enums";
+import { dbInstance } from "../database/init";
 
 @Route("/api/file")
 @Tags("Files")
@@ -16,8 +19,17 @@ export class FileController {
   }
 
   @Post("importCSV")
-  async importCSV(payload: Express.Multer.File) {
-    return this.fileService.importCsv(payload);
+  async importCSV(file: Express.Multer.File, payload: ICsvFileUploadPayload) {
+    switch (payload.assigment) {
+      case ECsvAssigment.ROUNDS:
+        return this.fileService.importCsv(file);
+      case ECsvAssigment.RATING:
+        return dbInstance.transaction((transaction) => {
+          return this.fileService.importCsvRating(file, payload, transaction);
+        });
+    }
+
+    throw new Error("No CSV assigment found");
   }
 
   @Delete("/delete")

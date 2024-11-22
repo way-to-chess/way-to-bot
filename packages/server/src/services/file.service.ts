@@ -3,15 +3,17 @@ import * as path from "path";
 import { rm } from "fs/promises";
 import { dbInstance } from "../database/init";
 import {
+  ICsvFileUploadPayload,
   IFileDeletePayload,
   IFileUploadPayload,
 } from "../interfaces/file.interface";
 import { FileDTO } from "../DTO/file.DTO";
 import csvToJson from "convert-csv-to-json";
 import { UserEntity } from "../database/entities/user.entity";
-import { In } from "typeorm";
+import { EntityManager, In } from "typeorm";
 import { compressImage } from "../utils/format-images";
 import { EImageAssigment } from "../enums";
+import { EventUserLeagueEntity } from "../database/entities/events_users_leagues";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
@@ -133,6 +135,108 @@ export class FileService {
     });
 
     await userRepository.save(users);
+    return true;
+  }
+
+  async importCsvRating(
+    file: Express.Multer.File,
+    payload: ICsvFileUploadPayload,
+    transactionManager: EntityManager,
+  ) {
+    if (!file.destination || !file.filename) {
+      throw new Error("No destination or filename, data corrupted");
+    }
+
+    const { leagueId, eventId } = payload;
+    if (!leagueId || !eventId) {
+      throw new Error("leagueId and eventId must be provided");
+    }
+
+    const userRepository = dbInstance.getRepository(UserEntity);
+    const eulRepository = dbInstance.getRepository(EventUserLeagueEntity);
+
+    const csvFilePath = path.join(file.destination, file.filename);
+
+    const results = csvToJson.getJsonFromCsv(csvFilePath) as {
+      Name: string;
+      NewRating: string;
+      Position?: string;
+      Pos?: string;
+    }[];
+
+    const participantsData = results.reduce(
+      (accumulator, result) => {
+        const nameSplitted = result.Name.split(" ");
+
+        if (nameSplitted.length !== 2) {
+          return accumulator;
+        }
+
+        const firstName = nameSplitted[1].trim();
+        const lastName = nameSplitted[0].trim();
+
+        accumulator.firstNames.add(firstName);
+        accumulator.lastNames.add(lastName);
+
+        return accumulator;
+      },
+      { firstNames: new Set<string>(), lastNames: new Set<string>() },
+    );
+
+    const users = await userRepository.find({
+      where: {
+        firstName: In(Array.from(participantsData.firstNames)),
+        lastName: In(Array.from(participantsData.lastNames)),
+      },
+    });
+
+    const euls = await eulRepository.find({
+      where: {
+        event: { id: eventId },
+        league: { id: leagueId },
+      },
+      relations: {
+        user: true,
+        event: true,
+        league: true,
+      },
+    });
+
+    results.forEach((result) => {
+      const nameSplitted = result.Name.split(" ");
+
+      if (nameSplitted.length !== 2) {
+        return;
+      }
+
+      const user = users.find(
+        (u) =>
+          u.firstName === nameSplitted[1] && u.lastName === nameSplitted[0],
+      );
+
+      if (user) {
+        user.rating = Number(result.NewRating);
+        const eventUserLeague = euls.find((eul) => eul.user.id === user.id);
+
+        if (eventUserLeague) {
+          const position = result.Position
+            ? result.Position.trim()
+            : result.Pos
+              ? result.Pos.trim()
+              : null;
+
+          if (position) {
+            eventUserLeague.place = position.includes("-")
+              ? Number(position.substring(0, position.indexOf("-")))
+              : Number(position);
+          }
+        }
+      }
+    });
+
+    await transactionManager.save(users);
+    await transactionManager.save(euls);
+
     return true;
   }
 }

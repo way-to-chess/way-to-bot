@@ -12,3 +12,8 @@ export enum EUserRole {
 export enum EImageAssigment {
   AVATAR = "avatar",
 }
+
+export enum ECsvAssigment {
+  ROUNDS = "rounds",
+  RATING = "rating",
+}
