@@ -14,7 +14,7 @@ import { MangeUsersDrawer } from "./MangeUsersDrawer";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
 import { useActionCreator } from "../Hooks/UseActionCreator";
-import { FC, useCallback } from "react";
+import { ChangeEventHandler, FC, useCallback } from "react";
 import {
   IUser,
   IUserDeletePayload,
@@ -128,11 +128,7 @@ const SortUsersButton = () => {
 
         <Divider />
 
-        <Radio.Group
-          options={SORT_DIR_OPTIONS}
-          value={sortDirection}
-          onChange={onChangeDir}
-        >
+        <Radio.Group value={sortDirection} onChange={onChangeDir}>
           <Space direction={"vertical"}>
             {SORT_DIR_OPTIONS.map(({ value, label }, index) => (
               <Radio value={value} key={index}>
@@ -147,10 +143,16 @@ const SortUsersButton = () => {
   );
 };
 
-const SORT_TYPE_TO_KEY_MAP: Record<EUserSortType, keyof IUser> = {
-  [EUserSortType.rating]: "rating",
-  [EUserSortType.username]: "username",
-  [EUserSortType.winRate]: "winRate",
+const SORT_BY_SORY_TYPE_MAP: Record<
+  EUserSortType,
+  (users: IUser[], sortDir: ESortDirection) => IUser[]
+> = {
+  [EUserSortType.rating]: (users: IUser[], sortDir: ESortDirection) =>
+    sortByKey(sortByKey(users, "winRate", sortDir), "rating", sortDir),
+  [EUserSortType.username]: (users: IUser[], sortDir: ESortDirection) =>
+    sortByKey(sortByKey(users, "lastName", sortDir), "firstName", sortDir),
+  [EUserSortType.winRate]: (users: IUser[], sortDir: ESortDirection) =>
+    sortByKey(sortByKey(users, "rating", sortDir), "winRate", sortDir),
 };
 
 const UsersList = () => {
@@ -164,10 +166,22 @@ const UsersList = () => {
 
   const sortDir = useSelector(userSlice.selectors.sortDirection);
 
+  const search = useSelector(userSlice.selectors.search);
+
+  const sorted = SORT_BY_SORY_TYPE_MAP[sortType](users, sortDir);
+
+  const filtered = sorted.filter(({ firstName, lastName, username }) => {
+    return (
+      username.toLowerCase().includes(search.toLowerCase()) ||
+      lastName.toLowerCase().includes(search.toLowerCase()) ||
+      firstName.toLowerCase().includes(search.toLowerCase())
+    );
+  });
+
   return (
     <List
       loading={status === ERequestStatus.loading}
-      dataSource={sortByKey(users, SORT_TYPE_TO_KEY_MAP[sortType], sortDir)}
+      dataSource={filtered}
       itemLayout={"vertical"}
       renderItem={(item, index) => (
         <List.Item key={item.id}>
@@ -186,13 +200,26 @@ const UsersList = () => {
   );
 };
 
+const SearchUsers = () => {
+  const dispatch = useDispatch();
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = useCallback(
+    (e) => {
+      dispatch(userSlice.actions.changeSearch(e.target.value));
+    },
+    [dispatch],
+  );
+
+  return <Input prefix={<SearchOutlined />} onChange={onChange} />;
+};
+
 const ManageUsersPage = () => {
   return (
     <>
       <MangeUsersDrawer />
       <Flex style={LAYOUT_STYLE} vertical gap={8}>
         <Flex gap={8}>
-          <Input prefix={<SearchOutlined />} disabled />
+          <SearchUsers />
           <SortUsersButton />
         </Flex>
         <UsersList />

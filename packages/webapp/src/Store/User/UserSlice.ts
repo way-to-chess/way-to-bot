@@ -16,6 +16,7 @@ interface IUserState {
   user: IUser | null;
   sortType: EUserSortType;
   sortDirection: ESortDirection;
+  search: string;
 }
 
 const initialState: IUserState = {
@@ -23,6 +24,7 @@ const initialState: IUserState = {
   user: null,
   sortType: EUserSortType.rating,
   sortDirection: ESortDirection.desc,
+  search: "",
 };
 
 const userSlice = createSlice({
@@ -53,6 +55,9 @@ const userSlice = createSlice({
     ) => {
       state.sortDirection = payload;
     },
+    changeSearch: (state, { payload }: PayloadAction<string>) => {
+      state.search = payload;
+    },
   },
   selectors: {
     sortType: (sliceState) => sliceState.sortType,
@@ -79,6 +84,7 @@ const userSlice = createSlice({
         sliceState.user.lastName,
       );
     },
+    search: (sliceState) => sliceState.search,
   },
 });
 
