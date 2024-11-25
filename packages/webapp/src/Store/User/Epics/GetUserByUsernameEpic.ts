@@ -9,7 +9,7 @@ const getUserByUsernameEpic: TAppEpic = (action$, state$, dependencies) => {
   let username = Telegram.WebApp.initDataUnsafe.user?.username;
 
   if (isDev) {
-    username = "admin";
+    username = "privetenn";
   }
 
   if (!username) {

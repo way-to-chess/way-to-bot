@@ -1,4 +1,13 @@
-import { concat, EMPTY, from, merge, Observable, of, switchMap } from "rxjs";
+import {
+  catchError,
+  concat,
+  EMPTY,
+  from,
+  merge,
+  Observable,
+  of,
+  switchMap,
+} from "rxjs";
 import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
 import { IWithError } from "../../Models/IError";
 import { PayloadActionCreator } from "@reduxjs/toolkit";
@@ -45,6 +54,11 @@ const httpRequestEpicFactory = <T>({
             onSuccess ? onSuccess() : EMPTY,
           ),
         );
+      }),
+      catchError((err) => {
+        console.error(err);
+
+        return EMPTY;
       }),
     ),
   );
