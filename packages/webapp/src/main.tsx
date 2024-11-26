@@ -49,7 +49,15 @@ const Test = () => {
     Telegram.WebApp.viewportStableHeight,
   );
 
-  Telegram.WebApp.onEvent("viewportChanged", (v) => {
+  document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
+
+  Telegram.WebApp.onEvent("viewportChanged", ({ isStateStable }) => {
+    if (!isStateStable) {
+      return;
+    }
+
+    document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
+
     setViewportHeight(Telegram.WebApp.viewportHeight);
     setViewportStableHeight(Telegram.WebApp.viewportStableHeight);
   });
