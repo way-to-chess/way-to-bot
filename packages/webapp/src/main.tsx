@@ -16,6 +16,8 @@ import { ConfigProvider, theme as antdTheme } from "antd";
 import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 import { useEffect, useState } from "react";
 import ru from "antd/locale/ru_RU";
+import { ACL } from "./ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 
 if (isDev && !isHttps) {
   document.body.setAttribute("data-dev", "true");
@@ -39,6 +41,28 @@ const useTheme = () => {
   return theme;
 };
 
+const Test = () => {
+  const [viewportHeight, setViewportHeight] = useState(
+    Telegram.WebApp.viewportHeight,
+  );
+  const [viewportStableHeight, setViewportStableHeight] = useState(
+    Telegram.WebApp.viewportStableHeight,
+  );
+
+  Telegram.WebApp.onEvent("viewportChanged", (v) => {
+    setViewportHeight(Telegram.WebApp.viewportHeight);
+    setViewportStableHeight(Telegram.WebApp.viewportStableHeight);
+  });
+
+  return (
+    <div style={{ textAlign: "center" }}>
+      {`viewportHeight: ${viewportHeight}`}
+      {"    "}
+      {`viewportStableHeight: ${viewportStableHeight}`}
+    </div>
+  );
+};
+
 const App = () => {
   const theme = useTheme();
 
@@ -54,6 +78,9 @@ const App = () => {
               ],
           }}
         >
+          <ACL roles={[EUserRole.ADMIN]}>
+            <Test />
+          </ACL>
           <Routes>
             <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
               <Route
