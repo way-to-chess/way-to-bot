@@ -48,3 +48,17 @@ services:
       - "80:80"
     depends_on:
       - app
+
+  ngrok:
+    container_name: wtb_ngrok
+    image: ngrok/ngrok:latest
+    restart: unless-stopped
+    command:
+      - "start"
+      - "--all"
+      - "--config"
+      - "/etc/ngrok.yml"
+    volumes:
+      - ./docker_data/ngrok/ngrok.yml:/etc/ngrok.yml
+    ports:
+      - "4040:4040"
