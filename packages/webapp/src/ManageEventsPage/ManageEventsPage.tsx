@@ -7,6 +7,8 @@ import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { EVENTS_GET_ALL_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
+import { sortByKey } from "../Utils/SortByKey";
+import { ESortDirection } from "../Models/ESortDirection";
 
 const ManageEventsPage = () => {
   const events = useSelector(eventsSlice.selectors.events);
@@ -22,7 +24,7 @@ const ManageEventsPage = () => {
         loading={status === ERequestStatus.loading}
         itemLayout={"vertical"}
         style={{ padding: 16 }}
-        dataSource={events}
+        dataSource={sortByKey(events, "dateTime", ESortDirection.desc)}
         renderItem={(event) => {
           return <EventsListItem {...event} key={event.id} />;
         }}
