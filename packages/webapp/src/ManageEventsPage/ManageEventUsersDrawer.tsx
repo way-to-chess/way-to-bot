@@ -8,12 +8,10 @@ import { leaguesSlice } from "../Store/Leagues/LeaguesSlice";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { LEAGUES_LOAD_REQUEST_SYMBOL } from "../Store/Leagues/LeaguesVariables";
-import { userSlice } from "../Store/User/UserSlice";
-import { USERS_LOAD_REQUEST_SYMBOL } from "../Store/User/UserVariables";
-import { getUserFullName } from "../Utils/GetUserFullName";
 import { eventsSlice } from "../Store/Events/EventsSlice";
 import { IAddUsersToEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
 import { ADD_USERS_TO_EVENT_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
+import { UsersSelect } from "../ManageUsersPage/UsersSelect";
 
 const ManageEventUsersDrawer = () => {
   const drawer = useDrawer(EDrawerType.MANAGE_EVENT_USERS_DRAWER);
@@ -38,13 +36,6 @@ const ManageEventUsersDrawer = () => {
   const leaguesStatus = useParamSelector(
     requestManagerSlice.selectors.statusBySymbol,
     LEAGUES_LOAD_REQUEST_SYMBOL,
-  );
-
-  const users = useSelector(userSlice.selectors.users);
-
-  const usersStatus = useParamSelector(
-    requestManagerSlice.selectors.statusBySymbol,
-    USERS_LOAD_REQUEST_SYMBOL,
   );
 
   const [form] = Form.useForm();
@@ -83,23 +74,16 @@ const ManageEventUsersDrawer = () => {
           label={TEXT.events.userIds}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
-          <Select
-            mode={"multiple"}
-            loading={usersStatus === ERequestStatus.loading}
-            options={users
-              .filter(({ id }) => {
-                if (!event) {
-                  return true;
-                }
+          <UsersSelect
+            filterUsers={({ id }) => {
+              if (!event) {
+                return true;
+              }
 
-                return !event.eventsUsersLeagues.find((it) => {
-                  return it.user.id === id;
-                });
-              })
-              .map(({ id, firstName, lastName }) => ({
-                value: id,
-                label: getUserFullName(firstName, lastName),
-              }))}
+              return !event.eventsUsersLeagues.find((it) => {
+                return it.user.id === id;
+              });
+            }}
           />
         </Form.Item>
 

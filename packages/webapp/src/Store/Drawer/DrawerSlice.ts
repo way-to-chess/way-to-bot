@@ -7,6 +7,7 @@ enum EDrawerType {
   MANAGE_LOCATIONS_DRAWER = "manageLocationsDrawer",
   MANAGE_LEAGUES_DRAWER = "manageLeaguesDrawer",
   SORT_USERS_DRAWER = "sortUsersDrawer",
+  SEND_MESSAGE_DRAWER = "sendMessageDrawer",
 }
 
 type TDrawersMap = Record<EDrawerType, any>;

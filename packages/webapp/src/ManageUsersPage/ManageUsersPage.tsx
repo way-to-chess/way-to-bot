@@ -38,6 +38,7 @@ import { useDrawer } from "../Hooks/UseDrawer";
 import { EUserSortType } from "../Models/EUserSortType";
 import { sortByKey } from "../Utils/SortByKey";
 import { ESortDirection } from "../Models/ESortDirection";
+import { SendMessageDrawer } from "./SendMessageDrawer";
 
 const EditButton: FC<IUser> = (user) => {
   const open = useActionCreator(drawerSlice.actions.openDrawer, {
@@ -218,6 +219,7 @@ const SearchUsers = () => {
 const ManageUsersPage = () => {
   return (
     <>
+      <SendMessageDrawer />
       <MangeUsersDrawer />
       <Flex style={LAYOUT_STYLE} vertical gap={8}>
         <Flex gap={8}>

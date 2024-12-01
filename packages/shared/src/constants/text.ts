@@ -1,5 +1,6 @@
 const TEXT = {
   common: {
+    send: "Отправить",
     yes: "Да",
     no: "Нет",
     requiredField: "Обязательное поле",
@@ -26,6 +27,10 @@ const TEXT = {
     leagues: "Лиги",
   },
   users: {
+    message: "Сообщение",
+    users: "Пользователи",
+    sendMessage: "Отправить сообщение",
+    addUser: "Добавить пользователя",
     sortByUsername: "По имени пользователя",
     sortByRating: "По рейтингу",
     sortByWinRate: "По проценту побед",

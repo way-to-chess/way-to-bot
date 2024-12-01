@@ -10,8 +10,13 @@ import {
 } from "react-router-dom";
 import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { MenuOutlined, PlusOutlined, UserOutlined } from "@ant-design/icons";
-import { Button, Drawer } from "antd";
+import {
+  MenuOutlined,
+  MoreOutlined,
+  PlusOutlined,
+  UserOutlined,
+} from "@ant-design/icons";
+import { Button, Drawer, Dropdown, Layout as AntLayout } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
@@ -26,6 +31,11 @@ interface ILink {
   to: string;
   title: string;
 }
+
+const DEFAULT_BUTTON_PROPS = {
+  size: "large",
+  type: "text",
+} as const;
 
 const LinkComponent: FC<ILink> = ({ title, to }) => {
   const closeDrawer = useActionCreator(
@@ -92,15 +102,49 @@ const MenuButton = () => {
     true,
   );
 
-  return <MenuOutlined className={classes.headerButton} onClick={openDrawer} />;
+  return (
+    <Button
+      icon={<MenuOutlined />}
+      onClick={openDrawer}
+      {...DEFAULT_BUTTON_PROPS}
+    />
+  );
 };
 
-const AddUserButton = () => {
-  const openDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
+const USER_MENU_TRIGGER: ("click" | "hover" | "contextMenu")[] = ["click"];
+
+const UsersDropdown = () => {
+  const openAddUserDrawer = useActionCreator(drawerSlice.actions.openDrawer, {
     drawerType: EDrawerType.MANAGE_USERS_DRAWER,
   });
 
-  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+  const openSendMessageDrawer = useActionCreator(
+    drawerSlice.actions.openDrawer,
+    {
+      drawerType: EDrawerType.SEND_MESSAGE_DRAWER,
+    },
+  );
+
+  const menu = {
+    items: [
+      {
+        key: 1,
+        label: TEXT.users.addUser,
+        onClick: openAddUserDrawer,
+      },
+      {
+        key: 2,
+        label: TEXT.users.sendMessage,
+        onClick: openSendMessageDrawer,
+      },
+    ],
+  };
+
+  return (
+    <Dropdown menu={menu} placement={"topRight"} trigger={USER_MENU_TRIGGER}>
+      <Button icon={<MoreOutlined />} {...DEFAULT_BUTTON_PROPS} />
+    </Dropdown>
+  );
 };
 
 const AddLocationButton = () => {
@@ -108,8 +152,13 @@ const AddLocationButton = () => {
     locationsSlice.actions.manageLocationsDrawerVisibilityChanged,
     true,
   );
-
-  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+  return (
+    <Button
+      icon={<PlusOutlined />}
+      onClick={openDrawer}
+      {...DEFAULT_BUTTON_PROPS}
+    />
+  );
 };
 
 const AddEventButton = () => {
@@ -117,7 +166,13 @@ const AddEventButton = () => {
     drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
   });
 
-  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+  return (
+    <Button
+      icon={<PlusOutlined />}
+      onClick={openDrawer}
+      {...DEFAULT_BUTTON_PROPS}
+    />
+  );
 };
 
 const AddUsersToEventButton = () => {
@@ -128,7 +183,13 @@ const AddUsersToEventButton = () => {
     data: { eventId: params.eventId },
   });
 
-  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+  return (
+    <Button
+      icon={<PlusOutlined />}
+      onClick={openDrawer}
+      {...DEFAULT_BUTTON_PROPS}
+    />
+  );
 };
 
 const AddLeagueButton = () => {
@@ -136,7 +197,13 @@ const AddLeagueButton = () => {
     drawerType: EDrawerType.MANAGE_LEAGUES_DRAWER,
   });
 
-  return <PlusOutlined className={classes.headerButton} onClick={openDrawer} />;
+  return (
+    <Button
+      icon={<PlusOutlined />}
+      onClick={openDrawer}
+      {...DEFAULT_BUTTON_PROPS}
+    />
+  );
 };
 
 const UserAccountButton = () => {
@@ -150,14 +217,14 @@ const UserAccountButton = () => {
 
   return (
     <Link to={to}>
-      <UserOutlined className={classes.headerButton} />
+      <Button icon={<UserOutlined />} {...DEFAULT_BUTTON_PROPS} />
     </Link>
   );
 };
 
 const Layout = () => {
   return (
-    <div className={classes.layout}>
+    <AntLayout className={classes.layout}>
       <MenuDrawer />
 
       <header className={classes.header}>
@@ -169,7 +236,7 @@ const Layout = () => {
           <Routes>
             <Route
               path={WEBAPP_ROUTES.manageUsersRoute}
-              element={<AddUserButton />}
+              element={<UsersDropdown />}
             />
 
             <Route
@@ -202,7 +269,7 @@ const Layout = () => {
       <div className={classes.content}>
         <Outlet />
       </div>
-    </div>
+    </AntLayout>
   );
 };
 
