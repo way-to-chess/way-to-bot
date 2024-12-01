@@ -39,39 +39,22 @@ const useTheme = () => {
   return theme;
 };
 
-//UNCOMMENT IF NEEDED
-// const Test = () => {
-//   const [viewportHeight, setViewportHeight] = useState(
-//     Telegram.WebApp.viewportHeight,
-//   );
-//   const [viewportStableHeight, setViewportStableHeight] = useState(
-//     Telegram.WebApp.viewportStableHeight,
-//   );
-//
-//   document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-//
-//   Telegram.WebApp.onEvent("viewportChanged", ({ isStateStable }) => {
-//     if (!isStateStable) {
-//       return;
-//     }
-//
-//     document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-//
-//     setViewportHeight(Telegram.WebApp.viewportHeight);
-//     setViewportStableHeight(Telegram.WebApp.viewportStableHeight);
-//   });
-//
-//   return (
-//     <div style={{ textAlign: "center" }}>
-//       {`viewportHeight: ${viewportHeight}`}
-//       {"    "}
-//       {`viewportStableHeight: ${viewportStableHeight}`}
-//     </div>
-//   );
-// };
+const useViewport = () => {
+  document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
+
+  Telegram.WebApp.onEvent("viewportChanged", ({ isStateStable }) => {
+    if (!isStateStable) {
+      return;
+    }
+
+    document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
+  });
+};
 
 const App = () => {
   const theme = useTheme();
+
+  useViewport();
 
   return (
     <Provider store={store}>
