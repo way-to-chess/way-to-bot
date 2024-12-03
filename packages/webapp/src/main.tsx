@@ -1,5 +1,11 @@
 import { createRoot } from "react-dom/client";
-import { Navigate, Route, Routes } from "react-router-dom";
+import {
+  matchPath,
+  Navigate,
+  Route,
+  Routes,
+  useLocation,
+} from "react-router-dom";
 import "./main.css";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
 import { Provider } from "react-redux";
@@ -14,7 +20,7 @@ import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
 import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
 import { ConfigProvider, theme as antdTheme } from "antd";
 import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
-import { useEffect, useState } from "react";
+import { FC, PropsWithChildren, useEffect, useState } from "react";
 import ru from "antd/locale/ru_RU";
 
 if (isDev && !isHttps) {
@@ -51,6 +57,29 @@ const useViewport = () => {
   });
 };
 
+const BackButtonHandler: FC<PropsWithChildren> = ({ children }) => {
+  const location = useLocation();
+
+  useEffect(() => {
+    const indexRoute = matchPath(
+      WEBAPP_ROUTES.manageUsersRoute,
+      location.pathname,
+    );
+
+    Telegram.WebApp.BackButton[indexRoute ? "hide" : "show"]();
+
+    const handler = () => history.back();
+
+    Telegram.WebApp.onEvent("backButtonClicked", handler);
+
+    return () => {
+      Telegram.WebApp.offEvent("backButtonClicked", handler);
+    };
+  }, [location.pathname]);
+
+  return children;
+};
+
 const App = () => {
   const theme = useTheme();
 
@@ -68,39 +97,41 @@ const App = () => {
               ],
           }}
         >
-          <Routes>
-            <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
-              <Route
-                index
-                element={<Navigate to={WEBAPP_ROUTES.manageUsersRoute} />}
-              />
+          <BackButtonHandler>
+            <Routes>
+              <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
+                <Route
+                  index
+                  element={<Navigate to={WEBAPP_ROUTES.manageUsersRoute} />}
+                />
 
-              <Route
-                path={WEBAPP_ROUTES.manageUsersRoute}
-                element={<ManageUsersPage />}
-              />
-              <Route
-                element={<ManageUsersIdPage />}
-                path={WEBAPP_ROUTES.manageUsersIdRoute}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageEventsRoute}
-                element={<ManageEventsPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageEventsIdRoute}
-                element={<ManageEventsIdPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageLocationsRoute}
-                element={<ManageLocationsPage />}
-              ></Route>
-              <Route
-                path={WEBAPP_ROUTES.manageLeaguesRoute}
-                element={<ManageLeaguesPage />}
-              />
-            </Route>
-          </Routes>
+                <Route
+                  path={WEBAPP_ROUTES.manageUsersRoute}
+                  element={<ManageUsersPage />}
+                />
+                <Route
+                  element={<ManageUsersIdPage />}
+                  path={WEBAPP_ROUTES.manageUsersIdRoute}
+                ></Route>
+                <Route
+                  path={WEBAPP_ROUTES.manageEventsRoute}
+                  element={<ManageEventsPage />}
+                ></Route>
+                <Route
+                  path={WEBAPP_ROUTES.manageEventsIdRoute}
+                  element={<ManageEventsIdPage />}
+                ></Route>
+                <Route
+                  path={WEBAPP_ROUTES.manageLocationsRoute}
+                  element={<ManageLocationsPage />}
+                ></Route>
+                <Route
+                  path={WEBAPP_ROUTES.manageLeaguesRoute}
+                  element={<ManageLeaguesPage />}
+                />
+              </Route>
+            </Routes>
+          </BackButtonHandler>
         </ConfigProvider>
       </ReduxRouter>
     </Provider>
