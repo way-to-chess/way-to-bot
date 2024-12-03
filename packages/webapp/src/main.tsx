@@ -17,6 +17,8 @@ import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
 import { useEffect, useState } from "react";
 import ru from "antd/locale/ru_RU";
 import * as Sentry from "@sentry/react";
+import { ACL } from "./ACL/ACL";
+import { EUserRole } from "@way-to-bot/shared/enums";
 
 Sentry.init({
   dsn: import.meta.env.VITE_SENTRY_DSN,
@@ -105,6 +107,15 @@ const App = () => {
               ],
           }}
         >
+          <ACL roles={[EUserRole.ADMIN]}>
+            <button
+              onClick={() => {
+                throw new Error("This is your first error!");
+              }}
+            >
+              Break the world
+            </button>
+          </ACL>
           <Routes>
             <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
               <Route
