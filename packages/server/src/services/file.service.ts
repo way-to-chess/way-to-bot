@@ -116,21 +116,31 @@ export class FileService {
           user.lastName === blackSplitted[0],
       );
 
-      if (whiteUser && blackUser) {
-        switch (result.Result) {
-          case "1-0":
-            whiteUser.wins++;
-            blackUser.losses++;
-            break;
-          case "0-1":
-            whiteUser.losses++;
-            blackUser.wins++;
-            break;
-          case "0.5-0.5":
-            whiteUser.draws++;
-            blackUser.draws++;
-            break;
-        }
+      if (!whiteUser) {
+        throw new Error(
+          "White player not found for such values: " + whiteSplitted.join(" "),
+        );
+      }
+
+      if (!blackUser) {
+        throw new Error(
+          "Black player not found for such values: " + blackSplitted.join(" "),
+        );
+      }
+
+      switch (result.Result) {
+        case "1-0":
+          whiteUser.wins++;
+          blackUser.losses++;
+          break;
+        case "0-1":
+          whiteUser.losses++;
+          blackUser.wins++;
+          break;
+        case "0.5-0.5":
+          whiteUser.draws++;
+          blackUser.draws++;
+          break;
       }
     });
 
