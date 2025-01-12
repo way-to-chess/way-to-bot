@@ -1,6 +1,6 @@
 import { dbInstance } from "../database/init";
 import { EventEntity } from "../database/entities/event.entity";
-import { DeepPartial, In } from "typeorm";
+import { DeepPartial, In, IsNull, Not } from "typeorm";
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
@@ -91,27 +91,45 @@ export class EventService {
       throw new Error("Event was not created");
     }
 
-    // const tgBotService = TgBotService.getInstance();
-    // const bot = tgBotService.getBot;
-    // await bot.sendMessage(
-    //   "@waytobottest",
-    //   "Всем привет! 👋\n" +
-    //     "\n" +
-    //     `Открыта регистрация на "${event.name}" ${moment(event.dateTime!, "", "ru").format("dd DD MMMM YYYY, hh:mm")}\n` +
-    //     "\n" +
-    //     "Что играем?\n" +
-    //     "\n" +
-    //     "Жеребьевка по швейцарской системе. Играем 7 туров.\n" +
-    //     "Рапид 10+2 (добавление 2 секунды на ход)\n" +
-    //     "Стоимость 40р. 50% денег от взносов идёт на благотворительность.\n" +
-    //     "\n" +
-    //     "\n" +
-    //     "Зарегестрироваться можно через нашего бота @way_to_chess_bot!\n",
-    // );
+    setImmediate(async () => {
+      await this.sendMessagesToUsersTg(createdEvent);
+    });
 
     await this.eventRepository.save(createdEvent);
 
     return createdEvent;
+  };
+
+  private sendMessagesToUsersTg = async (event: EventEntity) => {
+    const userRepository = dbInstance.getRepository(UserEntity);
+    const usersWithTgId = await userRepository.find({
+      where: { tgId: Not(IsNull()) },
+    });
+
+    const tgBotService = TgBotService.getInstance();
+    const bot = tgBotService.getBot;
+    let usersCount = 0;
+    for (const u of usersWithTgId) {
+      await bot.sendMessage(
+        u.tgId!,
+        "Всем привет! 👋\n" +
+          "\n" +
+          `Открыта регистрация на "${event.name}" ${moment(event.dateTime!, "", "ru").format("dd DD MMMM YYYY, hh:mm")}\n` +
+          "\n" +
+          "Что играем?\n" +
+          "\n" +
+          "Жеребьевка по швейцарской системе. Играем 7 туров.\n" +
+          "Рапид 10+2 (добавление 2 секунды на ход)\n" +
+          "Стоимость 40р. 50% денег от взносов идёт на благотворительность.\n" +
+          "\n" +
+          "\n" +
+          "Зарегестрироваться можно через нашего бота @way_to_chess_bot!\n",
+      );
+      usersCount++;
+      if (usersCount === 25) {
+        await new Promise((resolve) => setTimeout(resolve, 1000));
+      }
+    }
   };
 
   updateEvent = async (event: IEventUpdatePayload) => {
