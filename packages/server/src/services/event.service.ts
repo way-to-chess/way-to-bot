@@ -92,7 +92,11 @@ export class EventService {
     }
 
     setImmediate(async () => {
-      await this.sendMessagesToUsersTg(createdEvent);
+      try {
+        await this.sendMessagesToUsersTg(createdEvent);
+      } catch (e) {
+        console.error(e);
+      }
     });
 
     await this.eventRepository.save(createdEvent);

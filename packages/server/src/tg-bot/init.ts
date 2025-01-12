@@ -49,15 +49,19 @@ export class TgBotService {
           }
 
           setImmediate(async () => {
-            const userRepository = dbInstance.getRepository(UserEntity);
+            try {
+              const userRepository = dbInstance.getRepository(UserEntity);
 
-            const userFromDb = await userRepository.findOneBy({
-              username: `@${user.username}`,
-            });
+              const userFromDb = await userRepository.findOneBy({
+                username: `@${user.username}`,
+              });
 
-            if (userFromDb && !userFromDb.tgId) {
-              userFromDb.tgId = user.id;
-              await userRepository.save(userFromDb);
+              if (userFromDb && !userFromDb.tgId) {
+                userFromDb.tgId = user.id;
+                await userRepository.save(userFromDb);
+              }
+            } catch (e) {
+              console.error(e);
             }
           });
 
