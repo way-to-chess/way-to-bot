@@ -1,11 +1,6 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  ManyToMany,
-  OneToMany,
-} from "typeorm";
-import { EventUserLeagueEntity } from "./events_users_leagues";
+import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
+import { EventUserLeagueEntity } from "./events-users-leagues";
+import { EventsLeaguesEntity } from "./events-leagues";
 
 @Entity("leagues")
 export class LeagueEntity {
@@ -17,4 +12,7 @@ export class LeagueEntity {
 
   @OneToMany(() => EventUserLeagueEntity, (eul) => eul.league)
   eventsUsersLeagues!: EventUserLeagueEntity[];
+
+  @OneToMany(() => EventsLeaguesEntity, (elr) => elr.league)
+  eventsLeaguesResults!: EventsLeaguesEntity[];
 }

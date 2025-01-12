@@ -4,6 +4,7 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
+  TUserGetByTgInfoQueryPayload,
 } from "../interfaces/user.interface";
 import { castUserNameMiddleware } from "../middlewares/username.mddwmts";
 
@@ -35,6 +36,15 @@ UserRouter.get(
   },
 );
 
+UserRouter.get(
+  "/getUserByTgInfo",
+  castUserNameMiddleware,
+  async (req: Request<{}, {}, {}, TUserGetByTgInfoQueryPayload>, res) => {
+    const data = await userController.getUserByTgInfo(req.query);
+    res.status(200).json({ data });
+  },
+);
+
 UserRouter.post(
   "/create",
   async (req: Request<{}, {}, IUserCreatePayload>, res) => {
@@ -55,6 +65,14 @@ UserRouter.delete(
   "/delete",
   async (req: Request<{}, {}, IUserDeletePayload>, res) => {
     const data = await userController.deleteUser(req.body);
+    res.status(200).json({ data });
+  },
+);
+
+UserRouter.post(
+  "/addId",
+  async (req: Request<{}, {}, { username: string; tgId: number }>, res) => {
+    const data = await userController.addIdToUser(req.body);
     res.status(200).json({ data });
   },
 );

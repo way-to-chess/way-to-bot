@@ -13,7 +13,7 @@ import { UserEntity } from "../database/entities/user.entity";
 import { EntityManager, In } from "typeorm";
 import { compressImage } from "../utils/format-images";
 import { EImageAssigment } from "../enums";
-import { EventUserLeagueEntity } from "../database/entities/events_users_leagues";
+import { EventUserLeagueEntity } from "../database/entities/events-users-leagues";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);

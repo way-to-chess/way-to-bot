@@ -22,9 +22,10 @@ const errorHandler = (
   console.error(err);
   if (err.message) {
     res.status(400).send({ error: err.message });
+    return;
   }
   res.status(500).send({ error: "something went wrong" });
-  next(err);
+  return;
 };
 
 // if (process.env.NODE_ENV === "dev") {

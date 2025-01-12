@@ -32,3 +32,9 @@ export interface IRemoveUsersFromEventPayload {
   userIds: number[];
   leagueId: number;
 }
+
+export interface IEventsLeaguesUpdate {
+  eventId: number;
+  leagueId: number;
+  link: string;
+}

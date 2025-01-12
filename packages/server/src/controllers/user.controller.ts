@@ -1,9 +1,10 @@
 import { UserService } from "../services/user.service";
-import { Body, Delete, Get, Path, Post, Put, Route, Tags } from "tsoa";
+import { Body, Delete, Get, Path, Post, Put, Queries, Route, Tags } from "tsoa";
 import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
+  TUserGetByTgInfoQueryPayload,
 } from "../interfaces/user.interface";
 
 @Route("/api/user")
@@ -26,6 +27,14 @@ export class UserController {
     return this.userService.getUserByUserName(username);
   }
 
+  @Get("/getUserByTgInfo")
+  async getUserByTgInfo(@Queries() payload: TUserGetByTgInfoQueryPayload) {
+    if (!payload.tgId || !payload.username) {
+      throw new Error("Query params not found");
+    }
+    return this.userService.getUserByTgIdOrUsername(payload);
+  }
+
   @Post("/create")
   async createUser(@Body() payload: IUserCreatePayload) {
     return this.userService.createUser(payload);
@@ -39,5 +48,10 @@ export class UserController {
   @Delete("/delete")
   async deleteUser(@Body() payload: IUserDeletePayload) {
     return this.userService.deleteUser(payload);
+  }
+
+  @Post("/addId")
+  async addIdToUser(@Body() payload: { username: string; tgId: number }) {
+    return this.userService.addIdToUser(payload);
   }
 }

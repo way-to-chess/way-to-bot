@@ -4,6 +4,7 @@ import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
   IEventDeletePayload,
+  IEventsLeaguesUpdate,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
 } from "../interfaces/event.interface";
@@ -61,6 +62,14 @@ EventRouter.post(
   "/removeUsersFromEvent",
   async (req: Request<{}, {}, IRemoveUsersFromEventPayload>, res) => {
     const data = await eventController.removeUsersFromEvent(req.body);
+    res.status(200).json({ data });
+  },
+);
+
+EventRouter.put(
+  "/updateEventLeague",
+  async (req: Request<{}, {}, IEventsLeaguesUpdate>, res) => {
+    const data = await eventController.updateEventLeague(req.body);
     res.status(200).json({ data });
   },
 );

@@ -5,8 +5,9 @@ import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
+  TUserGetByTgInfoQueryPayload,
 } from "../interfaces/user.interface";
-import { DeepPartial } from "typeorm";
+import {DeepPartial, FindOptionsWhere} from "typeorm";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(UserEntity);
@@ -109,5 +110,43 @@ export class UserService {
     const userDeleted = await this.userRepository.delete(userId);
 
     return userDeleted.affected === 1;
+  };
+
+  addIdToUser = async (payload: { username: string; tgId: number }) => {
+    const { username, tgId } = payload;
+
+    const user = await this.userRepository.findOneBy({ username });
+    if (!user) {
+      throw new Error(`User with username ${username} not found`);
+    }
+
+    user.tgId = tgId;
+
+    await this.userRepository.save(user);
+    return true;
+  };
+
+  getUserByTgIdOrUsername = async (payload: TUserGetByTgInfoQueryPayload) => {
+    const { username, tgId } = payload;
+
+    const where: FindOptionsWhere<UserEntity>[] = [];
+
+    if (tgId && !isNaN(Number(tgId))) {
+      where.push({ tgId });
+    }
+
+    if (username) {
+      where.push({ username });
+    }
+
+    const user = await this.userRepository.findOneBy(where);
+
+    if (!user) {
+      throw new Error(
+        `User with tgId "${tgId}" and username "${username}" not found`,
+      );
+    }
+
+    return user;
   };
 }

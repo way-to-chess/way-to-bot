@@ -13,7 +13,7 @@ import {
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
-import { EventUserLeagueEntity } from "./events_users_leagues";
+import { EventUserLeagueEntity } from "./events-users-leagues";
 
 @Entity("users")
 @Unique(["username", "firstName", "lastName"])
@@ -21,8 +21,11 @@ export class UserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column("varchar", { unique: true })
-  username!: string;
+  @Column("varchar", { unique: true, nullable: true })
+  username?: string | null = null;
+
+  @Column("int", { unique: true, nullable: true, name: "tg_id" })
+  tgId?: number | null = null;
 
   @Column({ type: "varchar" })
   firstName!: string;

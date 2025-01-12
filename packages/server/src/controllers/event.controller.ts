@@ -3,7 +3,7 @@ import { EventService } from "../services/event.service";
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
-  IEventDeletePayload,
+  IEventDeletePayload, IEventsLeaguesUpdate,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
 } from "../interfaces/event.interface";
@@ -46,5 +46,10 @@ export class EventController {
   @Delete("/removeUsersFromEvent")
   async removeUsersFromEvent(@Body() payload: IRemoveUsersFromEventPayload) {
     return this.eventService.removeUsersFromEvent(payload);
+  }
+
+  @Put("/updateEventLeague")
+  async updateEventLeague(@Body() payload: IEventsLeaguesUpdate) {
+    return this.eventService.updateEventLeague(payload);
   }
 }

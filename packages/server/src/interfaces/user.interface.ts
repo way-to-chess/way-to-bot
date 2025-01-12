@@ -8,7 +8,9 @@ export interface IUserCreatePayload
 }
 
 export interface IUserUpdatePayload
-  extends Partial<Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">> {
+  extends Partial<
+    Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">
+  > {
   id: number;
   fileId?: number | null;
 }
@@ -16,3 +18,8 @@ export interface IUserUpdatePayload
 export interface IUserDeletePayload {
   userId: number;
 }
+
+export type TUserGetByTgInfoQueryPayload = {
+  tgId?: number;
+  username?: string;
+};

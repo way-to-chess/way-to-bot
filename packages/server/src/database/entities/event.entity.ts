@@ -3,8 +3,6 @@ import {
   CreateDateColumn,
   Entity,
   JoinColumn,
-  JoinTable,
-  ManyToMany,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
@@ -12,8 +10,9 @@ import {
 } from "typeorm";
 import { LocationEntity } from "./location.entity";
 import { EEventStatus } from "../../enums";
-import { EventUserLeagueEntity } from "./events_users_leagues";
+import { EventUserLeagueEntity } from "./events-users-leagues";
 import { FileEntity } from "./file.entity";
+import { EventsLeaguesEntity } from "./events-leagues";
 
 @Entity("events")
 export class EventEntity {
@@ -39,8 +38,8 @@ export class EventEntity {
   @Column({ type: "int", nullable: true, name: "participants_limit" })
   participantsLimit: number | null = null;
 
-  @Column({ type: "varchar", nullable: true, name: "link_to_table" })
-  linkToTable: string | null = null;
+  @Column({ type: "varchar", nullable: true, name: "link_to_stream" })
+  linkToStream: string | null = null;
 
   @ManyToOne(() => LocationEntity, { nullable: true })
   @JoinColumn({ name: "location_id" })
@@ -52,6 +51,9 @@ export class EventEntity {
 
   @OneToMany(() => EventUserLeagueEntity, (eul) => eul.event)
   eventsUsersLeagues!: EventUserLeagueEntity[];
+
+  @OneToMany(() => EventsLeaguesEntity, (elr) => elr.event)
+  leaguesResults!: EventsLeaguesEntity[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
