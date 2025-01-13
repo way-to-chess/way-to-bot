@@ -25,7 +25,7 @@ export class LocationEntity {
 
   @ManyToOne(() => FileEntity, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  preview: FileEntity | null = null;
+  preview?: FileEntity | null;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

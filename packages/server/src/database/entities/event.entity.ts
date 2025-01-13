@@ -10,9 +10,10 @@ import {
 } from "typeorm";
 import { LocationEntity } from "./location.entity";
 import { EEventStatus } from "../../enums";
-import { EventUserLeagueEntity } from "./events-users-leagues";
+import { EventUserLeagueEntity } from "./events-users-leagues.entity";
 import { FileEntity } from "./file.entity";
-import { EventsLeaguesEntity } from "./events-leagues";
+import { EventsLeaguesEntity } from "./events-leagues.entity";
+import { ParticipateRequestEntity } from "./participate-request.entity";
 
 @Entity("events")
 export class EventEntity {
@@ -47,13 +48,16 @@ export class EventEntity {
 
   @ManyToOne(() => FileEntity, { nullable: true })
   @JoinColumn({ name: "file_id" })
-  preview: FileEntity | null = null;
+  preview?: FileEntity | null;
 
   @OneToMany(() => EventUserLeagueEntity, (eul) => eul.event)
   eventsUsersLeagues!: EventUserLeagueEntity[];
 
   @OneToMany(() => EventsLeaguesEntity, (elr) => elr.event)
   leaguesResults!: EventsLeaguesEntity[];
+
+  @OneToMany(() => ParticipateRequestEntity, (pr) => pr.event)
+  participateRequests!: ParticipateRequestEntity[];
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

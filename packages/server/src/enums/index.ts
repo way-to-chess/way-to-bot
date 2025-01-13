@@ -11,6 +11,7 @@ export enum EUserRole {
 
 export enum EImageAssigment {
   AVATAR = "avatar",
+  RECEIPT = "receipt",
 }
 
 export enum ECsvAssigment {

@@ -1,6 +1,6 @@
 import { Entity, PrimaryGeneratedColumn, Column, OneToMany } from "typeorm";
-import { EventUserLeagueEntity } from "./events-users-leagues";
-import { EventsLeaguesEntity } from "./events-leagues";
+import { EventUserLeagueEntity } from "./events-users-leagues.entity";
+import { EventsLeaguesEntity } from "./events-leagues.entity";
 
 @Entity("leagues")
 export class LeagueEntity {

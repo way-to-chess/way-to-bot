@@ -12,11 +12,11 @@ import {
 import { LocationEntity } from "../database/entities/location.entity";
 import { UserEntity } from "../database/entities/user.entity";
 import { LeagueEntity } from "../database/entities/league.entity";
-import { EventUserLeagueEntity } from "../database/entities/events-users-leagues";
+import { EventUserLeagueEntity } from "../database/entities/events-users-leagues.entity";
 import { FileEntity } from "../database/entities/file.entity";
 import { TgBotService } from "../tg-bot/init";
 import moment from "moment";
-import { EventsLeaguesEntity } from "../database/entities/events-leagues";
+import { EventsLeaguesEntity } from "../database/entities/events-leagues.entity";
 
 export class EventService {
   private eventRepository = dbInstance.getRepository(EventEntity);
@@ -32,6 +32,10 @@ export class EventService {
         eventsUsersLeagues: {
           user: { photo: true },
           league: true,
+        },
+        participateRequests: {
+          user: { photo: true },
+          receipt: true,
         },
       },
     });

@@ -13,7 +13,7 @@ import { UserEntity } from "../database/entities/user.entity";
 import { EntityManager, In } from "typeorm";
 import { compressImage } from "../utils/format-images";
 import { EImageAssigment } from "../enums";
-import { EventUserLeagueEntity } from "../database/entities/events-users-leagues";
+import { EventUserLeagueEntity } from "../database/entities/events-users-leagues.entity";
 
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
@@ -27,7 +27,9 @@ export class FileService {
     const savingFileUrl =
       payload?.assigment === EImageAssigment.AVATAR
         ? await compressImage(uploadedFileUrl, EImageAssigment.AVATAR)
-        : uploadedFileUrl;
+        : payload?.assigment === EImageAssigment.RECEIPT
+          ? await compressImage(uploadedFileUrl, EImageAssigment.RECEIPT)
+          : uploadedFileUrl;
 
     const newFile = new FileEntity();
     newFile.url = savingFileUrl;

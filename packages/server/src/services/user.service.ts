@@ -7,7 +7,7 @@ import {
   IUserUpdatePayload,
   TUserGetByTgInfoQueryPayload,
 } from "../interfaces/user.interface";
-import {DeepPartial, FindOptionsWhere} from "typeorm";
+import { DeepPartial, FindOptionsWhere } from "typeorm";
 
 export class UserService {
   private userRepository = dbInstance.getRepository(UserEntity);
@@ -20,6 +20,10 @@ export class UserService {
         eventsUsersLeagues: {
           event: true,
           league: true,
+        },
+        participateRequests: {
+          event: true,
+          receipt: true,
         },
       },
     });

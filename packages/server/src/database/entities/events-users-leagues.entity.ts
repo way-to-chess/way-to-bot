@@ -11,7 +11,7 @@ import { EventEntity } from "./event.entity";
 import { UserEntity } from "./user.entity";
 import { LeagueEntity } from "./league.entity";
 import { dbInstance } from "../init";
-import { EventsLeaguesEntity } from "./events-leagues";
+import { EventsLeaguesEntity } from "./events-leagues.entity";
 
 @Entity("event_user_league")
 @Unique(["event", "user", "league"])

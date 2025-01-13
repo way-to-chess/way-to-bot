@@ -13,7 +13,8 @@ import {
 } from "typeorm";
 import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
-import { EventUserLeagueEntity } from "./events-users-leagues";
+import { EventUserLeagueEntity } from "./events-users-leagues.entity";
+import {ParticipateRequestEntity} from "./participate-request.entity";
 
 @Entity("users")
 @Unique(["username", "firstName", "lastName"])
@@ -71,6 +72,9 @@ export class UserEntity {
 
   @OneToMany(() => EventUserLeagueEntity, (eul) => eul.user)
   eventsUsersLeagues!: EventUserLeagueEntity[];
+
+  @OneToMany(() => ParticipateRequestEntity, (pr) => pr.user)
+  participateRequests!: ParticipateRequestEntity[];
 
   @BeforeInsert()
   @BeforeUpdate()
