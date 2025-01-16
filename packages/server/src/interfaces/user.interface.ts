@@ -1,15 +1,25 @@
 import { UserEntity } from "../database/entities/user.entity";
 
 export interface IUserCreatePayload
-  extends Partial<
-    Omit<UserEntity, "id" | "createdAt" | "updatedAt" | "winRate" | "photo">
+  extends Pick<
+    UserEntity,
+    "username" | "tgId" | "firstName" | "lastName" | "roles"
   > {
   fileId?: number;
 }
 
 export interface IUserUpdatePayload
   extends Partial<
-    Omit<UserEntity, "createdAt" | "updatedAt" | "winRate" | "photo">
+    Omit<
+      UserEntity,
+      | "createdAt"
+      | "updatedAt"
+      | "winRate"
+      | "photo"
+      | "total"
+      | "eventsUsersLeagues"
+      | "participateRequests"
+    >
   > {
   id: number;
   fileId?: number | null;

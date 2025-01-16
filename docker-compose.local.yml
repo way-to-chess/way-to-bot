@@ -30,10 +30,10 @@ services:
       - ./packages/webapp/.:/app/packages/webapp
       - /app/node_modules
       - ./docker_data/uploads:/app/uploads
-    restart: on-failure
     command: >
       sh -c "
         npm run typeorm:migrate --workspace @way-to-bot/server && 
+        npm run swagger --workspace @way-to-bot/server && 
         npm run dev:all
       "
 

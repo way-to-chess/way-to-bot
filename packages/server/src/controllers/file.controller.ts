@@ -1,11 +1,11 @@
-import { Body, Delete, Post, Route, Tags } from "tsoa";
+import { Body, Delete, FormField, Post, Route, Tags, UploadedFile } from "tsoa";
 import { FileService } from "../services/file.service";
 import {
   ICsvFileUploadPayload,
   IFileDeletePayload,
   IFileUploadPayload,
 } from "../interfaces/file.interface";
-import { ECsvAssigment } from "../enums";
+import { ECsvAssigment, EImageAssigment } from "../enums";
 import { dbInstance } from "../database/init";
 
 @Route("/api/file")
@@ -14,18 +14,30 @@ export class FileController {
   private fileService = new FileService();
 
   @Post("/upload")
-  async addFile(file: Express.Multer.File, payload: IFileUploadPayload) {
-    return this.fileService.addFile(file, payload);
+  async addFile(
+    @UploadedFile() file: Express.Multer.File,
+    @FormField() assigment: EImageAssigment,
+  ) {
+    return this.fileService.addFile(file, assigment);
   }
 
   @Post("importCSV")
-  async importCSV(file: Express.Multer.File, payload: ICsvFileUploadPayload) {
-    switch (payload.assigment) {
+  async importCSV(
+    @UploadedFile() file: Express.Multer.File,
+    @FormField() assigment: ECsvAssigment,
+    @FormField() eventId: number,
+    @FormField() leagueId: number,
+  ) {
+    switch (assigment) {
       case ECsvAssigment.ROUNDS:
         return this.fileService.importCsv(file);
       case ECsvAssigment.RATING:
         return dbInstance.transaction((transaction) => {
-          return this.fileService.importCsvRating(file, payload, transaction);
+          return this.fileService.importCsvRating(
+            file,
+            { assigment, eventId, leagueId },
+            transaction,
+          );
         });
     }
 

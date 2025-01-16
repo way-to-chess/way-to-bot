@@ -1,8 +1,16 @@
 import { EventEntity } from "../database/entities/event.entity";
 
 export interface IEventCreatePayload
-  extends Partial<
-    Omit<EventEntity, "createdAt" | "updatedAt" | "location" | "users">
+  extends Omit<
+    EventEntity,
+    | "createdAt"
+    | "updatedAt"
+    | "location"
+    | "users"
+    | "eventsUsersLeagues"
+    | "participateRequests"
+    | "preview"
+    | "leaguesResults"
   > {
   locationId?: number;
   fileId?: number | null;
@@ -10,7 +18,17 @@ export interface IEventCreatePayload
 
 export interface IEventUpdatePayload
   extends Partial<
-    Omit<EventEntity, "id" | "createdAt" | "updatedAt" | "location" | "users">
+    Omit<
+      EventEntity,
+      | "createdAt"
+      | "updatedAt"
+      | "location"
+      | "users"
+      | "eventsUsersLeagues"
+      | "participateRequests"
+      | "preview"
+      | "leaguesResults"
+    >
   > {
   id: number;
   locationId?: number | null;
@@ -23,14 +41,14 @@ export interface IEventDeletePayload {
 
 export interface IAddUsersToEventPayload {
   eventId: number;
-  userIds: number[];
   leagueId: number;
+  userIds: number[];
 }
 
 export interface IRemoveUsersFromEventPayload {
   eventId: number;
-  userIds: number[];
   leagueId: number;
+  userIds: number[];
 }
 
 export interface IEventsLeaguesUpdate {

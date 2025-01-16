@@ -135,7 +135,7 @@ export class UserService {
 
     const where: FindOptionsWhere<UserEntity>[] = [];
 
-    if (tgId && !isNaN(Number(tgId))) {
+    if (tgId) {
       where.push({ tgId });
     }
 

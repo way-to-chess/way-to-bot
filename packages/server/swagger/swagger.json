@@ -1,0 +1,2022 @@
+{
+	"openapi": "3.0.0",
+	"components": {
+		"examples": {},
+		"headers": {},
+		"parameters": {},
+		"requestBodies": {},
+		"responses": {},
+		"schemas": {
+			"EUserRole": {
+				"enum": [
+					"admin",
+					"user"
+				],
+				"type": "string"
+			},
+			"FileEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EEventStatus": {
+				"enum": [
+					"waiting",
+					"started",
+					"finished"
+				],
+				"type": "string"
+			},
+			"LocationEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"title": {
+						"type": "string"
+					},
+					"url": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"address": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"preview": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/FileEntity"
+							}
+						],
+						"nullable": true
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"title",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EventUserLeagueEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"event": {
+						"$ref": "#/components/schemas/EventEntity"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserEntity"
+					},
+					"league": {
+						"$ref": "#/components/schemas/LeagueEntity"
+					},
+					"place": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"event",
+					"user",
+					"league"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EventEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"price": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"status": {
+						"$ref": "#/components/schemas/EEventStatus"
+					},
+					"participantsLimit": {
+						"type": "number",
+						"format": "double",
+						"nullable": true,
+						"default": null
+					},
+					"linkToStream": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"location": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/LocationEntity"
+							}
+						],
+						"nullable": true,
+						"default": null
+					},
+					"preview": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/FileEntity"
+							}
+						],
+						"nullable": true
+					},
+					"eventsUsersLeagues": {
+						"items": {
+							"$ref": "#/components/schemas/EventUserLeagueEntity"
+						},
+						"type": "array"
+					},
+					"leaguesResults": {
+						"items": {
+							"$ref": "#/components/schemas/EventsLeaguesEntity"
+						},
+						"type": "array"
+					},
+					"participateRequests": {
+						"items": {
+							"$ref": "#/components/schemas/ParticipateRequestEntity"
+						},
+						"type": "array"
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"dateTime",
+					"status",
+					"eventsUsersLeagues",
+					"leaguesResults",
+					"participateRequests",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"EventsLeaguesEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"event": {
+						"$ref": "#/components/schemas/EventEntity"
+					},
+					"league": {
+						"$ref": "#/components/schemas/LeagueEntity"
+					},
+					"link": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"event",
+					"league"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"LeagueEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					},
+					"eventsUsersLeagues": {
+						"items": {
+							"$ref": "#/components/schemas/EventUserLeagueEntity"
+						},
+						"type": "array"
+					},
+					"eventsLeaguesResults": {
+						"items": {
+							"$ref": "#/components/schemas/EventsLeaguesEntity"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"name",
+					"eventsUsersLeagues",
+					"eventsLeaguesResults"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"UserEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"username": {
+						"type": "string",
+						"nullable": true,
+						"default": null
+					},
+					"tgId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true,
+						"default": null
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/EUserRole"
+						},
+						"type": "array"
+					},
+					"photo": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/FileEntity"
+							}
+						],
+						"nullable": true
+					},
+					"wins": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"losses": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"draws": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"total": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"winRate": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"rating": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"eventsUsersLeagues": {
+						"items": {
+							"$ref": "#/components/schemas/EventUserLeagueEntity"
+						},
+						"type": "array"
+					},
+					"participateRequests": {
+						"items": {
+							"$ref": "#/components/schemas/ParticipateRequestEntity"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"id",
+					"firstName",
+					"lastName",
+					"roles",
+					"photo",
+					"createdAt",
+					"updatedAt",
+					"eventsUsersLeagues",
+					"participateRequests"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ParticipateRequestEntity": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"event": {
+						"$ref": "#/components/schemas/EventEntity"
+					},
+					"user": {
+						"$ref": "#/components/schemas/UserEntity"
+					},
+					"receipt": {
+						"allOf": [
+							{
+								"$ref": "#/components/schemas/FileEntity"
+							}
+						],
+						"nullable": true
+					},
+					"approved": {
+						"type": "boolean",
+						"default": false
+					},
+					"createdAt": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"updatedAt": {
+						"type": "string",
+						"format": "date-time"
+					}
+				},
+				"required": [
+					"id",
+					"event",
+					"user",
+					"createdAt",
+					"updatedAt"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUserCreatePayload": {
+				"properties": {
+					"username": {
+						"type": "string",
+						"default": null
+					},
+					"tgId": {
+						"type": "number",
+						"format": "double",
+						"default": null
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/EUserRole"
+						},
+						"type": "array"
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"firstName",
+					"lastName",
+					"roles"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUserUpdatePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"username": {
+						"type": "string",
+						"default": null
+					},
+					"tgId": {
+						"type": "number",
+						"format": "double",
+						"default": null
+					},
+					"firstName": {
+						"type": "string"
+					},
+					"lastName": {
+						"type": "string"
+					},
+					"roles": {
+						"items": {
+							"$ref": "#/components/schemas/EUserRole"
+						},
+						"type": "array"
+					},
+					"wins": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"losses": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"draws": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"rating": {
+						"type": "number",
+						"format": "double",
+						"default": 0
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IUserDeletePayload": {
+				"properties": {
+					"userId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_ParticipateRequestEntity.Exclude_keyofParticipateRequestEntity.id-or-approved-or-createdAt-or-updatedAt-or-event-or-user-or-receipt__": {
+				"properties": {},
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"IParticipateRequestCreatePayload": {
+				"properties": {
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					},
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"eventId",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IParticipateRequestUpdatePayload": {
+				"properties": {
+					"approved": {
+						"type": "boolean",
+						"default": false
+					},
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					},
+					"userId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id",
+					"eventId",
+					"userId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IParticipantRequestDeletePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILocationCreatePayload": {
+				"properties": {
+					"url": {
+						"type": "string",
+						"default": null
+					},
+					"title": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string",
+						"default": null
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILocationUpdatePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"url": {
+						"type": "string",
+						"default": null
+					},
+					"title": {
+						"type": "string"
+					},
+					"address": {
+						"type": "string",
+						"default": null
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILocationDeletePayload": {
+				"properties": {
+					"locationId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"locationId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_LeagueEntity.Exclude_keyofLeagueEntity.id-or-eventsUsersLeagues-or-eventsLeaguesResults__": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"ILeagueCreatePayload": {
+				"properties": {
+					"name": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"name"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILeagueUpdatePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string"
+					}
+				},
+				"type": "object",
+				"additionalProperties": false
+			},
+			"ILeagueDeletePayload": {
+				"properties": {
+					"leagueId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"leagueId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"FileDTO": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"url": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"id",
+					"url"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IFileDeletePayload": {
+				"properties": {
+					"fileId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"fileId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"Pick_EventEntity.Exclude_keyofEventEntity.createdAt-or-updatedAt-or-location-or-users-or-eventsUsersLeagues-or-participateRequests-or-preview-or-leaguesResults__": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string",
+						"default": null
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"price": {
+						"type": "string",
+						"default": null
+					},
+					"status": {
+						"$ref": "#/components/schemas/EEventStatus"
+					},
+					"participantsLimit": {
+						"type": "number",
+						"format": "double",
+						"default": null
+					},
+					"linkToStream": {
+						"type": "string",
+						"default": null
+					}
+				},
+				"required": [
+					"id",
+					"dateTime",
+					"price",
+					"status",
+					"participantsLimit",
+					"linkToStream"
+				],
+				"type": "object",
+				"description": "From T, pick a set of properties whose keys are in the union K"
+			},
+			"IEventCreatePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string",
+						"default": null
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"price": {
+						"type": "string",
+						"default": null
+					},
+					"status": {
+						"$ref": "#/components/schemas/EEventStatus"
+					},
+					"participantsLimit": {
+						"type": "number",
+						"format": "double",
+						"default": null
+					},
+					"linkToStream": {
+						"type": "string",
+						"default": null
+					},
+					"locationId": {
+						"type": "number",
+						"format": "double"
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id",
+					"dateTime",
+					"price",
+					"status",
+					"participantsLimit",
+					"linkToStream"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IEventUpdatePayload": {
+				"properties": {
+					"id": {
+						"type": "number",
+						"format": "double"
+					},
+					"name": {
+						"type": "string",
+						"default": null
+					},
+					"dateTime": {
+						"type": "string",
+						"format": "date-time"
+					},
+					"price": {
+						"type": "string",
+						"default": null
+					},
+					"status": {
+						"$ref": "#/components/schemas/EEventStatus"
+					},
+					"participantsLimit": {
+						"type": "number",
+						"format": "double",
+						"default": null
+					},
+					"linkToStream": {
+						"type": "string",
+						"default": null
+					},
+					"locationId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					},
+					"fileId": {
+						"type": "number",
+						"format": "double",
+						"nullable": true
+					}
+				},
+				"required": [
+					"id"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IEventDeletePayload": {
+				"properties": {
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					}
+				},
+				"required": [
+					"eventId"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IAddUsersToEventPayload": {
+				"properties": {
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					},
+					"leagueId": {
+						"type": "number",
+						"format": "double"
+					},
+					"userIds": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"eventId",
+					"leagueId",
+					"userIds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IRemoveUsersFromEventPayload": {
+				"properties": {
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					},
+					"leagueId": {
+						"type": "number",
+						"format": "double"
+					},
+					"userIds": {
+						"items": {
+							"type": "number",
+							"format": "double"
+						},
+						"type": "array"
+					}
+				},
+				"required": [
+					"eventId",
+					"leagueId",
+					"userIds"
+				],
+				"type": "object",
+				"additionalProperties": false
+			},
+			"IEventsLeaguesUpdate": {
+				"properties": {
+					"eventId": {
+						"type": "number",
+						"format": "double"
+					},
+					"leagueId": {
+						"type": "number",
+						"format": "double"
+					},
+					"link": {
+						"type": "string"
+					}
+				},
+				"required": [
+					"eventId",
+					"leagueId",
+					"link"
+				],
+				"type": "object",
+				"additionalProperties": false
+			}
+		},
+		"securitySchemes": {}
+	},
+	"info": {
+		"title": "@way-to-bot/server",
+		"version": "1.0.0",
+		"license": {
+			"name": "ISC"
+		},
+		"contact": {}
+	},
+	"paths": {
+		"/api/user/all": {
+			"get": {
+				"operationId": "GetAllUsers",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/UserEntity"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/user/getById/{id}": {
+			"get": {
+				"operationId": "GetUserById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/getByUserName/{username}": {
+			"get": {
+				"operationId": "GetUserByUserName",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "username",
+						"required": true,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/getUserByTgInfo": {
+			"get": {
+				"operationId": "GetUserByTgInfo",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "query",
+						"name": "tgId",
+						"required": false,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					},
+					{
+						"in": "query",
+						"name": "username",
+						"required": false,
+						"schema": {
+							"type": "string"
+						}
+					}
+				]
+			}
+		},
+		"/api/user/create": {
+			"post": {
+				"operationId": "CreateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserCreatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user/update": {
+			"put": {
+				"operationId": "UpdateUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/UserEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserUpdatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user/delete": {
+			"delete": {
+				"operationId": "DeleteUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IUserDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/user/addId": {
+			"post": {
+				"operationId": "AddIdToUser",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Users"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"properties": {
+									"tgId": {
+										"type": "number",
+										"format": "double"
+									},
+									"username": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"tgId",
+									"username"
+								],
+								"type": "object"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/participateRequest/getById/{id}": {
+			"get": {
+				"operationId": "GetParticipateRequestById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ParticipateRequestEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Participate requests"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/participateRequest/create": {
+			"post": {
+				"operationId": "CreateParticipateRequest",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ParticipateRequestEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Participate requests"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParticipateRequestCreatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/participateRequest/update": {
+			"put": {
+				"operationId": "UpdateParticipateRequest",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/ParticipateRequestEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Participate requests"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParticipateRequestUpdatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/participateRequest/delete": {
+			"delete": {
+				"operationId": "DeleteParticipateRequest",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Participate requests"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IParticipantRequestDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/location/all": {
+			"get": {
+				"operationId": "GetAllLocations",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/LocationEntity"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Locations"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/location/getById/{id}": {
+			"get": {
+				"operationId": "GetLocationById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LocationEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Locations"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/location/create": {
+			"post": {
+				"operationId": "CreateLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LocationEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Locations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILocationCreatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/location/update": {
+			"put": {
+				"operationId": "UpdateLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LocationEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Locations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILocationUpdatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/location/delete": {
+			"delete": {
+				"operationId": "DeleteLocation",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Locations"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILocationDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/league/all": {
+			"get": {
+				"operationId": "GetAllLeagues",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/LeagueEntity"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leagues"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/league/create": {
+			"post": {
+				"operationId": "CreateLeague",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LeagueEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leagues"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILeagueCreatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/league/update": {
+			"put": {
+				"operationId": "UpdateLeague",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/LeagueEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leagues"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILeagueUpdatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/league/delete": {
+			"delete": {
+				"operationId": "DeleteLeague",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Leagues"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/ILeagueDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/file/upload": {
+			"post": {
+				"operationId": "AddFile",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/FileDTO"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Files"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									},
+									"assigment": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"file",
+									"assigment"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/file/importCSV": {
+			"post": {
+				"operationId": "ImportCSV",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Files"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"multipart/form-data": {
+							"schema": {
+								"type": "object",
+								"properties": {
+									"file": {
+										"type": "string",
+										"format": "binary"
+									},
+									"assigment": {
+										"type": "string"
+									},
+									"eventId": {
+										"type": "string"
+									},
+									"leagueId": {
+										"type": "string"
+									}
+								},
+								"required": [
+									"file",
+									"assigment",
+									"eventId",
+									"leagueId"
+								]
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/file/delete": {
+			"delete": {
+				"operationId": "DeleteFile",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Files"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IFileDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/all": {
+			"get": {
+				"operationId": "GetAllEvents",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"items": {
+										"$ref": "#/components/schemas/EventEntity"
+									},
+									"type": "array"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": []
+			}
+		},
+		"/api/event/getById/{id}": {
+			"get": {
+				"operationId": "GetEventById",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EventEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [
+					{
+						"in": "path",
+						"name": "id",
+						"required": true,
+						"schema": {
+							"format": "double",
+							"type": "number"
+						}
+					}
+				]
+			}
+		},
+		"/api/event/create": {
+			"post": {
+				"operationId": "CreateEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EventEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IEventCreatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/update": {
+			"put": {
+				"operationId": "UpdateEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EventEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IEventUpdatePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/delete": {
+			"delete": {
+				"operationId": "DeleteEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IEventDeletePayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/addUsersToEvent": {
+			"post": {
+				"operationId": "AddUsersToEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IAddUsersToEventPayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/removeUsersFromEvent": {
+			"delete": {
+				"operationId": "RemoveUsersFromEvent",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"type": "boolean"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IRemoveUsersFromEventPayload"
+							}
+						}
+					}
+				}
+			}
+		},
+		"/api/event/updateEventLeague": {
+			"put": {
+				"operationId": "UpdateEventLeague",
+				"responses": {
+					"200": {
+						"description": "Ok",
+						"content": {
+							"application/json": {
+								"schema": {
+									"$ref": "#/components/schemas/EventsLeaguesEntity"
+								}
+							}
+						}
+					}
+				},
+				"tags": [
+					"Events"
+				],
+				"security": [],
+				"parameters": [],
+				"requestBody": {
+					"required": true,
+					"content": {
+						"application/json": {
+							"schema": {
+								"$ref": "#/components/schemas/IEventsLeaguesUpdate"
+							}
+						}
+					}
+				}
+			}
+		}
+	},
+	"servers": [
+		{
+			"url": "/"
+		}
+	]
+}

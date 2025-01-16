@@ -10,7 +10,8 @@
     "production": "node build/app.js",
     "typeorm:migrate": "env-cmd sh bin/typeorm/migrate.sh",
     "typeorm:migrate:local": "env-cmd -f .env.local sh bin/typeorm/migrate.sh",
-    "lint": "eslint src --fix"
+    "lint": "eslint src --fix",
+    "swagger": "tsoa spec"
   },
   "keywords": [],
   "author": "",

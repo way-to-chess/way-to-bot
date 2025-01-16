@@ -1,9 +1,15 @@
 import { LeagueEntity } from "../database/entities/league.entity";
 
 export interface ILeagueCreatePayload
-  extends Partial<Omit<LeagueEntity, "id">> {}
+  extends Omit<
+    LeagueEntity,
+    "id" | "eventsUsersLeagues" | "eventsLeaguesResults"
+  > {}
 
-export interface ILeagueUpdatePayload extends Partial<LeagueEntity> {}
+export interface ILeagueUpdatePayload
+  extends Partial<
+    Omit<LeagueEntity, "eventsUsersLeagues" | "eventsLeaguesResults">
+  > {}
 
 export interface ILeagueDeletePayload {
   leagueId: number;

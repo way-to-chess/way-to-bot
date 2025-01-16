@@ -36,11 +36,21 @@ UserRouter.get(
   },
 );
 
+interface UserQuery {
+  tgId: string; // ID пользователя в Telegram
+  username: string; // Имя пользователя
+}
 UserRouter.get(
   "/getUserByTgInfo",
   castUserNameMiddleware,
-  async (req: Request<{}, {}, {}, TUserGetByTgInfoQueryPayload>, res) => {
-    const data = await userController.getUserByTgInfo(req.query);
+  async (
+    req: Request<{}, {}, {}, { username?: string; tgId?: string }>,
+    res,
+  ) => {
+    const data = await userController.getUserByTgInfo(
+      Number(req.query?.tgId),
+      req.query?.username,
+    );
     res.status(200).json({ data });
   },
 );

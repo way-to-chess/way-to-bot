@@ -3,7 +3,8 @@ import { EventService } from "../services/event.service";
 import {
   IAddUsersToEventPayload,
   IEventCreatePayload,
-  IEventDeletePayload, IEventsLeaguesUpdate,
+  IEventDeletePayload,
+  IEventsLeaguesUpdate,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
 } from "../interfaces/event.interface";

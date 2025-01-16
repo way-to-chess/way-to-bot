@@ -7,6 +7,8 @@ import chalk from "chalk";
 import cors from "cors";
 import { TgBotService } from "./tg-bot/init";
 import { dbInstance } from "./database/init";
+import swaggerUi from "swagger-ui-express";
+import swaggerDocument from "../swagger/swagger.json";
 
 const app = express();
 
@@ -28,11 +30,12 @@ const errorHandler = (
   return;
 };
 
-// if (process.env.NODE_ENV === "dev") {
-//   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
-// }
-
 app.use("/api", MainRouter);
+
+if (process.env.NODE_ENV === "dev") {
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+}
+
 app.use(errorHandler);
 
 dbInstance.initialize().then(() => {

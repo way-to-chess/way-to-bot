@@ -20,7 +20,7 @@ FileRouter.post(
       throw new Error("file not uploaded");
     }
 
-    const data = await fileController.addFile(file, req.body);
+    const data = await fileController.addFile(file, req.body.assigment!);
     res.status(200).json({ data });
   },
 );
@@ -34,7 +34,12 @@ FileRouter.post(
     if (!file) {
       throw new Error("file not uploaded");
     }
-    const data = await fileController.importCSV(file, req.body);
+    const data = await fileController.importCSV(
+      file,
+      req.body.assigment!,
+      req.body.eventId,
+      req.body.leagueId,
+    );
     res.status(200).json({ data });
   },
 );

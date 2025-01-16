@@ -7,7 +7,7 @@ import {
 } from "../interfaces/participate-request.interface";
 
 @Route("/api/participateRequest")
-@Tags("ParticipateRequests")
+@Tags("Participate requests")
 export class ParticipateRequestController {
   private participateRequestService = new ParticipateRequestService();
 

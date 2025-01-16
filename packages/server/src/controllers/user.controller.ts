@@ -1,14 +1,24 @@
 import { UserService } from "../services/user.service";
-import { Body, Delete, Get, Path, Post, Put, Queries, Route, Tags } from "tsoa";
+import {
+  Body,
+  Delete,
+  Get,
+  Path,
+  Post,
+  Put,
+  Queries,
+  Query,
+  Route,
+  Tags,
+} from "tsoa";
 import {
   IUserCreatePayload,
   IUserDeletePayload,
   IUserUpdatePayload,
-  TUserGetByTgInfoQueryPayload,
 } from "../interfaces/user.interface";
 
 @Route("/api/user")
-@Tags("User")
+@Tags("Users")
 export class UserController {
   private userService = new UserService();
 
@@ -28,11 +38,11 @@ export class UserController {
   }
 
   @Get("/getUserByTgInfo")
-  async getUserByTgInfo(@Queries() payload: TUserGetByTgInfoQueryPayload) {
-    if (!payload.tgId || !payload.username) {
+  async getUserByTgInfo(@Query() tgId?: number, @Query() username?: string) {
+    if (!tgId && !username) {
       throw new Error("Query params not found");
     }
-    return this.userService.getUserByTgIdOrUsername(payload);
+    return this.userService.getUserByTgIdOrUsername({ tgId, username });
   }
 
   @Post("/create")

@@ -18,16 +18,16 @@ import { EventUserLeagueEntity } from "../database/entities/events-users-leagues
 export class FileService {
   private fileRepository = dbInstance.getRepository(FileEntity);
 
-  async addFile(file: Express.Multer.File, payload: IFileUploadPayload) {
+  async addFile(file: Express.Multer.File, assigment: string) {
     if (!file.destination || !file.filename) {
       throw new Error("No destination or filename, data corrupted");
     }
 
     const uploadedFileUrl = path.join(file.destination, file.filename);
     const savingFileUrl =
-      payload?.assigment === EImageAssigment.AVATAR
+      assigment === EImageAssigment.AVATAR
         ? await compressImage(uploadedFileUrl, EImageAssigment.AVATAR)
-        : payload?.assigment === EImageAssigment.RECEIPT
+        : assigment === EImageAssigment.RECEIPT
           ? await compressImage(uploadedFileUrl, EImageAssigment.RECEIPT)
           : uploadedFileUrl;
 
