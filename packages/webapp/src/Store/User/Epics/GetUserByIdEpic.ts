@@ -1,7 +1,7 @@
 import { TAppEpic } from "../../App/Epics/TAppEpic";
 import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory";
-import { GET_USER_BY_ID_REQUEST_SYMBOL } from "../../User/UserVariables";
-import { userSlice } from "../../User/UserSlice";
+import { GET_USER_BY_ID_REQUEST_SYMBOL } from "../UserVariables";
+import { userSlice } from "../UserSlice";
 
 const getUserByIdEpic =
   (userId: number): TAppEpic =>
