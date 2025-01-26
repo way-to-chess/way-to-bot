@@ -9,7 +9,7 @@ import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { LOCATIONS_CREATE_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
 import { ILocationCreatePayload } from "@way-to-bot/shared/interfaces/location.interface";
 import { UploadOutlined } from "@ant-design/icons";
-import { useFileUpload } from "../Hooks/UseFileUpload";
+import { IFileUploadResponse, useFileUpload } from "../Hooks/UseFileUpload";
 import { useCallback } from "react";
 
 const ManageLocationsDrawer = () => {
@@ -40,7 +40,7 @@ const ManageLocationsDrawer = () => {
       [form],
     ),
     onDone: useCallback(
-      (fileId: number) => form.setFieldValue("fileId", fileId),
+      ({ id }: IFileUploadResponse) => form.setFieldValue("fileId", id),
       [form],
     ),
     onError: useCallback(() => {

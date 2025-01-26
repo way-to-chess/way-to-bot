@@ -1,4 +1,6 @@
 const TEXT = {
+  registrationInto: "У вас нет аккаунта",
+  uploadFileEmpty: "Файл не выбран",
   common: {
     send: "Отправить",
     yes: "Да",

@@ -14,7 +14,7 @@ import {
 } from "../Store/Events/EventsVariables";
 import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
-import { useFileUpload } from "../Hooks/UseFileUpload";
+import { IFileUploadResponse, useFileUpload } from "../Hooks/UseFileUpload";
 import { useCallback } from "react";
 import { UploadOutlined } from "@ant-design/icons";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
@@ -79,7 +79,7 @@ const ManageEventsDrawer = () => {
       [form],
     ),
     onDone: useCallback(
-      (fileId: number) => form.setFieldValue("fileId", fileId),
+      ({ id }: IFileUploadResponse) => form.setFieldValue("fileId", id),
       [form],
     ),
     onError: useCallback(() => {

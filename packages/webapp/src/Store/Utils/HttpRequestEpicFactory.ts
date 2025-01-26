@@ -40,7 +40,7 @@ const httpRequestEpicFactory = <T>({
             of(
               requestManagerSlice.actions.error({
                 symbol: requestSymbol,
-                error: result.error,
+                error: JSON.stringify(result.error),
               }),
             ),
             onError ? onError(result.error) : EMPTY,
@@ -64,3 +64,4 @@ const httpRequestEpicFactory = <T>({
   );
 
 export { httpRequestEpicFactory };
+export type { IHttpRequestEpicFactoryProps };

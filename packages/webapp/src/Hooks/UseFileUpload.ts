@@ -6,16 +6,23 @@ import { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import { BASE_API_URL } from "../HttpApi/RequestUtils";
 
+interface IFileUploadResponse {
+  id: number;
+  url: string;
+}
+
 interface IUseFileUploadProps {
   onRemove?: VoidFunction;
-  onDone?: (fileId: number) => void;
+  onDone?: (data: IFileUploadResponse) => void;
   onError?: VoidFunction;
 }
 
 const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
   const onChange = useCallback(
     (
-      info: UploadChangeParam<UploadFile<IResponseWithData<{ id: number }>>>,
+      info: UploadChangeParam<
+        UploadFile<IResponseWithData<IFileUploadResponse>>
+      >,
     ) => {
       switch (info.file.status) {
         case "removed":
@@ -24,11 +31,9 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
         case "done":
           message.success(TEXT.api.success);
 
-          console.dir(info);
-
           onDone?.(
             getNotNil(
-              info.file?.response?.data.id,
+              info.file?.response?.data,
               "useFileUpload -> onChange -> done",
             ),
           );
@@ -51,4 +56,4 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
   );
 };
 
-export { useFileUpload };
+export { useFileUpload, type IFileUploadResponse };

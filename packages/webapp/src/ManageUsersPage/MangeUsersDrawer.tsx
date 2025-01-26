@@ -12,7 +12,7 @@ import {
   USER_UPDATE_REQUEST_SYMBOL,
 } from "../Store/User/UserVariables";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
-import { useFileUpload } from "../Hooks/UseFileUpload";
+import { IFileUploadResponse, useFileUpload } from "../Hooks/UseFileUpload";
 import { UploadOutlined } from "@ant-design/icons";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { useDrawer } from "../Hooks/UseDrawer";
@@ -69,7 +69,7 @@ const MangeUsersDrawer = memo(() => {
       [form],
     ),
     onDone: useCallback(
-      (fileId: number) => form.setFieldValue("fileId", fileId),
+      ({ id }: IFileUploadResponse) => form.setFieldValue("fileId", id),
       [form],
     ),
     onError: useCallback(() => {

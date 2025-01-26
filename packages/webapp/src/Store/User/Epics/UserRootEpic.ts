@@ -7,7 +7,6 @@ import { routerEpic } from "../../Utils/RouterEpic";
 import { fromActionCreator } from "../../Utils/FromActionCreator";
 import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory";
 import {
-  USER_CREATE_REQUEST_SYMBOL,
   USER_DELETE_REQUEST_SYMBOL,
   USER_UPDATE_REQUEST_SYMBOL,
 } from "../UserVariables";
@@ -16,6 +15,7 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getUserByIdEpic } from "./GetUserByIdEpic";
 import { loadUsersEpic } from "./LoadUsersEpic";
 import { drawerSlice, EDrawerType } from "../../Drawer/DrawerSlice";
+import { createUserEpic } from "./CreateUserEpic";
 
 const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
@@ -24,34 +24,6 @@ const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
       httpRequestEpicFactory({
         input: dependencies.httpApi.updateUser(payload),
         requestSymbol: USER_UPDATE_REQUEST_SYMBOL,
-        onSuccess: () => {
-          message.success(TEXT.api.success);
-
-          return merge(
-            loadUsersEpic(action$, state$, dependencies),
-            of(
-              drawerSlice.actions.closeDrawer({
-                drawerType: EDrawerType.MANAGE_USERS_DRAWER,
-              }),
-            ),
-          );
-        },
-        onError: () => {
-          message.error(TEXT.api.error);
-
-          return EMPTY;
-        },
-      }),
-    ),
-  );
-
-const createUserEpic: TAppEpic = (action$, state$, dependencies) =>
-  action$.pipe(
-    fromActionCreator(userSlice.actions.createUser),
-    switchMap(({ payload }) =>
-      httpRequestEpicFactory({
-        input: dependencies.httpApi.createUser(payload),
-        requestSymbol: USER_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
           message.success(TEXT.api.success);
 
@@ -94,9 +66,31 @@ const deleteUserEpic: TAppEpic = (action$, state$, dependencies) =>
     ),
   );
 
-const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () =>
-  combineEpics(loadUsersEpic, createUserEpic, deleteUserEpic, updateUserEpic),
-);
+const createUserOnSuccessEpic: TAppEpic = (action$, state$, dependencies) =>
+  merge(
+    loadUsersEpic(action$, state$, dependencies),
+    of(
+      drawerSlice.actions.closeDrawer({
+        drawerType: EDrawerType.MANAGE_USERS_DRAWER,
+      }),
+    ),
+  );
+
+const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () => {
+  return (action$, state$, dependencies) =>
+    combineEpics(
+      loadUsersEpic,
+      deleteUserEpic,
+      updateUserEpic,
+      createUserEpic({
+        onSuccess: () => {
+          message.success(TEXT.api.success);
+
+          return createUserOnSuccessEpic(action$, state$, dependencies);
+        },
+      }),
+    )(action$, state$, dependencies);
+});
 
 const manageUsersIdRoute = routerEpic(
   WEBAPP_ROUTES.manageUsersIdRoute,

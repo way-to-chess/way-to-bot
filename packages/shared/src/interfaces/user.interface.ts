@@ -1,4 +1,4 @@
-import { EUserRole } from "../enums/index";
+import { EUserRole } from "../enums";
 import { TDate } from "./date.inteface";
 import { IEvent } from "./event.interface";
 import { IFile } from "./file.interface";
@@ -22,11 +22,12 @@ export interface IUser {
 }
 
 export interface IUserCreatePayload {
-  username: string;
+  username?: string;
   firstName: string;
   lastName: string;
   roles?: EUserRole[];
   fileId?: number;
+  tgId?: number;
 }
 
 export interface IUserUpdatePayload

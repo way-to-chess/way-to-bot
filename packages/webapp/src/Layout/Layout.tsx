@@ -209,11 +209,9 @@ const AddLeagueButton = () => {
 const UserAccountButton = () => {
   const userId = useSelector(userSlice.selectors.userId);
 
-  if (!userId) {
-    return null;
-  }
-
-  const to = generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId });
+  const to = userId
+    ? generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId })
+    : WEBAPP_ROUTES.registrationRoute;
 
   return (
     <Link to={to}>

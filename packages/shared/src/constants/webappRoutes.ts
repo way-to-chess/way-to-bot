@@ -7,11 +7,12 @@ const manageUsersRoute = "manage-users";
 const manageUsersIdRoute = `${manageUsersRoute}/:userId`;
 const manageLocationsRoute = "manage-locations";
 const manageLeaguesRoute = "manage-leagues";
+const registrationRoute = "registration";
 
 const WEBAPP_ROUTES = {
   emptyRoute,
   anyRoute,
-
+  registrationRoute,
   manageUsersRoute,
   manageUsersIdRoute,
   manageEventsRoute,
