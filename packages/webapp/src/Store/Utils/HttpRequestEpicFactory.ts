@@ -16,7 +16,7 @@ interface IHttpRequestEpicFactoryProps<T> {
   input: Promise<T | IWithError>;
   requestSymbol: string;
   receivedActionCreator?: PayloadActionCreator<T>;
-  onSuccess?: () => Observable<any>;
+  onSuccess?: (result: T) => Observable<any>;
   onError?: (error: string) => Observable<any>;
 }
 
@@ -51,7 +51,7 @@ const httpRequestEpicFactory = <T>({
           merge(
             of(requestManagerSlice.actions.success({ symbol: requestSymbol })),
             receivedActionCreator ? of(receivedActionCreator(result)) : EMPTY,
-            onSuccess ? onSuccess() : EMPTY,
+            onSuccess ? onSuccess(result) : EMPTY,
           ),
         );
       }),

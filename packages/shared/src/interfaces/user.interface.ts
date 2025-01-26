@@ -40,3 +40,8 @@ export interface IUserUpdatePayload
 export interface IUserDeletePayload {
   userId: number;
 }
+
+export interface IUserGetByTgInfoQueryPayload {
+  tgId: number;
+  username?: string;
+}

@@ -4,19 +4,19 @@ import { combineEpics } from "redux-observable";
 import { userRootEpic } from "../../User/Epics/UserRootEpic";
 import { eventsRootEpic } from "../../Events/EventsRootEpic";
 import { locationsRootEpic } from "../../Locations/Epics/LocationsRootEpic";
-import { getUserByUsernameEpic } from "../../User/Epics/GetUserByUsernameEpic";
 import { leaguesRootEpic } from "../../Leagues/LeaguesRootEpic";
 import { createUserEpic } from "../../User/Epics/CreateUserEpic";
+import { getUserByTgInfoEpic } from "../../User/Epics/GetUserByTgInfoEpic";
 
 const appEpic: TAppEpic = (action$, store$, dependencies) =>
   combineEpics(
     userRootEpic,
     eventsRootEpic,
     locationsRootEpic,
-    getUserByUsernameEpic,
+    getUserByTgInfoEpic,
     leaguesRootEpic,
     createUserEpic({
-      onSuccess: () => getUserByUsernameEpic(action$, store$, dependencies),
+      onSuccess: () => getUserByTgInfoEpic(action$, store$, dependencies),
     }),
   )(action$, store$, dependencies).pipe(
     catchError((error, source) => {

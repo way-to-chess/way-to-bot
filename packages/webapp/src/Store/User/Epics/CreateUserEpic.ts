@@ -13,7 +13,7 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 const createUserEpic =
   ({
     onSuccess,
-  }: Pick<IHttpRequestEpicFactoryProps<undefined>, "onSuccess">): TAppEpic =>
+  }: Pick<IHttpRequestEpicFactoryProps<boolean>, "onSuccess">): TAppEpic =>
   (action$, state$, dependencies) =>
     action$.pipe(
       fromActionCreator(userSlice.actions.createUser),

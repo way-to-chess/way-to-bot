@@ -3,6 +3,7 @@ import {
   IUser,
   IUserCreatePayload,
   IUserDeletePayload,
+  IUserGetByTgInfoQueryPayload,
   IUserUpdatePayload,
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
@@ -26,6 +27,7 @@ import {
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
 } from "@way-to-bot/shared/interfaces/league.interface";
+import { createQueryString } from "../Utils/CreateQueryString";
 
 const httpApi = {
   //USERS
@@ -48,6 +50,10 @@ const httpApi = {
     "PUT",
     "user/update",
   ),
+  getUserByTgInfo: ({ username, tgId }: IUserGetByTgInfoQueryPayload) =>
+    simpleGetRequest<IResponseWithData<IUser>>(
+      `user/getUserByTgInfo/${createQueryString({ username, tgId })}`,
+    )(),
 
   //LOCATIONS
   getAllLocations:
