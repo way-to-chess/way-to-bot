@@ -2,7 +2,7 @@ import { combineEpics } from "redux-observable";
 import { routerEpic } from "../../Utils/RouterEpic";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TAppEpic } from "../../App/Epics/TAppEpic";
-import { EMPTY, switchMap } from "rxjs";
+import { EMPTY, merge, of, switchMap } from "rxjs";
 import { locationsSlice } from "../LocationsSlice";
 
 import { locationsLoadEpic } from "./LocationsLoadEpic";
@@ -15,6 +15,7 @@ import {
   LOCATIONS_UPDATE_REQUEST_SYMBOL,
 } from "../../Locations/LocationsVariables";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { drawerSlice, EDrawerType } from "../../Drawer/DrawerSlice";
 
 const deleteLocationEpic: TAppEpic = (action$, state$, dependencies) =>
   action$.pipe(
@@ -68,7 +69,14 @@ const createLocationEpic: TAppEpic = (action$, state$, dependencies) =>
         onSuccess: () => {
           message.success(TEXT.api.success);
 
-          return locationsLoadEpic(action$, state$, dependencies);
+          return merge(
+            locationsLoadEpic(action$, state$, dependencies),
+            of(
+              drawerSlice.actions.closeDrawer({
+                drawerType: EDrawerType.MANAGE_LOCATIONS_DRAWER,
+              }),
+            ),
+          );
         },
         onError: () => {
           message.error(TEXT.api.error);

@@ -14,6 +14,7 @@ import { eventsSlice } from "../Events/EventsSlice";
 import { appSlice } from "./AppSlice";
 import { leaguesSlice } from "../Leagues/LeaguesSlice";
 import { drawerSlice } from "../Drawer/DrawerSlice";
+import { participateRequestSlice } from "../ParticipateRequest/ParticipateRequestSlice";
 
 const history = createBrowserHistory();
 const routerMiddleware = createRouterMiddleware(history);
@@ -33,6 +34,7 @@ export const createStore = () => {
       events: eventsSlice.reducer,
       leagues: leaguesSlice.reducer,
       drawer: drawerSlice.reducer,
+      [participateRequestSlice.name]: participateRequestSlice.reducer,
     },
     middleware: (getDefaultMiddleware) =>
       getDefaultMiddleware().prepend(routerMiddleware).concat(epicMiddleware),

@@ -8,6 +8,7 @@ import {
   Flex,
   List,
   Modal,
+  Typography,
 } from "antd";
 import { NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
@@ -36,6 +37,7 @@ import { useActionCreator } from "../Hooks/UseActionCreator";
 import { IRemoveUsersFromEventPayload } from "@way-to-bot/shared/interfaces/event.interface";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
+import { ParticipateEventButton } from "./ParticipateEventButton";
 
 const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
   const removeUserFromEvent = useActionCreator(
@@ -84,7 +86,7 @@ const ManageEventsIdPage = () => {
       const leagueIndex = acc.findIndex((it) => it.id === league.id);
 
       if (leagueIndex !== -1) {
-        acc[leagueIndex].users.push(user);
+        acc[leagueIndex]?.users.push(user);
         return acc;
       }
 
@@ -104,7 +106,10 @@ const ManageEventsIdPage = () => {
       <ManageEventUsersDrawer />
       <List
         itemLayout={"vertical"}
-        style={{ padding: 16 }}
+        style={{
+          padding: "16px 16px calc(var(--ant-control-height) + 32px)",
+          position: "relative",
+        }}
         loading={status === ERequestStatus.loading}
       >
         <List.Item>
@@ -166,16 +171,20 @@ const ManageEventsIdPage = () => {
             avatar={
               <Avatar
                 shape={"square"}
-                size={"large"}
-                src={getPreviewSrc(event.location?.url)}
+                size={60}
+                src={getPreviewSrc(event.location?.preview?.url ?? "")}
                 icon={<EnvironmentOutlined />}
               />
             }
-            title={event.location?.title}
+            title={<Typography.Text>{event.location?.title}</Typography.Text>}
             description={
-              <a href={event.location?.url} target={"_blank"} rel="noreferrer">
+              <Typography.Link
+                href={event.location?.url ?? ""}
+                target={"_blank"}
+                rel="noreferrer"
+              >
                 {event.location?.address}
-              </a>
+              </Typography.Link>
             }
           />
         </List.Item>
@@ -213,6 +222,7 @@ const ManageEventsIdPage = () => {
             <Empty />
           )}
         </List.Item>
+        <ParticipateEventButton eventId={event.id} />
       </List>
     </>
   );

@@ -1,8 +1,9 @@
-import { EEventStatus } from "../enums/index";
+import { EEventStatus } from "../enums";
 import { TDate } from "./date.inteface";
 import { ILocation } from "./location.interface";
 import { IEventUserLeague } from "./eventUserLeague.interface";
 import { IFile } from "./file.interface";
+import { IParticipateRequest } from "./participate-request.interface";
 
 export interface IEvent {
   id: number;
@@ -17,6 +18,7 @@ export interface IEvent {
   updatedAt: TDate;
   eventsUsersLeagues: IEventUserLeague[];
   preview: IFile | null;
+  participateRequests: IParticipateRequest[];
 }
 
 export interface IEventCreatePayload {

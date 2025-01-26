@@ -28,6 +28,11 @@ import {
   ILeagueUpdatePayload,
 } from "@way-to-bot/shared/interfaces/league.interface";
 import { createQueryString } from "../Utils/CreateQueryString";
+import {
+  IParticipateRequestCreatePayload,
+  IParticipateRequestDeletePayload,
+  IParticipateRequestUpdatePayload,
+} from "@way-to-bot/shared/interfaces/participate-request.interface";
 
 const httpApi = {
   //USERS
@@ -110,6 +115,22 @@ const httpApi = {
     "DELETE",
     "league/delete",
   ),
+
+  //PARTICIPATE REQUEST
+  createParticipateRequest: requestWithPayload<
+    IParticipateRequestCreatePayload,
+    boolean
+  >("POST", "participateRequest/create"),
+  deleteParticipateRequest: requestWithPayload<
+    IParticipateRequestDeletePayload,
+    boolean
+  >("DELETE", "participateRequest/delete"),
+  updateParticipateRequest: requestWithPayload<
+    IParticipateRequestUpdatePayload,
+    boolean
+  >("POST", "participateRequest/update"),
+  getParticipateRequestById: (requestId: number) =>
+    simpleGetRequest(`participateRequest/getById/${requestId}`)(),
 };
 
 export { httpApi };

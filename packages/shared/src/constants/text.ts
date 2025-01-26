@@ -1,6 +1,11 @@
 const TEXT = {
   registrationInto: "У вас нет аккаунта",
   uploadFileEmpty: "Файл не выбран",
+  participate: "Участвовать",
+  participateRequestIntro:
+    "Загрузите чек об оплате чтобы отправить запрос на участие",
+  confirmParticipateRequest: "Отправить запрос",
+  hasPendingRequest: "Запрос на рассмотрении",
   common: {
     send: "Отправить",
     yes: "Да",

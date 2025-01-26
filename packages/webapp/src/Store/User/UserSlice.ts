@@ -85,6 +85,7 @@ const userSlice = createSlice({
       );
     },
     search: (sliceState) => sliceState.search,
+    userExists: (sliceState) => !!sliceState.user,
   },
 });
 

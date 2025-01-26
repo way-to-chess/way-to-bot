@@ -22,6 +22,7 @@ import { loadEventByIdEpic } from "../Events/LoadEventByIdEpic";
 import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { drawerSlice, EDrawerType } from "../Drawer/DrawerSlice";
 import { loadUsersEpic } from "../User/Epics/LoadUsersEpic";
+import { createParticipateRequestEpic } from "../ParticipateRequest/Epics/CreateParticipateRequestEpic";
 
 const loadEventsEpic: TAppEpic = (_, __, { httpApi }) =>
   httpRequestEpicFactory({
@@ -175,6 +176,7 @@ const manageEventsIdRouterEpic = routerEpic(
   WEBAPP_ROUTES.manageEventsIdRoute,
   ({ params }) =>
     combineEpics(
+      createParticipateRequestEpic,
       removeUsersFromEvent,
       addUsersToEvent,
       loadUsersEpic,

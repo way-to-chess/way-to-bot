@@ -56,6 +56,8 @@ const requestManagerSlice = createSlice({
       sliceState[symbol]?.status ?? ERequestStatus.idle,
     errorBySymbol: (sliceState, symbol: string) =>
       sliceState[symbol]?.error ?? "Unknown Error",
+    loadingBySymbol: (sliceState, symbol: string) =>
+      sliceState[symbol]?.status === ERequestStatus.loading,
   },
 });
 

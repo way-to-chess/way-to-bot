@@ -8,6 +8,7 @@ import {
   IRemoveUsersFromEventPayload,
 } from "@way-to-bot/shared/interfaces/event.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 
 interface IEventsSlice {
   events: IEvent[];
@@ -15,6 +16,10 @@ interface IEventsSlice {
 
 const initialState: IEventsSlice = {
   events: [],
+};
+
+const eventById = (sliceState: IEventsSlice, eventId: number | string) => {
+  return sliceState.events.find((it) => it.id === Number(eventId)) ?? null;
 };
 
 const eventsSlice = createSlice({
@@ -40,8 +45,27 @@ const eventsSlice = createSlice({
   },
   selectors: {
     events: (sliceState) => sliceState.events,
-    eventById: (sliceState, eventId: number | string) => {
-      return sliceState.events.find((it) => it.id === Number(eventId)) ?? null;
+    eventById,
+    eventStatusById: (sliceState, eventId: number) => {
+      const event = getNotNil(
+        eventById(sliceState, eventId),
+        "eventStatusById",
+      );
+
+      return event.status;
+    },
+    hasPendingParticipateRequest: (
+      sliceState,
+      eventId: number,
+      userId: number,
+    ) => {
+      const event = eventById(sliceState, eventId);
+
+      const participateRequest = event?.participateRequests.find(
+        (it) => it.user.id === userId,
+      );
+
+      return participateRequest && !participateRequest.approved;
     },
   },
 });
