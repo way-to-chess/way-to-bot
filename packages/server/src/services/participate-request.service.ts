@@ -18,6 +18,16 @@ export class ParticipateRequestService {
   private userRepository = dbInstance.getRepository(UserEntity);
   private fileRepository = dbInstance.getRepository(FileEntity);
 
+  getAllParticipateRequests = async () => {
+    return this.participateRequestRepository.find({
+      relations: {
+        receipt: true,
+        user: { photo: true },
+        event: true,
+      },
+    });
+  };
+
   getParticipateRequestById = async (id: number) => {
     const participateRequest = await this.participateRequestRepository.findOne({
       where: { id },

@@ -11,6 +11,11 @@ import {
 export class ParticipateRequestController {
   private participateRequestService = new ParticipateRequestService();
 
+  @Get("/all")
+  async getAllParticipateRequests() {
+    return this.participateRequestService.getAllParticipateRequests();
+  }
+
   @Get("/getById/{id}")
   async getParticipateRequestById(@Path() id: number) {
     return this.participateRequestService.getParticipateRequestById(id);

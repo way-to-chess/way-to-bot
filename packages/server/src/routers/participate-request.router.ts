@@ -9,6 +9,11 @@ import {
 export const ParticipateRequestRouter = Router();
 const participateRequestController = new ParticipateRequestController();
 
+ParticipateRequestRouter.get("/all", async (req, res) => {
+  const data = await participateRequestController.getAllParticipateRequests();
+  res.status(200).json({ data });
+});
+
 ParticipateRequestRouter.get(
   "/getById/:id",
   async (req: Request<{ id: number }>, res) => {
