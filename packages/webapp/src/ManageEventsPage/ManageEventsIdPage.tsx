@@ -26,7 +26,6 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { UsersListItem } from "../ManageUsersPage/UsersListItem";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { EVENTS_GET_BY_ID_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
-import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
 import { ManageEventUsersDrawer } from "./ManageEventUsersDrawer";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
@@ -72,8 +71,8 @@ const ManageEventsIdPage = () => {
 
   const event = useParamSelector(eventsSlice.selectors.eventById, eventId);
 
-  const status = useParamSelector(
-    requestManagerSlice.selectors.statusBySymbol,
+  const loading = useParamSelector(
+    requestManagerSlice.selectors.loadingBySymbol,
     EVENTS_GET_BY_ID_REQUEST_SYMBOL,
   );
 
@@ -110,7 +109,7 @@ const ManageEventsIdPage = () => {
           padding: "16px 16px calc(var(--ant-control-height) + 32px)",
           position: "relative",
         }}
-        loading={status === ERequestStatus.loading}
+        loading={loading}
       >
         <List.Item>
           <NavLink to={`/${WEBAPP_ROUTES.manageEventsRoute}`}>
@@ -222,7 +221,7 @@ const ManageEventsIdPage = () => {
             <Empty />
           )}
         </List.Item>
-        <ParticipateEventButton eventId={event.id} />
+        {loading ? null : <ParticipateEventButton eventId={event.id} />}
       </List>
     </>
   );

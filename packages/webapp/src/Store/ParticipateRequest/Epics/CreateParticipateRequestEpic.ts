@@ -7,7 +7,7 @@ import { PARTICIPATE_REQUEST_CREATE_REQUEST_SYMBOL } from "../ParticipateRequest
 import { message } from "antd";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { drawerSlice, EDrawerType } from "../../Drawer/DrawerSlice";
-import { getUserByIdEpic } from "../../User/Epics/GetUserByIdEpic";
+import { loadEventByIdEpic } from "../../Events/LoadEventByIdEpic";
 
 const createParticipateRequestEpic: TAppEpic = (
   action$,
@@ -29,7 +29,11 @@ const createParticipateRequestEpic: TAppEpic = (
                 drawerType: EDrawerType.CONFIRM_PARTICIPATE_REQUEST,
               }),
             ),
-            getUserByIdEpic(payload.userId)(action$, state$, dependencies),
+            loadEventByIdEpic(payload.eventId.toString())(
+              action$,
+              state$,
+              dependencies,
+            ),
           );
         },
         onError: () => {
