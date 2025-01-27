@@ -32,9 +32,9 @@ const errorHandler = (
 app.use("/api", MainRouter);
 
 if (process.env.NODE_ENV === "dev") {
-  import("../swagger/swagger.json").then((swaggerDocument) =>
-    app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument)),
-  );
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const swaggerDocument = require("../swagger/swagger.json");
+  app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 
 app.use(errorHandler);
