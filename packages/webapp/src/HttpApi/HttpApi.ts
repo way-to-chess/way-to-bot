@@ -29,6 +29,7 @@ import {
 } from "@way-to-bot/shared/interfaces/league.interface";
 import { createQueryString } from "../Utils/CreateQueryString";
 import {
+  IParticipateRequest,
   IParticipateRequestCreatePayload,
   IParticipateRequestDeletePayload,
   IParticipateRequestUpdatePayload,
@@ -128,9 +129,12 @@ const httpApi = {
   updateParticipateRequest: requestWithPayload<
     IParticipateRequestUpdatePayload,
     boolean
-  >("POST", "participateRequest/update"),
+  >("PUT", "participateRequest/update"),
   getParticipateRequestById: (requestId: number) =>
     simpleGetRequest(`participateRequest/getById/${requestId}`)(),
+  getAllParticipateRequests: simpleGetRequest<
+    IResponseWithData<IParticipateRequest[]>
+  >("participateRequest/all"),
 };
 
 export { httpApi };

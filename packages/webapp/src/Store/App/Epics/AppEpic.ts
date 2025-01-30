@@ -7,6 +7,7 @@ import { locationsRootEpic } from "../../Locations/Epics/LocationsRootEpic";
 import { leaguesRootEpic } from "../../Leagues/LeaguesRootEpic";
 import { createUserEpic } from "../../User/Epics/CreateUserEpic";
 import { getUserByTgInfoEpic } from "../../User/Epics/GetUserByTgInfoEpic";
+import { participateRequestsRouterEpic } from "../../ParticipateRequest/Epics/ParticipateRequestRootEpic";
 
 const appEpic: TAppEpic = (action$, store$, dependencies) =>
   combineEpics(
@@ -18,6 +19,7 @@ const appEpic: TAppEpic = (action$, store$, dependencies) =>
     createUserEpic({
       onSuccess: () => getUserByTgInfoEpic(action$, store$, dependencies),
     }),
+    participateRequestsRouterEpic,
   )(action$, store$, dependencies).pipe(
     catchError((error, source) => {
       console.error(error);

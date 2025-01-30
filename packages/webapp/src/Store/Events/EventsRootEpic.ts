@@ -18,7 +18,7 @@ import { message } from "antd";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { loadLeaguesEpic } from "../Leagues/LoadLeaguesEpic";
-import { loadEventByIdEpic } from "../Events/LoadEventByIdEpic";
+import { loadEventByIdEpic } from "./LoadEventByIdEpic";
 import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { drawerSlice, EDrawerType } from "../Drawer/DrawerSlice";
 import { loadUsersEpic } from "../User/Epics/LoadUsersEpic";

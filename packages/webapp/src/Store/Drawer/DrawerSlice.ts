@@ -8,7 +8,8 @@ enum EDrawerType {
   MANAGE_LEAGUES_DRAWER = "manageLeaguesDrawer",
   SORT_USERS_DRAWER = "sortUsersDrawer",
   SEND_MESSAGE_DRAWER = "sendMessageDrawer",
-  CONFIRM_PARTICIPATE_REQUEST = "confirmParticipateRequest",
+  CONFIRM_PARTICIPATE_REQUEST_DRAWER = "confirmParticipateRequestDrawer",
+  APPROVE_PARTICIPATE_REQUEST_DRAWER = "approveParticipateRequestDrawer",
 }
 
 type TDrawersMap = Record<EDrawerType, any>;

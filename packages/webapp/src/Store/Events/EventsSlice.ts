@@ -22,6 +22,16 @@ const eventById = (sliceState: IEventsSlice, eventId: number | string) => {
   return sliceState.events.find((it) => it.id === Number(eventId)) ?? null;
 };
 
+const notNilEventById = (
+  sliceState: IEventsSlice,
+  eventId: number,
+  context: string,
+) =>
+  getNotNil(
+    eventById(sliceState, eventId),
+    `event with id: ${eventId} not found | context: ${context}`,
+  );
+
 const eventsSlice = createSlice({
   name: "events",
   initialState,
@@ -46,13 +56,20 @@ const eventsSlice = createSlice({
   selectors: {
     events: (sliceState) => sliceState.events,
     eventById,
+    notNilEventById,
     eventStatusById: (sliceState, eventId: number) => {
-      const event = getNotNil(
-        eventById(sliceState, eventId),
-        "eventStatusById",
-      );
+      const event = notNilEventById(sliceState, eventId, "eventStatusById");
 
       return event.status;
+    },
+    notNilEventParticipateRequests: (sliceState, eventId: number) => {
+      const event = notNilEventById(
+        sliceState,
+        eventId,
+        "notNilEventParticipateRequests",
+      );
+
+      return event.participateRequests;
     },
     hasPendingParticipateRequest: (
       sliceState,

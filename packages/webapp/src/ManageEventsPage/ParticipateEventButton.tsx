@@ -27,7 +27,7 @@ const PARTICIPATE_BUTTON_STYLE = {
 
 const ExistsUserParticipateButton = memo<IWithEventId>(({ eventId }) => {
   const openConfirm = useActionCreator(drawerSlice.actions.openDrawer, {
-    drawerType: EDrawerType.CONFIRM_PARTICIPATE_REQUEST,
+    drawerType: EDrawerType.CONFIRM_PARTICIPATE_REQUEST_DRAWER,
     data: { eventId },
   });
 
@@ -81,7 +81,9 @@ const ParticipateButton = memo<IWithEventId>(({ eventId }) => {
 });
 
 const ParticipateEventButton = memo<IWithEventId>(({ eventId }) => {
-  const { open, onClose } = useDrawer(EDrawerType.CONFIRM_PARTICIPATE_REQUEST);
+  const { open, onClose } = useDrawer(
+    EDrawerType.CONFIRM_PARTICIPATE_REQUEST_DRAWER,
+  );
 
   const [fileId, setFileId] = useState(0);
 

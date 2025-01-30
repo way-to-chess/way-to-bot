@@ -26,7 +26,7 @@ const createParticipateRequestEpic: TAppEpic = (
           return merge(
             of(
               drawerSlice.actions.closeDrawer({
-                drawerType: EDrawerType.CONFIRM_PARTICIPATE_REQUEST,
+                drawerType: EDrawerType.CONFIRM_PARTICIPATE_REQUEST_DRAWER,
               }),
             ),
             loadEventByIdEpic(payload.eventId.toString())(

@@ -18,6 +18,7 @@ import { useEffect, useState } from "react";
 import ru from "antd/locale/ru_RU";
 import * as Sentry from "@sentry/react";
 import { RegistrationPage } from "./Registration/RegistrationPage";
+import { ManageParticipateRequestsPage } from "./ManageParticipateRequestsPage/ManageParticipateRequestsPage";
 
 if (!isDev) {
   Sentry.init({
@@ -143,6 +144,10 @@ const App = () => {
               <Route
                 path={WEBAPP_ROUTES.registrationRoute}
                 element={<RegistrationPage />}
+              />
+              <Route
+                path={WEBAPP_ROUTES.manageParticipateRequestsRoute}
+                element={<ManageParticipateRequestsPage />}
               />
             </Route>
           </Routes>
