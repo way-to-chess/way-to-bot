@@ -14,6 +14,7 @@ import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { ApproveParticipateRequestDrawer } from "./ApproveParticipateRequestDrawer";
 import type { IWithRequestId } from "../Types";
 import { getUserFullName } from "../Utils/GetUserFullName";
+import dayjs from "dayjs";
 
 const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
   {
@@ -54,7 +55,7 @@ const OpenApproveDrawer = memo<IWithRequestId>(({ requestId }) => {
 });
 
 const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
-  expandedRowRender: ({ receipt, id }) => {
+  expandedRowRender: ({ receipt, id, approved, updatedAt }) => {
     return (
       <Flex align={"center"} justify={"space-between"}>
         {receipt ? (
@@ -68,7 +69,11 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
         ) : (
           <Typography.Text type={"danger"}>{TEXT.noFile}</Typography.Text>
         )}
-        <OpenApproveDrawer requestId={id} />
+        {approved ? (
+          dayjs(updatedAt).format("DD/YYYY, HH:MM")
+        ) : (
+          <OpenApproveDrawer requestId={id} />
+        )}
       </Flex>
     );
   },
