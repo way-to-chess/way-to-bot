@@ -1,14 +1,16 @@
 import { dbInstance } from "../database/init";
 import { FileEntity } from "../database/entities/file.entity";
-import { DeepPartial } from "typeorm";
+import { DeepPartial, EntityManager } from "typeorm";
 import { ParticipateRequestEntity } from "../database/entities/participate-request.entity";
 import { EventEntity } from "../database/entities/event.entity";
 import { UserEntity } from "../database/entities/user.entity";
 import {
   IParticipantRequestDeletePayload,
+  IParticipateRequestApprovePayload,
   IParticipateRequestCreatePayload,
   IParticipateRequestUpdatePayload,
 } from "../interfaces/participate-request.interface";
+import { EventUserLeagueEntity } from "../database/entities/events-users-leagues.entity";
 
 export class ParticipateRequestService {
   private participateRequestRepository = dbInstance.getRepository(
@@ -17,6 +19,11 @@ export class ParticipateRequestService {
   private eventRepository = dbInstance.getRepository(EventEntity);
   private userRepository = dbInstance.getRepository(UserEntity);
   private fileRepository = dbInstance.getRepository(FileEntity);
+  private transactionManager: EntityManager | null;
+
+  constructor(transactionManager: EntityManager | null = null) {
+    this.transactionManager = transactionManager;
+  }
 
   getAllParticipateRequests = async () => {
     return this.participateRequestRepository.find({
@@ -132,5 +139,37 @@ export class ParticipateRequestService {
       await this.participateRequestRepository.delete(id);
 
     return participateRequestDeleted.affected === 1;
+  };
+
+  approveParticipateRequest = async (
+    payload: IParticipateRequestApprovePayload,
+  ) => {
+    if (!this.transactionManager) {
+      throw new Error("API error. Transaction must be passed to this service");
+    }
+    const { leagueId, id } = payload;
+
+    const participateRequest =
+      await this.participateRequestRepository.findOneBy({ id });
+
+    if (!participateRequest) {
+      throw new Error("Participate request is not found");
+    }
+    if (participateRequest.approved) {
+      throw new Error("Participate request is already approved");
+    }
+
+    participateRequest.approved = true;
+    await this.transactionManager.save(participateRequest);
+
+    const eulRepository = dbInstance.getRepository(EventUserLeagueEntity);
+    const newEul = eulRepository.create({
+      userId: participateRequest.userId,
+      eventId: participateRequest.eventId,
+      leagueId,
+    });
+
+    await this.transactionManager.save(newEul);
+    return newEul;
   };
 }

@@ -23,6 +23,11 @@ export interface IParticipateRequestUpdatePayload
   userId: number;
 }
 
+export interface IParticipateRequestApprovePayload {
+  id: number;
+  leagueId: number;
+}
+
 export interface IParticipantRequestDeletePayload {
   id: number;
 }
