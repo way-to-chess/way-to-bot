@@ -1,12 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { participateRequestsApi } from "./Domains/ParticipateRequests/Slice";
+import { API } from "./Api";
+import { participateRequestsSlice } from "./Domains/ParticipateRequests/Slice";
 
 const STORE = configureStore({
   reducer: {
-    [participateRequestsApi.reducerPath]: participateRequestsApi.reducer,
+    [API.reducerPath]: API.reducer,
+    [participateRequestsSlice.name]: participateRequestsSlice.reducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(participateRequestsApi.middleware),
+    getDefaultMiddleware().concat(API.middleware),
 });
 
 export { STORE };

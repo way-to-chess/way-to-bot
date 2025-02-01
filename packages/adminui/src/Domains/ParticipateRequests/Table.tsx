@@ -7,7 +7,7 @@ import type { IWithRequestId } from "@way-to-bot/shared/interfaces/with.interfac
 import type { ExpandableConfig } from "rc-table/lib/interface";
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import dayjs from "dayjs";
-import { participateRequestsApi } from "./Slice";
+import { API } from "../../Api";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
@@ -40,8 +40,7 @@ const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
 ];
 
 const OpenApproveDrawer = memo<IWithRequestId>(({ requestId }) => {
-  const [approve, { isLoading, error }] =
-    participateRequestsApi.useApproveParticipateRequestMutation();
+  const [approve, { isLoading }] = API.useApproveParticipateRequestMutation();
 
   const onClick = () => {
     approve({ id: requestId });
@@ -83,8 +82,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
 const getRowKey = (request: IParticipateRequest) => request.id;
 
 const ParticipateRequestsTable = () => {
-  const { data, isFetching } =
-    participateRequestsApi.useGetAllParticipateRequestsQuery();
+  const { data, isFetching } = API.useGetAllParticipateRequestsQuery();
 
   return (
     <Table
