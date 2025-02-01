@@ -11,6 +11,9 @@
       ],
       "@way-to-bot/server/*": [
         "../packages/server/src/*"
+      ],
+      "@way-to-bot/adminui/*": [
+        "../packages/adminui/src/*"
       ]
     }
   },
@@ -23,6 +26,9 @@
     },
     {
       "path": "../packages/webapp/tsconfig.json"
+    },
+    {
+      "path": "../packages/adminui/tsconfig.json"
     }
   ],
   "include": [
