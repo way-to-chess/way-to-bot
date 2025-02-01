@@ -9,7 +9,7 @@ import {
   switchMap,
 } from "rxjs";
 import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
-import { IWithError } from "../../Models/IError";
+import { IWithError } from "@way-to-bot/shared/interfaces/error.interface";
 import { PayloadActionCreator } from "@reduxjs/toolkit";
 
 interface IHttpRequestEpicFactoryProps<T> {

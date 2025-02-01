@@ -1,21 +1,5 @@
-import { IWithError } from "../Models/IError";
-
-const BASE_API_URL = import.meta.env.VITE_API_URL;
-
-try {
-  new URL(BASE_API_URL);
-} catch {
-  const errorMessage =
-    "VITE_API_URL not specified or not valid -> check .env file";
-
-  const span = document.createElement("span");
-  span.innerText = errorMessage;
-  span.style.color = "red";
-
-  document.body.appendChild(span);
-
-  throw errorMessage;
-}
+import { IWithError } from "../../interfaces/error.interface";
+import { BASE_API_URL } from "../../constants/envs";
 
 const simpleGetRequest = <Response>(
   endpoint: string,
@@ -23,11 +7,11 @@ const simpleGetRequest = <Response>(
   return () =>
     fetch(`${BASE_API_URL}/${endpoint}`)
       .then((response) => {
-        if (response.ok) {
+        try {
           return response.json();
+        } catch (error) {
+          return { error };
         }
-
-        return { error: response.statusText };
       })
       .catch((reason) => ({ error: reason }));
 };
@@ -45,14 +29,15 @@ const requestWithPayload = <P extends Record<string, any>, R>(
       method,
     })
       .then((response) => {
-        if (response.ok) {
+        try {
           return response.json();
+        } catch (error) {
+          return { error };
         }
-        return { error: response.statusText };
       })
       .catch((reason) => {
         return { error: reason };
       });
 };
 
-export { simpleGetRequest, requestWithPayload, BASE_API_URL };
+export { simpleGetRequest, requestWithPayload };

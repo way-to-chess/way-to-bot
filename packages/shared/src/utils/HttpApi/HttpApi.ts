@@ -5,8 +5,8 @@ import {
   IUserDeletePayload,
   IUserGetByTgInfoQueryPayload,
   IUserUpdatePayload,
-} from "@way-to-bot/shared/interfaces/user.interface";
-import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+} from "../../interfaces/user.interface";
+import { IResponseWithData } from "../../interfaces/response.interface";
 import {
   IAddUsersToEventPayload,
   IEvent,
@@ -14,26 +14,26 @@ import {
   IEventDeletePayload,
   IEventUpdatePayload,
   IRemoveUsersFromEventPayload,
-} from "@way-to-bot/shared/interfaces/event.interface";
+} from "../../interfaces/event.interface";
 import {
   ILocation,
   ILocationCreatePayload,
   ILocationDeletePayload,
   ILocationUpdatePayload,
-} from "@way-to-bot/shared/interfaces/location.interface";
+} from "../../interfaces/location.interface";
 import {
   ILeague,
   ILeagueCreatePayload,
   ILeagueDeletePayload,
   ILeagueUpdatePayload,
-} from "@way-to-bot/shared/interfaces/league.interface";
-import { createQueryString } from "../Utils/CreateQueryString";
+} from "../../interfaces/league.interface";
+import { createQueryString } from "../CreateQueryString";
 import {
   IParticipateRequest,
   IParticipateRequestCreatePayload,
   IParticipateRequestDeletePayload,
   IParticipateRequestUpdatePayload,
-} from "@way-to-bot/shared/interfaces/participate-request.interface";
+} from "../../interfaces/participate-request.interface";
 
 const httpApi = {
   //USERS
@@ -131,7 +131,9 @@ const httpApi = {
     boolean
   >("PUT", "participateRequest/update"),
   getParticipateRequestById: (requestId: number) =>
-    simpleGetRequest(`participateRequest/getById/${requestId}`)(),
+    simpleGetRequest<IResponseWithData<IParticipateRequest>>(
+      `participateRequest/getById/${requestId}`,
+    )(),
   getAllParticipateRequests: simpleGetRequest<
     IResponseWithData<IParticipateRequest[]>
   >("participateRequest/all"),

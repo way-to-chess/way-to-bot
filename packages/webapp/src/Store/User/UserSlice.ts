@@ -7,7 +7,7 @@ import {
 } from "@way-to-bot/shared/interfaces/user.interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
 import { EUserRole } from "@way-to-bot/shared/enums";
-import { getUserFullName } from "../../Utils/GetUserFullName";
+import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 import { EUserSortType } from "../../Models/EUserSortType";
 import { ESortDirection } from "../../Models/ESortDirection";
 

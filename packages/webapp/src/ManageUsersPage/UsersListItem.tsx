@@ -5,8 +5,8 @@ import { generatePath, Link } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { Avatar, Flex, Typography } from "antd";
 import { UserOutlined } from "@ant-design/icons";
-import { getPreviewSrc } from "../Utils/GetPreviewSrc";
-import { getUserFullName } from "../Utils/GetUserFullName";
+import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
+import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 
 const UsersListItem = memo<IUser & { index: number }>(({ index, ...user }) => {
   return (

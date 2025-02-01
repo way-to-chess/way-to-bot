@@ -9,7 +9,7 @@ import {
   EnvironmentOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 
 interface IEventListItemProps extends IEvent {

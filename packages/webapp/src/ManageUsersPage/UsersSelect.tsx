@@ -1,5 +1,5 @@
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
-import { getUserFullName } from "../Utils/GetUserFullName";
+import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 import { Select, SelectProps } from "antd";
 import { useSelector } from "react-redux";
 import { userSlice } from "../Store/User/UserSlice";

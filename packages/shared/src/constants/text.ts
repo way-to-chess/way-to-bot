@@ -72,6 +72,7 @@ const TEXT = {
   url: "Ссылка",
   address: "Адрес",
   map: "Показать на карте",
+  createdAt: "Создан",
 };
 
 export { TEXT };

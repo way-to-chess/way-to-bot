@@ -1,20 +1,15 @@
 import { memo } from "react";
-import { IParticipateRequest } from "@way-to-bot/shared/interfaces/participate-request.interface";
 import { Badge, Button, Flex, Table, TableProps, Typography } from "antd";
-import { useParamSelector } from "../Hooks/UseParamSelector";
-import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
-import { GET_ALL_PARTICIPATE_REQUESTS_REQUEST_SYMBOL } from "../Store/ParticipateRequest/ParticipateRequestVariables";
-import { useSelector } from "react-redux";
-import { participateRequestSlice } from "../Store/ParticipateRequest/ParticipateRequestSlice";
+import { IParticipateRequest } from "@way-to-bot/shared/interfaces/participate-request.interface";
 import { TEXT } from "@way-to-bot/shared/constants/text";
+import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
+import type { IWithRequestId } from "@way-to-bot/shared/interfaces/with.interface";
 import type { ExpandableConfig } from "rc-table/lib/interface";
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
-import { useActionCreator } from "../Hooks/UseActionCreator";
-import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
-import { ApproveParticipateRequestDrawer } from "./ApproveParticipateRequestDrawer";
-import type { IWithRequestId } from "@way-to-bot/shared/interfaces/Types";
-import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 import dayjs from "dayjs";
+import { participateRequestsApi } from "./Slice";
+
+const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
 const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
   {
@@ -37,24 +32,30 @@ const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
         text={approved ? TEXT.approvedStatus : TEXT.waitingStatus}
       />
     ),
-    minWidth: 150,
+  },
+  {
+    title: TEXT.createdAt,
+    render: ({ createdAt }) => dayjs(createdAt).format(DATE_TIME_FORMAT),
   },
 ];
 
 const OpenApproveDrawer = memo<IWithRequestId>(({ requestId }) => {
-  const open = useActionCreator(drawerSlice.actions.openDrawer, {
-    drawerType: EDrawerType.APPROVE_PARTICIPATE_REQUEST_DRAWER,
-    data: { requestId },
-  });
+  const [approve, { isLoading, error }] =
+    participateRequestsApi.useApproveParticipateRequestMutation();
+
+  const onClick = () => {
+    approve({ id: requestId });
+  };
 
   return (
-    <Button type={"primary"} onClick={open}>
+    <Button type={"primary"} loading={isLoading} onClick={onClick}>
       {TEXT.approve}
     </Button>
   );
 });
 
 const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
+  expandRowByClick: true,
   expandedRowRender: ({ receipt, id, approved, updatedAt }) => {
     return (
       <Flex align={"center"} justify={"space-between"}>
@@ -70,7 +71,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
           <Typography.Text type={"danger"}>{TEXT.noFile}</Typography.Text>
         )}
         {approved ? (
-          dayjs(updatedAt).format("DD/YYYY, HH:MM")
+          dayjs(updatedAt).format(DATE_TIME_FORMAT)
         ) : (
           <OpenApproveDrawer requestId={id} />
         )}
@@ -81,29 +82,21 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
 
 const getRowKey = (request: IParticipateRequest) => request.id;
 
-const ManageParticipateRequestsPage = memo(() => {
-  const loading = useParamSelector(
-    requestManagerSlice.selectors.loadingBySymbol,
-    GET_ALL_PARTICIPATE_REQUESTS_REQUEST_SYMBOL,
-  );
-
-  const allRequests = useSelector(
-    participateRequestSlice.selectors.allRequests,
-  );
+const ParticipateRequestsTable = () => {
+  const { data, isFetching } =
+    participateRequestsApi.useGetAllParticipateRequestsQuery();
 
   return (
-    <>
-      <ApproveParticipateRequestDrawer />
-      <Table
-        rowKey={getRowKey}
-        dataSource={allRequests}
-        loading={loading}
-        columns={COLUMNS}
-        pagination={false}
-        expandable={EXPANDABLE_CONFIG}
-      />
-    </>
+    <Table
+      style={{ width: "100%" }}
+      rowKey={getRowKey}
+      dataSource={data}
+      loading={isFetching}
+      columns={COLUMNS}
+      pagination={false}
+      expandable={EXPANDABLE_CONFIG}
+    />
   );
-});
+};
 
-export { ManageParticipateRequestsPage };
+export { ParticipateRequestsTable };

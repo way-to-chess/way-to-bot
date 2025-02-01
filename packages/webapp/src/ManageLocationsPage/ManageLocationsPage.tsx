@@ -7,7 +7,7 @@ import { useParamSelector } from "../Hooks/UseParamSelector";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
 import { LOCATIONS_GET_ALL_REQUEST_SYMBOL } from "../Store/Locations/LocationsVariables";
-import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const ManageLocationsPage = memo(() => {

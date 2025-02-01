@@ -26,7 +26,7 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { UsersListItem } from "../ManageUsersPage/UsersListItem";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { EVENTS_GET_BY_ID_REQUEST_SYMBOL } from "../Store/Events/EventsVariables";
-import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { ManageEventUsersDrawer } from "./ManageEventUsersDrawer";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 import { ILeague } from "@way-to-bot/shared/interfaces/league.interface";

@@ -2,7 +2,7 @@ import { Action, configureStore } from "@reduxjs/toolkit";
 import { userSlice } from "../User/UserSlice";
 import { appEpic } from "./Epics/AppEpic";
 import { createEpicMiddleware } from "redux-observable";
-import { httpApi } from "../../HttpApi/HttpApi";
+import { httpApi } from "@way-to-bot/shared/utils/HttpApi/HttpApi";
 import {
   createRouterMiddleware,
   createRouterReducerMapObject,

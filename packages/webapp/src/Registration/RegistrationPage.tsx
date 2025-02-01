@@ -15,7 +15,7 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { useDispatch } from "react-redux";
 import { userSlice } from "../Store/User/UserSlice";
 import { EUserRole } from "@way-to-bot/shared/enums";
-import { getPreviewSrc } from "../Utils/GetPreviewSrc";
+import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { UserOutlined } from "@ant-design/icons";
 import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
 

@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { IWithError } from "../../Models/IError";
+import { IWithError } from "@way-to-bot/shared/interfaces/error.interface";
 import { ERequestStatus } from "./RequestManagerModels";
 
 interface IRequestManagerSlice {

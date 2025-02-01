@@ -4,7 +4,8 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { useCallback, useMemo } from "react";
 import { UploadChangeParam, UploadFile } from "antd/es/upload/interface";
 import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
-import { BASE_API_URL } from "../HttpApi/RequestUtils";
+
+import { BASE_API_URL } from "@way-to-bot/shared/constants/envs";
 
 interface IFileUploadResponse {
   id: number;

@@ -1,6 +1,6 @@
 import { type Action } from "@reduxjs/toolkit";
 import { type Epic } from "redux-observable";
-import { httpApi } from "../../../HttpApi/HttpApi";
+import { httpApi } from "@way-to-bot/shared/utils/HttpApi/HttpApi";
 import { type AppState } from "../CreateStore";
 
 interface IAppEpicDependencies {
