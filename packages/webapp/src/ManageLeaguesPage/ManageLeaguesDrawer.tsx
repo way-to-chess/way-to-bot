@@ -32,7 +32,7 @@ const ManageLeaguesDrawer = () => {
       getContainer={false}
     >
       <Form layout={"vertical"} onFinish={onFinish}>
-        <Form.Item name={"name"} label={TEXT.leagues.name}>
+        <Form.Item name={"name"} label={TEXT.name}>
           <Input />
         </Form.Item>
 
@@ -42,7 +42,7 @@ const ManageLeaguesDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {TEXT.create}
           </Button>
         </Form.Item>
       </Form>

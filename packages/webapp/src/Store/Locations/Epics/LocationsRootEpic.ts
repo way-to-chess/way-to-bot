@@ -25,12 +25,12 @@ const deleteLocationEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.deleteLocation(payload),
         requestSymbol: LOCATIONS_DELETE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return locationsLoadEpic(action$, state$, dependencies);
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -46,12 +46,12 @@ const updateLocationEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.updateLocation(payload),
         requestSymbol: LOCATIONS_UPDATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return locationsLoadEpic(action$, state$, dependencies);
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -67,7 +67,7 @@ const createLocationEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.createLocation(payload),
         requestSymbol: LOCATIONS_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             locationsLoadEpic(action$, state$, dependencies),
@@ -79,7 +79,7 @@ const createLocationEpic: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },

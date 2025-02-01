@@ -93,35 +93,35 @@ const MangeUsersDrawer = memo(() => {
       >
         <Form.Item
           name={"username"}
-          label={TEXT.users.username}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.username}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item
           name={"firstName"}
-          label={TEXT.users.firstName}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.firstName}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name={"lastName"}
-          label={TEXT.users.lastName}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.lastName}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
 
         <Form.Item name={"fileId"}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
+            <Button icon={<UploadOutlined />}>{TEXT.upload}</Button>
           </Upload>
         </Form.Item>
         <Form.Item
           name={"roles"}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Select options={USER_ROLES_SELECT_OPTIONS} mode={"multiple"} />
         </Form.Item>
@@ -132,7 +132,7 @@ const MangeUsersDrawer = memo(() => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {data ? TEXT.common.edit : TEXT.common.create}
+            {data ? TEXT.edit : TEXT.create}
           </Button>
         </Form.Item>
       </Form>

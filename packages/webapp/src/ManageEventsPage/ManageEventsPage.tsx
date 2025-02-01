@@ -27,7 +27,7 @@ const EditButton = (event: IEvent) => {
     data: event,
   });
 
-  return <Button onClick={open}>{TEXT.common.edit}</Button>;
+  return <Button onClick={open}>{TEXT.edit}</Button>;
 };
 
 const DeleteButton: FC<IEventDeletePayload> = ({ eventId }) => {
@@ -37,18 +37,18 @@ const DeleteButton: FC<IEventDeletePayload> = ({ eventId }) => {
 
   const showDeleteConfirm = useCallback(() => {
     return Modal.confirm({
-      title: TEXT.events.deleteWarn,
+      title: TEXT.deleteWarn,
       icon: <ExclamationCircleFilled />,
-      okText: TEXT.common.yes,
+      okText: TEXT.yes,
       okType: "danger",
-      cancelText: TEXT.common.no,
+      cancelText: TEXT.no,
       onOk: deleteEvent,
     });
   }, [deleteEvent]);
 
   return (
     <Button danger onClick={showDeleteConfirm}>
-      {TEXT.common.delete}
+      {TEXT.delete}
     </Button>
   );
 };

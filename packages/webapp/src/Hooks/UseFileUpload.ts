@@ -29,7 +29,7 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
           onRemove?.();
           break;
         case "done":
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           onDone?.(
             getNotNil(
@@ -39,7 +39,7 @@ const useFileUpload = ({ onRemove, onDone, onError }: IUseFileUploadProps) => {
           );
           break;
         case "error":
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
           onError?.();
       }
     },

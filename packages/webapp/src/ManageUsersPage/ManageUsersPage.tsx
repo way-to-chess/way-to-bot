@@ -46,7 +46,7 @@ const EditButton: FC<IUser> = (user) => {
     data: user,
   });
 
-  return <Button onClick={open}>{TEXT.common.edit}</Button>;
+  return <Button onClick={open}>{TEXT.edit}</Button>;
 };
 
 const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
@@ -54,26 +54,26 @@ const DeleteButton: FC<IUserDeletePayload> = ({ userId }) => {
 
   const showDeleteConfirm = useCallback(() => {
     return Modal.confirm({
-      title: TEXT.users.deleteWarn,
+      title: TEXT.usersDeleteWarn,
       icon: <ExclamationCircleFilled />,
-      okText: TEXT.common.yes,
+      okText: TEXT.yes,
       okType: "danger",
-      cancelText: TEXT.common.no,
+      cancelText: TEXT.no,
       onOk: deleteUser,
     });
   }, [deleteUser]);
 
   return (
     <Button onClick={showDeleteConfirm} danger>
-      {TEXT.common.delete}
+      {TEXT.delete}
     </Button>
   );
 };
 
 const SORT_TYPE_TO_TEXT_MAP: Record<EUserSortType, string> = {
-  [EUserSortType.username]: TEXT.users.sortByUsername,
-  [EUserSortType.rating]: TEXT.users.sortByRating,
-  [EUserSortType.winRate]: TEXT.users.sortByWinRate,
+  [EUserSortType.username]: TEXT.sortByUsername,
+  [EUserSortType.rating]: TEXT.sortByRating,
+  [EUserSortType.winRate]: TEXT.sortByWinRate,
 };
 
 const SORT_TYPE_OPTIONS = Object.values(EUserSortType).map((value) => ({
@@ -82,8 +82,8 @@ const SORT_TYPE_OPTIONS = Object.values(EUserSortType).map((value) => ({
 }));
 
 const SORT_DIR_TO_TEXT_MAP: Record<ESortDirection, string> = {
-  [ESortDirection.asc]: TEXT.common.asc,
-  [ESortDirection.desc]: TEXT.common.desc,
+  [ESortDirection.asc]: TEXT.asc,
+  [ESortDirection.desc]: TEXT.desc,
 };
 
 const SORT_DIR_OPTIONS = Object.values(ESortDirection).map((value) => ({
@@ -113,7 +113,7 @@ const SortUsersButton = () => {
       <Drawer
         placement={"bottom"}
         getContainer={false}
-        title={TEXT.users.sortBy}
+        title={TEXT.sortBy}
         height={300}
         {...drawer}
       >

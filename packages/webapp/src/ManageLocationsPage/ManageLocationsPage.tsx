@@ -34,7 +34,7 @@ const ManageLocationsPage = memo(() => {
               actions={[
                 url ? (
                   <a key={1} href={url} target={"_blank"} rel="noreferrer">
-                    {TEXT.locations.map}
+                    {TEXT.map}
                   </a>
                 ) : undefined,
               ]}

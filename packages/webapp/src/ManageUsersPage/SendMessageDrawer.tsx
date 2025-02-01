@@ -10,15 +10,15 @@ const SendMessageForm = () => {
 
   return (
     <Form layout={"vertical"} form={form}>
-      <Form.Item name={"users"} label={TEXT.users.users}>
+      <Form.Item name={"users"} label={TEXT.users}>
         <UsersSelect />
       </Form.Item>
-      <Form.Item name={"message"} label={TEXT.users.message}>
+      <Form.Item name={"message"} label={TEXT.message}>
         <Input.TextArea />
       </Form.Item>
       <Form.Item>
         <Button type={"primary"} htmlType={"submit"} style={{ float: "right" }}>
-          {TEXT.common.send}
+          {TEXT.send}
         </Button>
       </Form.Item>
     </Form>

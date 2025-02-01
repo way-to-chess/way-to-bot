@@ -17,7 +17,7 @@ const EditButton = () => {
     drawerType: EDrawerType.MANAGE_LEAGUES_DRAWER,
   });
 
-  return <Button onClick={open}>{TEXT.common.edit}</Button>;
+  return <Button onClick={open}>{TEXT.edit}</Button>;
 };
 
 const DeleteButton: FC<ILeagueDeletePayload> = ({ leagueId }) => {
@@ -27,7 +27,7 @@ const DeleteButton: FC<ILeagueDeletePayload> = ({ leagueId }) => {
 
   return (
     <Button onClick={deleteLeague} danger>
-      {TEXT.common.delete}
+      {TEXT.delete}
     </Button>
   );
 };

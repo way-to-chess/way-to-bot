@@ -158,9 +158,7 @@ const ParticipateEventButton = memo<IWithEventId>(({ eventId }) => {
         >
           <Form.Item name={"fileId"} style={{ flex: 1 }}>
             <Upload {...uploadProps} listType={"picture"}>
-              {disabled ? (
-                <Button type={"dashed"}>{TEXT.common.upload}</Button>
-              ) : null}
+              {disabled ? <Button type={"dashed"}>{TEXT.upload}</Button> : null}
             </Upload>
           </Form.Item>
 

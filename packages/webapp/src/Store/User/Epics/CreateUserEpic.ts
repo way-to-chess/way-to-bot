@@ -23,7 +23,7 @@ const createUserEpic =
           requestSymbol: USER_CREATE_REQUEST_SYMBOL,
           onSuccess,
           onError: () => {
-            message.error(TEXT.api.error);
+            message.error(TEXT.error);
 
             return EMPTY;
           },

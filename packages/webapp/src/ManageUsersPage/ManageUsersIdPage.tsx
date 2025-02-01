@@ -33,7 +33,7 @@ const ManageUsersIdPage = () => {
       <List.Item>
         <NavLink to={`/${WEBAPP_ROUTES.manageUsersRoute}`}>
           <Button icon={<ArrowLeftOutlined />} type={"text"}>
-            {TEXT.common.users}
+            {TEXT.users}
           </Button>
         </NavLink>
       </List.Item>
@@ -57,23 +57,21 @@ const ManageUsersIdPage = () => {
       <List.Item>
         <Flex vertical gap={8}>
           <Flex gap={8} style={{ fontSize: 20 }}>
-            <div
-              style={{ color: "green" }}
-            >{`${TEXT.users.wins}: ${user.wins}`}</div>
-            <div>{`${TEXT.users.draws}: ${user.draws}`}</div>
+            <div style={{ color: "green" }}>{`${TEXT.wins}: ${user.wins}`}</div>
+            <div>{`${TEXT.draws}: ${user.draws}`}</div>
             <div
               style={{ color: "red" }}
-            >{`${TEXT.users.loses}: ${user.losses}`}</div>
+            >{`${TEXT.loses}: ${user.losses}`}</div>
           </Flex>
 
-          <div>{`${TEXT.users.total}: ${user.total}`}</div>
-          <div>{`${TEXT.users.winRate}: ${user.winRate}`}</div>
-          <div>{`${TEXT.users.rating}: ${user.rating}`}</div>
+          <div>{`${TEXT.total}: ${user.total}`}</div>
+          <div>{`${TEXT.winRate}: ${user.winRate}`}</div>
+          <div>{`${TEXT.rating}: ${user.rating}`}</div>
         </Flex>
       </List.Item>
 
       <List.Item>
-        <Empty description={TEXT.common.underDevelopment} />
+        <Empty description={TEXT.underDevelopment} />
       </List.Item>
     </List>
   );

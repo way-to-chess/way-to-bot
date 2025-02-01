@@ -49,16 +49,16 @@ const ManageEventUsersDrawer = () => {
       <Form onFinish={onFinish} layout={"vertical"} form={form}>
         <Form.Item
           name={"leagueId"}
-          label={TEXT.events.leagueId}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.leagueId}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <LeaguesSelect />
         </Form.Item>
 
         <Form.Item
           name={"userIds"}
-          label={TEXT.events.userIds}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.userIds}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <UsersSelect
             filterUsers={({ id }) => {
@@ -80,7 +80,7 @@ const ManageEventUsersDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {TEXT.create}
           </Button>
         </Form.Item>
       </Form>

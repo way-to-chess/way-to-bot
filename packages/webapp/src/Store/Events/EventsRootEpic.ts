@@ -42,7 +42,7 @@ const createEventEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.createEvent(action.payload),
         requestSymbol: EVENTS_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             of(
@@ -54,7 +54,7 @@ const createEventEpic: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -113,7 +113,7 @@ const addUsersToEvent: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.addUsersToEvent(payload),
         requestSymbol: ADD_USERS_TO_EVENT_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             of(
@@ -129,7 +129,7 @@ const addUsersToEvent: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -145,7 +145,7 @@ const removeUsersFromEvent: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.removeUsersFromEvent(payload),
         requestSymbol: REMOVE_USERS_FROM_EVENT_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return loadEventByIdEpic(payload.eventId.toString())(
             action$,
@@ -154,7 +154,7 @@ const removeUsersFromEvent: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },

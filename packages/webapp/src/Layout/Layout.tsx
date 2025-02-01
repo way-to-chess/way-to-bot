@@ -66,7 +66,7 @@ const MenuDrawer = () => {
 
   return (
     <Drawer
-      title={userFullName ?? TEXT.mainMenu.title}
+      title={userFullName ?? TEXT.mainMenuTitle}
       styles={{ body: { padding: 0 } }}
       placement={"left"}
       closable={false}
@@ -74,10 +74,7 @@ const MenuDrawer = () => {
       onClose={closeDrawer}
       getContainer={false}
     >
-      <LinkComponent
-        title={TEXT.mainMenu.events}
-        to={WEBAPP_ROUTES.manageEventsRoute}
-      />
+      <LinkComponent title={TEXT.events} to={WEBAPP_ROUTES.manageEventsRoute} />
 
       <ACL roles={[EUserRole.ADMIN]}>
         <LinkComponent
@@ -86,18 +83,15 @@ const MenuDrawer = () => {
         />
       </ACL>
 
-      <LinkComponent
-        title={TEXT.mainMenu.users}
-        to={WEBAPP_ROUTES.manageUsersRoute}
-      />
+      <LinkComponent title={TEXT.users} to={WEBAPP_ROUTES.manageUsersRoute} />
 
       <LinkComponent
-        title={TEXT.mainMenu.locations}
+        title={TEXT.locations}
         to={WEBAPP_ROUTES.manageLocationsRoute}
       />
       <ACL roles={[EUserRole.ADMIN]}>
         <LinkComponent
-          title={TEXT.mainMenu.leagues}
+          title={TEXT.leagues}
           to={WEBAPP_ROUTES.manageLeaguesRoute}
         />
       </ACL>
@@ -138,12 +132,12 @@ const UsersDropdown = () => {
     items: [
       {
         key: 1,
-        label: TEXT.users.addUser,
+        label: TEXT.addUser,
         onClick: openAddUserDrawer,
       },
       {
         key: 2,
-        label: TEXT.users.sendMessage,
+        label: TEXT.sendMessage,
         onClick: openSendMessageDrawer,
       },
     ],

@@ -77,7 +77,7 @@ const RegistrationPage = () => {
                   <Typography.Text>{TEXT.uploadFileEmpty}</Typography.Text>
                   <Upload {...uploadProps} showUploadList={false}>
                     <Button type={"text"} style={{ padding: 0 }}>
-                      {TEXT.common.upload}
+                      {TEXT.upload}
                     </Button>
                   </Upload>
                 </Flex>
@@ -99,7 +99,7 @@ const RegistrationPage = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {TEXT.create}
           </Button>
         </Form.Item>
       </Form>

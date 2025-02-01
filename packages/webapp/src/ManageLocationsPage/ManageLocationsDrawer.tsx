@@ -63,23 +63,23 @@ const ManageLocationsDrawer = () => {
       >
         <Form.Item
           name={"title"}
-          label={TEXT.locations.title}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.name}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
 
-        <Form.Item name={"url"} label={TEXT.locations.url}>
+        <Form.Item name={"url"} label={TEXT.url}>
           <Input />
         </Form.Item>
 
-        <Form.Item name={"address"} label={TEXT.locations.address}>
+        <Form.Item name={"address"} label={TEXT.address}>
           <Input />
         </Form.Item>
 
-        <Form.Item name={"fileId"} label={TEXT.locations.fileId}>
+        <Form.Item name={"fileId"} label={TEXT.formItemNameFileId}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
+            <Button icon={<UploadOutlined />}>{TEXT.upload}</Button>
           </Upload>
         </Form.Item>
 
@@ -90,7 +90,7 @@ const ManageLocationsDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {TEXT.common.create}
+            {TEXT.create}
           </Button>
         </Form.Item>
       </Form>

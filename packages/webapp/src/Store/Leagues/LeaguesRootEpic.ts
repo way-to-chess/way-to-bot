@@ -24,7 +24,7 @@ const createLeague: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.createLeague(payload),
         requestSymbol: LEAGUES_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             of(
@@ -36,7 +36,7 @@ const createLeague: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -52,11 +52,11 @@ const updateLeague: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.updateLeague(payload),
         requestSymbol: LEAGUES_UPDATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
           return EMPTY;
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -75,7 +75,7 @@ const deleteLeague: TAppEpic = (action$, state$, dependencies) =>
           return loadLeaguesEpic(action$, state$, dependencies);
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },

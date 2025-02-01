@@ -115,49 +115,46 @@ const ManageEventsDrawer = () => {
       >
         <Form.Item
           name={"name"}
-          label={TEXT.events.name}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.name}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name={"dateTime"}
-          label={TEXT.events.dateTime}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.dateTime}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <DatePicker style={{ width: "100%" }} placeholder={""} showTime />
         </Form.Item>
 
         <Form.Item
           name={"price"}
-          label={TEXT.events.price}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.price}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Input />
         </Form.Item>
         <Form.Item
           name={"status"}
           label={TEXT.status}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Select
             value={EEventStatus.WAITING}
             options={EVENT_STATUS_SELECT_OPTIONS}
           />
         </Form.Item>
-        <Form.Item
-          name={"participantsLimit"}
-          label={TEXT.events.participantsLimit}
-        >
+        <Form.Item name={"participantsLimit"} label={TEXT.participantsLimit}>
           <Input type={"number"} />
         </Form.Item>
-        <Form.Item name={"linkToTable"} label={TEXT.events.linkToTable}>
+        <Form.Item name={"linkToTable"} label={TEXT.linkToTable}>
           <Input />
         </Form.Item>
         <Form.Item
           name={"locationId"}
-          label={TEXT.events.locationId}
-          rules={[{ required: true, message: TEXT.common.requiredField }]}
+          label={TEXT.locationId}
+          rules={[{ required: true, message: TEXT.requiredField }]}
         >
           <Select
             loading={locationsStatus === ERequestStatus.loading}
@@ -167,9 +164,9 @@ const ManageEventsDrawer = () => {
             }))}
           />
         </Form.Item>
-        <Form.Item name={"fileId"} label={TEXT.events.fileId}>
+        <Form.Item name={"fileId"} label={TEXT.formItemNameFileId}>
           <Upload {...uploadProps}>
-            <Button icon={<UploadOutlined />}>{TEXT.common.upload}</Button>
+            <Button icon={<UploadOutlined />}>{TEXT.upload}</Button>
           </Upload>
         </Form.Item>
         <Form.Item>
@@ -179,7 +176,7 @@ const ManageEventsDrawer = () => {
             htmlType={"submit"}
             style={{ float: "right" }}
           >
-            {data ? TEXT.common.edit : TEXT.common.create}
+            {data ? TEXT.edit : TEXT.create}
           </Button>
         </Form.Item>
       </Form>

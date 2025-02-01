@@ -21,7 +21,7 @@ const createParticipateRequestEpic: TAppEpic = (
         input: dependencies.httpApi.createParticipateRequest(payload),
         requestSymbol: PARTICIPATE_REQUEST_CREATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             of(
@@ -37,7 +37,7 @@ const createParticipateRequestEpic: TAppEpic = (
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },

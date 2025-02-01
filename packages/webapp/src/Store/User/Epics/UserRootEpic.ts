@@ -25,7 +25,7 @@ const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.updateUser(payload),
         requestSymbol: USER_UPDATE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return merge(
             loadUsersEpic(action$, state$, dependencies),
@@ -37,7 +37,7 @@ const updateUserEpic: TAppEpic = (action$, state$, dependencies) =>
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -53,12 +53,12 @@ const deleteUserEpic: TAppEpic = (action$, state$, dependencies) =>
         input: dependencies.httpApi.deleteUser(payload),
         requestSymbol: USER_DELETE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return loadUsersEpic(action$, state$, dependencies);
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -84,7 +84,7 @@ const manageUsersRouterEpic = routerEpic(WEBAPP_ROUTES.manageUsersRoute, () => {
       updateUserEpic,
       createUserEpic({
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return createUserOnSuccessEpic(action$, state$, dependencies);
         },

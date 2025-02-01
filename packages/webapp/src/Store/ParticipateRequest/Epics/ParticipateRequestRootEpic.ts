@@ -42,12 +42,12 @@ const deleteParticipateRequestEpic: TAppEpic = (
         input: dependencies.httpApi.deleteParticipateRequest(payload),
         requestSymbol: PARTICIPATE_REQUEST_DELETE_REQUEST_SYMBOL,
         onSuccess: () => {
-          message.success(TEXT.api.success);
+          message.success(TEXT.success);
 
           return EMPTY;
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },
@@ -77,7 +77,7 @@ const updateParticipateRequestEpic: TAppEpic = (
           );
         },
         onError: () => {
-          message.error(TEXT.api.error);
+          message.error(TEXT.error);
 
           return EMPTY;
         },

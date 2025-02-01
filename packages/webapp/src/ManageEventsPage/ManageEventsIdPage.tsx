@@ -46,18 +46,18 @@ const DeleteButton: FC<IRemoveUsersFromEventPayload> = (payload) => {
 
   const showDeleteConfirm = useCallback(() => {
     return Modal.confirm({
-      title: TEXT.users.deleteWarn,
+      title: TEXT.usersDeleteWarn,
       icon: <ExclamationCircleFilled />,
-      okText: TEXT.common.yes,
+      okText: TEXT.yes,
       okType: "danger",
-      cancelText: TEXT.common.no,
+      cancelText: TEXT.no,
       onOk: removeUserFromEvent,
     });
   }, [removeUserFromEvent]);
 
   return (
     <Button onClick={showDeleteConfirm} danger>
-      {TEXT.common.delete}
+      {TEXT.delete}
     </Button>
   );
 };
@@ -114,7 +114,7 @@ const ManageEventsIdPage = () => {
         <List.Item>
           <NavLink to={`/${WEBAPP_ROUTES.manageEventsRoute}`}>
             <Button icon={<ArrowLeftOutlined />} type={"text"}>
-              {TEXT.common.events}
+              {TEXT}
             </Button>
           </NavLink>
         </List.Item>
