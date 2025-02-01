@@ -75,13 +75,22 @@ const MenuDrawer = () => {
       getContainer={false}
     >
       <LinkComponent
-        title={TEXT.mainMenu.users}
-        to={WEBAPP_ROUTES.manageUsersRoute}
-      />
-      <LinkComponent
         title={TEXT.mainMenu.events}
         to={WEBAPP_ROUTES.manageEventsRoute}
       />
+
+      <ACL roles={[EUserRole.ADMIN]}>
+        <LinkComponent
+          title={TEXT.participateRequests}
+          to={WEBAPP_ROUTES.manageParticipateRequestsRoute}
+        />
+      </ACL>
+
+      <LinkComponent
+        title={TEXT.mainMenu.users}
+        to={WEBAPP_ROUTES.manageUsersRoute}
+      />
+
       <LinkComponent
         title={TEXT.mainMenu.locations}
         to={WEBAPP_ROUTES.manageLocationsRoute}

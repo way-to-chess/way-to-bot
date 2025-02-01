@@ -1,60 +1,22 @@
-import { FC, memo, useCallback } from "react";
-import {
-  IEvent,
-  IEventDeletePayload,
-} from "@way-to-bot/shared/interfaces/event.interface";
-import { Badge, Button, Card, Flex, List, Modal } from "antd";
+import { memo, ReactNode } from "react";
+import { IEvent } from "@way-to-bot/shared/interfaces/event.interface";
+import { Badge, Card, Flex, List } from "antd";
 import { generatePath, Link } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
   ClockCircleOutlined,
   DollarOutlined,
   EnvironmentOutlined,
-  ExclamationCircleFilled,
   UserOutlined,
 } from "@ant-design/icons";
 import { getPreviewSrc } from "../Utils/GetPreviewSrc";
-import { useActionCreator } from "../Hooks/UseActionCreator";
-import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
-import { TEXT } from "@way-to-bot/shared/constants/text";
-import { eventsSlice } from "../Store/Events/EventsSlice";
-import { ACL } from "../ACL/ACL";
-import { EUserRole } from "@way-to-bot/shared/enums";
 import { EVENT_STATUS_TO_TEXT_MAP } from "./EVENT_STATUS_TO_TEXT_MAP";
 
-const EditButton = (event: IEvent) => {
-  const open = useActionCreator(drawerSlice.actions.openDrawer, {
-    drawerType: EDrawerType.MANAGE_EVENTS_DRAWER,
-    data: event,
-  });
+interface IEventListItemProps extends IEvent {
+  extra?: ReactNode;
+}
 
-  return <Button onClick={open}>{TEXT.common.edit}</Button>;
-};
-
-const DeleteButton: FC<IEventDeletePayload> = ({ eventId }) => {
-  const deleteEvent = useActionCreator(eventsSlice.actions.deleteEvent, {
-    eventId,
-  });
-
-  const showDeleteConfirm = useCallback(() => {
-    return Modal.confirm({
-      title: TEXT.events.deleteWarn,
-      icon: <ExclamationCircleFilled />,
-      okText: TEXT.common.yes,
-      okType: "danger",
-      cancelText: TEXT.common.no,
-      onOk: deleteEvent,
-    });
-  }, [deleteEvent]);
-
-  return (
-    <Button danger onClick={showDeleteConfirm}>
-      {TEXT.common.delete}
-    </Button>
-  );
-};
-
-const EventsListItem = memo<IEvent>((event) => {
+const EventsListItem = memo<IEventListItemProps>(({ extra, ...event }) => {
   const {
     eventsUsersLeagues,
     price,
@@ -123,12 +85,7 @@ const EventsListItem = memo<IEvent>((event) => {
           </Badge.Ribbon>
         </Link>
 
-        <ACL roles={[EUserRole.ADMIN]}>
-          <Flex gap={8} justify={"flex-end"}>
-            <EditButton {...event} />
-            <DeleteButton eventId={id} />
-          </Flex>
-        </ACL>
+        {extra}
       </Flex>
     </List.Item>
   );

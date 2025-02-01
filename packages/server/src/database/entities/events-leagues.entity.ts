@@ -15,12 +15,18 @@ export class EventsLeaguesEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ name: "event_id" })
+  eventId!: number;
+
   @ManyToOne(() => EventEntity, (event) => event.leaguesResults, {
     nullable: false,
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "event_id" })
   event!: EventEntity;
+
+  @Column({ name: "league_id" })
+  leagueId!: number;
 
   @ManyToOne(() => LeagueEntity, (league) => league.eventsLeaguesResults, {
     nullable: false,

@@ -19,6 +19,9 @@ export class EventUserLeagueEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ name: "event_id" })
+  eventId!: number;
+
   @ManyToOne(() => EventEntity, (event) => event.eventsUsersLeagues, {
     nullable: false,
     onDelete: "CASCADE",
@@ -26,12 +29,18 @@ export class EventUserLeagueEntity {
   @JoinColumn({ name: "event_id" })
   event!: EventEntity;
 
+  @Column({ name: "user_id" })
+  userId!: number;
+
   @ManyToOne(() => UserEntity, (user) => user.eventsUsersLeagues, {
     nullable: false,
     onDelete: "CASCADE",
   })
   @JoinColumn({ name: "user_id" })
   user!: UserEntity;
+
+  @Column({ name: "league_id" })
+  leagueId!: number;
 
   @ManyToOne(() => LeagueEntity, (league) => league.eventsUsersLeagues, {
     nullable: false,
@@ -48,13 +57,13 @@ export class EventUserLeagueEntity {
     const eventLeagueRepository = dbInstance.getRepository(EventsLeaguesEntity);
 
     const eventLeague = await eventLeagueRepository.findOne({
-      where: { league: { id: this.league.id }, event: { id: this.event.id } },
+      where: { leagueId: this.leagueId, eventId: this.eventId },
     });
 
     if (!eventLeague) {
       const newEventLeague = eventLeagueRepository.create({
-        league: this.league,
-        event: this.event,
+        leagueId: this.leagueId,
+        eventId: this.eventId,
       });
 
       await eventLeagueRepository.save(newEventLeague);

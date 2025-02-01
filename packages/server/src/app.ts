@@ -8,7 +8,6 @@ import cors from "cors";
 import { TgBotService } from "./tg-bot/init";
 import { dbInstance } from "./database/init";
 import swaggerUi from "swagger-ui-express";
-import swaggerDocument from "../swagger/swagger.json";
 
 const app = express();
 
@@ -33,6 +32,8 @@ const errorHandler = (
 app.use("/api", MainRouter);
 
 if (process.env.NODE_ENV === "dev") {
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  const swaggerDocument = require("../swagger/swagger.json");
   app.use("/docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 }
 

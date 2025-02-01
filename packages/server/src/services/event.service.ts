@@ -57,6 +57,7 @@ export class EventService {
           user: { photo: true },
           league: true,
         },
+        participateRequests: true,
       },
     });
   };

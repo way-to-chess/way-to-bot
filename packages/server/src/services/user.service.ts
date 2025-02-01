@@ -140,10 +140,15 @@ export class UserService {
     }
 
     if (username) {
-      where.push({ username });
+      where.push({ username: "@" + username });
     }
 
     const user = await this.userRepository.findOneBy(where);
+
+    if (user && !user.tgId && tgId) {
+      user.tgId = tgId;
+      await this.userRepository.save(user);
+    }
 
     if (!user) {
       throw new Error(

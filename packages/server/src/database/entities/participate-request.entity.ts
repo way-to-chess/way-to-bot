@@ -18,13 +18,22 @@ export class ParticipateRequestEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
+  @Column({ name: "event_id" })
+  eventId!: number;
+
   @ManyToOne(() => EventEntity, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "event_id" })
   event!: EventEntity;
 
+  @Column({ name: "user_id" })
+  userId!: number;
+
   @ManyToOne(() => UserEntity, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user!: UserEntity;
+
+  @Column({ name: "file_id", nullable: true })
+  fileId?: number | null;
 
   @ManyToOne(() => FileEntity, { nullable: true })
   @JoinColumn({ name: "file_id" })

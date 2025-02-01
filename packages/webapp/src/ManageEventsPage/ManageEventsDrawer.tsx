@@ -137,7 +137,7 @@ const ManageEventsDrawer = () => {
         </Form.Item>
         <Form.Item
           name={"status"}
-          label={TEXT.events.status}
+          label={TEXT.status}
           rules={[{ required: true, message: TEXT.common.requiredField }]}
         >
           <Select

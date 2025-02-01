@@ -1,7 +1,7 @@
 import { TAppEpic } from "../App/Epics/TAppEpic";
 import { httpRequestEpicFactory } from "../Utils/HttpRequestEpicFactory";
-import { LEAGUES_LOAD_REQUEST_SYMBOL } from "../Leagues/LeaguesVariables";
-import { leaguesSlice } from "../Leagues/LeaguesSlice";
+import { LEAGUES_LOAD_REQUEST_SYMBOL } from "./LeaguesVariables";
+import { leaguesSlice } from "./LeaguesSlice";
 
 const loadLeaguesEpic: TAppEpic = (action$, state$, dependencies) => {
   return httpRequestEpicFactory({

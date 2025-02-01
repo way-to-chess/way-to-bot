@@ -13,7 +13,9 @@ const useDrawer = (drawerType: EDrawerType) => {
     drawerType,
   });
 
-  return { open, onClose, trigger };
+  const data = useParamSelector(drawerSlice.selectors.drawerData, drawerType);
+
+  return { open, onClose, trigger, data };
 };
 
 export { useDrawer };
