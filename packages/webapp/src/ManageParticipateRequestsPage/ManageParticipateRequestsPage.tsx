@@ -12,9 +12,9 @@ import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { useActionCreator } from "../Hooks/UseActionCreator";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { ApproveParticipateRequestDrawer } from "./ApproveParticipateRequestDrawer";
-import type { IWithRequestId } from "@way-to-bot/shared/interfaces/Types";
 import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 import dayjs from "dayjs";
+import { IWithRequestId } from "@way-to-bot/shared/interfaces/with.interface";
 
 const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
   {

@@ -33,20 +33,26 @@ const ExistsUserParticipateButton = memo<IWithEventId>(({ eventId }) => {
 
   const userId = useSelector(userSlice.selectors.userId);
 
-  const hasPendingParticipateRequest = useParamSelector(
-    eventsSlice.selectors.hasPendingParticipateRequest,
+  const isParticipateRequestApproved = useParamSelector(
+    eventsSlice.selectors.isParticipateRequestApproved,
     eventId,
     userId,
   );
+
+  if (isParticipateRequestApproved) {
+    return null;
+  }
 
   return (
     <Button
       onClick={openConfirm}
       type={"primary"}
       style={PARTICIPATE_BUTTON_STYLE}
-      disabled={hasPendingParticipateRequest}
+      disabled={isParticipateRequestApproved !== null}
     >
-      {hasPendingParticipateRequest ? TEXT.hasPendingRequest : TEXT.participate}
+      {isParticipateRequestApproved === null
+        ? TEXT.participate
+        : TEXT.hasPendingRequest}
     </Button>
   );
 });

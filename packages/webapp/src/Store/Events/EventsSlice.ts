@@ -71,7 +71,7 @@ const eventsSlice = createSlice({
 
       return event.participateRequests;
     },
-    hasPendingParticipateRequest: (
+    isParticipateRequestApproved: (
       sliceState,
       eventId: number,
       userId: number,
@@ -82,7 +82,7 @@ const eventsSlice = createSlice({
         (it) => it.user.id === userId,
       );
 
-      return participateRequest && !participateRequest.approved;
+      return participateRequest?.approved ?? null;
     },
   },
 });

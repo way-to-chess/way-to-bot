@@ -114,7 +114,7 @@ const ManageEventsIdPage = () => {
         <List.Item>
           <NavLink to={`/${WEBAPP_ROUTES.manageEventsRoute}`}>
             <Button icon={<ArrowLeftOutlined />} type={"text"}>
-              {TEXT}
+              {TEXT.events}
             </Button>
           </NavLink>
         </List.Item>
