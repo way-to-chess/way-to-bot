@@ -10,12 +10,12 @@ import {
 } from "antd";
 import ru from "antd/locale/ru_RU";
 import { CSSProperties } from "react";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { BrowserRouter, NavLink, Route, Routes } from "react-router";
-import { ParticipateRequestsTable } from "./Domains/ParticipateRequests/Table";
 import { Provider } from "react-redux";
 import { STORE } from "./store";
+import { ParticipateRequestsPage } from "./Domains/ParticipateRequests/Page";
+import { ROUTES } from "./Constants/Routes";
 
 const APP_CONFIG: ConfigProviderProps = {
   locale: ru,
@@ -39,7 +39,7 @@ const MENU_ITEMS: TMenuItem[] = [
   {
     key: 1,
     label: (
-      <NavLink to={WEBAPP_ROUTES.manageParticipateRequestsRoute}>
+      <NavLink to={ROUTES.participateRequestsRoute}>
         {TEXT.participateRequests}
       </NavLink>
     ),
@@ -65,11 +65,11 @@ const App = () => {
             </Layout.Sider>
             <Layout.Content style={MAIN_STYLE}>
               <Routes>
-                <Route path={WEBAPP_ROUTES.emptyRoute} element={null} />
+                <Route path={ROUTES.root} element={null} />
                 <Route
                   index
-                  path={WEBAPP_ROUTES.manageParticipateRequestsRoute}
-                  element={<ParticipateRequestsTable />}
+                  path={ROUTES.participateRequestsRoute}
+                  element={<ParticipateRequestsPage />}
                 />
               </Routes>
             </Layout.Content>

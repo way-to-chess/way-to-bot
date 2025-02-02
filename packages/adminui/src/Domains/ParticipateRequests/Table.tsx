@@ -7,7 +7,10 @@ import type { IWithRequestId } from "@way-to-bot/shared/interfaces/with.interfac
 import type { ExpandableConfig } from "rc-table/lib/interface";
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import dayjs from "dayjs";
-import { API } from "../../Api";
+import { api } from "../../Api";
+import { entitySlice } from "../../EntitySlice";
+import { useActionCreator } from "@way-to-bot/shared/utils/UseActionCreator";
+import { PARTICIPATE_REQUESTS_DRAWER_ID } from "../../Constants/EntityIds";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
@@ -40,14 +43,13 @@ const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
 ];
 
 const OpenApproveDrawer = memo<IWithRequestId>(({ requestId }) => {
-  const [approve, { isLoading }] = API.useApproveParticipateRequestMutation();
-
-  const onClick = () => {
-    approve({ id: requestId });
-  };
+  const openDrawer = useActionCreator(entitySlice.actions.addEntity, {
+    id: PARTICIPATE_REQUESTS_DRAWER_ID,
+    requestId,
+  });
 
   return (
-    <Button type={"primary"} loading={isLoading} onClick={onClick}>
+    <Button type={"primary"} onClick={openDrawer}>
       {TEXT.approve}
     </Button>
   );
@@ -82,7 +84,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
 const getRowKey = (request: IParticipateRequest) => request.id;
 
 const ParticipateRequestsTable = () => {
-  const { data, isFetching } = API.useGetAllParticipateRequestsQuery();
+  const { data, isFetching } = api.useGetAllParticipateRequestsQuery();
 
   return (
     <Table
