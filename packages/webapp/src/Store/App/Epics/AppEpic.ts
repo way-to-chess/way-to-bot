@@ -8,6 +8,16 @@ import { leaguesRootEpic } from "../../Leagues/LeaguesRootEpic";
 import { createUserEpic } from "../../User/Epics/CreateUserEpic";
 import { getUserByTgInfoEpic } from "../../User/Epics/GetUserByTgInfoEpic";
 import { participateRequestsRouterEpic } from "../../ParticipateRequest/Epics/ParticipateRequestRootEpic";
+import { routerEpic } from "../../Utils/RouterEpic";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
+
+const registrationRouterEpic = routerEpic(
+  WEBAPP_ROUTES.registrationRoute,
+  () => (action$, state$, dependencies) =>
+    createUserEpic({
+      onSuccess: () => getUserByTgInfoEpic(action$, state$, dependencies),
+    })(action$, state$, dependencies),
+);
 
 const appEpic: TAppEpic = (action$, store$, dependencies) =>
   combineEpics(
@@ -16,9 +26,7 @@ const appEpic: TAppEpic = (action$, store$, dependencies) =>
     locationsRootEpic,
     getUserByTgInfoEpic,
     leaguesRootEpic,
-    createUserEpic({
-      onSuccess: () => getUserByTgInfoEpic(action$, store$, dependencies),
-    }),
+    registrationRouterEpic,
     participateRequestsRouterEpic,
   )(action$, store$, dependencies).pipe(
     catchError((error, source) => {
