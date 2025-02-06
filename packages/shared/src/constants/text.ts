@@ -1,6 +1,5 @@
 const TEXT = {
-  registrationInto: "У вас нет аккаунта",
-  uploadFileEmpty: "Файл не выбран",
+  registrationInto: "У вас нет аккаунта, здесь можно его создать",
   participate: "Участвовать",
   participateRequestIntro:
     "Загрузите чек об оплате чтобы отправить запрос на участие",
@@ -24,6 +23,7 @@ const TEXT = {
   create: "Создать",
   events: "События",
   upload: "Загрузить",
+  uploadPhoto: "Загрузить Фото",
   edit: "Изменить",
   delete: "Удалить",
   underDevelopment: "В разработке",
