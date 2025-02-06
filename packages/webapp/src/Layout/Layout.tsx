@@ -1,24 +1,23 @@
 import classes from "./Layout.module.css";
 import {
   generatePath,
-  Link,
-  NavLink,
   Outlet,
   Route,
   Routes,
+  useLocation,
+  useNavigate,
   useParams,
 } from "react-router-dom";
-import { FC } from "react";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
-  MenuOutlined,
   MoreOutlined,
+  NotificationOutlined,
   PlusOutlined,
+  TeamOutlined,
   UserOutlined,
 } from "@ant-design/icons";
-import { Button, Drawer, Dropdown, Layout as AntLayout } from "antd";
+import { Button, Dropdown, Layout as AntLayout } from "antd";
 import { useActionCreator } from "../Hooks/UseActionCreator";
-import { appSlice } from "../Store/App/AppSlice";
 import { useSelector } from "react-redux";
 import { TEXT } from "@way-to-bot/shared/constants/text";
 import { userSlice } from "../Store/User/UserSlice";
@@ -26,93 +25,12 @@ import { locationsSlice } from "../Store/Locations/LocationsSlice";
 import { drawerSlice, EDrawerType } from "../Store/Drawer/DrawerSlice";
 import { ACL } from "../ACL/ACL";
 import { EUserRole } from "@way-to-bot/shared/enums";
-
-interface ILink {
-  to: string;
-  title: string;
-}
+import { TabBar } from "antd-mobile";
 
 const DEFAULT_BUTTON_PROPS = {
   size: "large",
   type: "text",
 } as const;
-
-const LinkComponent: FC<ILink> = ({ title, to }) => {
-  const closeDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibleChanged,
-    false,
-  );
-
-  return (
-    <NavLink to={to} className={classes.link} onClick={closeDrawer}>
-      <Button
-        type={"text"}
-        style={{ width: "100%", justifyContent: "left", height: "100%" }}
-      >
-        {title}
-      </Button>
-    </NavLink>
-  );
-};
-
-const MenuDrawer = () => {
-  const open = useSelector(appSlice.selectors.mainMenuDrawerVisible);
-  const closeDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibleChanged,
-    false,
-  );
-
-  const userFullName = useSelector(userSlice.selectors.userFullName);
-
-  return (
-    <Drawer
-      title={userFullName ?? TEXT.mainMenuTitle}
-      styles={{ body: { padding: 0 } }}
-      placement={"left"}
-      closable={false}
-      open={open}
-      onClose={closeDrawer}
-      getContainer={false}
-    >
-      <LinkComponent title={TEXT.events} to={WEBAPP_ROUTES.manageEventsRoute} />
-
-      <ACL roles={[EUserRole.ADMIN]}>
-        <LinkComponent
-          title={TEXT.participateRequests}
-          to={WEBAPP_ROUTES.manageParticipateRequestsRoute}
-        />
-      </ACL>
-
-      <LinkComponent title={TEXT.users} to={WEBAPP_ROUTES.manageUsersRoute} />
-
-      <LinkComponent
-        title={TEXT.locations}
-        to={WEBAPP_ROUTES.manageLocationsRoute}
-      />
-      <ACL roles={[EUserRole.ADMIN]}>
-        <LinkComponent
-          title={TEXT.leagues}
-          to={WEBAPP_ROUTES.manageLeaguesRoute}
-        />
-      </ACL>
-    </Drawer>
-  );
-};
-
-const MenuButton = () => {
-  const openDrawer = useActionCreator(
-    appSlice.actions.mainMenuDrawerVisibleChanged,
-    true,
-  );
-
-  return (
-    <Button
-      icon={<MenuOutlined />}
-      onClick={openDrawer}
-      {...DEFAULT_BUTTON_PROPS}
-    />
-  );
-};
 
 const USER_MENU_TRIGGER: ("click" | "hover" | "contextMenu")[] = ["click"];
 
@@ -212,25 +130,56 @@ const AddLeagueButton = () => {
 const UserAccountButton = () => {
   const userId = useSelector(userSlice.selectors.userId);
 
-  const to = userId
+  const key = userId
+    ? generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId })
+    : WEBAPP_ROUTES.registrationRoute;
+
+  return <TabBar.Item icon={<UserOutlined />} title={TEXT.profile} key={key} />;
+};
+
+const TABS = [
+  {
+    key: WEBAPP_ROUTES.manageEventsRoute,
+    title: TEXT.events,
+    icon: <NotificationOutlined />,
+  },
+  {
+    key: WEBAPP_ROUTES.manageUsersRoute,
+    title: TEXT.users,
+    icon: <TeamOutlined />,
+  },
+];
+
+const BottomNavBar = () => {
+  const navigate = useNavigate();
+  const { pathname } = useLocation();
+
+  const onChange = (value: string) => navigate(value);
+
+  const userId = useSelector(userSlice.selectors.userId);
+
+  const profileKey = userId
     ? generatePath(WEBAPP_ROUTES.manageUsersIdRoute, { userId })
     : WEBAPP_ROUTES.registrationRoute;
 
   return (
-    <Link to={to}>
-      <Button icon={<UserOutlined />} {...DEFAULT_BUTTON_PROPS} />
-    </Link>
+    <TabBar safeArea activeKey={pathname.replace("/", "")} onChange={onChange}>
+      {TABS.map((item) => (
+        <TabBar.Item icon={item.icon} title={item.title} key={item.key} />
+      ))}
+      <TabBar.Item
+        icon={<UserOutlined />}
+        title={TEXT.profile}
+        key={profileKey}
+      />
+    </TabBar>
   );
 };
 
 const Layout = () => {
   return (
     <AntLayout className={classes.layout}>
-      <MenuDrawer />
-
       <header className={classes.header}>
-        <MenuButton />
-
         <UserAccountButton />
 
         <ACL roles={[EUserRole.ADMIN]}>
@@ -270,6 +219,8 @@ const Layout = () => {
       <div className={classes.content}>
         <Outlet />
       </div>
+
+      <BottomNavBar />
     </AntLayout>
   );
 };

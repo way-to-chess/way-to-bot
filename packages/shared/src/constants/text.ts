@@ -73,6 +73,7 @@ const TEXT = {
   address: "Адрес",
   map: "Показать на карте",
   createdAt: "Создан",
+  profile: "Профиль",
 };
 
 export { TEXT };
