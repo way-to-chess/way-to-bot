@@ -13,7 +13,8 @@
 }
 
 .header {
-    padding: 0 16px;
+    border-top: 1px solid var(--ant-color-border);
+    padding: 0 32px;
     align-items: center;
     flex: 0 0 60px;
     width: 100%;
@@ -21,24 +22,10 @@
     justify-content: space-between;
 }
 
-.headerButton {
-    height: 60px;
-    width: 60px;
-    display: flex;
-    font-size: 20px;
-    align-items: center;
-    justify-content: center;
-}
-
 .link {
-    display: block;
-    width: 100%;
-    height: 50px;
-    flex: 1;
-    line-height: 50px;
-    text-decoration: none;
+    color: var(--ant-color-text);
 }
 
 .link:global(.active) {
-    color: #3390ec;
+    color: var(--ant-color-primary);
 }

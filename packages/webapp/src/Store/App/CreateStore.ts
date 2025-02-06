@@ -11,7 +11,6 @@ import { createBrowserHistory } from "history";
 import { locationsSlice } from "../Locations/LocationsSlice";
 import { requestManagerSlice } from "../RequestManager/RequestManagerSlice";
 import { eventsSlice } from "../Events/EventsSlice";
-import { appSlice } from "./AppSlice";
 import { leaguesSlice } from "../Leagues/LeaguesSlice";
 import { drawerSlice } from "../Drawer/DrawerSlice";
 import { participateRequestSlice } from "../ParticipateRequest/ParticipateRequestSlice";
@@ -27,7 +26,6 @@ export const createStore = () => {
   const store = configureStore({
     reducer: {
       ...createRouterReducerMapObject(history),
-      app: appSlice.reducer,
       user: userSlice.reducer,
       locations: locationsSlice.reducer,
       requestManager: requestManagerSlice.reducer,
