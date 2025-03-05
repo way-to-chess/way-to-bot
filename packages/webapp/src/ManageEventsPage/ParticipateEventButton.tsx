@@ -20,7 +20,7 @@ import { PARTICIPATE_REQUEST_CREATE_REQUEST_SYMBOL } from "../Store/ParticipateR
 const PARTICIPATE_BUTTON_STYLE = {
   width: "50%",
   position: "fixed",
-  bottom: 16,
+  bottom: 76,
   left: "50%",
   transform: "translateX(-50%)",
 } as const;

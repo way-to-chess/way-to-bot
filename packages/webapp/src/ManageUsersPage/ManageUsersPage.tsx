@@ -174,7 +174,7 @@ const UsersList = () => {
   const filtered = search
     ? sorted.filter(({ firstName, lastName, username }) => {
         return (
-          username.toLowerCase().includes(search.toLowerCase()) ||
+          username?.toLowerCase().includes(search.toLowerCase()) ||
           lastName.toLowerCase().includes(search.toLowerCase()) ||
           firstName.toLowerCase().includes(search.toLowerCase())
         );

@@ -5,7 +5,7 @@ import { IFile } from "./file.interface";
 
 export interface IUser {
   id: number;
-  username: string;
+  username?: string;
   firstName: string;
   lastName: string;
   roles: EUserRole[];
