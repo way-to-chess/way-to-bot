@@ -1,6 +1,6 @@
 import { memo } from "react";
 import { Select, SelectProps } from "antd";
-import { api } from "../../Api";
+import { api } from "@way-to-bot/shared/Api";
 
 const LeaguesSelect = memo<Omit<SelectProps, "options" | "loading">>(
   (props) => {

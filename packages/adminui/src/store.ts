@@ -1,5 +1,5 @@
 import { configureStore } from "@reduxjs/toolkit";
-import { api } from "./Api";
+import { api } from "@way-to-bot/shared/Api";
 import { participateRequestsSlice } from "./Domains/ParticipateRequests/Slice";
 import { entitySlice } from "./EntitySlice";
 

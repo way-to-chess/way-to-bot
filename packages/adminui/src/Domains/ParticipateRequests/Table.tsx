@@ -7,7 +7,7 @@ import type { IWithRequestId } from "@way-to-bot/shared/interfaces/with.interfac
 import type { ExpandableConfig } from "rc-table/lib/interface";
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import dayjs from "dayjs";
-import { api } from "../../Api";
+import { api } from "@way-to-bot/shared/Api";
 import { entitySlice } from "../../EntitySlice";
 import { useActionCreator } from "@way-to-bot/shared/utils/UseActionCreator";
 import { PARTICIPATE_REQUESTS_DRAWER_ID } from "../../Constants/EntityIds";
