@@ -9,6 +9,7 @@ import {
 } from "react-router-dom";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
+  MessageOutlined,
   MoreOutlined,
   NotificationOutlined,
   PlusOutlined,
@@ -168,6 +169,19 @@ const BottomNavBar = () => {
           </Flex>
         </NavLink>
       ))}
+      <ACL roles={[EUserRole.ADMIN]}>
+        <NavLink
+          to={WEBAPP_ROUTES.manageParticipateRequestsRoute}
+          className={classes.link}
+          end
+        >
+          <Flex vertical align={"center"}>
+            <MessageOutlined />
+            <Typography.Text>{TEXT.participateRequests}</Typography.Text>
+          </Flex>
+        </NavLink>
+      </ACL>
+
       <UserAccountButton />
     </div>
   );
