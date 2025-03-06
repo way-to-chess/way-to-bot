@@ -139,7 +139,7 @@ const UserAccountButton = () => {
     <NavLink to={to} className={classes.link} end>
       <Flex vertical align={"center"}>
         <UserOutlined size={60} style={ICON_STYLE} />
-        <Typography>{TEXT.profile}</Typography>
+        <Typography.Text ellipsis>{TEXT.profile}</Typography.Text>
       </Flex>
     </NavLink>
   );
@@ -165,7 +165,7 @@ const BottomNavBar = () => {
         <NavLink key={link.to} to={link.to} className={classes.link} end>
           <Flex vertical align={"center"}>
             {link.icon}
-            <Typography.Text>{link.title}</Typography.Text>
+            <Typography.Text ellipsis>{link.title}</Typography.Text>
           </Flex>
         </NavLink>
       ))}
@@ -177,7 +177,10 @@ const BottomNavBar = () => {
         >
           <Flex vertical align={"center"}>
             <MessageOutlined />
-            <Typography.Text>{TEXT.participateRequests}</Typography.Text>
+
+            <Typography.Text ellipsis>
+              {TEXT.participateRequests}
+            </Typography.Text>
           </Flex>
         </NavLink>
       </ACL>

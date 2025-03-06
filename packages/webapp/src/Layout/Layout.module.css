@@ -20,10 +20,12 @@
     width: 100%;
     display: flex;
     justify-content: space-between;
+    gap: 8px;
 }
 
 .link {
     color: var(--ant-color-text);
+    overflow: hidden;
 }
 
 .link:global(.active) {
