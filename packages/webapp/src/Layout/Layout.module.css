@@ -14,7 +14,7 @@
 
 .header {
     border-top: 1px solid var(--ant-color-border);
-    padding: 0 32px;
+    padding: 0 16px;
     align-items: center;
     flex: 0 0 60px;
     width: 100%;
