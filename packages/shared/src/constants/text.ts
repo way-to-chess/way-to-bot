@@ -5,7 +5,7 @@ const TEXT = {
     "Загрузите чек об оплате чтобы отправить запрос на участие",
   confirmParticipateRequest: "Отправить запрос",
   hasPendingRequest: "Запрос на рассмотрении",
-  participateRequests: "Запросы на участие",
+  participateRequests: "Запросы",
   user: "Пользователь",
   event: "Событие",
   status: "Статус",
