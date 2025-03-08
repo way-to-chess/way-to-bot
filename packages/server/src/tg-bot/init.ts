@@ -57,7 +57,7 @@ export class TgBotService {
               });
 
               if (userFromDb && !userFromDb.tgId) {
-                userFromDb.tgId = user.id;
+                userFromDb.tgId = String(user.id);
                 await userRepository.save(userFromDb);
               }
             } catch (e) {

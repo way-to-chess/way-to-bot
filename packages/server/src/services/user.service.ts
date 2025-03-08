@@ -124,7 +124,7 @@ export class UserService {
       throw new Error(`User with username ${username} not found`);
     }
 
-    user.tgId = tgId;
+    user.tgId = String(tgId);
 
     await this.userRepository.save(user);
     return true;
@@ -136,7 +136,7 @@ export class UserService {
     const where: FindOptionsWhere<UserEntity>[] = [];
 
     if (tgId) {
-      where.push({ tgId });
+      where.push({ tgId: String(tgId) });
     }
 
     if (username) {
@@ -146,7 +146,7 @@ export class UserService {
     const user = await this.userRepository.findOneBy(where);
 
     if (user && !user.tgId && tgId) {
-      user.tgId = tgId;
+      user.tgId = String(tgId);
       await this.userRepository.save(user);
     }
 

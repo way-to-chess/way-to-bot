@@ -14,7 +14,7 @@ import {
 import { FileEntity } from "./file.entity";
 import { EUserRole } from "../../enums";
 import { EventUserLeagueEntity } from "./events-users-leagues.entity";
-import {ParticipateRequestEntity} from "./participate-request.entity";
+import { ParticipateRequestEntity } from "./participate-request.entity";
 
 @Entity("users")
 @Unique(["username", "firstName", "lastName"])
@@ -25,8 +25,8 @@ export class UserEntity {
   @Column("varchar", { unique: true, nullable: true })
   username?: string | null = null;
 
-  @Column("int", { unique: true, nullable: true, name: "tg_id" })
-  tgId?: number | null = null;
+  @Column("bigint", { unique: true, nullable: true, name: "tg_id" })
+  tgId?: string | null = null;
 
   @Column({ type: "varchar" })
   firstName!: string;
