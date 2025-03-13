@@ -8,6 +8,7 @@ import cors from "cors";
 import { TgBotService } from "./tg-bot/init";
 import { dbInstance } from "./database/init";
 import swaggerUi from "swagger-ui-express";
+import { logger } from "./utils/logger";
 
 const app = express();
 
@@ -20,7 +21,9 @@ const errorHandler = (
   res: Response,
   next: NextFunction,
 ) => {
+  logger.error(err.message, { stack: err.stack });
   console.error(err);
+
   if (err.message) {
     res.status(400).send({ error: err.message });
     return;

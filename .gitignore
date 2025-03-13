@@ -8,3 +8,4 @@ build
 docker_data
 .cert
 swagger
+logs

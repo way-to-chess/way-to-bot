@@ -1,5 +1,5 @@
 {
-  "name": "adminui",
+  "name": "@way-to-bot/adminui",
   "private": true,
   "version": "0.0.0",
   "type": "module",

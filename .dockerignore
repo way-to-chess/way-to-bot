@@ -1,4 +1,4 @@
 node_modules
-packages/webapp/dist
-packages/server/build
+dist
+build
 packages/webapp/.cert
