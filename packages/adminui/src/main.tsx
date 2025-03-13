@@ -11,14 +11,7 @@ import {
 import ru from "antd/locale/ru_RU";
 import { CSSProperties } from "react";
 import { TEXT } from "@way-to-bot/shared/constants/text";
-import {
-  BrowserRouter,
-  Navigate,
-  NavLink,
-  Outlet,
-  Route,
-  Routes,
-} from "react-router";
+import { BrowserRouter, Navigate, NavLink, Route, Routes } from "react-router";
 import { Provider } from "react-redux";
 import { STORE } from "./store";
 import { ParticipateRequestsPage } from "./Domains/ParticipateRequests/Page";
@@ -72,19 +65,13 @@ const App = () => {
             </Layout.Sider>
             <Layout.Content style={MAIN_STYLE}>
               <Routes>
-                <Route path={ROUTES.admin} element={<Outlet />}>
-                  <Route
-                    index
-                    element={<Navigate to={ROUTES.participateRequestsRoute} />}
-                  />
-                  <Route
-                    path={ROUTES.participateRequestsRoute}
-                    element={<ParticipateRequestsPage />}
-                  />
-                </Route>
+                <Route
+                  path={ROUTES.participateRequestsRoute}
+                  element={<ParticipateRequestsPage />}
+                />
                 <Route
                   path={ROUTES.any}
-                  element={<Navigate to={ROUTES.admin} />}
+                  element={<Navigate to={ROUTES.participateRequestsRoute} />}
                 />
               </Routes>
             </Layout.Content>

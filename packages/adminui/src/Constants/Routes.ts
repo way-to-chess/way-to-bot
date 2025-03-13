@@ -1,8 +1,9 @@
+const PREFIX = "/admin";
+
 const ROUTES = {
   any: "*",
   root: "/",
-  admin: "/admin",
-  participateRequestsRoute: "participate-requests",
+  participateRequestsRoute: `${PREFIX}/participate-requests`,
 };
 
 export { ROUTES };
