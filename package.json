@@ -22,8 +22,5 @@
     "eslint": "9.12.0",
     "npm-run-all": "^4.1.5",
     "typescript": "5.6.3"
-  },
-  "dependencies": {
-    "antd-mobile": "^5.38.1"
   }
 }

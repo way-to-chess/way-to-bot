@@ -79,7 +79,6 @@ const PageContent = () => {
 
 const RegistrationPage = () => {
   const user = useSelector(userSlice.selectors.user);
-  console.log(user, "reg", 123);
 
   if (user) {
     const to = generatePath(WEBAPP_ROUTES.manageUsersIdRoute, {
