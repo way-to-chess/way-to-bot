@@ -2,9 +2,9 @@ import { createRoot } from "react-dom/client";
 import { Navigate, Route, Routes } from "react-router-dom";
 import "./main.css";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
-import { Provider } from "react-redux";
-import { history, store } from "./Store/App/CreateStore";
-import { ReduxRouter } from "@lagunovsky/redux-react-router";
+import { Provider, useDispatch, useSelector } from "react-redux";
+import { history as browserHistory, store } from "./Store/App/CreateStore";
+import { ReduxRouter, replace } from "@lagunovsky/redux-react-router";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
 import { Layout } from "./Layout/Layout";
@@ -19,6 +19,8 @@ import ru from "antd/locale/ru_RU";
 import * as Sentry from "@sentry/react";
 import { RegistrationPage } from "./Registration/RegistrationPage";
 import { ManageParticipateRequestsPage } from "./ManageParticipateRequestsPage/ManageParticipateRequestsPage";
+import { selectHistoryStack } from "./Store/Router/HistoryReducer";
+import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 
 if (!isDev) {
   Sentry.init({
@@ -72,21 +74,38 @@ const useViewport = () => {
 };
 
 const BackButtonHandler: FC<PropsWithChildren> = ({ children }) => {
-  // const location = useLocation();
-  //
-  // const navigate = useNavigate();
-  //
-  // useEffect(() => {
-  //   Telegram.WebApp.BackButton.show();
-  //
-  //   const handler = () => navigate(-1);
-  //
-  //   Telegram.WebApp.onEvent("backButtonClicked", handler);
-  //
-  //   return () => {
-  //     Telegram.WebApp.offEvent("backButtonClicked", handler);
-  //   };
-  // }, [location.pathname]);
+  const historyStack = useSelector(selectHistoryStack);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (historyStack.length >= 2) {
+      Telegram.WebApp.BackButton.show();
+
+      const handler = () => {
+        const historyItem = getNotNil(
+          historyStack[historyStack.length - 2],
+          `historyItem | stack: ${JSON.stringify(historyStack)}`,
+        );
+
+        dispatch(
+          replace(historyItem.location.pathname, {
+            fromBackButton: true,
+          }),
+        );
+      };
+
+      Telegram.WebApp.BackButton.onClick(handler);
+
+      return () => {
+        Telegram.WebApp.BackButton.offClick(handler);
+      };
+    }
+
+    Telegram.WebApp.BackButton.hide();
+
+    return () => {};
+  }, [historyStack, dispatch]);
 
   return children;
 };
@@ -98,7 +117,7 @@ const App = () => {
 
   return (
     <Provider store={store}>
-      <ReduxRouter history={history}>
+      <ReduxRouter history={browserHistory}>
         <ConfigProvider
           locale={ru}
           theme={{

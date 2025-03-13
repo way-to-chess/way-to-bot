@@ -23,6 +23,10 @@
     gap: 8px;
 }
 
+.header:empty {
+    display: none;
+}
+
 .link {
     color: var(--ant-color-text);
     overflow: hidden;
