@@ -42,9 +42,10 @@ const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
   },
 ];
 
-const OpenApproveDrawer = memo<IWithRequestId>(({ requestId }) => {
+const OpenApproveDrawer = memo(({ requestId }: IWithRequestId) => {
   const openDrawer = useActionCreator(entitySlice.actions.addEntity, {
     id: PARTICIPATE_REQUESTS_DRAWER_ID,
+    // @ts-ignore
     requestId,
   });
 

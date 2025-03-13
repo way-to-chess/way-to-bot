@@ -58,7 +58,7 @@ const ApproveForm = memo(() => {
       await getAllParticipateRequests().unwrap();
 
       closeDrawer();
-    } catch (e) {
+    } catch (e: any) {
       message.error(JSON.stringify(e.data.error, null, 2));
     }
   };
