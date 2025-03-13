@@ -1,7 +1,7 @@
 import { getNotNil } from "../utils/getNotNil";
 
 const getEnv = (name: string) => {
-  return getNotNil(import.meta.env[`VITE_${name}`], `getEnv | name: ${name}`);
+  return getNotNil(import.meta.env[`VITE_${name}`], ` add 'VITE_${name}' to .evn file`);
 };
 
 const BASE_API_URL = getEnv("API_URL");

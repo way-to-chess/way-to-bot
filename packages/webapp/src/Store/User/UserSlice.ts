@@ -27,6 +27,8 @@ const initialState: IUserState = {
   search: "",
 };
 
+const selectUser = (state: IUserState) => state.user;
+
 const userSlice = createSlice({
   name: "user",
   initialState,
@@ -42,6 +44,10 @@ const userSlice = createSlice({
       { payload }: PayloadAction<IResponseWithData<IUser>>,
     ) => {
       state.user = payload.data;
+      state.users.push(payload.data);
+    },
+    clearUser: (state: IUserState) => {
+      state.user = null;
     },
     createUser: (_state, _action: PayloadAction<IUserCreatePayload>) => {},
     deleteUser: (_state, _action: PayloadAction<IUserDeletePayload>) => {},
@@ -66,26 +72,26 @@ const userSlice = createSlice({
     userById: (sliceState, userId: number) =>
       sliceState.users.find((it) => it.id === userId),
     userHasAccessRoles: (sliceState, roles: EUserRole[], exact = false) => {
-      const userRoles = sliceState.user?.roles;
+      const userRoles = selectUser(sliceState)?.roles;
       if (!userRoles) {
         return false;
       }
 
       return roles.some((role) => userRoles.includes(role));
     },
-    userId: (sliceState) => sliceState.user?.id,
+    userId: (sliceState) => selectUser(sliceState)?.id,
+    user: (sliceState) => selectUser(sliceState),
     userFullName: (sliceState) => {
-      if (!sliceState.user) {
+      const user = selectUser(sliceState);
+
+      if (!user) {
         return null;
       }
 
-      return getUserFullName(
-        sliceState.user.firstName,
-        sliceState.user.lastName,
-      );
+      return getUserFullName(user.firstName, user.lastName);
     },
     search: (sliceState) => sliceState.search,
-    userExists: (sliceState) => !!sliceState.user,
+    userExists: (sliceState) => !!selectUser(sliceState),
   },
 });
 

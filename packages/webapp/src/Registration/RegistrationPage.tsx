@@ -3,12 +3,14 @@ import { LAYOUT_STYLE } from "../Variables";
 import { IFileUploadResponse, useFileUpload } from "../Hooks/UseFileUpload";
 import { useState } from "react";
 import { TEXT } from "@way-to-bot/shared/constants/text";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { userSlice } from "../Store/User/UserSlice";
 import { EUserRole } from "@way-to-bot/shared/enums";
 import { IUserCreatePayload } from "@way-to-bot/shared/interfaces/user.interface";
+import { generatePath, Navigate } from "react-router-dom";
+import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 
-const RegistrationPage = () => {
+const PageContent = () => {
   const [form] = Form.useForm();
 
   const [fileId, setFileId] = useState(0);
@@ -73,6 +75,21 @@ const RegistrationPage = () => {
       </Form>
     </Flex>
   );
+};
+
+const RegistrationPage = () => {
+  const user = useSelector(userSlice.selectors.user);
+  console.log(user, "reg", 123);
+
+  if (user) {
+    const to = generatePath(WEBAPP_ROUTES.manageUsersIdRoute, {
+      userId: user.id,
+    });
+
+    return <Navigate to={`/${to}`} />;
+  }
+
+  return <PageContent />;
 };
 
 export { RegistrationPage };

@@ -1,6 +1,6 @@
 import { httpRequestEpicFactory } from "../../Utils/HttpRequestEpicFactory";
 import { TAppEpic } from "../../App/Epics/TAppEpic";
-import { EMPTY } from "rxjs";
+import { EMPTY, of } from "rxjs";
 import { GET_USER_BY_TG_INFO_REQUEST_SYMBOL } from "../UserVariables";
 import { userSlice } from "../UserSlice";
 import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
@@ -22,6 +22,9 @@ const getUserByTgInfoEpic: TAppEpic = (action$, state$, dependencies) => {
     }),
     requestSymbol: GET_USER_BY_TG_INFO_REQUEST_SYMBOL,
     receivedActionCreator: userSlice.actions.userReceived,
+    onError: () => {
+      return of(userSlice.actions.clearUser());
+    },
   });
 };
 

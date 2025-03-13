@@ -1,5 +1,5 @@
 import { Avatar, Button, Empty, Flex, List, Typography } from "antd";
-import { NavLink, useParams } from "react-router-dom";
+import { Navigate, NavLink, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
 import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
@@ -9,27 +9,16 @@ import { TEXT } from "@way-to-bot/shared/constants/text";
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { requestManagerSlice } from "../Store/RequestManager/RequestManagerSlice";
 import { GET_USER_BY_ID_REQUEST_SYMBOL } from "../Store/User/UserVariables";
-import { ERequestStatus } from "../Store/RequestManager/RequestManagerModels";
+import { useSelector } from "react-redux";
+import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
+import { IWithId } from "@way-to-bot/shared/interfaces/with.interface";
 
-const ManageUsersIdPage = () => {
-  const { userId } = useParams();
-
-  const user = useParamSelector(userSlice.selectors.userById, Number(userId));
-  const status = useParamSelector(
-    requestManagerSlice.selectors.statusBySymbol,
-    GET_USER_BY_ID_REQUEST_SYMBOL,
-  );
-
-  if (!user) {
-    return <Empty style={{ padding: 16 }} />;
-  }
-
+const UserPageBase = ({
+  isLoading,
+  ...user
+}: IUser & { isLoading?: boolean }) => {
   return (
-    <List
-      style={{ padding: 16 }}
-      itemLayout={"vertical"}
-      loading={status === ERequestStatus.loading}
-    >
+    <List style={{ padding: 16 }} itemLayout={"vertical"} loading={isLoading}>
       <List.Item>
         <NavLink to={`/${WEBAPP_ROUTES.manageUsersRoute}`}>
           <Button icon={<ArrowLeftOutlined />} type={"text"}>
@@ -75,6 +64,42 @@ const ManageUsersIdPage = () => {
       </List.Item>
     </List>
   );
+};
+
+const MyUserPage = () => {
+  const user = useSelector(userSlice.selectors.user);
+
+  if (!user) {
+    return <Navigate to={`/${WEBAPP_ROUTES.registrationRoute}`} replace />;
+  }
+
+  return <UserPageBase {...user} />;
+};
+
+const UserPage = ({ id }: IWithId) => {
+  const user = useParamSelector(userSlice.selectors.userById, id);
+  const isLoading = useParamSelector(
+    requestManagerSlice.selectors.loadingBySymbol,
+    GET_USER_BY_ID_REQUEST_SYMBOL,
+  );
+
+  if (!user) {
+    return <Empty />;
+  }
+
+  return <UserPageBase isLoading={isLoading} {...user} />;
+};
+
+const ManageUsersIdPage = () => {
+  const { userId } = useParams();
+
+  const myUserId = useSelector(userSlice.selectors.userId);
+
+  if (myUserId === userId) {
+    return <MyUserPage />;
+  }
+
+  return <UserPage id={Number(userId)} />;
 };
 
 export { ManageUsersIdPage };

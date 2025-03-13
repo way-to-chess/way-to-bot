@@ -9,7 +9,7 @@ export default defineConfig({
   server: {
     host: "way-to-bot.local",
     https: {
-      key: fs.readFileSync(".cert/localhost-key.pem").toString(),
+      key: fs.readFileSync(".cert/localhost.key").toString(),
       cert: fs.readFileSync(".cert/localhost.pem").toString(),
     },
   },

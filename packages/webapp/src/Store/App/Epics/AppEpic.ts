@@ -10,12 +10,18 @@ import { getUserByTgInfoEpic } from "../../User/Epics/GetUserByTgInfoEpic";
 import { participateRequestsRouterEpic } from "../../ParticipateRequest/Epics/ParticipateRequestRootEpic";
 import { routerEpic } from "../../Utils/RouterEpic";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
+import { message } from "antd";
+import { TEXT } from "@way-to-bot/shared/constants/text";
 
 const registrationRouterEpic = routerEpic(
   WEBAPP_ROUTES.registrationRoute,
   () => (action$, state$, dependencies) =>
     createUserEpic({
-      onSuccess: () => getUserByTgInfoEpic(action$, state$, dependencies),
+      onSuccess: () => {
+        message.success(TEXT.success);
+
+        return getUserByTgInfoEpic(action$, state$, dependencies);
+      },
     })(action$, state$, dependencies),
 );
 
