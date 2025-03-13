@@ -13,7 +13,7 @@ services:
     volumes:
       - ./docker_data/uploads:/app/uploads
       - ./packages/webapp/dist:/app/packages/webapp/dist
-      - ./packages/server/logs:/app/api_logs
+      - ./docker_data/api_logs:/app/api_logs
     restart: on-failure
     command: >
       sh -c "
