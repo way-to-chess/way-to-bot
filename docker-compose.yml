@@ -18,7 +18,8 @@ services:
     command: >
       sh -c "
         npm run build --workspace @way-to-bot/webapp &&
-        npm run build --workspace @way-to-bot/server && 
+        npm run build --workspace=@way-to-bot/adminui &&
+        npm run build --workspace @way-to-bot/server &&
         npm run typeorm:migrate --workspace @way-to-bot/server &&
         npm run production --workspace @way-to-bot/server
       "
