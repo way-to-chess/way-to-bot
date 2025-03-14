@@ -35,7 +35,7 @@ RUN npm install --production
 EXPOSE 3000
 CMD ["npx", "env-cmd", "-f", ".env", "node", "dist/app.js"]
 
-FROM nginx:alpine AS frontend
+FROM nginx:alpine AS web
 COPY --from=builder /app/packages/webapp/dist /usr/share/nginx/html/webapp
 COPY --from=builder /app/packages/adminui/dist /usr/share/nginx/html/admin
 COPY nginx/nginx.conf /etc/nginx/nginx.conf

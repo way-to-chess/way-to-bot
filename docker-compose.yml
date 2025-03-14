@@ -15,19 +15,23 @@ services:
       - ./docker_data/api_logs:/app/api_logs
     restart: unless-stopped
 
-  frontend:
+  web:
+    container_name: wtb_web
     build:
       context: .
       dockerfile: Dockerfile
-      target: frontend
+      target: web
     volumes:
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
+      - ./docker_data/certbot/www/:/var/www/certbot/:ro
+      - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
     ports:
       - "80:80"
       - "443:443"
     restart: unless-stopped
 
   certbot:
+    container_name: wtb_certbot
     image: certbot/certbot:latest
     volumes:
       - ./docker_data/certbot/www/:/var/www/certbot/:rw
