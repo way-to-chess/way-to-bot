@@ -7,7 +7,7 @@
     "build": "tsc",
     "dev": "nodemon src/app.ts",
     "dev:local": "env-cmd -f .env.local nodemon src/app.ts",
-    "production": "node build/app.js",
+    "production": "node dist/app.js",
     "typeorm:migrate": "env-cmd sh bin/typeorm/migrate.sh",
     "typeorm:migrate:local": "env-cmd -f .env.local sh bin/typeorm/migrate.sh",
     "lint": "eslint src --fix",
