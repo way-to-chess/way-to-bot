@@ -26,16 +26,16 @@ services:
       - "80:80"
       - "443:443"
     restart: unless-stopped
-#
-#  certbot:
-#    image: certbot/certbot:latest
-#    volumes:
-#      - ./docker_data/certbot/www/:/var/www/certbot/:rw
-#      - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
-#    entrypoint: |
-#      sh -c "
-#        certbot certonly --webroot -w /var/www/certbot -d waytochess.site --email ignatmustafin77@gmail.com --agree-tos --non-interactive --keep-until-expiring &&
-#        sleep 1d &&
-#        exit 0
-#      "
-#    restart: unless-stopped
+
+  certbot:
+    image: certbot/certbot:latest
+    volumes:
+      - ./docker_data/certbot/www/:/var/www/certbot/:rw
+      - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: |
+      sh -c "
+        certbot certonly --webroot -w /var/www/certbot -d waytochess.site --email ignatmustafin77@gmail.com --agree-tos --non-interactive --keep-until-expiring &&
+        sleep 1d &&
+        exit 0
+      "
+    restart: unless-stopped
