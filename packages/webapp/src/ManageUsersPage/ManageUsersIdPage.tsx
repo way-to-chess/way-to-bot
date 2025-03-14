@@ -1,8 +1,8 @@
-import { Avatar, Button, Empty, Flex, List, Typography } from "antd";
-import { Navigate, NavLink, useParams } from "react-router-dom";
+import { Avatar, Empty, Flex, List, Typography } from "antd";
+import { Navigate, useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { userSlice } from "../Store/User/UserSlice";
-import { ArrowLeftOutlined, UserOutlined } from "@ant-design/icons";
+import { UserOutlined } from "@ant-design/icons";
 import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { TEXT } from "@way-to-bot/shared/constants/text";
@@ -19,14 +19,6 @@ const UserPageBase = ({
 }: IUser & { isLoading?: boolean }) => {
   return (
     <List style={{ padding: 16 }} itemLayout={"vertical"} loading={isLoading}>
-      <List.Item>
-        <NavLink to={`/${WEBAPP_ROUTES.manageUsersRoute}`}>
-          <Button icon={<ArrowLeftOutlined />} type={"text"}>
-            {TEXT.users}
-          </Button>
-        </NavLink>
-      </List.Item>
-
       <List.Item>
         <Flex gap={8}>
           <Avatar

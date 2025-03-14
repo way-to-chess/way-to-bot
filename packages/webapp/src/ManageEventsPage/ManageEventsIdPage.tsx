@@ -10,12 +10,10 @@ import {
   Modal,
   Typography,
 } from "antd";
-import { NavLink, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useParamSelector } from "../Hooks/UseParamSelector";
 import { eventsSlice } from "../Store/Events/EventsSlice";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import {
-  ArrowLeftOutlined,
   ClockCircleOutlined,
   DollarOutlined,
   EnvironmentOutlined,
@@ -111,14 +109,6 @@ const ManageEventsIdPage = () => {
         }}
         loading={loading}
       >
-        <List.Item>
-          <NavLink to={`/${WEBAPP_ROUTES.manageEventsRoute}`}>
-            <Button icon={<ArrowLeftOutlined />} type={"text"}>
-              {TEXT.events}
-            </Button>
-          </NavLink>
-        </List.Item>
-
         <List.Item>
           <Badge.Ribbon text={EVENT_STATUS_TO_TEXT_MAP[event.status]}>
             <Card

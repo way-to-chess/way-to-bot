@@ -7,15 +7,15 @@ interface IHistoryItem {
 }
 
 interface IHistoryState {
-  history: {
-    stack: IHistoryItem[];
-  };
+  stack: IHistoryItem[];
+}
+
+interface IWithHistoryState {
+  history: IHistoryState;
 }
 
 const historyInitialState: IHistoryState = {
-  history: {
-    stack: [],
-  },
+  stack: [],
 };
 
 const historyReducer = (
@@ -28,25 +28,21 @@ const historyReducer = (
     if (payload.location.state?.fromBackButton) {
       return {
         ...state,
-        history: {
-          ...state.history,
-          stack: state.history.stack.slice(0, -1),
-        },
+        stack: state.stack.slice(0, -1),
       };
     }
 
+    const stack = state.stack.length > 5 ? state.stack.slice(1) : state.stack;
+
     return {
       ...state,
-      history: {
-        ...state.history,
-        stack: [...state.history.stack, payload],
-      },
+      stack: [...stack, payload],
     };
   }
 
   return state as IHistoryState;
 };
 
-const selectHistoryStack = (state: IHistoryState) => state.history.stack;
+const selectHistoryStack = (state: IWithHistoryState) => state.history.stack;
 
 export { historyReducer, selectHistoryStack };

@@ -79,7 +79,7 @@ const BackButtonHandler: FC<PropsWithChildren> = ({ children }) => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    if (historyStack.length >= 2) {
+    if (historyStack?.length >= 2) {
       Telegram.WebApp.BackButton.show();
 
       const handler = () => {
