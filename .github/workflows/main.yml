@@ -23,8 +23,7 @@ jobs:
           git pull origin master
           . ~/.nvm/nvm.sh
           nvm use default
-          docker compose down app web
-          docker rmi way-to-bot-app
-          docker rmi way-to-bot-web
+          docker compose down
+          docker-compose build
+          docker compose up -d
           docker builder prune -a -f
-          docker compose up app web --build -d
