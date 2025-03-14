@@ -13,6 +13,7 @@ services:
     volumes:
       - ./docker_data/uploads:/app/uploads
       - ./packages/webapp/dist:/app/packages/webapp/dist
+      - ./packages/adminui/dist:/app/packages/adminui/dist
       - ./docker_data/api_logs:/app/api_logs
     restart: on-failure
     command: >
