@@ -1,6 +1,5 @@
 import { createRoot } from "react-dom/client";
 import { Navigate, Route, Routes } from "react-router-dom";
-import "./main.css";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
 import { Provider, useDispatch, useSelector } from "react-redux";
 import { history as browserHistory, store } from "./Store/App/CreateStore";
@@ -21,6 +20,7 @@ import { RegistrationPage } from "./Registration/RegistrationPage";
 import { ManageParticipateRequestsPage } from "./ManageParticipateRequestsPage/ManageParticipateRequestsPage";
 import { selectHistoryStack } from "./Store/Router/HistoryReducer";
 import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
+import { WebApp } from "./WebApp/WebApp";
 
 if (!isDev) {
   Sentry.init({
@@ -177,4 +177,4 @@ const App = () => {
   );
 };
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(<WebApp />);
