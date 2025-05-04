@@ -60,3 +60,7 @@
 .textColor2 {
     color: var(--text-color-2);
 }
+
+.textColor5 {
+    color: var(--text-color-5);
+}

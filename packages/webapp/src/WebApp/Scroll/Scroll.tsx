@@ -50,9 +50,7 @@ const ScrollAreaViewport: FC<PropsWithChildren> = ({ children }) => {
 
   return (
     <ScrollArea.Viewport className={classes.viewport} ref={ref}>
-      <ScrollContext value={ref}>
-        <div className={classes.pageWrapper}>{children}</div>
-      </ScrollContext>
+      <ScrollContext value={ref}>{children}</ScrollContext>
     </ScrollArea.Viewport>
   );
 };

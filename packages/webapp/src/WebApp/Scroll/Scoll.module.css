@@ -1,8 +1,5 @@
 .viewport {
     height: 100%;
-}
-
-.pageWrapper {
     width: 100%;
     min-height: calc(100vh - var(--bottom-bar-height));
     display: flex;

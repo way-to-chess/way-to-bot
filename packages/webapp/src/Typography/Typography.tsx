@@ -11,7 +11,7 @@ type TTypographyType =
   | "text2"
   | "title5";
 
-type TColor = "textColor1" | "textColor2";
+type TColor = "textColor1" | "textColor2" | "textColor5";
 
 interface IWithValue {
   value?: string | number;
@@ -52,6 +52,7 @@ const TAG_BY_TYPE: Record<TTypographyType, ElementType> = {
 const CLASSNAME_BY_COLOR: Record<TColor, string | undefined> = {
   textColor1: classes.textColor1,
   textColor2: classes.textColor2,
+  textColor5: classes.textColor5,
 };
 
 const getTypographyClassName = ({

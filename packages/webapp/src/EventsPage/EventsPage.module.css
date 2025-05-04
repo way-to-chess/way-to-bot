@@ -1,3 +1,130 @@
 .page {
     padding: 20px 16px 30px;
+    display: flex;
+    flex-direction: column;
+    gap: 40px;
+}
+
+.eventGroup {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.event {
+    position: relative;
+    border-radius: 16px;
+    border: 1px solid var(--stroke-color-1);
+    box-shadow: var(--shadow-1);
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    overflow: hidden;
+}
+
+.event.finished::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--background-color-1);
+    opacity: 60%;
+    pointer-events: none;
+}
+
+.imgContainer {
+    height: 124px;
+    width: 100%;
+    border-radius: 12px;
+    overflow: hidden;
+}
+
+.imgContainer img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.emptyImg {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    height: 100%;
+    background: #E5E7EB;
+}
+
+.status {
+    position: absolute;
+    top: 12px;
+    right: 10px;
+    width: fit-content;
+    height: 24px;
+    border-radius: 24px;
+    background: var(--main-color);
+    padding: 2px 8px;
+}
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.nameBlock {
+    display: flex;
+    gap: 8px;
+}
+
+.name {
+    flex: 1;
+}
+
+.participantsBlock {
+    height: 28px;
+    flex: 0 0 auto;
+    width: fit-content;
+    padding: 0 8px;
+    background: #C0F3BC99;
+    color: #2A5D26;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.participantsBlock.danger {
+    background: #FF908699;
+    color: #5D2626;
+}
+
+.participantsBlock.warning {
+    background: #FFF58699;
+    color: #5D5326;
+}
+
+.participantsBlock.full {
+    color: var(--text-color-1);
+    background: #ECF1F6;
+}
+
+.infoBlock {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.infoGroup {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+}
+
+.infoItem {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
