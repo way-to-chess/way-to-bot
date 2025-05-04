@@ -1,7 +1,7 @@
 .bottom {
     display: flex;
     align-items: center;
-    background: var(--background-color);
+    background: var(--background-color-1);
     height: var(--bottom-bar-height);
     box-shadow: 2px -1px 8px 0 #0A2F701A;
     backdrop-filter: blur(8px);

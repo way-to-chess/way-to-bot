@@ -9,7 +9,7 @@ import {
   useRef,
 } from "react";
 import { ScrollArea } from "@base-ui-components/react";
-import classes from "../Layout/Layout.module.css";
+import classes from "./Scoll.module.css";
 
 const useScrollToTop = () => {
   const { pathname } = useLocation();

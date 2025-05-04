@@ -1,10 +1,7 @@
 import { createBrowserRouter, redirect } from "react-router";
 import { Layout } from "./Layout/Layout";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-
-const Events = () => {
-  return "events";
-};
+import { EventsPage } from "../EventsPage/EventsPage";
 
 const Leaderboard = () => {
   return "leaderboard";
@@ -28,7 +25,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
         children: [
           {
             index: true,
-            Component: Events,
+            Component: EventsPage,
           },
         ],
       },

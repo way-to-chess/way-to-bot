@@ -4,10 +4,13 @@
 :root {
     --bottom-bar-height: calc(57px + env(safe-area-inset-bottom));
     --main-color: #007AFF;
-    --text-color: #000000;
+    --text-color-1: #192333;
+    --text-color-2: #707579;
     --text-color-3: #A2ACB0;
-    --background-color: #FFF;
+    --background-color-1: #FFF;
     --background-color-2: #FFFFFFF2;
+    --background-color-3: #F9FAFB;
+
 }
 
 * {

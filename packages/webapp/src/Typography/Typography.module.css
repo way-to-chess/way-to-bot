@@ -1,0 +1,62 @@
+.typography {
+    font-family: Roboto;
+    font-style: normal;
+    margin: 0;
+}
+
+.title2 {
+    font-weight: 700;
+    font-size: 24px;
+    line-height: 28px;
+    letter-spacing: 0.07px;
+}
+
+.title3 {
+    font-weight: 700;
+    font-size: 20px;
+    line-height: 25px;
+    letter-spacing: -0.45px;
+}
+
+.text1 {
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: -0.4px;
+}
+
+.buttonTitle {
+    font-weight: 590;
+    font-size: 17px;
+    line-height: 22px;
+    letter-spacing: -0.4px;
+}
+
+.title4 {
+    font-weight: 700;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: -0.4px;
+}
+
+.text2 {
+    font-weight: 400;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.23px;
+}
+
+.title5 {
+    font-weight: 510;
+    font-size: 15px;
+    line-height: 20px;
+    letter-spacing: -0.23px;
+}
+
+.textColor1 {
+    color: var(--text-color-1);
+}
+
+.textColor2 {
+    color: var(--text-color-2);
+}
