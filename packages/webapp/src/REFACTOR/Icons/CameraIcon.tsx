@@ -1,6 +1,6 @@
 import { FC } from "react";
 
-const CameraIcon: FC<{ width: number; height: number }> = ({
+const CameraIcon: FC<{ width: number | string; height: number | string }> = ({
   height,
   width,
 }) => {

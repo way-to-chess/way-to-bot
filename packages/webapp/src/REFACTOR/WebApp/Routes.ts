@@ -3,10 +3,7 @@ import { Layout } from "./Layout/Layout";
 import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { EventsPage } from "../EventsPage/EventsPage";
 import { SingleEventPage } from "../SingleEventPage/SingleEventPage";
-
-const Leaderboard = () => {
-  return "leaderboard";
-};
+import { LeaderboardPage } from "../LeaderboardPage/LeaderboardPage";
 
 const Profile = () => {
   return "profile";
@@ -36,7 +33,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
       },
       {
         path: "/leaderboard",
-        Component: Leaderboard,
+        Component: LeaderboardPage,
       },
       {
         path: "/profile",

@@ -1,0 +1,34 @@
+.page {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.users {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.user {
+    height: 60px;
+    padding: 0 16px;
+    gap: 8px;
+    background: var(--background-color-1);
+    border: 1px solid var(--stroke-color-1);
+    border-radius: 12px;
+}
+
+.user:nth-child(1) {
+    background: #FFCC0033;
+}
+
+.user:nth-child(2) {
+    background: #94949433;
+}
+
+.user:nth-child(3) {
+    background: #8B420133;
+    margin-bottom: 16px;
+}

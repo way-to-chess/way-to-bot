@@ -105,53 +105,29 @@
 
 .participant {
     height: 60px;
-    display: flex;
-    align-items: center;
     gap: 4px;
-}
-
-.participant.admin {
-    gap: 12px;
 }
 
 .participant:not(:last-child) {
     border-bottom: 1px solid var(--stroke-color-1);
 }
 
-.participantImg {
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    flex-shrink: 0;
+.host {
+    display: flex;
+    align-items: center;
+    gap: 12px;
 }
 
-.participant.admin .participantImg {
-    width: 40px;
-    height: 40px;
-}
-
-.participantInfo {
+.hostInfo {
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    color: var(--text-color-1);
-    font-weight: 400;
-    font-size: 12px;
-    line-height: 100%;
-    letter-spacing: -0.23px;
     flex: 1;
 }
 
-.participant.admin .participantInfo {
-    gap: 0;
-}
-
-.adminMessage {
-    width: 44px;
-    height: 44px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+.hostImg {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
     flex-shrink: 0;
 }
 

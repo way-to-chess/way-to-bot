@@ -9,13 +9,13 @@ const sortByKey = <T>(
     const aa = a[key];
     const bb = b[key];
     if (typeof aa === "number" && typeof bb === "number") {
-      return sortDirection === ESortDirection.asc ? aa - bb : bb - aa;
+      return sortDirection === ESortDirection.asc ? bb - aa : aa - bb;
     }
 
     if (typeof aa === "string" && typeof bb === "string") {
       return sortDirection === ESortDirection.asc
-        ? aa.localeCompare(bb)
-        : bb.localeCompare(aa);
+        ? bb.localeCompare(aa)
+        : aa.localeCompare(bb);
     }
 
     return 0;

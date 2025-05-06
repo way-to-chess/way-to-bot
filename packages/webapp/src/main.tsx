@@ -1,11 +1,7 @@
 import { createRoot } from "react-dom/client";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
-import { useDispatch, useSelector } from "react-redux";
-import { replace } from "@lagunovsky/redux-react-router";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
-import { selectHistoryStack } from "./Store/Router/HistoryReducer";
-import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
 import { WebApp } from "./REFACTOR/WebApp/WebApp";
 
 if (!isDev) {
@@ -57,43 +53,6 @@ const useViewport = () => {
 
     document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
   });
-};
-
-const BackButtonHandler: FC<PropsWithChildren> = ({ children }) => {
-  const historyStack = useSelector(selectHistoryStack);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (historyStack?.length >= 2) {
-      Telegram.WebApp.BackButton.show();
-
-      const handler = () => {
-        const historyItem = getNotNil(
-          historyStack[historyStack.length - 2],
-          `historyItem | stack: ${JSON.stringify(historyStack)}`,
-        );
-
-        dispatch(
-          replace(historyItem.location.pathname, {
-            fromBackButton: true,
-          }),
-        );
-      };
-
-      Telegram.WebApp.BackButton.onClick(handler);
-
-      return () => {
-        Telegram.WebApp.BackButton.offClick(handler);
-      };
-    }
-
-    Telegram.WebApp.BackButton.hide();
-
-    return () => {};
-  }, [historyStack, dispatch]);
-
-  return children;
 };
 
 createRoot(document.getElementById("root")!).render(<WebApp />);

@@ -15,12 +15,10 @@ import { FoodIcon } from "../Icons/FoodIcon";
 import { AlcoholIcon } from "../Icons/AlcoholIcon";
 import { CoffeeIcon } from "../Icons/CoffeeIcon";
 import { CameraIcon } from "../Icons/CameraIcon";
-import { FC } from "react";
-import { IUser } from "@way-to-bot/shared/interfaces/user.interface";
 import { getUserFullName } from "@way-to-bot/shared/utils/GetUserFullName";
-import clsx from "clsx";
 import { MessageIcon } from "../Icons/MessageIcon";
 import { Button } from "../../Button/Button";
+import { UserListItem } from "../UserListItem/UserListItem";
 
 const LOCATION_BENEFITS = [
   { icon: FoodIcon, title: "Еда" },
@@ -29,47 +27,22 @@ const LOCATION_BENEFITS = [
   { icon: CoffeeIcon, title: "Напитки" },
 ];
 
-interface IParticipantProps
-  extends Pick<IUser, "photo" | "username" | "firstName" | "lastName"> {
-  isAdmin?: boolean;
-}
-
-const Participant: FC<IParticipantProps> = ({
-  firstName,
-  lastName,
-  username,
-  photo,
-  isAdmin,
-}) => {
+const Host = () => {
   return (
-    <div className={clsx(classes.participant, isAdmin && classes.admin)}>
-      <ImgWithContainer
-        className={classes.participantImg}
-        previewUrl={photo?.url}
-      />
-      <div className={classes.participantInfo}>
-        <Typography
-          type={"title5"}
-          value={getUserFullName(firstName, lastName)}
-        />
-        {isAdmin ? (
-          <Typography type={"text2"} value={username} color={"textColor2"} />
-        ) : (
-          username
-        )}
+    <a
+      className={classes.host}
+      href={"https://web.telegram.org/k/#@Roman_Comandorb"}
+      rel={"noreferrer noopener"}
+      target={"_blank"}
+    >
+      <ImgWithContainer className={classes.hostImg} />
+      <div className={classes.hostInfo}>
+        <Typography type={"title5"} value={getUserFullName("Роман", "Радюш")} />
+        <Typography type={"text2"} value={"Написать"} color={"textColor2"} />
       </div>
 
-      {isAdmin ? (
-        <a
-          className={classes.adminMessage}
-          href={"https://web.telegram.org/k/#@Roman_Comandorb"}
-          rel={"noreferrer noopener"}
-          target={"_blank"}
-        >
-          {MessageIcon}
-        </a>
-      ) : null}
-    </div>
+      {MessageIcon}
+    </a>
   );
 };
 
@@ -181,18 +154,17 @@ const SingleEventPage = () => {
           </div>
           <div className={classes.participants}>
             {eventsUsersLeagues.slice(0, 5).map(({ user }) => (
-              <Participant {...user} key={user.id} />
+              <UserListItem
+                {...user}
+                className={classes.participant}
+                key={user.id}
+              />
             ))}
           </div>
         </div>
         <div className={classes.block}>
           <Typography type={"title4"} value={"Организатор"} />
-          <Participant
-            isAdmin
-            firstName={"Роман"}
-            lastName={"Радюш"}
-            username={"Написать"}
-          />
+          <Host />
         </div>
         <Button className={classes.button} disabled>
           {"Участвовать"}
