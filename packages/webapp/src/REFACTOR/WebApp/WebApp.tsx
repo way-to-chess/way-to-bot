@@ -1,8 +1,8 @@
 import { RouterProvider } from "react-router";
 import { WEB_APP_ROUTER } from "./Routes";
 import { Provider } from "react-redux";
-import "../Assets/Style/Global.css";
-import { store } from "../Store/Store";
+import "../../Assets/Style/Global.css";
+import { store } from "../Store";
 
 const WebApp = () => (
   <Provider store={store}>

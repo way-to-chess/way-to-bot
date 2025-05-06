@@ -15,12 +15,13 @@
     color: var(--text-color-5);
 }
 
-.primary:active {
+.primary:not(:disabled):active {
     opacity: 0.6;
 }
 
 .primary:disabled {
     background: #C6CBD0;
+    cursor: not-allowed;
 }
 
 @media (hover: hover) {

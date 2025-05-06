@@ -6,7 +6,7 @@ import { FC, PropsWithChildren, useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
 import { selectHistoryStack } from "./Store/Router/HistoryReducer";
 import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
-import { WebApp } from "./WebApp/WebApp";
+import { WebApp } from "./REFACTOR/WebApp/WebApp";
 
 if (!isDev) {
   Sentry.init({

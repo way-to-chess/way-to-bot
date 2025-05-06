@@ -1,4 +1,4 @@
-import { eventApi } from "../Store/Event/EventApi";
+import { eventApi } from "../Event/EventApi";
 import classes from "./EventsPage.module.css";
 import { Typography } from "../Typography/Typography";
 import { IEvent } from "@way-to-bot/shared/interfaces/event.interface";
@@ -6,17 +6,16 @@ import { EEventStatus } from "@way-to-bot/shared/enums";
 import { FC } from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
-import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
-import { ParticipantsIcon } from "../Icons/ParticipantsIcon";
 import { CalendarIcon } from "../Icons/CalendarIcon";
 import { ClockIcon } from "../Icons/ClockIcon";
 import { PriceIcon } from "../Icons/PriceIcon";
 import { LocationIcon } from "../Icons/LocationIcon";
-import { Button } from "../Button/Button";
+import { Button } from "../../Button/Button";
 import { generatePath } from "react-router";
 import clsx from "clsx";
 import { Skeleton } from "../Skeleton/Skeleton";
-import { CameraIcon } from "../Icons/CameraIcon";
+import { ImgWithContainer } from "../ImgWithContainer/ImgWithContainer";
+import { EventParticipantCount } from "../EventParticipantCount/EventParticipantCount";
 
 dayjs.locale("ru");
 
@@ -34,29 +33,6 @@ const groupByDateTime = (events: IEvent[]) =>
 
     return acc;
   }, {});
-
-const getParticipantsClassName = (
-  participantsCount: number,
-  participantsLimit?: number | null,
-) => {
-  const percent = participantsLimit
-    ? Math.min((participantsCount * 100) / participantsLimit, 100)
-    : 0;
-
-  if (percent === 100) {
-    return classes.full;
-  }
-
-  if (percent >= 70 && percent < 100) {
-    return classes.danger;
-  }
-
-  if (percent >= 30 && percent < 70) {
-    return classes.warning;
-  }
-
-  return undefined;
-};
 
 interface IEventProps extends IEvent {
   formattedDate: string;
@@ -79,20 +55,12 @@ const Event: FC<IEventProps> = ({
 
   const isFinished = status === EEventStatus.FINISHED;
 
-  const participantsClassName = getParticipantsClassName(
-    eventsUsersLeagues.length,
-    participantsLimit,
-  );
-
   return (
     <div className={clsx(classes.event, isFinished && classes.finished)}>
-      <div className={classes.imgContainer}>
-        {preview ? (
-          <img alt={"event cover"} src={getPreviewSrc(preview.url)} />
-        ) : (
-          <div className={classes.emptyImg}>{CameraIcon}</div>
-        )}
-      </div>
+      <ImgWithContainer
+        previewUrl={preview?.url}
+        className={classes.imgContainer}
+      />
 
       {isFinished ? (
         <Typography
@@ -108,10 +76,11 @@ const Event: FC<IEventProps> = ({
         <Typography type={"title3"} className={classes.name}>
           {name}
         </Typography>
-        <div className={clsx(classes.participantsBlock, participantsClassName)}>
-          {ParticipantsIcon}
-          {`${eventsUsersLeagues.length} / ${participantsLimit}`}
-        </div>
+
+        <EventParticipantCount
+          currentCount={eventsUsersLeagues.length}
+          maxCount={participantsLimit}
+        />
       </div>
 
       <div className={classes.infoBlock}>

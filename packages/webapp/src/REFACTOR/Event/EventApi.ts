@@ -8,6 +8,10 @@ const eventApi = webAppApi.injectEndpoints({
       query: () => "event/all",
       transformResponse: (data: IResponseWithData<IEvent[]>) => data.data,
     }),
+    getEventById: build.query<IEvent, string>({
+      query: (id) => `event/getById/${id}`,
+      transformResponse: (data: IResponseWithData<IEvent>) => data.data,
+    }),
   }),
 });
 
