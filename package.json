@@ -1,15 +1,15 @@
 {
-  "name": "wat-to-bot",
+  "name": "way-to-bot",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "type": "module",
   "private": true,
   "scripts": {
-    "server:dev": "npm run dev --workspace=@way-to-bot/server",
     "webapp:dev": "npm run dev --workspace=@way-to-bot/webapp",
+    "adminui:dev": "npm run dev --workspace=@way-to-bot/adminui",
+    "dev:web:all": "npm-run-all --parallel webapp:dev adminui:dev",
     "webapp:dev:local": "npm run dev:local --workspace=@way-to-bot/webapp",
-    "dev:all": "npm-run-all --parallel server:dev webapp:dev",
     "lint": "npm run lint --workspaces --if-present"
   },
   "keywords": [],
@@ -20,6 +20,8 @@
   ],
   "devDependencies": {
     "eslint": "9.12.0",
+    "eslint-config-prettier": "^10.1.2",
+    "eslint-plugin-prettier": "^5.2.6",
     "npm-run-all": "^4.1.5",
     "typescript": "5.6.3"
   }

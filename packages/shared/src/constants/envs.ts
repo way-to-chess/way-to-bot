@@ -1,6 +1,7 @@
 import { getNotNil } from "../utils/getNotNil";
 
 const getEnv = (name: string) => {
+  // @ts-expect-error For Sanya
   return getNotNil(import.meta.env[`VITE_${name}`], ` add 'VITE_${name}' to .evn file`);
 };
 

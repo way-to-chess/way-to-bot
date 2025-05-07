@@ -1,0 +1,48 @@
+services:
+  postgres:
+    container_name: wtb_postgres
+    image: postgres
+    env_file:
+      - ./packages/server/.env
+    restart: on-failure:3
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test:
+        ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  app:
+    container_name: wtb_app
+    build:
+      context: .
+      dockerfile: Dockerfile-dev
+      target: server-dev
+    ports:
+      - "3000:3000"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    env_file:
+      - ./packages/server/.env
+    restart: on-failure:3
+    volumes:
+      - uploads:/app/uploads
+      - api_logs:/app/api_logs
+    command: >
+      sh -c "
+        cd packages/server &&
+        sh bin/typeorm/run-migration.sh && 
+        npm run production
+      "
+
+
+volumes:
+  pg_data:
+  uploads:
+  api_logs:

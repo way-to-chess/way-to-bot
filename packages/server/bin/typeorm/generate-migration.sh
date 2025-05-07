@@ -1,0 +1,4 @@
+#!/bin/sh
+export $(grep -v '^#' .env | xargs)
+read -p "Input name for your migration: " migrationName
+npx typeorm-ts-node-esm migration:generate ./src/database/migrations/"$migrationName" -d ./dist/database/ds/ds.mts

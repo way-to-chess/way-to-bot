@@ -6,6 +6,7 @@ build
 .env
 .env.*
 docker_data
-.cert
+packages/webapp/.cert
 swagger
 logs
+private

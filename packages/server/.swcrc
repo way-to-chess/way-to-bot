@@ -1,0 +1,17 @@
+{
+  "jsc": {
+    "parser": {
+      "syntax": "typescript",
+      "tsx": false,
+      "decorators": true
+    },
+    "target": "esnext",
+    "keepClassNames": true,
+    "transform": {
+      "decoratorMetadata": true
+    }
+  },
+  "module": {
+    "type": "nodenext"
+  }
+}
