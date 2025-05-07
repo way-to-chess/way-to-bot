@@ -4,10 +4,7 @@ import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
 import { EventsPage } from "../EventsPage/EventsPage";
 import { SingleEventPage } from "../SingleEventPage/SingleEventPage";
 import { LeaderboardPage } from "../LeaderboardPage/LeaderboardPage";
-
-const Profile = () => {
-  return "profile";
-};
+import { ProfilePage } from "../ProfilePage/ProfilePage";
 
 const WEB_APP_ROUTER = createBrowserRouter([
   {
@@ -37,7 +34,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
       },
       {
         path: "/profile",
-        Component: Profile,
+        Component: ProfilePage,
       },
     ],
   },

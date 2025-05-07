@@ -22,7 +22,7 @@ const UserListItem: FC<IUserListItemProps> = ({
   prefix,
   rating,
 }) => {
-  const pathToUser = generatePath("/profile/:id", { id: id.toString() });
+  const pathToUser = generatePath("/user/:id", { id: id.toString() });
 
   return (
     <Link to={pathToUser} className={clsx(classes.user, className)}>

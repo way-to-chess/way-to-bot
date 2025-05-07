@@ -61,6 +61,12 @@
     flex: 1;
 }
 
+.imgContainer {
+    height: 124px;
+    border-radius: 12px;
+    width: 100%;
+}
+
 .infoBlock {
     display: flex;
     flex-direction: column;
