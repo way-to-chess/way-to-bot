@@ -58,27 +58,8 @@
     border-color: var(--main-color);
 }
 
-/* File input styles */
 .fileInput {
     position: relative;
-    display: inline-block;
-    cursor: pointer;
-    color: var(--text-color-2);
-    font-size: 14px;
-    padding: 8px 12px;
-    border-radius: 8px;
-    background-color: var(--background-color-3);
-    border: 1px dashed var(--stroke-color-2);
-    text-align: center;
-    transition: all 0.3s;
-    width: 100%;
-    max-width: 200px;
-    margin-top: 8px;
-}
-
-.fileInput:hover {
-    border-color: var(--main-color);
-    color: var(--main-color);
 }
 
 .fileInput input[type="file"] {

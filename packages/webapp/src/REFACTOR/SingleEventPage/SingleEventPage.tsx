@@ -114,12 +114,20 @@ const SingleEventPage = () => {
             </Typography>
           </div>
         </div>
-        <div className={classes.block}>
-          <Typography type={"text2"} className={classes.infoItem}>
-            {LocationIcon}
-            {location?.title}
-          </Typography>
-        </div>
+        {location ? (
+          <a
+            className={classes.block}
+            href={location.url ?? undefined}
+            target={"_blank"}
+            rel={"noreferrer noopener"}
+          >
+            <Typography type={"text2"} className={classes.infoItem}>
+              {LocationIcon}
+              {location.title}
+            </Typography>
+          </a>
+        ) : null}
+
         <div className={classes.block}>
           <Typography type={"title4"} value={"Детали турнира"} />
           <Typography type={"text2"}>{"Детали не добавлены"}</Typography>

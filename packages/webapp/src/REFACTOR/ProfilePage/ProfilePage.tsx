@@ -3,24 +3,132 @@ import { ImgWithContainer } from "../ImgWithContainer/ImgWithContainer";
 import { Typography } from "../Typography/Typography";
 import { Input } from "@base-ui-components/react";
 import { Button } from "../../Button/Button";
+import { fileApi } from "../File/FileApi";
+import { ChangeEventHandler, FC, FormEventHandler, useState } from "react";
+import { userApi } from "../User/UserApi";
+import { EUserRole } from "@way-to-bot/shared/enums";
+
+interface IFileInput {
+  setFileId: (fileId: undefined | number) => void;
+}
+
+const FileInput: FC<IFileInput> = ({ setFileId }) => {
+  const [uploadFile] = fileApi.useUploadFileMutation();
+  const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
+
+  const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    const file = e.target.files?.item(0);
+
+    if (file) {
+      const formData = new FormData();
+      formData.append("file", file);
+
+      uploadFile(formData)
+        .unwrap()
+        .then(({ url, id }) => {
+          setFileId(id);
+          setPreviewUrl(url);
+        });
+    }
+  };
+
+  const clearPreviewUrl = () => {
+    setFileId(undefined);
+    setPreviewUrl(undefined);
+  };
+
+  return (
+    <div className={classes.preview}>
+      <ImgWithContainer
+        className={classes.imgContainer}
+        previewUrl={previewUrl}
+      />
+      <label className={classes.fileInput}>
+        {previewUrl ? (
+          <Typography
+            type={"title5"}
+            value={"Изменить фото"}
+            color={"mainColor"}
+          />
+        ) : (
+          <Typography
+            type={"title5"}
+            value={"Добавить фото"}
+            color={"mainColor"}
+          />
+        )}
+
+        <input
+          type={"file"}
+          accept={"image/png, image/jpeg"}
+          onChange={onChange}
+        />
+      </label>
+      {previewUrl ? (
+        <button onClick={clearPreviewUrl}>
+          <Typography
+            type={"title5"}
+            value={"Удалить фото"}
+            color={"redColor"}
+          />
+        </button>
+      ) : null}
+    </div>
+  );
+};
 
 const ProfilePage = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [fileId, setFileId] = useState<undefined | number>(undefined);
+
+  const [createUser] = userApi.useCreateUserMutation();
+
+  const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
+    e.preventDefault();
+    createUser({
+      firstName,
+      lastName,
+      fileId,
+      roles: [EUserRole.USER],
+      tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+    });
+  };
+
+  const isButtonDisabled = !lastName || !firstName;
+
+  const onFirstNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setFirstName(e.target.value ?? "");
+  };
+
+  const onLastNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
+    setLastName(e.target.value ?? "");
+  };
+
   return (
-    <div className={classes.page}>
-      <div className={classes.preview}>
-        <ImgWithContainer className={classes.imgContainer} />
-        <label className={classes.fileInput}>
-          Выбрать фото
-          <input type={"file"} />
-        </label>
-        <Typography type={"title5"} />
-      </div>
-      <Input placeholder={"Имя"} className={classes.input} />
-      <Input placeholder={"Фамилия"} className={classes.input} />
-      <Button disabled className={classes.button}>
+    <form className={classes.page} onSubmit={onSubmit}>
+      <FileInput setFileId={setFileId} />
+
+      <Input
+        placeholder={"Имя"}
+        className={classes.input}
+        value={firstName}
+        onChange={onFirstNameChange}
+      />
+      <Input
+        placeholder={"Фамилия"}
+        className={classes.input}
+        value={lastName}
+        onChange={onLastNameChange}
+      />
+      <Button
+        type={"submit"}
+        disabled={isButtonDisabled}
+        className={classes.button}
+      >
         {"Создать профиль"}
       </Button>
-    </div>
+    </form>
   );
 };
 

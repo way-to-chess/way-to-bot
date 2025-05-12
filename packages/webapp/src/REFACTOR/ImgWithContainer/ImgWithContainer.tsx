@@ -19,7 +19,7 @@ const ImgWithContainer: FC<IImgWithContainerProps> = ({
         <img alt={"event cover"} src={getPreviewSrc(previewUrl)} />
       ) : (
         <div className={classes.emptyImg}>
-          <CameraIcon width={"80%"} height={"80%"} />
+          <CameraIcon width={"70%"} height={"70%"} />
         </div>
       )}
     </div>

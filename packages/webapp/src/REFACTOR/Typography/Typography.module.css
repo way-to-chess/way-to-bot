@@ -68,3 +68,7 @@
 .mainColor {
     color: var(--main-color);
 }
+
+.redColor {
+    color: var(--red-color);
+}
