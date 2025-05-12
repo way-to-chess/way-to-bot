@@ -1,0 +1,23 @@
+.user {
+    display: flex;
+    align-items: center;
+}
+
+.userImg {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+
+.userInfo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    color: var(--text-color-1);
+    font-weight: 400;
+    font-size: 12px;
+    line-height: 100%;
+    letter-spacing: -0.23px;
+    flex: 1;
+}

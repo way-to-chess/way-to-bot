@@ -1,26 +1,8 @@
 import { createRoot } from "react-dom/client";
-import { Navigate, Route, Routes } from "react-router-dom";
-import "./main.css";
 import { isDev, isHttps } from "./Utils/OneLineUtils";
-import { Provider, useDispatch, useSelector } from "react-redux";
-import { history as browserHistory, store } from "./Store/App/CreateStore";
-import { ReduxRouter, replace } from "@lagunovsky/redux-react-router";
-import { WEBAPP_ROUTES } from "@way-to-bot/shared/constants/webappRoutes";
-import { ManageUsersPage } from "./ManageUsersPage/ManageUsersPage";
-import { Layout } from "./Layout/Layout";
-import { ManageEventsPage } from "./ManageEventsPage/ManageEventsPage";
-import { ManageLocationsPage } from "./ManageLocationsPage/ManageLocationsPage";
-import { ManageUsersIdPage } from "./ManageUsersPage/ManageUsersIdPage";
-import { ManageEventsIdPage } from "./ManageEventsPage/ManageEventsIdPage";
-import { ConfigProvider, theme as antdTheme } from "antd";
-import { ManageLeaguesPage } from "./ManageLeaguesPage/ManageLeaguesPage";
-import { FC, PropsWithChildren, useEffect, useState } from "react";
-import ru from "antd/locale/ru_RU";
+import { useEffect, useState } from "react";
 import * as Sentry from "@sentry/react";
-import { RegistrationPage } from "./Registration/RegistrationPage";
-import { ManageParticipateRequestsPage } from "./ManageParticipateRequestsPage/ManageParticipateRequestsPage";
-import { selectHistoryStack } from "./Store/Router/HistoryReducer";
-import { getNotNil } from "@way-to-bot/shared/utils/getNotNil";
+import { WebApp } from "./REFACTOR/WebApp/WebApp";
 
 if (!isDev) {
   Sentry.init({
@@ -73,108 +55,4 @@ const useViewport = () => {
   });
 };
 
-const BackButtonHandler: FC<PropsWithChildren> = ({ children }) => {
-  const historyStack = useSelector(selectHistoryStack);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    if (historyStack?.length >= 2) {
-      Telegram.WebApp.BackButton.show();
-
-      const handler = () => {
-        const historyItem = getNotNil(
-          historyStack[historyStack.length - 2],
-          `historyItem | stack: ${JSON.stringify(historyStack)}`,
-        );
-
-        dispatch(
-          replace(historyItem.location.pathname, {
-            fromBackButton: true,
-          }),
-        );
-      };
-
-      Telegram.WebApp.BackButton.onClick(handler);
-
-      return () => {
-        Telegram.WebApp.BackButton.offClick(handler);
-      };
-    }
-
-    Telegram.WebApp.BackButton.hide();
-
-    return () => {};
-  }, [historyStack, dispatch]);
-
-  return children;
-};
-
-const App = () => {
-  const theme = useTheme();
-
-  useViewport();
-
-  return (
-    <Provider store={store}>
-      <ReduxRouter history={browserHistory}>
-        <ConfigProvider
-          locale={ru}
-          theme={{
-            cssVar: true,
-            algorithm:
-              antdTheme[
-                theme === "dark" ? "darkAlgorithm" : "defaultAlgorithm"
-              ],
-          }}
-        >
-          <BackButtonHandler>
-            <Routes>
-              <Route path={WEBAPP_ROUTES.anyRoute} element={<Layout />}>
-                <Route
-                  index
-                  element={<Navigate to={WEBAPP_ROUTES.manageUsersRoute} />}
-                />
-
-                <Route
-                  path={WEBAPP_ROUTES.manageUsersRoute}
-                  element={<ManageUsersPage />}
-                />
-                <Route
-                  element={<ManageUsersIdPage />}
-                  path={WEBAPP_ROUTES.manageUsersIdRoute}
-                ></Route>
-                <Route
-                  path={WEBAPP_ROUTES.manageEventsRoute}
-                  element={<ManageEventsPage />}
-                ></Route>
-                <Route
-                  path={WEBAPP_ROUTES.manageEventsIdRoute}
-                  element={<ManageEventsIdPage />}
-                ></Route>
-                <Route
-                  path={WEBAPP_ROUTES.manageLocationsRoute}
-                  element={<ManageLocationsPage />}
-                ></Route>
-                <Route
-                  path={WEBAPP_ROUTES.manageLeaguesRoute}
-                  element={<ManageLeaguesPage />}
-                />
-                <Route
-                  path={WEBAPP_ROUTES.registrationRoute}
-                  element={<RegistrationPage />}
-                />
-                <Route
-                  path={WEBAPP_ROUTES.manageParticipateRequestsRoute}
-                  element={<ManageParticipateRequestsPage />}
-                />
-              </Route>
-            </Routes>
-          </BackButtonHandler>
-        </ConfigProvider>
-      </ReduxRouter>
-    </Provider>
-  );
-};
-
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(<WebApp />);

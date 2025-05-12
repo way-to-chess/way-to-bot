@@ -1,0 +1,27 @@
+.count {
+    height: 28px;
+    flex: 0 0 auto;
+    width: fit-content;
+    padding: 0 8px;
+    background: #C0F3BC99;
+    color: #2A5D26;
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    border-radius: 12px;
+}
+
+.count.danger {
+    background: #FF908699;
+    color: #5D2626;
+}
+
+.count.warning {
+    background: #FFF58699;
+    color: #5D5326;
+}
+
+.count.full {
+    color: var(--text-color-1);
+    background: #ECF1F6;
+}

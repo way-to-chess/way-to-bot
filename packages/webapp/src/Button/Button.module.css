@@ -1,0 +1,40 @@
+.button {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    letter-spacing: -0.4px;
+    text-align: center;
+    vertical-align: middle;
+    border-radius: 10px
+}
+
+/* Variants */
+.primary {
+    background-color: var(--main-color);
+    color: var(--text-color-5);
+}
+
+.primary:not(:disabled):active {
+    opacity: 0.6;
+}
+
+.primary:disabled {
+    background: #C6CBD0;
+    cursor: not-allowed;
+}
+
+@media (hover: hover) {
+    .primary:not(:disabled):hover {
+        opacity: 0.8;
+    }
+}
+
+/* Sizes */
+.L {
+    font-weight: 500;
+    font-size: 17px;
+    line-height: 22px;
+    height: 50px;
+}
+

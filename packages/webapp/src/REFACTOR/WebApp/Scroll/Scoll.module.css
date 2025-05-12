@@ -1,0 +1,29 @@
+.viewport {
+    height: 100%;
+    width: 100%;
+    min-height: calc(100vh - var(--bottom-bar-height));
+    display: flex;
+    flex-direction: column;
+}
+
+.scrollbar {
+    display: flex;
+    justify-content: center;
+    width: 8px;
+    border-radius: 10px;
+    opacity: 0;
+    transition: opacity 150ms 300ms;
+}
+
+.scrollbar[data-hovering],
+.scrollbar[data-scrolling] {
+    opacity: 1;
+    transition-duration: 75ms;
+    transition-delay: 0ms;
+}
+
+.thumb {
+    width: 100%;
+    border-radius: inherit;
+    background-color: var(--background-color-1);
+}
