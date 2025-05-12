@@ -1,18 +1,22 @@
-import { webAppApi } from "../WebAppApi";
-import { IEvent } from "@way-to-bot/shared/interfaces/event.interface";
-import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import {webAppApi} from "../WebAppApi";
+import {
+    ClientDTOEventGetMany,
+    ClientDTOEventGetManyResponse,
+    ClientDTOEventGetOne,
+    ClientDTOEventGetOneResponse
+} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 
 const eventApi = webAppApi.injectEndpoints({
-  endpoints: (build) => ({
-    getAllEvents: build.query<IEvent[], void>({
-      query: () => "event/all",
-      transformResponse: (data: IResponseWithData<IEvent[]>) => data.data,
+    endpoints: (build) => ({
+        getAllEvents: build.query<ClientDTOEventGetMany[], void>({
+            query: () => "event/all",
+            transformResponse: (response: ClientDTOEventGetManyResponse) => response.data,
+        }),
+        getEventById: build.query<ClientDTOEventGetOne, string>({
+            query: (id) => `event/getById/${id}`,
+            transformResponse: (response: ClientDTOEventGetOneResponse) => response.data,
+        }),
     }),
-    getEventById: build.query<IEvent, string>({
-      query: (id) => `event/getById/${id}`,
-      transformResponse: (data: IResponseWithData<IEvent>) => data.data,
-    }),
-  }),
 });
 
-export { eventApi };
+export {eventApi};

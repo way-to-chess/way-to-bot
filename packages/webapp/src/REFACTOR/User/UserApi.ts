@@ -1,24 +1,25 @@
-import { webAppApi } from "../WebAppApi";
-import { IResponseWithData } from "@way-to-bot/shared/interfaces/response.interface";
+import {webAppApi} from "../WebAppApi";
 import {
-  IUser,
-  IUserCreatePayload,
-} from "@way-to-bot/shared/interfaces/user.interface";
+  ClientDTOUserCreateResponse,
+  ClientDTOUserGetMany,
+  ClientDTOUserGetManyResponse
+} from "@way-to-bot/shared/api/DTO/client/user.DTO";
+import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 
 const userApi = webAppApi.injectEndpoints({
-  endpoints: (build) => ({
-    getAllUsers: build.query<IUser[], void>({
-      query: () => "user/all",
-      transformResponse: (data: IResponseWithData<IUser[]>) => data.data,
+    endpoints: (build) => ({
+        getAllUsers: build.query<ClientDTOUserGetMany[], void>({
+            query: () => "user/all",
+            transformResponse: (data: ClientDTOUserGetManyResponse) => data.data,
+        }),
+        createUser: build.mutation<ClientDTOUserCreateResponse, TClientUserCreatePayload>({
+            query: (payload) => ({
+                url: "user/create",
+                method: "POST",
+                body: payload,
+            }),
+        }),
     }),
-    createUser: build.mutation<boolean, IUserCreatePayload>({
-      query: (payload) => ({
-        url: "user/create",
-        method: "POST",
-        body: payload,
-      }),
-    }),
-  }),
 });
 
-export { userApi };
+export {userApi};
