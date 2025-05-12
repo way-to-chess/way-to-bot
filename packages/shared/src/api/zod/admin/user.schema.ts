@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EUserRole } from "../../enums/index.js";
+import { EContactType, EUserRole } from "../../enums/index.js";
 
 const AdminSchemaUserBase = {
   username: z.string().nullable().optional(),
@@ -11,6 +11,14 @@ const AdminSchemaUserBase = {
   losses: z.number().optional(),
   draws: z.number().optional(),
   rating: z.number().optional(),
+  contactInfo: z
+    .array(
+      z.object({
+        type: z.nativeEnum(EContactType),
+        url: z.string(),
+      }),
+    )
+    .optional(),
 };
 
 export const AdminSchemaUserCreate = z

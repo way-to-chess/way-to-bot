@@ -1,5 +1,6 @@
 import { ILocationEntity } from "@way-to-bot/shared/api/interfaces/entities/location-entity.interface.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
+import { ELocationBenefits } from "@way-to-bot/shared/api/enums/index.js";
 
 export class BaseDTOLocation {
   readonly id: number;
@@ -8,6 +9,7 @@ export class BaseDTOLocation {
   readonly address: string | null;
   readonly fileId: number | null;
   readonly preview: IFileEntity | null;
+  readonly benefits: ELocationBenefits[];
 
   constructor(location: ILocationEntity) {
     this.id = location.id;
@@ -16,5 +18,6 @@ export class BaseDTOLocation {
     this.address = location.address ?? null;
     this.fileId = location.fileId ?? null;
     this.preview = location.preview ?? null;
+    this.benefits = location.benefits;
   }
 }

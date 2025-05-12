@@ -17,6 +17,7 @@ import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/p
 import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
+import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 
 @Entity("users")
 @Unique(["username", "firstName", "lastName"])
@@ -43,6 +44,9 @@ export class UserEntity implements IUserEntity {
     default: [EUserRole.USER],
   })
   roles!: EUserRole[];
+
+  @Column({ type: "jsonb", name: "contact_info", nullable: false, default: [] })
+  contactInfo!: TCommonContactInfo[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
   fileId?: number | null;

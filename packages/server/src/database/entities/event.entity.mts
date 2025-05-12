@@ -15,6 +15,7 @@ import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-le
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { EEventStatus } from "@way-to-bot/shared/api/enums/index.js";
 import type { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
+import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 
 @Entity("events")
 export class EventEntity implements IEventEntity {
@@ -27,8 +28,14 @@ export class EventEntity implements IEventEntity {
   @Column({ type: "timestamp", name: "date_time" })
   dateTime!: Date;
 
+  @Column({ type: "int", nullable: true })
+  duration?: number | null;
+
   @Column({ type: "varchar", length: 32, nullable: true })
   price?: string | null;
+
+  @Column({ type: "varchar", nullable: true })
+  description?: string | null;
 
   @Column({
     default: EEventStatus.WAITING,
@@ -65,6 +72,13 @@ export class EventEntity implements IEventEntity {
     (pr: ParticipateRequestEntity) => pr.event,
   )
   participateRequests?: Relation<ParticipateRequestEntity[]>;
+
+  @Column({ name: "host_id", type: "int", nullable: false })
+  hostId!: number;
+
+  @ManyToOne(() => UserEntity)
+  @JoinColumn({ name: "host_id" })
+  host!: Relation<UserEntity>;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

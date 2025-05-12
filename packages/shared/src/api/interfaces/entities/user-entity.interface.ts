@@ -2,6 +2,7 @@ import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { IEventLeagueUserEntity } from "@way-to-bot/shared/api/interfaces/entities/event-league-user-entity.interface.js";
+import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 
 export interface IUserEntity {
   id: number;
@@ -20,4 +21,5 @@ export interface IUserEntity {
   rating: number;
   participateRequests?: IParticipateRequestEntity[];
   eventLeagues?: IEventLeagueUserEntity[];
+  contactInfo: TCommonContactInfo[];
 }

@@ -32,6 +32,7 @@ export class EventRepository {
             },
           },
         },
+        host: true,
       },
     });
 
@@ -54,6 +55,7 @@ export class EventRepository {
       .createQueryBuilder("event")
       .leftJoinAndSelect("event.preview", "preview")
       .leftJoinAndSelect("event.location", "location")
+      .leftJoinAndSelect("event.host", "host")
       .leftJoin("event.eventLeagues", "el")
       .leftJoin("el.participants", "elu")
       .loadRelationCountAndMap(

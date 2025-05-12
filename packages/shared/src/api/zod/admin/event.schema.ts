@@ -12,6 +12,9 @@ const AdminSchemaEventBase = {
   linkToStream: z.string().nullable().optional(),
   locationId: z.number().nullable().optional(),
   fileId: z.number().nullable().optional(),
+  description: z.string().nullable().optional(),
+  duration: z.number().nullable().optional(),
+  hostId: z.number(),
 };
 
 export const AdminSchemaEventCreate = z

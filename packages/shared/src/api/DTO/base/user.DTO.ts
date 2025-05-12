@@ -1,19 +1,21 @@
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
+import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 
 export abstract class BaseDTOUser {
-  id: number;
-  firstName: string;
-  lastName: string;
-  photo?: IFileEntity | null;
-  roles: EUserRole[];
-  wins: number;
-  draws: number;
-  losses: number;
-  total: number;
-  winRate: number;
-  rating: number;
+  readonly id: number;
+  readonly firstName: string;
+  readonly lastName: string;
+  readonly photo?: IFileEntity | null;
+  readonly roles: EUserRole[];
+  readonly wins: number;
+  readonly draws: number;
+  readonly losses: number;
+  readonly total: number;
+  readonly winRate: number;
+  readonly rating: number;
+  readonly contactInfo: TCommonContactInfo[];
 
   protected constructor(user: IUserEntity) {
     this.id = user.id;
@@ -27,5 +29,6 @@ export abstract class BaseDTOUser {
     this.total = user.total;
     this.winRate = user.winRate;
     this.rating = user.rating;
+    this.contactInfo = user.contactInfo;
   }
 }

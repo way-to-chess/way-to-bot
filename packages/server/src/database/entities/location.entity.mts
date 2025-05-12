@@ -10,6 +10,7 @@ import {
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { ILocationEntity } from "@way-to-bot/shared/api/interfaces/entities/location-entity.interface.js";
+import { ELocationBenefits } from "@way-to-bot/shared/api/enums/index.js";
 
 @Entity("locations")
 export class LocationEntity implements ILocationEntity {
@@ -24,6 +25,15 @@ export class LocationEntity implements ILocationEntity {
 
   @Column({ nullable: true, type: "varchar", length: 255 })
   address?: string | null;
+
+  @Column({
+    type: "enum",
+    nullable: false,
+    array: true,
+    enum: ELocationBenefits,
+    default: [],
+  })
+  benefits!: ELocationBenefits[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
   fileId?: number | null;
