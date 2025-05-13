@@ -5,6 +5,7 @@ import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 
 export abstract class BaseDTOUser {
   readonly id: number;
+  readonly username?: string | null;
   readonly firstName: string;
   readonly lastName: string;
   readonly photo?: IFileEntity | null;
@@ -19,6 +20,7 @@ export abstract class BaseDTOUser {
 
   protected constructor(user: IUserEntity) {
     this.id = user.id;
+    this.username = user.username;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.photo = user.photo;

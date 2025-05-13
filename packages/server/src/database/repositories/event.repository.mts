@@ -51,30 +51,19 @@ export class EventRepository {
     options?: FindManyOptions<EventEntity>,
     queryRunner?: QueryRunner,
   ) {
-    const query = this.getRepository(queryRunner)
-      .createQueryBuilder("event")
-      .leftJoinAndSelect("event.preview", "preview")
-      .leftJoinAndSelect("event.location", "location")
-      .leftJoinAndSelect("event.host", "host")
-      .leftJoin("event.eventLeagues", "el")
-      .leftJoin("el.participants", "elu")
-      .loadRelationCountAndMap(
-        "event.participantsCount",
-        "event.eventLeagues.eventLeagueUsers",
-      );
-
-    if (options?.take) {
-      query.limit(options.take);
-    }
-
-    if (options?.skip) {
-      query.skip(options.skip);
-    }
-
-    const [data, count] = (await query.getManyAndCount()) as unknown as [
-      (EventEntity & { participantsCount: number })[],
-      number,
-    ];
+    const [data, count] = await this.getRepository(queryRunner).findAndCount({
+      relations: {
+        location: true,
+        preview: true,
+        eventLeagues: {
+          participants: {
+            user: true,
+          },
+        },
+        host: true,
+      },
+      ...(options && options),
+    });
 
     return {
       data,

@@ -7,7 +7,7 @@ import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-ent
 export abstract class BaseDTOEvent {
   readonly id: number;
   readonly name: string;
-  readonly dateTime: Date;
+  readonly dateTime: string;
   readonly linkToStream?: string | null;
   readonly location?: ILocationEntity | null;
   readonly participantsLimit?: number | null;
@@ -21,7 +21,7 @@ export abstract class BaseDTOEvent {
   protected constructor(event: IEventEntity) {
     this.id = event.id;
     this.name = event.name;
-    this.dateTime = event.dateTime;
+    this.dateTime = event.dateTime.toISOString();
     this.linkToStream = event.linkToStream;
     this.location = event.location;
     this.participantsLimit = event.participantsLimit;

@@ -21,8 +21,20 @@ export class ClientDTOEventGetOneResponse extends GetOneDTO<ClientDTOEventGetOne
 
 // returning data DTO
 export class ClientDTOEventGetMany extends BaseDTOEvent {
+  readonly participantsCount: number;
+
   constructor(data: IEventEntity) {
     super(data);
+    this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
+  }
+
+  countParticipants(eventLeagues: IEventLeagueEntity[]) {
+    return eventLeagues.reduce((pr, curr) => {
+      if (curr.participants?.length) {
+        pr += curr.participants.length;
+      }
+      return pr;
+    }, 0);
   }
 }
 
