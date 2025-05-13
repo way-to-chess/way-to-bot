@@ -11,6 +11,9 @@ import {TrophyIcon} from "../Icons/TrophyIcon";
 import {GamePadIcon} from "../Icons/GamePadIcon";
 import {ClientDTOUserGetOne} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import dayjs from "dayjs";
+import {Skeleton} from "../Skeleton/Skeleton";
+import {Error, RefetchError} from "../Error/Error";
+import {Button} from "../../Button/Button";
 
 interface IStatItem {
     icon: ReactNode;
@@ -61,16 +64,43 @@ const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = ({preview, name, 
     </Link>
 }
 
+const Loading = () => {
+    return <div className={classes.page}>
+        <Skeleton style={{height: 240}}/>
+        <div className={classes.content}>
+            <div className={classes.stats}>
+                <Skeleton style={{height: 110, flex: 1, borderRadius: 16}}/>
+                <Skeleton style={{height: 110, flex: 1, borderRadius: 16}}/>
+                <Skeleton style={{height: 110, flex: 1, borderRadius: 16}}/>
+            </div>
+
+            <Skeleton style={{height: 376, borderRadius: 16}}/>
+        </div>
+    </div>
+}
+
 
 const SingleUserPage = () => {
     const {id} = useParams()
 
     const notNilId = getNotNil(id, "SingleUserPage -> id")
 
-    const {data: user} = userApi.useGetUserByIdQuery(notNilId)
+    const {data: user, isFetching, isError, refetch, error} = userApi.useGetUserByIdQuery(notNilId)
+
+    if (isError) {
+        return <RefetchError refetch={refetch} error={error}/>
+    }
+
+    if (isFetching) {
+        return <Loading/>
+    }
 
     if (!user) {
-        return null
+        return <Error title={"Хмм..."} text={"Похоже такого пользователя нет"}>
+            <Button as={"link"} to={"/leaderboard"}>
+                {"Все пользователи"}
+            </Button>
+        </Error>
     }
 
     const {

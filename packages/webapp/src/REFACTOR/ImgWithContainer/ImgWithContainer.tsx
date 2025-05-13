@@ -15,20 +15,25 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
         className,
     }) => {
     const [hasError, setHasError] = useState(false)
+    const [isLoaded, setIsLoaded] = useState(false)
 
     const onError = () => {
         setHasError(true)
     }
 
+    const onLoad = () => {
+        setIsLoaded(true)
+    }
+
+    const shouldShowFallback = !previewUrl || !isLoaded || hasError
+
     return (
         <div className={clsx(classes.imgContainer, className)}>
-            {previewUrl && !hasError ? (
-                <img alt={"image"} src={getPreviewSrc(previewUrl)} onError={onError}/>
-            ) : (
+            {shouldShowFallback ? (
                 <div className={classes.emptyImg}>
                     <CameraIcon width={"70%"} height={"70%"}/>
                 </div>
-            )}
+            ) : <img alt={"image"} src={getPreviewSrc(previewUrl)} onError={onError} onLoad={onLoad}/>}
         </div>
     );
 };

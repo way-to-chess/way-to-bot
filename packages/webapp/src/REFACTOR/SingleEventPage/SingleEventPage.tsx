@@ -21,6 +21,8 @@ import {Button} from "../../Button/Button";
 import {UserListItem} from "../UserListItem/UserListItem";
 import {FC} from "react";
 import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
+import {Skeleton} from "../Skeleton/Skeleton";
+import {Error, RefetchError} from "../Error/Error";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -48,15 +50,36 @@ const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username})
     );
 };
 
+const Loading = () => {
+    return <div className={classes.page}>
+        <Skeleton className={classes.imgContainer}/>
+        <div className={classes.blocks}>
+            <Skeleton className={classes.blockLoading} style={{height: 190}}/>
+            <Skeleton className={classes.blockLoading} style={{height: 76}}/>
+            <Skeleton className={classes.blockLoading} style={{height: 184}}/>
+        </div>
+    </div>
+}
+
 const SingleEventPage = () => {
     const {id} = useParams();
 
     const notNilId = getNotNil(id, "SingleEventPage -> id");
 
-    const {data: event} = eventApi.useGetEventByIdQuery(notNilId);
+    const {data: event, isFetching, isError, error, refetch} = eventApi.useGetEventByIdQuery(notNilId);
+
+    if (isFetching) {
+        return <Loading/>
+    }
+
+    if (isError) {
+        return <RefetchError refetch={refetch} error={error}/>
+    }
 
     if (!event) {
-        return "Такого события больше нет :(";
+        return <Error title={"Ой!"} text={"Похоже такого события нет"}>
+            <Button as={"link"} to={"/events"}>{"Вернуться к событиям"}</Button>
+        </Error>
     }
 
     const {

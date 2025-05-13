@@ -30,6 +30,11 @@
     gap: 20px;
 }
 
+.blockLoading {
+    border: 1px solid var(--stroke-color-1);
+    border-radius: 16px;
+}
+
 .nameBlock {
     display: flex;
     flex-direction: column;

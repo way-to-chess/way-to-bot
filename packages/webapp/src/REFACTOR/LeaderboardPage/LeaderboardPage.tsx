@@ -11,6 +11,8 @@ import {Radio, RadioGroup} from "@base-ui-components/react";
 import {ESortDirection} from "../../Models/ESortDirection";
 import {useState} from "react";
 import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
+import {Skeleton} from "../Skeleton/Skeleton";
+import {RefetchError} from "../Error/Error";
 
 const renderSortButton: TBottomSheetTrigger = (props) => {
     return <button className={classes.sortButton} {...props}>
@@ -48,14 +50,26 @@ const SORT_OPTIONS: ISortOption[] = [
     }
 ] as const
 
-const UsersList = () => {
 
+const FAKE_USERS = Array(10).fill(null)
+
+const Loading = () => {
+    return <div className={classes.users}>
+        <Skeleton style={{height: 60, borderRadius: 12}}/>
+        <Skeleton style={{height: 60, borderRadius: 12}}/>
+        <Skeleton style={{height: 60, borderRadius: 12, marginBottom: 16}}/>
+        {FAKE_USERS.map((_, i) => (<Skeleton style={{height: 60, borderRadius: 12}}/>))}
+    </div>
 }
 
 const LeaderboardPage = () => {
-    const {data: users} = userApi.useGetAllUsersQuery();
+    const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery();
 
     const [sort, setSort] = useState<TISortOptionValue>(DEFAULT_SORT_OPTION.value)
+
+    if (isError) {
+        return <RefetchError refetch={refetch} error={error}/>
+    }
 
     const sorted = users && sort ? sortByKey(users, ...sort) : [];
 
@@ -83,18 +97,19 @@ const LeaderboardPage = () => {
                     </RadioGroup>
                 </BottomSheet>
             </div>
+            {
+                isFetching ? <Loading/> : <div className={classes.users}>
+                    {sorted.map((user, index) => (
+                        <UserListItem
+                            {...user}
+                            prefix={index + 1}
+                            className={classes.user}
+                            key={user.id}
+                        />
+                    ))}
+                </div>
+            }
 
-
-            <div className={classes.users}>
-                {sorted.map((user, index) => (
-                    <UserListItem
-                        {...user}
-                        prefix={index + 1}
-                        className={classes.user}
-                        key={user.id}
-                    />
-                ))}
-            </div>
         </div>
     );
 };

@@ -1,5 +1,6 @@
 .imgContainer {
     overflow: hidden;
+    transition: opacity .3s ease-in;
 }
 
 .imgContainer img {

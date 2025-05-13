@@ -30,6 +30,7 @@
     "antd": "^5.11.5",
     "clsx": "^2.1.0",
     "dayjs": "^1.11.13",
+    "lucide-react": "^0.510.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.48.2",

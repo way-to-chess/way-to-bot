@@ -16,6 +16,7 @@ import {Skeleton} from "../Skeleton/Skeleton";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {ClientDTOEventGetMany} from "@way-to-bot/shared/api/DTO/client/event.DTO";
+import {RefetchError} from "../Error/Error";
 
 dayjs.locale("ru");
 
@@ -157,10 +158,14 @@ const FakeEventGroup = () => {
 };
 
 const Events = () => {
-    const {data, isLoading} = eventApi.useGetAllEventsQuery();
+    const {data, isFetching, isError, refetch, error} = eventApi.useGetAllEventsQuery();
 
-    if (isLoading) {
+    if (isFetching) {
         return <FakeEventGroup/>;
+    }
+
+    if (isError) {
+        return <RefetchError refetch={refetch} error={error}/>
     }
 
     if (!data) {
