@@ -1,12 +1,12 @@
 import classes from "./ProfilePage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {Typography} from "../Typography/Typography";
-import {Input} from "@base-ui-components/react";
 import {Button} from "../../Button/Button";
 import {fileApi} from "../File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../User/UserApi";
 import {EUserRole} from "@way-to-bot/shared/api/enums";
+import {Input} from "../Input/Input";
 
 interface IFileInput {
     setFileId: (fileId: undefined | number) => void;
@@ -109,18 +109,8 @@ const ProfilePage = () => {
         <form className={classes.page} onSubmit={onSubmit}>
             <FileInput setFileId={setFileId}/>
 
-            <Input
-                placeholder={"Имя"}
-                className={classes.input}
-                value={firstName}
-                onChange={onFirstNameChange}
-            />
-            <Input
-                placeholder={"Фамилия"}
-                className={classes.input}
-                value={lastName}
-                onChange={onLastNameChange}
-            />
+            <Input placeholder={"Имя"} value={firstName} onChange={onFirstNameChange}/>
+            <Input placeholder={"Фамилия"} value={lastName} onChange={onLastNameChange}/>
             <Button
                 type={"submit"}
                 disabled={isButtonDisabled}

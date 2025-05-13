@@ -20,42 +20,9 @@
     border-radius: 50%;
 }
 
-.input {
-    background: var(--background-color-1);
-    padding: 0 16px;
-    border-radius: 12px;
-    border: 1px solid var(--stroke-color-2);
-    height: 48px;
-}
-
-.input::placeholder {
-    color: var(--text-color-3);
-    font-weight: 400;
-    font-size: 17px;
-    line-height: 100%;
-    letter-spacing: -0.4px;
-}
-
 .button {
     max-width: 329px;
     margin: auto auto 0 auto;
-}
-
-/* Additional input styles */
-.input {
-    font-size: 16px;
-    color: var(--text-color-1);
-    transition: border-color 0.3s, box-shadow 0.3s;
-    width: 100%;
-}
-
-.input:focus {
-    border-color: var(--main-color);
-    box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
-}
-
-.input:hover {
-    border-color: var(--main-color);
 }
 
 .fileInput {

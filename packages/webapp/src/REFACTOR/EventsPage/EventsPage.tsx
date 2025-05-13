@@ -15,12 +15,12 @@ import clsx from "clsx";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
-import {IEvent} from "../Event/IEvent";
+import {TEvent} from "../Event/TEvent";
 
 dayjs.locale("ru");
 
-const groupByDateTime = (events: IEvent[]) =>
-    events.reduce<Record<string, IEvent[]>>((acc, event) => {
+const groupByDateTime = (events: TEvent[]) =>
+    events.reduce<Record<string, TEvent[]>>((acc, event) => {
         const key =
             event.status === EEventStatus.FINISHED ? event.dateTime : event.dateTime;
 
@@ -34,7 +34,7 @@ const groupByDateTime = (events: IEvent[]) =>
         return acc;
     }, {});
 
-interface IEventProps extends IEvent {
+interface IEventProps extends TEvent {
     formattedDate: string;
     formattedTime: string;
 }
@@ -79,7 +79,7 @@ const Event: FC<IEventProps> = (
                 </Typography>
 
                 <EventParticipantCount
-                    currentCount={users.length}
+                    currentCount={users?.length}
                     maxCount={participantsLimit}
                 />
             </div>
@@ -114,7 +114,7 @@ const Event: FC<IEventProps> = (
 
 interface IEventGroupProps {
     dateTimeString: string;
-    events: IEvent[];
+    events: TEvent[];
 }
 
 const EventGroup: FC<IEventGroupProps> = ({dateTimeString, events}) => {

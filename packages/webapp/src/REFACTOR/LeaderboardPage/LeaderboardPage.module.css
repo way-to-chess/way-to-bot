@@ -5,6 +5,21 @@
     gap: 20px;
 }
 
+.top {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.sortButton {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .users {
     display: flex;
     flex-direction: column;
@@ -31,4 +46,59 @@
 .user:nth-child(3) {
     background: #8B420133;
     margin-bottom: 16px;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.option {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    height: 44px;
+    border-radius: 12px;
+    padding: 0 16px;
+    border: 1px solid var(--stroke-color-1);
+    cursor: pointer;
+}
+
+.option > :first-child {
+    flex: 1;
+}
+
+.option:has(.radio[data-checked]) {
+    background: var(--background-color-3);
+}
+
+.radio {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: 2px solid var(--text-color-3);
+    flex-shrink: 0;
+}
+
+.radio[data-checked] {
+    border-color: var(--main-color);
+}
+
+.indicator {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.indicator[data-unchecked] {
+    display: none;
+}
+
+.indicator::before {
+    content: '';
+    border-radius: 50%;
+    width: 8px;
+    height: 8px;
+    background-color: var(--main-color);
 }
