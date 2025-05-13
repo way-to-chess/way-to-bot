@@ -2,7 +2,9 @@ import {webAppApi} from "../WebAppApi";
 import {
     ClientDTOUserCreateResponse,
     ClientDTOUserGetMany,
-    ClientDTOUserGetManyResponse
+    ClientDTOUserGetManyResponse,
+    ClientDTOUserGetOne,
+    ClientDTOUserGetOneResponse
 } from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 
@@ -11,6 +13,10 @@ const userApi = webAppApi.injectEndpoints({
         getAllUsers: build.query<ClientDTOUserGetMany[], void>({
             query: () => "user",
             transformResponse: (data: ClientDTOUserGetManyResponse) => data.data,
+        }),
+        getUserById: build.query<ClientDTOUserGetOne, string>({
+            query: (id) => `user/${id}`,
+            transformResponse: (data: ClientDTOUserGetOneResponse) => data.data,
         }),
         createUser: build.mutation<ClientDTOUserCreateResponse, TClientUserCreatePayload>({
             query: (payload) => ({

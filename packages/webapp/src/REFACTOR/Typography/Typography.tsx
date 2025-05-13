@@ -17,7 +17,8 @@ type TColor =
     | "textColor2"
     | "textColor5"
     | "mainColor"
-    | "redColor";
+    | "redColor"
+    | "greenColor"
 
 interface IWithValue {
     value?: string | number;
@@ -63,13 +64,15 @@ const CLASSNAME_BY_COLOR: Record<TColor, string | undefined> = {
     textColor5: classes.textColor5,
     mainColor: classes.mainColor,
     redColor: classes.redColor,
+    greenColor: classes.greenColor
 };
 
-const getTypographyClassName = ({
-                                    type,
-                                    className,
-                                    color = "textColor1",
-                                }: IWithType & IWithClassName & { color?: TColor }) => {
+const getTypographyClassName = (
+    {
+        type,
+        className,
+        color = "textColor1",
+    }: IWithType & IWithClassName & { color?: TColor }) => {
     return clsx(
         classes.typography,
         CLASSNAME_BY_TYPE[type],
@@ -99,3 +102,4 @@ const Typography: FC<TTypographyProps> = ({
 };
 
 export {Typography, getTypographyClassName};
+export type {TTypographyProps}

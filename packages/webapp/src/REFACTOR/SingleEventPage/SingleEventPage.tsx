@@ -19,6 +19,8 @@ import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {MessageIcon} from "../Icons/MessageIcon";
 import {Button} from "../../Button/Button";
 import {UserListItem} from "../UserListItem/UserListItem";
+import {FC} from "react";
+import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -27,17 +29,17 @@ const LOCATION_BENEFITS = [
     {icon: CoffeeIcon, title: "Напитки"},
 ];
 
-const Host = () => {
+const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username}) => {
     return (
         <a
             className={classes.host}
-            href={"https://web.telegram.org/k/#@Roman_Comandorb"}
+            href={`https://web.telegram.org/k/#${username}`}
             rel={"noreferrer noopener"}
             target={"_blank"}
         >
             <ImgWithContainer className={classes.hostImg}/>
             <div className={classes.hostInfo}>
-                <Typography type={"title5"} value={getUserFullName("Роман", "Радюш")}/>
+                <Typography type={"title5"} value={getUserFullName(firstName, lastName)}/>
                 <Typography type={"text2"} value={"Написать"} color={"textColor2"}/>
             </div>
 
@@ -54,7 +56,7 @@ const SingleEventPage = () => {
     const {data: event} = eventApi.useGetEventByIdQuery(notNilId);
 
     if (!event) {
-        return null;
+        return "Такого события больше нет :(";
     }
 
     const {
@@ -65,6 +67,9 @@ const SingleEventPage = () => {
         price,
         dateTime,
         location,
+        host,
+        description,
+
     } = event;
 
     const date = dayjs(dateTime);
@@ -130,7 +135,7 @@ const SingleEventPage = () => {
 
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Детали турнира"}/>
-                    <Typography type={"text2"}>{"Детали не добавлены"}</Typography>
+                    <Typography type={"text2"}>{description || "Детали не добавлены"}</Typography>
                 </div>
 
                 <div className={classes.block}>
@@ -172,7 +177,7 @@ const SingleEventPage = () => {
                 </div>
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Организатор"}/>
-                    <Host/>
+                    <Host {...host}/>
                 </div>
                 <Button className={classes.button} disabled>
                     {"Участвовать"}

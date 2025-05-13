@@ -15,12 +15,12 @@ import clsx from "clsx";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
-import {TEvent} from "../Event/TEvent";
+import {ClientDTOEventGetMany} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 
 dayjs.locale("ru");
 
-const groupByDateTime = (events: TEvent[]) =>
-    events.reduce<Record<string, TEvent[]>>((acc, event) => {
+const groupByDateTime = (events: ClientDTOEventGetMany[]) =>
+    events.reduce<Record<string, ClientDTOEventGetMany[]>>((acc, event) => {
         const key =
             event.status === EEventStatus.FINISHED ? event.dateTime : event.dateTime;
 
@@ -34,7 +34,7 @@ const groupByDateTime = (events: TEvent[]) =>
         return acc;
     }, {});
 
-interface IEventProps extends TEvent {
+interface IEventProps extends ClientDTOEventGetMany {
     formattedDate: string;
     formattedTime: string;
 }
@@ -43,7 +43,6 @@ const Event: FC<IEventProps> = (
     {
         preview,
         name,
-        users,
         participantsLimit,
         formattedDate,
         formattedTime,
@@ -51,6 +50,7 @@ const Event: FC<IEventProps> = (
         location,
         id,
         status,
+        participantsCount,
     }) => {
     const eventPath = generatePath("/events/:id", {id: id.toString()});
 
@@ -79,7 +79,7 @@ const Event: FC<IEventProps> = (
                 </Typography>
 
                 <EventParticipantCount
-                    currentCount={users?.length}
+                    currentCount={participantsCount}
                     maxCount={participantsLimit}
                 />
             </div>
@@ -114,7 +114,7 @@ const Event: FC<IEventProps> = (
 
 interface IEventGroupProps {
     dateTimeString: string;
-    events: TEvent[];
+    events: ClientDTOEventGetMany[];
 }
 
 const EventGroup: FC<IEventGroupProps> = ({dateTimeString, events}) => {

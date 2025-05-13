@@ -5,6 +5,7 @@
     --bottom-bar-height: calc(57px + env(safe-area-inset-bottom));
     --main-color: #007AFF;
     --red-color: #FF4848;
+    --green-color: #0FB000;
     --text-color-1: #192333;
     --text-color-2: #707579;
     --text-color-3: #A2ACB0;

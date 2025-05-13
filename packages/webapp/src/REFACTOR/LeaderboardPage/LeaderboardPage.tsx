@@ -48,6 +48,10 @@ const SORT_OPTIONS: ISortOption[] = [
     }
 ] as const
 
+const UsersList = () => {
+
+}
+
 const LeaderboardPage = () => {
     const {data: users} = userApi.useGetAllUsersQuery();
 
