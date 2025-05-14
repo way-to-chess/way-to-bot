@@ -1,14 +1,14 @@
 import { Router } from "express";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { ClientUserController } from "@way-to-bot/server/client/controllers/user.controller.mjs";
-import { validatePayloadMddw } from "@way-to-bot/server/middlewares/validate-payload.mddw.mjs";
+import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw.mjs";
 import { CommonSchemaGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { getManyOptionsMddw } from "@way-to-bot/server/middlewares/get-many-options.mddw.mjs";
+import { getManyOptionsMddw } from "@way-to-bot/server/express/middlewares/get-many-options.mddw.mjs";
 import {
   ClientSchemaUserCreate,
   ClientSchemaUserUpdate,
 } from "@way-to-bot/shared/api/zod/client/user.schema.js";
-import { authMddw } from "@way-to-bot/server/middlewares/auth.mddw.mjs";
+import { authMddw } from "@way-to-bot/server/express/middlewares/auth.mddw.mjs";
 import { NoPermissionsError } from "@way-to-bot/server/common/errors/no-permissions.error.mjs";
 
 export const ClientUserRouter = Router();

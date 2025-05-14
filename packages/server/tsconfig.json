@@ -6,7 +6,12 @@
     "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "types": ["node", "express"],
-    "typeRoots": ["./src/@types", "../../node_modules/@types"]
+    "typeRoots": ["./src/@types", "../../node_modules/@types"],
+    "baseUrl": ".",
+    "paths": {
+      "@way-to-bot/shared/*": ["../shared/src/*"],
+      "@way-to-bot/server/*": ["./src/*"]
+    }
   },
   "include": ["src/**/*"]
 }

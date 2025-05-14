@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { AdminEventLeagueController } from "@way-to-bot/server/admin/controllers/event-league.controller.js";
-import { validatePayloadMddw } from "@way-to-bot/server/middlewares/validate-payload.mddw.mjs";
+import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw.mjs";
 import {
   AdminSchemaEventLeagueCreate,
   AdminSchemaEventLeagueUsersUpdate,

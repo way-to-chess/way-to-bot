@@ -36,30 +36,32 @@ export class DevideThreeFieldsAssociation1745956548107
 `);
 
     // Leagues
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "leagues"
     ALTER COLUMN "name" TYPE character varying(64),
     ALTER COLUMN "name" SET NOT NULL
 `);
 
-      // Events
+
+
+    // Events
     await queryRunner.query(
       `ALTER TABLE "events" DROP CONSTRAINT "FK_fccf31c64ec14a66276e9999730"`,
     );
     await queryRunner.query(
       `ALTER TABLE "events" DROP CONSTRAINT "FK_a9d65d9417390e6bf1a7695a36b"`,
     );
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "events"
     ALTER COLUMN "name" TYPE character varying(128),
     ALTER COLUMN "name" SET NOT NULL
 `);
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "events"
     ALTER COLUMN "price" TYPE character varying(32)
 `);
 
-      // users
+    // users
     await queryRunner.query(
       `ALTER TABLE "users" DROP CONSTRAINT "FK_a367444399d0404c15d7dffdb02"`,
     );
@@ -69,26 +71,26 @@ export class DevideThreeFieldsAssociation1745956548107
     await queryRunner.query(
       `ALTER TABLE "users" DROP CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710"`,
     );
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "users"
     ALTER COLUMN "username" TYPE character varying(255)
 `);
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "users"
     ADD CONSTRAINT "UQ_fe0bb3f6520ee0469504521e710" UNIQUE ("username")
 `);
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "users"
     ALTER COLUMN "firstName" TYPE character varying(255),
     ALTER COLUMN "firstName" SET NOT NULL
 `);
-      await queryRunner.query(`
+    await queryRunner.query(`
   ALTER TABLE "users"
     ALTER COLUMN "lastName" TYPE character varying(255),
     ALTER COLUMN "lastName" SET NOT NULL
 `);
 
-      // Constraints
+    // Constraints
     await queryRunner.query(
       `ALTER TABLE "users" ADD CONSTRAINT "UQ_6f640d8cd261d169b5a5eb25fb0" UNIQUE ("username", "firstName", "lastName")`,
     );

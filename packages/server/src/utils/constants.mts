@@ -8,6 +8,7 @@ import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.m
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-league.entity.mjs";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
+import { EventLeagueResultEntity } from "@way-to-bot/server/database/entities/event-league-result.entity.mjs";
 
 export const DEFAULT_LEAGUE_NAME = "DEFAULT";
 
@@ -38,6 +39,7 @@ export const dbConnectionOptions: DataSourceOptions = {
     ParticipateRequestEntity,
     EventLeagueEntity,
     EventLeagueUserEntity,
+    EventLeagueResultEntity,
   ],
   subscribers: [EventEntitySubscriber],
   ssl: NODE_ENV === "production" ? { rejectUnauthorized: false } : false,

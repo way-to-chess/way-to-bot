@@ -1,9 +1,9 @@
 import { Router } from "express";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { AdminUserController } from "@way-to-bot/server/admin/controllers/user.controller.mjs";
-import { validatePayloadMddw } from "@way-to-bot/server/middlewares/validate-payload.mddw.mjs";
+import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw.mjs";
 import { CommonSchemaGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { getManyOptionsMddw } from "@way-to-bot/server/middlewares/get-many-options.mddw.mjs";
+import { getManyOptionsMddw } from "@way-to-bot/server/express/middlewares/get-many-options.mddw.mjs";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import {

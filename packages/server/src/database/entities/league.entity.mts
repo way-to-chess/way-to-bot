@@ -13,7 +13,7 @@ export class LeagueEntity implements ILeagueEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column("varchar", { length: 64 })
+  @Column("varchar", { length: 64, unique: true })
   name!: string;
 
   @OneToMany(() => EventLeagueEntity, (el: EventLeagueEntity) => el.league)

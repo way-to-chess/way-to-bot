@@ -21,8 +21,8 @@ services:
     container_name: wtb_app
     build:
       context: .
-      dockerfile: Dockerfile-dev
-      target: server-dev
+      dockerfile: Dockerfile
+      target: server
     ports:
       - "3000:3000"
     depends_on:
@@ -32,8 +32,8 @@ services:
       - ./packages/server/.env
     restart: on-failure:3
     volumes:
-      - uploads:/app/uploads
-      - api_logs:/app/api_logs
+      - ./docker_data/uploads:/app/uploads
+      - ./docker_data/api_logs:/app/api_logs
     command: >
       sh -c "
         cd packages/server &&
@@ -41,8 +41,34 @@ services:
         npm run production
       "
 
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: web
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx-dev.conf:/etc/nginx/nginx.conf:ro
+      - ./docker_data/uploads:/usr/share/nginx/html/uploads
+      - ./docker_data/certbot/www/:/var/www/certbot/:ro
+      - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
+    restart: on-failure:3
+
+  certbot:
+    container_name: wtb_certbot
+    image: certbot/certbot:latest
+    volumes:
+      - ./docker_data/certbot/www/:/var/www/certbot/:rw
+      - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
+    entrypoint: |
+      sh -c "
+        certbot certonly --webroot -w /var/www/certbot -d waytochess.space --email ignatmustafin77@gmail.com --agree-tos --non-interactive --keep-until-expiring &&
+        sleep 1d &&
+        exit 0
+      "
+    restart: on-failure:3
 
 volumes:
   pg_data:
-  uploads:
-  api_logs:

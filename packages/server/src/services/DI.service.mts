@@ -32,7 +32,8 @@ import { ClientFileService } from "@way-to-bot/server/client/services/file.servi
 import { ClientParticipateRequestService } from "@way-to-bot/server/client/services/participate-request.service.mjs";
 import { ClientUserService } from "@way-to-bot/server/client/services/user.service.mjs";
 import { CommonAuthController } from "@way-to-bot/server/express/controllers/auth.controller.mjs";
-import {AdminEventLeagueController} from "@way-to-bot/server/admin/controllers/event-league.controller.js";
+import { AdminEventLeagueController } from "@way-to-bot/server/admin/controllers/event-league.controller.js";
+import { EventLeagueResultRepository } from "@way-to-bot/server/database/repositories/event-league-result.repository.js";
 
 // singleton
 class DIService {
@@ -72,6 +73,10 @@ class DIService {
       .toSelf()
       .inSingletonScope();
     this._container.bind(UserRepository).toSelf().inSingletonScope();
+    this._container
+      .bind(EventLeagueResultRepository)
+      .toSelf()
+      .inSingletonScope();
 
     this._container.bind(CommonAuthController).toSelf().inRequestScope();
 

@@ -25,14 +25,11 @@ export enum EErrorCode {
   INTERNAL_ERROR = "INTERNAL_ERROR",
 }
 
-export enum EClientFileAssigment {
+export enum EFileAssigment {
   AVATAR = "avatar",
   RECEIPT = "receipt",
-}
-
-export enum EAdminFileAssigment {
-  ROUNDS = "rounds",
-  RATING = "rating",
+  ROUNDS_CSV = "rounds_csv",
+  RATING_CSV = "rating_csv",
 }
 
 export enum EContactType {

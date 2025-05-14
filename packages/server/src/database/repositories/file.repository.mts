@@ -1,8 +1,7 @@
 import { inject, injectable } from "inversify";
-import { QueryRunner, Repository } from "typeorm";
-import { DbService } from '@way-to-bot/server/services/db.service.mjs';
-import { FileEntity } from '@way-to-bot/server/database/entities/file.entity.mjs';
-import { NotFoundError } from '@way-to-bot/server/common/errors/not-found.error.mjs';
+import { QueryRunner } from "typeorm";
+import { DbService } from "@way-to-bot/server/services/db.service.mjs";
+import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 
 @injectable()
 export class FileRepository {
@@ -23,7 +22,10 @@ export class FileRepository {
     return this.getRepository(queryRunner).find();
   }
 
-  async create(payload: Pick<FileEntity, "url">, queryRunner?: QueryRunner) {
+  async create(
+    payload: Pick<FileEntity, "url" | "previewUrl">,
+    queryRunner?: QueryRunner,
+  ) {
     const repo = this.getRepository(queryRunner);
     const newFile = repo.create(payload);
     const savedFile = await repo.save(newFile);
@@ -32,12 +34,6 @@ export class FileRepository {
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingFile = await this.getOneById(id);
-
-    if (!existingFile) {
-      throw new NotFoundError(`File with id ${id} not found`);
-    }
-
     const result = await repo.delete(id);
     return result.affected === 1;
   }

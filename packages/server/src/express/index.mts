@@ -4,7 +4,7 @@ import cors from "cors";
 import { MainRouter } from "@way-to-bot/server/express/routers/index.mjs";
 import swaggerUi from "swagger-ui-express";
 import { NODE_ENV } from "@way-to-bot/server/utils/constants.mjs";
-import { errorHandlerMddw } from "@way-to-bot/server/middlewares/error-handler.mddw.mjs";
+import { errorHandlerMddw } from "@way-to-bot/server/express/middlewares/error-handler.mddw.mjs";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { Server } from "http";
 

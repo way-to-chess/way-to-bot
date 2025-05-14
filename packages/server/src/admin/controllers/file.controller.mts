@@ -1,9 +1,33 @@
 import { inject, injectable } from "inversify";
 import { AdminFileService } from "@way-to-bot/server/admin/services/file.service.mjs";
+import { EFileAssigment } from "@way-to-bot/shared/api/enums/index.js";
+import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
+import { AdminDTOFileImportCsvResponse } from "@way-to-bot/shared/api/DTO/admin/file.DTO.js";
 
 @injectable()
 export class AdminFileController {
   constructor(
     @inject(AdminFileService) private readonly _fileService: AdminFileService,
   ) {}
+
+  async importCsv(
+    eventLeagueId: number,
+    assigment: EFileAssigment,
+    file?: Express.Multer.File,
+  ) {
+    switch (assigment) {
+      case EFileAssigment.ROUNDS_CSV:
+        await this._fileService.importRoundsCsv(eventLeagueId, file);
+        break;
+      case EFileAssigment.RATING_CSV:
+        await this._fileService.importRatingCsv(eventLeagueId, file);
+        break;
+      default:
+        throw new BadRequestError(
+          `Unknown assigment type for import. "${assigment}"`,
+        );
+    }
+
+    return new AdminDTOFileImportCsvResponse(true);
+  }
 }

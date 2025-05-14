@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { ClientParticipateRequestController } from "@way-to-bot/server/client/controllers/participate-request.controller.mjs";
-import { validatePayloadMddw } from "@way-to-bot/server/middlewares/validate-payload.mddw.mjs";
+import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw.mjs";
 import {
   ClientSchemaParticipateRequestCreate,
   ClientSchemaParticipateRequestUpdate,
