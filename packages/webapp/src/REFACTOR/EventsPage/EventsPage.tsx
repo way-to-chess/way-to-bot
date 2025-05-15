@@ -16,14 +16,13 @@ import {Skeleton} from "../Skeleton/Skeleton";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {ClientDTOEventGetMany} from "@way-to-bot/shared/api/DTO/client/event.DTO";
-import {RefetchError} from "../Error/Error";
+import {Error, RefetchError} from "../Error/Error";
 
 dayjs.locale("ru");
 
 const groupByDateTime = (events: ClientDTOEventGetMany[]) =>
     events.reduce<Record<string, ClientDTOEventGetMany[]>>((acc, event) => {
-        const key =
-            event.status === EEventStatus.FINISHED ? event.dateTime : event.dateTime;
+        const key = event.dateTime
 
         if (acc[key]) {
             acc[key].push(event);
@@ -169,12 +168,12 @@ const Events = () => {
     }
 
     if (!data) {
-        return null;
+        return <Error title={"Нет событий"} text={"Зайдите сюда позже"}/>
     }
 
     const grouped = groupByDateTime(data);
 
-    return Object.entries(grouped).map(([key, value]) => (
+    return Object.entries(grouped).reverse().map(([key, value]) => (
         <EventGroup events={value} dateTimeString={key} key={key}/>
     ));
 };

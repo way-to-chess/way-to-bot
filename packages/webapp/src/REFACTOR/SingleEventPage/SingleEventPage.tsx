@@ -61,6 +61,7 @@ const Loading = () => {
     </div>
 }
 
+
 const SingleEventPage = () => {
     const {id} = useParams();
 
@@ -106,6 +107,8 @@ const SingleEventPage = () => {
             maxCount={participantsLimit}
         />
     );
+
+    const sliced = users.slice(0, 5)
 
     return (
         <div className={classes.page}>
@@ -184,19 +187,25 @@ const SingleEventPage = () => {
                     <div className={classes.participantBlock}>
                         <Typography type={"title4"} value={"Участники"}/>
                         {ParticipantCount}
-                        <button className={classes.all}>
-                            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
-                        </button>
+                        {
+                            sliced.length > 0 ? <button className={classes.all}>
+                                <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
+                            </button> : null
+                        }
+
                     </div>
-                    <div className={classes.participants}>
-                        {users.slice(0, 5).map((user) => (
-                            <UserListItem
-                                {...user}
-                                className={classes.participant}
-                                key={user.id}
-                            />
-                        ))}
-                    </div>
+                    {
+                        sliced.length > 0 ?
+                            <div className={classes.participants}>
+                                {sliced.map((user) => (
+                                    <UserListItem
+                                        {...user}
+                                        className={classes.participant}
+                                        key={user.id}
+                                    />
+                                ))}
+                            </div> : null
+                    }
                 </div>
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Организатор"}/>
