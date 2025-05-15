@@ -1,4 +1,4 @@
-name: CI/CD
+name: PROD
 
 on:
   push:
@@ -21,8 +21,5 @@ jobs:
         script: |
           cd /home/way-to-bot
           git pull origin master
-          . ~/.nvm/nvm.sh
-          nvm use default
-          docker-compose build
-          docker compose up -d --build
+          docker compose -f docker-compose.dev.yml up app web -d --build
           docker system prune -f
