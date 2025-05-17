@@ -1,4 +1,4 @@
-import {webAppApi} from "../WebAppApi";
+import {webAppClientApi} from "../WebAppClientApi";
 import {
     ClientDTOUserCreateResponse,
     ClientDTOUserGetMany,
@@ -8,7 +8,7 @@ import {
 } from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 
-const userApi = webAppApi.injectEndpoints({
+const userApi = webAppClientApi.injectEndpoints({
     endpoints: (build) => ({
         getAllUsers: build.query<ClientDTOUserGetMany[], void>({
             query: () => "user",

@@ -1,4 +1,4 @@
-import {eventApi} from "../Event/EventApi";
+import {eventApi} from "../Store/Event/EventApi";
 import classes from "./EventsPage.module.css";
 import {Typography} from "../Typography/Typography";
 import {EEventStatus} from "@way-to-bot/shared/api/enums";

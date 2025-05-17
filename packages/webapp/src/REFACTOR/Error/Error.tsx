@@ -7,7 +7,7 @@ import {SerializedError} from "@reduxjs/toolkit";
 
 interface IErrorProps extends PropsWithChildren {
     title: string,
-    text: string,
+    text: string | number,
 }
 
 const Error: FC<IErrorProps> = ({title, text, children}) => {
@@ -25,7 +25,7 @@ interface IRefetchError {
 }
 
 const RefetchError: FC<IRefetchError> = ({refetch, error}) => {
-    const text = error && "error" in error ? error.error : JSON.stringify(error)
+    const text = error && "status" in error ? error.status : JSON.stringify(error)
 
     return <Error title={"Ошибка при отправке запроса"} text={text}>
         <Button onClick={refetch}>

@@ -2,9 +2,9 @@ import classes from "./ProfilePage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {Typography} from "../Typography/Typography";
 import {Button} from "../../Button/Button";
-import {fileApi} from "../File/FileApi";
+import {fileApi} from "../Store/File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
-import {userApi} from "../User/UserApi";
+import {userApi} from "../Store/User/UserApi";
 import {EUserRole} from "@way-to-bot/shared/api/enums";
 import {Input} from "../Input/Input";
 

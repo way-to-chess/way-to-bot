@@ -4,7 +4,7 @@ import clsx from "clsx";
 import classes from "./Input.module.css";
 
 interface IInputProps extends BaseInput.Props {
-    before: ReactNode
+    before?: ReactNode
 }
 
 const Input: FC<IInputProps> = ({children, className, before, ...rest}) => {

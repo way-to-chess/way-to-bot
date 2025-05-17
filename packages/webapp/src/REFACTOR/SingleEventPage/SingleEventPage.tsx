@@ -1,5 +1,5 @@
 import {useParams} from "react-router";
-import {eventApi} from "../Event/EventApi";
+import {eventApi} from "../Store/Event/EventApi";
 import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import classes from "./SingleEventPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";

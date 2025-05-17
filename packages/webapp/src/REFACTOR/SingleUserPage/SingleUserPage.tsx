@@ -2,7 +2,7 @@ import classes from "./SingleUserPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {generatePath, Link, useParams} from "react-router";
 import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
-import {userApi} from "../User/UserApi";
+import {userApi} from "../Store/User/UserApi";
 import {TTypographyProps, Typography} from "../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {FC, PropsWithChildren, ReactNode} from "react";

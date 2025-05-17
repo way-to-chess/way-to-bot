@@ -1,5 +1,5 @@
 import classes from "./LeaderboardPage.module.css";
-import {userApi} from "../User/UserApi";
+import {userApi} from "../Store/User/UserApi";
 import {UserListItem} from "../UserListItem/UserListItem";
 import {sortByKey} from "../../Utils/SortByKey";
 import {BottomSheet, TBottomSheetTrigger} from "../BottomSheet/BottomSheet";

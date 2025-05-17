@@ -1,8 +1,8 @@
 import classes from "./ImgWithContainer.module.css";
-import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {CameraIcon} from "../Icons/CameraIcon";
-import {FC, useState} from "react";
+import {FC, useEffect, useState} from "react";
 import clsx from "clsx";
+import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 interface IImgWithContainerProps {
     previewUrl?: string;
@@ -14,26 +14,28 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
         previewUrl,
         className,
     }) => {
-    const [hasError, setHasError] = useState(false)
-    const [isLoaded, setIsLoaded] = useState(false)
+    const [loadedSrc, setLoadedSrc] = useState<string>("")
 
-    const onError = () => {
-        setHasError(true)
-    }
+    useEffect(() => {
+        const src = getPreviewSrc(previewUrl)
 
-    const onLoad = () => {
-        setIsLoaded(true)
-    }
+        if (src) {
+            const img = new Image();
 
-    const shouldShowFallback = !previewUrl || !isLoaded || hasError
+            img.src = src;
+
+            img.onload = () => setLoadedSrc(src);
+            img.onerror = () => setLoadedSrc("");
+        }
+    }, [previewUrl]);
 
     return (
         <div className={clsx(classes.imgContainer, className)}>
-            {shouldShowFallback ? (
+            {!loadedSrc ? (
                 <div className={classes.emptyImg}>
                     <CameraIcon width={"70%"} height={"70%"}/>
                 </div>
-            ) : <img alt={"image"} src={getPreviewSrc(previewUrl)} onError={onError} onLoad={onLoad}/>}
+            ) : <img alt={"image"} src={loadedSrc}/>}
         </div>
     );
 };
