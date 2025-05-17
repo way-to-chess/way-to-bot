@@ -11,10 +11,12 @@ const eventApi = webAppApi.injectEndpoints({
         getAllEvents: build.query<ClientDTOEventGetMany[], void>({
             query: () => "event",
             transformResponse: (response: ClientDTOEventGetManyResponse) => response.data,
+            providesTags: () => [{type: 'EVENT', id: "ALL"}]
         }),
         getEventById: build.query<ClientDTOEventGetOne, string>({
             query: (id) => `event/${id}`,
             transformResponse: (response: ClientDTOEventGetOneResponse) => response.data,
+            providesTags: (_result, _err, id) => [{type: 'EVENT', id}]
         }),
     }),
 });

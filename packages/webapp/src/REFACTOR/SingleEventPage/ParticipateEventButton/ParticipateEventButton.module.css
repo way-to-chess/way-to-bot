@@ -1,0 +1,6 @@
+.button {
+    position: fixed;
+    bottom: calc(var(--bottom-bar-height) + 16px);
+    left: 32px;
+    max-width: calc(100% - 64px);
+}

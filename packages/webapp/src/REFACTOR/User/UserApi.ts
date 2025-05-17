@@ -13,10 +13,12 @@ const userApi = webAppApi.injectEndpoints({
         getAllUsers: build.query<ClientDTOUserGetMany[], void>({
             query: () => "user",
             transformResponse: (data: ClientDTOUserGetManyResponse) => data.data,
+            providesTags: () => [{type: "USER", id: "ALL"}]
         }),
         getUserById: build.query<ClientDTOUserGetOne, string>({
             query: (id) => `user/${id}`,
             transformResponse: (data: ClientDTOUserGetOneResponse) => data.data,
+            providesTags: (result, error, id) => [{type: "USER", id}],
         }),
         createUser: build.mutation<ClientDTOUserCreateResponse, TClientUserCreatePayload>({
             query: (payload) => ({

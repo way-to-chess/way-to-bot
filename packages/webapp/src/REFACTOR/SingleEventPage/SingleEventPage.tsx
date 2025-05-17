@@ -23,6 +23,7 @@ import {FC} from "react";
 import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
+import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventButton";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -93,7 +94,6 @@ const SingleEventPage = () => {
         location,
         host,
         description,
-
     } = event;
 
     const date = dayjs(dateTime);
@@ -211,9 +211,7 @@ const SingleEventPage = () => {
                     <Typography type={"title4"} value={"Организатор"}/>
                     <Host {...host}/>
                 </div>
-                <Button className={classes.button} disabled>
-                    {"Участвовать"}
-                </Button>
+                <ParticipateEventButton eventId={notNilId}/>
             </div>
         </div>
     );
