@@ -8,9 +8,13 @@ export function getManyOptionsMddw(
   next: NextFunction,
 ) {
   try {
-    req.getManyOptions = new GetManyOptionsDTO<unknown>(
-      req.query as unknown as TCommonGetManyOptions,
-    );
+    if (typeof req.query.q === "string") {
+      const decodedQuery = Buffer.from(req.query.q, "base64").toString();
+      console.log(decodedQuery);
+      const parsedQuery = JSON.parse(decodedQuery) as TCommonGetManyOptions;
+      req.getManyOptions = new GetManyOptionsDTO<unknown>(parsedQuery);
+    }
+
     return next();
   } catch (e) {
     return next(e);

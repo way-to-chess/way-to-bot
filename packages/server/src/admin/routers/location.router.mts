@@ -17,10 +17,9 @@ const adminLocationController = DiContainer.get(AdminLocationController);
 AdminLocationRouter.get(
   "/",
   validatePayloadMddw(CommonSchemaGetManyOptions),
-  getManyOptionsMddw,
   async (req, res) => {
     const data = await adminLocationController.getMany(
-      req.query as unknown as GetManyOptionsDTO<LocationEntity>,
+      req.getManyOptions as GetManyOptionsDTO<LocationEntity>,
     );
     res.status(200).send(data);
   },

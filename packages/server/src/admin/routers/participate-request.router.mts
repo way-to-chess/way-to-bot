@@ -19,7 +19,7 @@ AdminParticipateRequestRouter.get(
   getManyOptionsMddw,
   async (req, res) => {
     const data = await adminParticipateRequestController.getMany(
-      req.query as unknown as GetManyOptionsDTO<ParticipateRequestEntity>,
+      req.getManyOptions as GetManyOptionsDTO<ParticipateRequestEntity>,
     );
     res.status(200).send(data);
   },

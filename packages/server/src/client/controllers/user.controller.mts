@@ -26,9 +26,9 @@ export class ClientUserController {
     return new ClientDTOUserGetManyResponse(
       data.data.map((i) => new ClientDTOUserGetMany(i)),
       {
-        itemsPerPage: options?.getFindOptions?.take,
-        pageNumber: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count
       },
     );
   }

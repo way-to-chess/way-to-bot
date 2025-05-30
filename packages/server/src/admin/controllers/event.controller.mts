@@ -28,9 +28,9 @@ export class AdminEventController {
     return new AdminDTOEventGetManyResponse(
       data.data.map((i) => new AdminDTOEventGetMany(i)),
       {
-        itemsPerPage: options?.getFindOptions?.take,
-        pageNumber: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count
       },
     );
   }

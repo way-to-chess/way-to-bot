@@ -17,10 +17,9 @@ const adminLeagueController = DiContainer.get(AdminLeagueController);
 AdminLeagueRouter.get(
   "/",
   validatePayloadMddw(CommonSchemaGetManyOptions),
-  getManyOptionsMddw,
   async (req, res) => {
     const data = await adminLeagueController.getMany(
-      req.query as unknown as GetManyOptionsDTO<LeagueEntity>,
+      req.getManyOptions as GetManyOptionsDTO<LeagueEntity>,
     );
     res.status(200).send(data);
   },

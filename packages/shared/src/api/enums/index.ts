@@ -47,3 +47,16 @@ export enum ELocationBenefits {
   VIDEO = "video",
   WC = "wc",
 }
+
+export enum EPredicate {
+  EQ = "EQ",
+  NOT_EQ = "NOT_EQ",
+  IN = "IN",
+  NOT_IN = "NOT_IN",
+  LIKE = "LIKE",
+}
+
+export enum ESortDirection {
+  ASC = "ASC",
+  DESC = "DESC",
+}

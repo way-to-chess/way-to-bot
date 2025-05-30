@@ -20,7 +20,7 @@ AdminUserRouter.get(
   getManyOptionsMddw,
   async (req, res) => {
     const data = await adminUserController.getMany(
-      req.query as unknown as GetManyOptionsDTO<UserEntity>,
+      req.getManyOptions as GetManyOptionsDTO<UserEntity>,
     );
     res.status(200).send(data);
   },

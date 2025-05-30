@@ -21,7 +21,7 @@ AdminEventRouter.get(
   getManyOptionsMddw,
   async (req, res) => {
     const data = await adminEventController.getMany(
-      req.query as unknown as GetManyOptionsDTO<EventEntity>,
+      req.getManyOptions as GetManyOptionsDTO<EventEntity>,
     );
     res.status(200).json(data);
   },

@@ -27,9 +27,9 @@ export class AdminUserController {
     return new AdminDTOUserGetManyResponse(
       data.data.map((i) => new AdminDTOUserGetMany(i)),
       {
-        itemsPerPage: options?.getFindOptions?.take,
-        pageNumber: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count
       },
     );
   }

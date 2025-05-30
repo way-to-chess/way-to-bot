@@ -16,7 +16,7 @@ ClientEventRouter.get(
   getManyOptionsMddw,
   async (req, res) => {
     const data = await clientEventController.getMany(
-      req.query as unknown as GetManyOptionsDTO<EventEntity>,
+      req.getManyOptions as GetManyOptionsDTO<EventEntity>,
     );
     res.status(200).send(data);
   },

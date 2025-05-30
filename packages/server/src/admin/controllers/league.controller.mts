@@ -28,9 +28,9 @@ export class AdminLeagueController {
     return new AdminDTOLeagueGetManyResponse(
       data.data.map((i) => new AdminDTOLeagueGetMany(i)),
       {
-        itemsPerPage: options?.getFindOptions?.take,
-        pageNumber: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count
       },
     );
   }

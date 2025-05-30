@@ -28,9 +28,9 @@ export class AdminLocationController {
     return new AdminDTOLocationGetManyResponse(
       data.data.map((i) => new AdminDTOLocationGetMany(i)),
       {
-        itemsPerPage: options?.getFindOptions?.take,
-        pageNumber: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count
       },
     );
   }
