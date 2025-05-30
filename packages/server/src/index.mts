@@ -38,7 +38,10 @@ async function bootstrap() {
 
     handleSignals(expressApp);
   } catch (e: any) {
-    logger.error("Error while starting the app.", { message: e.message, stack: e.stack });
+    logger.error("Error while starting the app.", {
+      message: e.message,
+      stack: e.stack,
+    });
     process.exit(1);
   }
 }

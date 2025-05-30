@@ -5,3 +5,4 @@ docker_data
 eslint.config.mjs
 .prettierrc
 .gitignore
+packages/server/scripts

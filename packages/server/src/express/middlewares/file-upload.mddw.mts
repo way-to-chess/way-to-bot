@@ -39,6 +39,10 @@ function getDirectoryByFileAssigment(fileAssigment?: EFileAssigment) {
       return "avatars";
     case EFileAssigment.RECEIPT:
       return "receipts";
+    case EFileAssigment.LOCATION:
+      return "locations";
+    case EFileAssigment.EVENT:
+      return "events";
     case EFileAssigment.RATING_CSV:
     case EFileAssigment.ROUNDS_CSV:
       return "results";

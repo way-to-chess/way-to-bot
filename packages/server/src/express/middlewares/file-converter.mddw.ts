@@ -61,6 +61,10 @@ function getFormatOptions(fileAssigment?: EFileAssigment): {
       return { width: 200, height: 200, quality: 75 };
     case EFileAssigment.RECEIPT:
       return { width: 800, height: 1100, quality: 85 };
+    case EFileAssigment.EVENT:
+      return { width: 800, height: 1080, quality: 85 };
+    case EFileAssigment.LOCATION:
+      return { width: 800, height: 1080, quality: 85 };
     default:
       return { width: 200, height: 200, quality: 70 };
   }
