@@ -2,8 +2,8 @@ import { BaseDTOParticipateRequest } from "@way-to-bot/shared/api/DTO/base/parti
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { GetOneDTO } from "@way-to-bot/shared/api/DTO/common/get-one.DTO.js";
 import { DeleteDTO } from "@way-to-bot/shared/api/DTO/common/delete.DTO.js";
-import { IPagination } from "@way-to-bot/shared/api/interfaces/pagination.interface";
-import { GetManyWithPaginationDTO } from "@way-to-bot/shared/api/DTO/common/get-many-with-pagination.DTO";
+import { IPagination } from "@way-to-bot/shared/api/interfaces/pagination.interface.js";
+import { GetManyWithPaginationDTO } from "@way-to-bot/shared/api/DTO/common/get-many-with-pagination.DTO.js";
 
 // response DTO
 export class ClientDTOParticipateRequestGetManyResponse extends GetManyWithPaginationDTO<ClientDTOParticipateRequestGetMany> {

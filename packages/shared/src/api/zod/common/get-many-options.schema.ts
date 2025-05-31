@@ -1,5 +1,8 @@
 import { z } from "zod";
-import { EPredicate, ESortDirection } from "@way-to-bot/shared/api/enums/index";
+import {
+  EPredicate,
+  ESortDirection,
+} from "@way-to-bot/shared/api/enums/index.js";
 
 export const PaginationSchema = z
   .object({

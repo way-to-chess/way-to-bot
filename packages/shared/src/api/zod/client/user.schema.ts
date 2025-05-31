@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EContactType } from "@way-to-bot/shared/api/enums/index";
+import { EContactType } from "@way-to-bot/shared/api/enums/index.js";
 
 export const ClientSchemaUserContactInfo = z.object({
   type: z.nativeEnum(EContactType),

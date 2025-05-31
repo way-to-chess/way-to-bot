@@ -5,7 +5,7 @@ import {
   TCommonSort,
   TCommonWhere,
 } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { EPredicate } from "@way-to-bot/shared/api/enums/index.ts";
+import { EPredicate } from "@way-to-bot/shared/api/enums/index.js";
 
 export class GetManyOptionsDTO<Entity> {
   private readonly _findOptions: FindManyOptions<Entity>;

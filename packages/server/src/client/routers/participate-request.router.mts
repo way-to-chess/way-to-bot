@@ -8,7 +8,7 @@ import {
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { authMddw } from "@way-to-bot/server/express/middlewares/auth.mddw.mjs";
 import { getManyOptionsMddw } from "@way-to-bot/server/express/middlewares/get-many-options.mddw.mjs";
-import { CommonSchemaGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.ts";
+import { CommonSchemaGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 

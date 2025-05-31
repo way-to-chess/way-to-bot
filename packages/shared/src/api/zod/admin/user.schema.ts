@@ -1,6 +1,6 @@
 import { z } from "zod";
-import { ClientSchemaUserContactInfo } from "@way-to-bot/shared/api/zod/client/user.schema";
-import { EUserRole } from "@way-to-bot/shared/api/enums/index";
+import { ClientSchemaUserContactInfo } from "@way-to-bot/shared/api/zod/client/user.schema.js";
+import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 
 const AdminSchemaUserBase = {
   username: z.string().nullable().optional(),

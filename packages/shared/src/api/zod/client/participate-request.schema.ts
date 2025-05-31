@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { ClientSchemaUserBase } from "@way-to-bot/shared/api/zod/client/user.schema";
+import { ClientSchemaUserBase } from "@way-to-bot/shared/api/zod/client/user.schema.js";
 
 const ClientSchemaParticipateRequestAdditionalUserSchema = z
   .object({
