@@ -7,6 +7,9 @@ import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../Store/User/UserApi";
 import {EUserRole} from "@way-to-bot/shared/api/enums";
 import {Input} from "../Input/Input";
+import {useSelector} from "react-redux";
+import {authSlice} from "../Store/Auth/AuthSlice";
+import {Navigate} from "react-router";
 
 interface IFileInput {
     setFileId: (fileId: undefined | number) => void;
@@ -77,7 +80,7 @@ const FileInput: FC<IFileInput> = ({setFileId}) => {
     );
 };
 
-const ProfilePage = () => {
+const CreateProfile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [fileId, setFileId] = useState<undefined | number>(undefined);
@@ -120,6 +123,12 @@ const ProfilePage = () => {
             </Button>
         </form>
     );
+}
+
+const ProfilePage = () => {
+    const authId = useSelector(authSlice.selectors.id)
+
+    return authId ? <Navigate to={`/users/${authId}`}/> : <CreateProfile/>
 };
 
 export {ProfilePage};

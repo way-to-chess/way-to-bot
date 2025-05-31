@@ -26,6 +26,8 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
 
             img.onload = () => setLoadedSrc(src);
             img.onerror = () => setLoadedSrc("");
+        } else {
+            setLoadedSrc("");
         }
     }, [previewUrl]);
 
