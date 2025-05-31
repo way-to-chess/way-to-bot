@@ -4,21 +4,25 @@ import {Provider} from "react-redux";
 import "../../Assets/Style/Global.css";
 import "../../Assets/SDK/TelegramWebApp.min.js";
 import {store} from "../Store/Store";
-import {webAppAuthApi} from "../Store/WebAppAuthApi";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {FC, PropsWithChildren} from "react";
 
 
-const WithAut: FC<PropsWithChildren> = ({children}) => {
-    webAppAuthApi.useAuthByTelegramQuery()
+const WithAuth: FC<PropsWithChildren> = ({children}) => {
+    authApi.useAuthByTelegramQuery({
+        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+        username: Telegram.WebApp.initDataUnsafe.user?.username,
+    })
 
     return children
 }
 
+
 const WebApp = () => (
     <Provider store={store}>
-        <WithAut>
+        <WithAuth>
             <RouterProvider router={WEB_APP_ROUTER}/>
-        </WithAut>
+        </WithAuth>
     </Provider>
 
 );

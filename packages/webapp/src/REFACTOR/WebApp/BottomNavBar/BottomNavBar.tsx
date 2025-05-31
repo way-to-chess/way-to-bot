@@ -5,7 +5,7 @@ import {ProfileIcon} from "../../Icons/ProfileIcon";
 import {NavLink} from "react-router";
 import {FC, ReactNode} from "react";
 import {useSelector} from "react-redux";
-import {authSlice} from "../../Store/Auth/AuthSlice";
+import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 
 interface INavBarItem {
     title: string;

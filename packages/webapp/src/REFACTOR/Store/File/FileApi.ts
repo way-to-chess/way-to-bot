@@ -1,7 +1,7 @@
-import {webAppClientApi} from "../WebAppClientApi";
 import {ClientDTOFileCreateResponse, ClientDTOFileGetOne} from "@way-to-bot/shared/api/DTO/client/file.DTO";
+import {clientApi} from "../ClientApi";
 
-const fileApi = webAppClientApi.injectEndpoints({
+const fileApi = clientApi.injectEndpoints({
     endpoints: (build) => ({
         uploadFile: build.mutation<ClientDTOFileGetOne, FormData>({
             query: (file) => ({

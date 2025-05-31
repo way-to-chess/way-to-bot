@@ -1,85 +1,41 @@
-import { createRoot } from "react-dom/client";
+import {createRoot} from "react-dom/client";
 import "./main.css";
-import {
-  ConfigProvider,
-  ConfigProviderProps,
-  Layout,
-  Menu,
-  MenuProps,
-  theme as antdTheme,
-} from "antd";
-import ru from "antd/locale/ru_RU";
-import { CSSProperties } from "react";
-import { TEXT } from "@way-to-bot/shared/constants/text";
-import { BrowserRouter, Navigate, NavLink, Route, Routes } from "react-router";
-import { Provider } from "react-redux";
-import { STORE } from "./store";
-import { ParticipateRequestsPage } from "./Domains/ParticipateRequests/Page";
-import { ROUTES } from "./Constants/Routes";
+import {Provider} from "react-redux";
+import {store} from "./Store/Store";
+import {RouterProvider} from "react-router";
+import {ROUTER} from "./Router";
+import {FC, PropsWithChildren} from "react";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
+import {Skeleton} from "antd";
 
-const APP_CONFIG: ConfigProviderProps = {
-  locale: ru,
-  theme: {
-    algorithm: antdTheme.defaultAlgorithm,
-    cssVar: { key: "adminui" },
-    hashed: false,
-    components: {
-      Layout: {
-        headerHeight: 56,
-      },
-    },
-  },
-};
 
-const LAYOUT_STYLE: CSSProperties = { minHeight: "100dvh" };
+const WithAuth: FC<PropsWithChildren> = ({children}) => {
+    const {isLoading, isError} = authApi.useAuthByTelegramQuery({
+        tgId: 409658449,
+    })
 
-type TMenuItem = Required<MenuProps>["items"][number];
+    if (isLoading) {
+        return <Skeleton/>
+    }
 
-const MENU_ITEMS: TMenuItem[] = [
-  {
-    key: 1,
-    label: (
-      <NavLink to={ROUTES.participateRequestsRoute}>
-        {TEXT.participateRequests}
-      </NavLink>
-    ),
-  },
-];
+    if (isError) {
+        return "Errror"
+    }
 
-const MAIN_STYLE: CSSProperties = {
-  padding: 24,
-};
+    return children
+}
+
 
 const App = () => {
-  return (
-    <Provider store={STORE}>
-      <BrowserRouter>
-        <ConfigProvider {...APP_CONFIG}>
-          <Layout style={LAYOUT_STYLE}>
-            <Layout.Sider width="200px" theme={"light"}>
-              <Menu
-                defaultSelectedKeys={["1"]}
-                mode="inline"
-                items={MENU_ITEMS}
-              />
-            </Layout.Sider>
-            <Layout.Content style={MAIN_STYLE}>
-              <Routes>
-                <Route
-                  path={ROUTES.participateRequestsRoute}
-                  element={<ParticipateRequestsPage />}
-                />
-                <Route
-                  path={ROUTES.any}
-                  element={<Navigate to={ROUTES.participateRequestsRoute} />}
-                />
-              </Routes>
-            </Layout.Content>
-          </Layout>
-        </ConfigProvider>
-      </BrowserRouter>
-    </Provider>
-  );
+
+
+    return (
+        <Provider store={store}>
+            <WithAuth>
+                <RouterProvider router={ROUTER}/>
+            </WithAuth>
+        </Provider>
+    );
 };
 
-createRoot(document.getElementById("root")!).render(<App />);
+createRoot(document.getElementById("root")!).render(<App/>);

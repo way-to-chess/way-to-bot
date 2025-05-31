@@ -1,3 +1,4 @@
+import {adminApi} from "../AdminApi";
 import {
     ClientDTOUserCreateResponse,
     ClientDTOUserGetMany,
@@ -6,9 +7,8 @@ import {
     ClientDTOUserGetOneResponse
 } from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
-import {clientApi} from "../ClientApi";
 
-const userApi = clientApi.injectEndpoints({
+const userApi = adminApi.injectEndpoints({
     endpoints: (build) => ({
         getAllUsers: build.query<ClientDTOUserGetMany[], void>({
             query: () => "user",
@@ -27,7 +27,7 @@ const userApi = clientApi.injectEndpoints({
                 body: payload,
             }),
         }),
-    }),
-});
+    })
+})
 
-export {userApi};
+export {userApi}

@@ -8,7 +8,7 @@ import {userApi} from "../Store/User/UserApi";
 import {EUserRole} from "@way-to-bot/shared/api/enums";
 import {Input} from "../Input/Input";
 import {useSelector} from "react-redux";
-import {authSlice} from "../Store/Auth/AuthSlice";
+import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {Navigate} from "react-router";
 
 interface IFileInput {
