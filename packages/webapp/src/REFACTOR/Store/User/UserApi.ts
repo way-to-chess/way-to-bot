@@ -26,6 +26,7 @@ const userApi = webAppClientApi.injectEndpoints({
                 method: "POST",
                 body: payload,
             }),
+            invalidatesTags: ["TELEGRAM"]
         }),
     }),
 });

@@ -16,7 +16,7 @@ const webAppClientApi = createApi({
             return headers
         }
     }),
-    tagTypes: ["EVENT", "USER"],
+    tagTypes: ["EVENT", "USER", "TELEGRAM"],
     endpoints: () => ({}),
 });
 

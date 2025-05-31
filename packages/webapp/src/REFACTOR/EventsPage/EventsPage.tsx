@@ -17,7 +17,6 @@ import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {ClientDTOEventGetMany} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 import {Error, RefetchError} from "../Error/Error";
-import {webAppAuthApi} from "../Store/WebAppAuthApi";
 
 dayjs.locale("ru");
 
@@ -180,7 +179,6 @@ const Events = () => {
 };
 
 const EventsPage = () => {
-    const {data: tgAuth, currentData} = webAppAuthApi.useAuthByTelegramQuery()
 
     return (
         <div className={classes.page}>
