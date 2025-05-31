@@ -11,6 +11,7 @@ import {
   OneToMany,
   Unique,
   type Relation,
+  VirtualColumn,
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
@@ -31,11 +32,25 @@ export class UserEntity implements IUserEntity {
   @Column("bigint", { unique: true, nullable: true, name: "tg_id" })
   tgId?: string | null = null;
 
+  @Column({ type: "varchar", length: 255, unique: true, nullable: true })
+  email?: string | null;
+
   @Column({ type: "varchar", length: 255 })
   firstName!: string;
 
   @Column({ type: "varchar", length: 255 })
   lastName!: string;
+
+  @Column({ type: "date", nullable: true, name: "birth_date" })
+  birthDate?: Date;
+
+  @VirtualColumn({
+    type: "integer",
+    query: (alias) => `
+      EXTRACT(YEAR FROM AGE(${alias}.birth_date))::integer
+    `,
+  })
+  age?: number;
 
   @Column("enum", {
     nullable: false,

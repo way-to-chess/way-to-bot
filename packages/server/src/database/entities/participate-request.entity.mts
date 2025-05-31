@@ -13,9 +13,9 @@ import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
+import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.ts";
 
 @Entity("participate_requests")
-@Unique(["event", "user"])
 export class ParticipateRequestEntity implements IParticipateRequestEntity {
   @PrimaryGeneratedColumn()
   id!: number;
@@ -33,6 +33,9 @@ export class ParticipateRequestEntity implements IParticipateRequestEntity {
   @ManyToOne(() => UserEntity, { nullable: false, onDelete: "CASCADE" })
   @JoinColumn({ name: "user_id" })
   user!: Relation<UserEntity>;
+
+  @Column({ type: "jsonb", default: [] })
+  additionalUsers!: TCommonParticipateRequestAdditionalUser[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
   fileId?: number | null;

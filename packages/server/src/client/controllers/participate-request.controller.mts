@@ -7,10 +7,14 @@ import {
 import {
   ClientDTOParticipateRequestCreateResponse,
   ClientDTOParticipateRequestDeleteResponse,
+  ClientDTOParticipateRequestGetMany,
+  ClientDTOParticipateRequestGetManyResponse,
   ClientDTOParticipateRequestGetOne,
   ClientDTOParticipateRequestGetOneResponse,
   ClientDTOParticipateRequestUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/client/participate-request.DTO.js";
+import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class ClientParticipateRequestController {
@@ -19,6 +23,21 @@ export class ClientParticipateRequestController {
     private readonly _participateRequestService: ClientParticipateRequestService,
   ) {}
 
+  async getMany(
+    userId: number,
+    options?: GetManyOptionsDTO<ParticipateRequestEntity>,
+  ) {
+    const data = await this._participateRequestService.getMany(userId, options);
+    return new ClientDTOParticipateRequestGetManyResponse(
+      data.data.map((i) => new ClientDTOParticipateRequestGetMany(i)),
+      {
+        limit: options?.getFindOptions?.take,
+        offset: options?.getFindOptions?.skip,
+        totalRows: data.count,
+      },
+    );
+  }
+
   async getById(id: number) {
     const data = await this._participateRequestService.getById(id);
     return new ClientDTOParticipateRequestGetOneResponse(
@@ -26,8 +45,14 @@ export class ClientParticipateRequestController {
     );
   }
 
-  async create(payload: TClientParticipateRequestCreatePayload) {
-    const data = await this._participateRequestService.create(payload);
+  async create(
+    userId: number,
+    payload: TClientParticipateRequestCreatePayload,
+  ) {
+    const data = await this._participateRequestService.create({
+      ...payload,
+      userId,
+    });
     return new ClientDTOParticipateRequestCreateResponse(
       new ClientDTOParticipateRequestGetOne(data),
     );

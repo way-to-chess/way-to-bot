@@ -5,6 +5,8 @@ import {
   TClientParticipateRequestUpdatePayload,
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
+import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 
 @injectable()
 export class ClientParticipateRequestService {
@@ -12,6 +14,21 @@ export class ClientParticipateRequestService {
     @inject(ParticipateRequestRepository)
     private readonly _participateRequestRepository: ParticipateRequestRepository,
   ) {}
+
+  async getMany(
+    userId: number,
+    options?: GetManyOptionsDTO<ParticipateRequestEntity>,
+  ) {
+    const findOptions = {
+      ...options?.getFindOptions,
+      where: {
+        ...options?.getFindOptions?.where,
+        userId,
+      },
+    };
+
+    return this._participateRequestRepository.getMany(findOptions);
+  }
 
   async getById(id: number) {
     const data = await this._participateRequestRepository.getById(id);
@@ -23,7 +40,9 @@ export class ClientParticipateRequestService {
     return data;
   }
 
-  async create(payload: TClientParticipateRequestCreatePayload) {
+  async create(
+    payload: TClientParticipateRequestCreatePayload & { userId: number },
+  ) {
     const data = await this._participateRequestRepository.create(payload);
 
     if (!data) {

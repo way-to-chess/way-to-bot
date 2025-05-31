@@ -1,9 +1,18 @@
 import { z } from "zod";
+import { ClientSchemaUserBase } from "@way-to-bot/shared/api/zod/client/user.schema";
+
+const ClientSchemaParticipateRequestAdditionalUserSchema = z
+  .object({
+    ...ClientSchemaUserBase,
+    birthDate: z.coerce.date(),
+    email: z.string().optional(),
+  })
+  .catchall(z.any());
 
 const ClientSchemaParticipateRequestBase = {
   eventId: z.number(),
-  userId: z.number(),
   fileId: z.number(),
+  additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema),
 };
 
 export const ClientSchemaParticipateRequestCreate = z
@@ -28,4 +37,7 @@ export type TClientParticipateRequestCreatePayload = z.infer<
 >;
 export type TClientParticipateRequestUpdatePayload = z.infer<
   typeof ClientSchemaParticipateRequestUpdate
+>;
+export type TClientParticipateRequestAdditionalUser = z.infer<
+  typeof ClientSchemaParticipateRequestAdditionalUserSchema
 >;

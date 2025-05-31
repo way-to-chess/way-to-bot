@@ -79,6 +79,25 @@ export class UserRepository {
     return this.getById(savedUser.id, queryRunner);
   }
 
+  async findOrCreateByEmail(
+    payload: TClientUserCreatePayload,
+    queryRunner?: QueryRunner,
+  ) {
+    const repo = this.getRepository(queryRunner);
+
+    if (payload.email) {
+      const existingUser = await repo.findOneBy({ email: payload.email });
+
+      if (existingUser) {
+        return existingUser.id;
+      }
+    }
+
+    const newUser = repo.create(payload);
+    const savedUser = await repo.save(newUser);
+    return savedUser.id;
+  }
+
   async update(
     id: number,
     payload: TAdminUserUpdatePayload | TClientUserUpdatePayload,

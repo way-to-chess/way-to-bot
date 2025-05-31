@@ -5,11 +5,12 @@ import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 import { EventLeagueUserRepository } from "@way-to-bot/server/database/repositories/event-league-user.repository.mjs";
 import { EventLeagueRepository } from "@way-to-bot/server/database/repositories/event-league.repository.mjs";
-import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TAdminParticipateRequestApprovePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
+import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
+import { In } from "typeorm";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -22,6 +23,8 @@ export class AdminParticipateRequestService {
     private readonly _eventLeagueUserRepository: EventLeagueUserRepository,
     @inject(EventLeagueRepository)
     private readonly _eventLeagueRepository: EventLeagueRepository,
+    @inject(UserRepository)
+    private readonly _userRepository: UserRepository,
   ) {}
 
   async approveParticipateRequest(
@@ -44,24 +47,65 @@ export class AdminParticipateRequestService {
         throw new InternalError("Participate request was not approved");
       }
 
-      const eventLeague =
-        await this._eventLeagueRepository.getOneByEventIdAndLeagueId(
-          updatedParticipateRequest.eventId,
-          payload.leagueId,
-          queryRunner,
-        );
+      const allEventLeaguesForEvent = await this._eventLeagueRepository.getMany(
+        { where: { eventId: updatedParticipateRequest.eventId } },
+      );
 
-      if (!eventLeague) {
-        throw new NotFoundError(
-          `Event league with eventId: ${updatedParticipateRequest.eventId} and leagueId: ${payload.leagueId} not found`,
+      if (!allEventLeaguesForEvent.length) {
+        throw new InternalError(
+          `No event leagues for event ${updatedParticipateRequest.eventId}`,
         );
       }
 
-      const elu = new EventLeagueUserEntity();
-      elu.eventLeagueId = eventLeague.id;
-      elu.userId = updatedParticipateRequest.userId;
+      const additionalUsers = updatedParticipateRequest.additionalUsers;
+      const allParticipantsIds: Set<number> = new Set([
+        updatedParticipateRequest.userId,
+      ]);
+      if (additionalUsers.length) {
+        for (const user of additionalUsers) {
+          const userId = await this._userRepository.findOrCreateByEmail(
+            user,
+            queryRunner,
+          );
+          allParticipantsIds.add(userId);
+        }
+      }
 
-      await this._eventLeagueUserRepository.addRows([elu], queryRunner);
+      const eluList: EventLeagueUserEntity[] = [];
+      const eventLeagueIds = allEventLeaguesForEvent.map((el) => el.id);
+      const defaultEventLeague =
+        allEventLeaguesForEvent.length === 1
+          ? allEventLeaguesForEvent[0]
+          : await this._eventLeagueRepository.getOneByEventIdAndLeagueId(
+              updatedParticipateRequest.eventId,
+            );
+
+      if (!defaultEventLeague) {
+        throw new InternalError(
+          `Default league for event ${updatedParticipateRequest.eventId} was not found`,
+        );
+      }
+
+      for (const pid of allParticipantsIds) {
+        const existingElu = await this._eventLeagueUserRepository.getOne(
+          {
+            where: {
+              userId: pid,
+              eventLeagueId: In(eventLeagueIds),
+            },
+          },
+          queryRunner,
+        );
+
+        if (existingElu) continue;
+
+        const elu = new EventLeagueUserEntity();
+        elu.eventLeagueId = defaultEventLeague.id;
+        elu.userId = pid;
+        eluList.push(elu);
+      }
+
+      await this._eventLeagueUserRepository.addRows(eluList, queryRunner);
 
       await queryRunner.commitTransaction();
       return updatedParticipateRequest;

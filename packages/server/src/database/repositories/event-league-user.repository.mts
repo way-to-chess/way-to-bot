@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindOptionsWhere, QueryRunner } from "typeorm";
+import { FindOneOptions, FindOptionsWhere, QueryRunner } from "typeorm";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
 
 @injectable()
@@ -12,6 +12,14 @@ export class EventLeagueUserRepository {
       return queryRunner.manager.getRepository(EventLeagueUserEntity);
     }
     return this._dbService.dataSource.getRepository(EventLeagueUserEntity);
+  }
+
+  getOne(
+    options: FindOneOptions<EventLeagueUserEntity>,
+    queryRunner?: QueryRunner,
+  ) {
+    const repo = this.getRepository(queryRunner);
+    return repo.findOne(options);
   }
 
   addRows(eluList: EventLeagueUserEntity[], queryRunner?: QueryRunner) {

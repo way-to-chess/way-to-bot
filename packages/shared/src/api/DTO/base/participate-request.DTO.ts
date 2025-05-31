@@ -2,6 +2,7 @@ import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/ent
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
+import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index";
 
 export class BaseDTOParticipateRequest {
   readonly id: number;
@@ -12,6 +13,7 @@ export class BaseDTOParticipateRequest {
   readonly fileId: number | null;
   readonly receipt: IFileEntity | null;
   readonly approved: boolean;
+  readonly additionalUsers: TCommonParticipateRequestAdditionalUser[];
 
   constructor(request: IParticipateRequestEntity) {
     this.id = request.id;
@@ -22,5 +24,6 @@ export class BaseDTOParticipateRequest {
     this.fileId = request.fileId ?? null;
     this.receipt = request.receipt ?? null;
     this.approved = request.approved;
+    this.additionalUsers = request.additionalUsers;
   }
 }

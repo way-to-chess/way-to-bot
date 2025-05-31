@@ -10,6 +10,9 @@ export interface IUserEntity {
   tgId?: string | null;
   firstName: string;
   lastName: string;
+  email?: string | null;
+  birthDate?: Date;
+  age?: number;
   roles: EUserRole[];
   fileId?: number | null;
   photo?: IFileEntity | null;

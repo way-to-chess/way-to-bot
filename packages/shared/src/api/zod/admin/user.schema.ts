@@ -1,24 +1,20 @@
 import { z } from "zod";
-import { EContactType, EUserRole } from "../../enums/index.js";
+import { ClientSchemaUserContactInfo } from "@way-to-bot/shared/api/zod/client/user.schema";
+import { EUserRole } from "@way-to-bot/shared/api/enums/index";
 
 const AdminSchemaUserBase = {
   username: z.string().nullable().optional(),
   firstName: z.string(),
   lastName: z.string(),
+  email: z.string().nullable().optional(),
+  birthDate: z.date().optional(),
   roles: z.array(z.nativeEnum(EUserRole)).optional(),
   fileId: z.number().nullable().optional(),
   wins: z.number().optional(),
   losses: z.number().optional(),
   draws: z.number().optional(),
   rating: z.number().optional(),
-  contactInfo: z
-    .array(
-      z.object({
-        type: z.nativeEnum(EContactType),
-        url: z.string(),
-      }),
-    )
-    .optional(),
+  contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
 };
 
 export const AdminSchemaUserCreate = z

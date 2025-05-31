@@ -6,11 +6,7 @@ export const AdminSchemaParticipateRequestUpdate = z
   })
   .strict();
 
-export const AdminSchemaParticipateRequestApprove = z
-  .object({
-    leagueId: z.number().optional(),
-  })
-  .strict();
+export const AdminSchemaParticipateRequestApprove = z.object({}).strict();
 
 export type TAdminParticipateRequestUpdatePayload = z.infer<
   typeof AdminSchemaParticipateRequestUpdate

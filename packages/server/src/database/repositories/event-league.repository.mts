@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindOneOptions, QueryRunner } from "typeorm";
+import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
 import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-league.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
@@ -24,6 +24,14 @@ export class EventLeagueRepository {
       return queryRunner.manager.getRepository(EventLeagueEntity);
     }
     return this._dbService.dataSource.getRepository(EventLeagueEntity);
+  }
+
+  getMany(
+    options?: FindManyOptions<EventLeagueEntity>,
+    queryRunner?: QueryRunner,
+  ) {
+    const repo = this.getRepository(queryRunner);
+    return repo.find(options);
   }
 
   async getOneById(

@@ -1,8 +1,8 @@
 import { inject, injectable } from "inversify";
-import { DbService } from '@way-to-bot/server/services/db.service.mjs';
+import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { FindManyOptions, QueryRunner } from "typeorm";
-import { NotFoundError } from '@way-to-bot/server/common/errors/not-found.error.mjs';
-import { ParticipateRequestEntity } from '@way-to-bot/server/database/entities/participate-request.entity.mjs';
+import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import {
   TClientParticipateRequestCreatePayload,
   TClientParticipateRequestUpdatePayload,
@@ -49,7 +49,7 @@ export class ParticipateRequestRepository {
   }
 
   async create(
-    payload: TClientParticipateRequestCreatePayload,
+    payload: TClientParticipateRequestCreatePayload & { userId: number },
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);

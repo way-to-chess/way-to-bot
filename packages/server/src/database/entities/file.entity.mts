@@ -1,4 +1,10 @@
-import {Entity, PrimaryGeneratedColumn, Column, AfterLoad, BeforeInsert, BeforeUpdate} from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  BeforeInsert,
+  BeforeUpdate,
+} from "typeorm";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import * as process from "node:process";
 import path from "path";
@@ -11,7 +17,7 @@ export class FileEntity implements IFileEntity {
   @Column({ type: "varchar", nullable: false })
   url!: string;
 
-  @Column({ type: "varchar", nullable: true })
+  @Column({ type: "varchar", nullable: true, name: "preview_url" })
   previewUrl?: string | null = null;
 
   @BeforeInsert()
