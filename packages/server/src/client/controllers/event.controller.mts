@@ -17,7 +17,6 @@ export class ClientEventController {
   ) {}
 
   async getMany(options?: GetManyOptionsDTO<EventEntity>) {
-    console.log(options)
     const data = await this._eventService.getMany(options);
     return new ClientDTOEventGetManyResponse(
       data.data.map((i) => new ClientDTOEventGetMany(i)),

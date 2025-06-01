@@ -1,11 +1,21 @@
-import { Equal, FindManyOptions, In, Like, Not } from "typeorm";
+import {
+  Equal,
+  FindManyOptions,
+  FindOptionsWhere,
+  In,
+  Like,
+  Not,
+} from "typeorm";
 import {
   TCommonGetManyOptions,
   TCommonPagination,
   TCommonSort,
   TCommonWhere,
 } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { EPredicate } from "@way-to-bot/shared/api/enums/index.js";
+import {
+  EOperandPredicate,
+  EPredicate,
+} from "@way-to-bot/shared/api/enums/index.js";
 
 export class GetManyOptionsDTO<Entity> {
   private readonly _findOptions: FindManyOptions<Entity>;
@@ -17,7 +27,6 @@ export class GetManyOptionsDTO<Entity> {
       ...(parsedQuery.where && this.getWhereOptions(parsedQuery.where)),
       ...(parsedQuery.sort && this.getSortOptions(parsedQuery.sort)),
     } as FindManyOptions<Entity>;
-    console.log(this._findOptions);
   }
 
   get getFindOptions() {
@@ -33,29 +42,36 @@ export class GetManyOptionsDTO<Entity> {
     };
   }
 
-  private getWhereOptions(whereOptions: TCommonWhere): FindManyOptions {
-    return {
-      where: {
-        [whereOptions.field]: this.getPredicate(
-          whereOptions.predicate,
-          whereOptions.value,
-        ),
-      },
+  private getWhereOptions(whereOptions: TCommonWhere): FindOptionsWhere<any> {
+    const finalOptions = {
+      where: whereOptions.predicate === EPredicate.OR ? [] : {},
     };
+
+    for (const op of whereOptions.operands) {
+      const where = { [op.field]: this.getPredicate(op.predicate, op.value) };
+
+      if (whereOptions.predicate === EPredicate.OR) {
+        (finalOptions.where as unknown[]).push(where);
+      } else {
+        finalOptions.where = { ...finalOptions.where, ...where };
+      }
+    }
+
+    return finalOptions;
   }
 
-  private getPredicate(predicate: EPredicate, value: any) {
+  private getPredicate(predicate: EOperandPredicate, value: any) {
     switch (predicate) {
-      case EPredicate.EQ:
+      case EOperandPredicate.EQ:
         return Equal(value);
-      case EPredicate.NOT_EQ:
+      case EOperandPredicate.NOT_EQ:
         return Not(value);
-      case EPredicate.IN:
+      case EOperandPredicate.IN:
         return In(value);
-      case EPredicate.NOT_IN:
+      case EOperandPredicate.NOT_IN:
         return Not(In(value));
-      case EPredicate.LIKE:
-        return Like(value);
+      case EOperandPredicate.LIKE:
+        return Like(`%${value}%`);
       default:
         throw new Error(`Unknown predicate ${predicate}`);
     }

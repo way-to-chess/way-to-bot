@@ -19,6 +19,8 @@ export const ClientSchemaUserBase = {
 export const ClientSchemaUserCreate = z
   .object({
     ...ClientSchemaUserBase,
+    tgId: z.string().optional(),
+    username: z.string().optional(),
   })
   .strict();
 
