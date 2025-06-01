@@ -2,7 +2,6 @@ import {adminApi} from "../AdminApi";
 import {
     AdminDTOUserCreateResponse,
     AdminDTOUserDeleteResponse,
-    AdminDTOUserGetMany,
     AdminDTOUserGetManyResponse,
     AdminDTOUserGetOne,
     AdminDTOUserGetOneResponse
@@ -14,9 +13,8 @@ import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchP
 
 const userApi = adminApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllUsers: build.query<AdminDTOUserGetMany[], IQueryOptions>({
+        getAllUsers: build.query<AdminDTOUserGetManyResponse, IQueryOptions>({
             query: (options) => options ? getUrlWithSearchParams("user", options) : "user",
-            transformResponse: (data: AdminDTOUserGetManyResponse) => data.data,
             providesTags: () => [{type: "USER", id: "ALL"}]
         }),
         getUserById: build.query<AdminDTOUserGetOne, string>({
@@ -33,10 +31,10 @@ const userApi = adminApi.injectEndpoints({
         }),
         deleteUser: build.mutation<AdminDTOUserDeleteResponse, IWithId>({
             query: (payload) => ({
-                url: "user",
+                url: `user/${payload.id}`,
                 method: "DELETE",
-                body: payload,
             }),
+            invalidatesTags: [{type: "USER", id: "ALL"}]
         }),
     })
 })

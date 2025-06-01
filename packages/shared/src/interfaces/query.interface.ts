@@ -18,8 +18,8 @@ interface ILimitInput {
 
 interface IQueryOptions {
   where?: IWhereInput[];
-  orderBy?: IOrderByInput;
-  limit?: ILimitInput;
+  sort?: IOrderByInput;
+  pagination?: ILimitInput;
 }
 
 export type { IQueryOptions, IWhereInput };

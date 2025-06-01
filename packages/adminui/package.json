@@ -11,9 +11,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@way-to-bot/shared": "*",
     "@reduxjs/toolkit": "^2.8.2",
+    "@way-to-bot/shared": "*",
     "antd": "^5.25.4",
+    "lucide-react": "^0.511.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-redux": "^9.2.0",
