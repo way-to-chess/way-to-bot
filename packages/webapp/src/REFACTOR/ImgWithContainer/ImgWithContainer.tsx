@@ -5,7 +5,7 @@ import clsx from "clsx";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 interface IImgWithContainerProps {
-    previewUrl?: string;
+    previewUrl?: string | null;
     className?: string;
 }
 

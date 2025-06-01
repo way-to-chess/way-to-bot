@@ -1,4 +1,4 @@
-import {createElement, ElementType, FC, PropsWithChildren} from "react";
+import {createElement, ElementType, FC, PropsWithChildren, ReactNode} from "react";
 import clsx from "clsx";
 import classes from "./Typography.module.css";
 
@@ -21,7 +21,7 @@ type TColor =
     | "greenColor"
 
 interface IWithValue {
-    value?: string | number;
+    value?: ReactNode;
 }
 
 interface IWithType {

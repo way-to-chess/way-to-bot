@@ -1,27 +1,43 @@
-import {Dialog} from "@base-ui-components/react";
+import {Dialog,} from "@base-ui-components/react";
 import {Typography} from "../Typography/Typography";
 import classes from "./BottomSheet.module.css";
 import {CloseIcon} from "../Icons/CloseIcon";
-import {FC, PropsWithChildren} from "react";
+import {FC, Fragment, PropsWithChildren} from "react";
+import clsx from "clsx";
 
 type TBottomSheetTrigger = Dialog.Trigger.Props["render"]
 
 interface IBottomSheetProps extends PropsWithChildren {
     title?: string
+    description?: string
     trigger: TBottomSheetTrigger
+    className?: string
+    open?: boolean;
+    onOpenChange?: Dialog.Root.Props["onOpenChange"]
 }
 
-const BottomSheet: FC<IBottomSheetProps> = ({trigger, title, children}) => {
+const BottomSheet: FC<IBottomSheetProps> = ({trigger, title, description, children, className, open, onOpenChange}) => {
+    const Wrapper = title && description ? "div" : Fragment
+
     return (
-        <Dialog.Root>
+        <Dialog.Root open={open} onOpenChange={onOpenChange}>
             <Dialog.Trigger render={trigger}/>
             <Dialog.Portal>
                 <Dialog.Backdrop className={classes.backdrop}/>
-                <Dialog.Popup className={classes.popup}>
+                <Dialog.Popup className={clsx(classes.popup, className)}>
                     <div className={classes.top}>
-                        <Dialog.Title
-                            render={<Typography type={"title3"} value={title}/>}
-                        />
+                        <Wrapper>
+                            {
+                                title ?
+                                    <Dialog.Title render={<Typography type={"title3"} value={title}/>}/>
+                                    : null
+                            }
+                            {
+                                description ?
+                                    <Dialog.Description render={<Typography type={"text2"} value={description}/>}/>
+                                    : null
+                            }
+                        </Wrapper>
                         <Dialog.Close className={classes.close}>{CloseIcon}</Dialog.Close>
                     </div>
                     {children}

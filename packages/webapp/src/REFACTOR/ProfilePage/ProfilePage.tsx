@@ -5,11 +5,11 @@ import {Button} from "../../Button/Button";
 import {fileApi} from "../Store/File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../Store/User/UserApi";
-import {EUserRole} from "@way-to-bot/shared/api/enums";
 import {Input} from "../Input/Input";
 import {useSelector} from "react-redux";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {Navigate} from "react-router";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
 
 interface IFileInput {
     setFileId: (fileId: undefined | number) => void;
@@ -87,15 +87,20 @@ const CreateProfile = () => {
 
     const [createUser] = userApi.useCreateUserMutation();
 
+    const [auth] = authApi.useLazyAuthByTelegramQuery()
+
     const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
         createUser({
             firstName,
             lastName,
             fileId,
-            roles: [EUserRole.USER],
-            tgId: Telegram.WebApp.initDataUnsafe.user?.id,
-        });
+        }).unwrap().then(() => {
+            auth({
+                tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+                username: Telegram.WebApp.initDataUnsafe.user?.username,
+            })
+        })
     };
 
     const isButtonDisabled = !lastName || !firstName;
@@ -114,6 +119,7 @@ const CreateProfile = () => {
 
             <Input placeholder={"Имя"} value={firstName} onChange={onFirstNameChange}/>
             <Input placeholder={"Фамилия"} value={lastName} onChange={onLastNameChange}/>
+
             <Button
                 type={"submit"}
                 disabled={isButtonDisabled}
@@ -121,6 +127,7 @@ const CreateProfile = () => {
             >
                 {"Создать профиль"}
             </Button>
+
         </form>
     );
 }

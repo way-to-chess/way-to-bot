@@ -7,12 +7,12 @@ import {Typography} from "../Typography/Typography";
 import {Input} from "../Input/Input";
 import {SearchIcon} from "../Icons/SearchIcon";
 import {SortIcon} from "../Icons/SortIcon";
-import {Radio, RadioGroup} from "@base-ui-components/react";
 import {ESortDirection} from "../../Models/ESortDirection";
 import {useState} from "react";
 import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {RefetchError} from "../Error/Error";
+import {Options} from "../Options/Options";
 
 const renderSortButton: TBottomSheetTrigger = (props) => {
     return <button className={classes.sortButton} {...props}>
@@ -85,16 +85,7 @@ const LeaderboardPage = () => {
                 <Input placeholder={"Найти участника"} before={SearchIcon}/>
 
                 <BottomSheet title={"Сортировка"} trigger={renderSortButton}>
-                    <RadioGroup className={classes.options} value={sort} onValueChange={onValueChange}>
-                        {SORT_OPTIONS.map(({title, value}) => (
-                            <label className={classes.option}>
-                                <Typography type={"title6"} value={title}/>
-                                <Radio.Root value={value} className={classes.radio}>
-                                    <Radio.Indicator className={classes.indicator}/>
-                                </Radio.Root>
-                            </label>
-                        ))}
-                    </RadioGroup>
+                    <Options options={SORT_OPTIONS} value={sort} onValueChange={onValueChange}/>
                 </BottomSheet>
             </div>
             {

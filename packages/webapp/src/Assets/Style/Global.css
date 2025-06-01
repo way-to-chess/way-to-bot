@@ -49,3 +49,7 @@ html, body {
     margin: 15px auto;
     overflow: hidden;
 }
+
+.flex1 {
+    flex: 1;
+}

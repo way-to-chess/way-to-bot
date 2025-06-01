@@ -28,6 +28,16 @@
     opacity: 0;
 }
 
+.popup[data-nested-dialog-open]:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: #0000001A;
+}
+
 .top {
     display: flex;
     justify-content: space-between;
