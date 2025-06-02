@@ -43,5 +43,5 @@ RUN npm install --production
 
 FROM nginx:alpine AS web
 COPY --from=builder /app/packages/webapp/dist /usr/share/nginx/html/webapp
-#COPY --from=builder /app/packages/adminui/dist /usr/share/nginx/html/admin
+COPY --from=builder /app/packages/adminui/dist /usr/share/nginx/html/admin
 CMD ["nginx", "-g", "daemon off;"]
