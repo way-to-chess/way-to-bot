@@ -16,13 +16,10 @@ RUN npm install --workspace @way-to-bot/server
 
 # BUILD
 RUN npm run build --workspace @way-to-bot/shared
-
 RUN npm run build --workspace @way-to-bot/webapp
-
-#RUN npm run build --workspace @way-to-bot/adminui
-
+RUN npm run build --workspace @way-to-bot/adminui
 RUN npm run build --workspace @way-to-bot/server
-#RUN npm run typeorm:migrate --workspace @way-to-bot/server
+
 
 FROM node:20.17.0-slim AS server
 
