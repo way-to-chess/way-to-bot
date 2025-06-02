@@ -2,12 +2,12 @@ import {Avatar, Button, Flex, Input, Popconfirm, Table, TableProps, Tag, Typogra
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {userApi} from "../../Store/User/UserApi";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
-import {ESortDirection, EUserRole} from "@way-to-bot/shared/api/enums/index";
+import {EOperandPredicate, EPredicate, ESortDirection, EUserRole} from "@way-to-bot/shared/api/enums/index";
 import {FC, useState} from "react";
 import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
-import {IQueryOptions} from "@way-to-bot/shared/interfaces/query.interface";
 import {AdminDTOUserGetMany} from "@way-to-bot/shared/api/DTO/admin/user.DTO";
 import {PlusIcon} from "lucide-react";
+import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 const DeleteButton: FC<IWithId> = ({id}) => {
     const [trigger] = userApi.useDeleteUserMutation()
@@ -91,7 +91,7 @@ const UsersTable = () => {
 
     const offset = (currentPage - 1) * pageSize
 
-    const options: IQueryOptions = {
+    const options: TCommonGetManyOptions = {
         pagination: {limit: pageSize, offset},
     }
 
@@ -99,6 +99,29 @@ const UsersTable = () => {
         options.sort = {
             field: sortField,
             direction: sortDirection
+        }
+    }
+
+    if (searchValue) {
+        options.where = {
+            predicate: EPredicate.OR,
+            operands: [
+                {
+                    field: "firstName",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValue
+                },
+                {
+                    field: "lastName",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValue
+                },
+                {
+                    field: "username",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValue
+                }
+            ]
         }
     }
 

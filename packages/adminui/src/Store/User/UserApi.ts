@@ -8,12 +8,12 @@ import {
 } from "@way-to-bot/shared/api/DTO/admin/user.DTO";
 import {TAdminUserCreatePayload} from "@way-to-bot/shared/api/zod/admin/user.schema";
 import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
-import {IQueryOptions} from "@way-to-bot/shared/interfaces/query.interface";
 import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchParams";
+import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 const userApi = adminApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllUsers: build.query<AdminDTOUserGetManyResponse, IQueryOptions>({
+        getAllUsers: build.query<AdminDTOUserGetManyResponse, TCommonGetManyOptions>({
             query: (options) => options ? getUrlWithSearchParams("user", options) : "user",
             providesTags: () => [{type: "USER", id: "ALL"}]
         }),
