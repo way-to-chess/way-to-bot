@@ -19,7 +19,7 @@ ClientUserRouter.get(
   validatePayloadMddw(CommonSchemaGetManyOptions),
   getManyOptionsMddw,
   async (req, res) => {
-    const data = await clientUserController.getMany(req.query as any);
+    const data = await clientUserController.getMany(req.getManyOptions);
     res.status(200).send(data);
   },
 );

@@ -6,14 +6,13 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
-  Unique,
   type Relation,
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
-import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.ts";
+import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
 
 @Entity("participate_requests")
 export class ParticipateRequestEntity implements IParticipateRequestEntity {

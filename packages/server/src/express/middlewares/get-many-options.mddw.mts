@@ -10,7 +10,6 @@ export function getManyOptionsMddw(
   try {
     if (typeof req.query.q === "string") {
       const decodedQuery = Buffer.from(req.query.q, "base64").toString();
-      console.log(decodedQuery);
       const parsedQuery = JSON.parse(decodedQuery) as TCommonGetManyOptions;
       req.getManyOptions = new GetManyOptionsDTO<unknown>(parsedQuery);
     }

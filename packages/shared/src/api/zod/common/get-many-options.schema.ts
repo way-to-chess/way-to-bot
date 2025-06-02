@@ -1,5 +1,6 @@
 import { z } from "zod";
 import {
+  EOperandPredicate,
   EPredicate,
   ESortDirection,
 } from "@way-to-bot/shared/api/enums/index.js";
@@ -11,11 +12,16 @@ export const PaginationSchema = z
   })
   .strict();
 
+export const WhereOperand = z.object({
+  field: z.string(),
+  predicate: z.nativeEnum(EOperandPredicate),
+  value: z.any(),
+});
+
 export const WhereSchema = z
   .object({
-    field: z.string(),
     predicate: z.nativeEnum(EPredicate),
-    value: z.any(),
+    operands: z.array(WhereOperand),
   })
   .strict();
 

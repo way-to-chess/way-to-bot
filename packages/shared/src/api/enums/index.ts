@@ -49,6 +49,11 @@ export enum ELocationBenefits {
 }
 
 export enum EPredicate {
+  AND = "AND",
+  OR = "OR",
+}
+
+export enum EOperandPredicate {
   EQ = "EQ",
   NOT_EQ = "NOT_EQ",
   IN = "IN",
