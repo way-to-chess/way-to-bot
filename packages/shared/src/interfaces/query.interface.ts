@@ -17,7 +17,7 @@ interface ILimitInput {
 }
 
 interface IQueryOptions {
-  where?: IWhereInput[];
+  where?: IWhereInput;
   sort?: IOrderByInput;
   pagination?: ILimitInput;
 }

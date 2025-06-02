@@ -87,7 +87,7 @@ const CreateProfile = () => {
 
     const [createUser] = userApi.useCreateUserMutation();
 
-    const [auth] = authApi.useLazyAuthByTelegramQuery()
+    const [auth, {isFetching}] = authApi.useLazyAuthByTelegramQuery()
 
     const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
@@ -95,6 +95,8 @@ const CreateProfile = () => {
             firstName,
             lastName,
             fileId,
+            tgId: String(Telegram.WebApp.initDataUnsafe.user?.id),
+            username: Telegram.WebApp.initDataUnsafe.user?.username
         }).unwrap().then(() => {
             auth({
                 tgId: Telegram.WebApp.initDataUnsafe.user?.id,
@@ -124,6 +126,7 @@ const CreateProfile = () => {
                 type={"submit"}
                 disabled={isButtonDisabled}
                 className={classes.button}
+                loading={isFetching}
             >
                 {"Создать профиль"}
             </Button>

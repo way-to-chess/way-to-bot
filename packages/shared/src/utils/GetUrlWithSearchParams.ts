@@ -1,4 +1,4 @@
-import { IQueryOptions } from "../interfaces/query.interface";
+import { TCommonGetManyOptions } from "../api/zod/common/get-many-options.schema";
 
 const textEncoder = new TextEncoder();
 
@@ -10,7 +10,9 @@ const encodeToBase64Binary = (str: string) => {
   return window.btoa(binary);
 };
 
-const getUrlWithSearchParams = (url: string, options: IQueryOptions): string =>
-  `${url}?q=${encodeToBase64Binary(JSON.stringify(options))}`;
+const getUrlWithSearchParams = (
+  url: string,
+  options: TCommonGetManyOptions,
+): string => `${url}?q=${encodeToBase64Binary(JSON.stringify(options))}`;
 
 export { getUrlWithSearchParams };

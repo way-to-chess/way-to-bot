@@ -10,7 +10,8 @@ interface IButtonBaseProps {
     to?: string;
     textAlign?: CSSProperties["textAlign"];
     ref?: Ref<HTMLAnchorElement>;
-    value?: ReactNode
+    value?: ReactNode;
+    loading?: boolean;
 }
 
 type IButtonProps = IButtonBaseProps &
@@ -33,16 +34,21 @@ const Button: FC<IButtonProps> = (
         to,
         textAlign,
         value,
+        loading,
         ...props
     }) => {
     const buttonClassName = clsx(
         classes.button,
         classes[variant],
         classes[size],
+        loading && classes.loading,
         className,
     );
 
     const style = textAlign ? {textAlign} : undefined;
+
+    // When loading, we should disable the button to prevent multiple submissions
+    const buttonProps = loading ? { ...props, disabled: true } : props;
 
     if (as === "link" && to) {
         return (
@@ -50,7 +56,7 @@ const Button: FC<IButtonProps> = (
                 to={to}
                 className={buttonClassName}
                 style={style}
-                {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+                {...(buttonProps as AnchorHTMLAttributes<HTMLAnchorElement>)}
             >
                 {children || value}
             </Link>
@@ -62,7 +68,7 @@ const Button: FC<IButtonProps> = (
             <a
                 className={buttonClassName}
                 style={style}
-                {...(props as AnchorHTMLAttributes<HTMLAnchorElement>)}
+                {...(buttonProps as AnchorHTMLAttributes<HTMLAnchorElement>)}
             >
                 {children || value}
             </a>
@@ -73,7 +79,7 @@ const Button: FC<IButtonProps> = (
         <button
             className={buttonClassName}
             style={style}
-            {...(props as ButtonHTMLAttributes<HTMLButtonElement>)}
+            {...(buttonProps as ButtonHTMLAttributes<HTMLButtonElement>)}
         >
             {children || value}
         </button>
