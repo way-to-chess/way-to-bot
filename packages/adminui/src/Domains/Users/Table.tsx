@@ -102,24 +102,26 @@ const UsersTable = () => {
         }
     }
 
-    if (searchValue) {
+    const searchValueToSend = searchValue.trim()
+
+    if (searchValueToSend) {
         options.where = {
             predicate: EPredicate.OR,
             operands: [
                 {
                     field: "firstName",
                     predicate: EOperandPredicate.LIKE,
-                    value: searchValue
+                    value: searchValueToSend
                 },
                 {
                     field: "lastName",
                     predicate: EOperandPredicate.LIKE,
-                    value: searchValue
+                    value: searchValueToSend
                 },
                 {
                     field: "username",
                     predicate: EOperandPredicate.LIKE,
-                    value: searchValue
+                    value: searchValueToSend
                 }
             ]
         }

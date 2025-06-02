@@ -88,7 +88,7 @@ const CreateProfile = () => {
     const [createUser] = userApi.useCreateUserMutation();
 
     const [auth, {isFetching}] = authApi.useLazyAuthByTelegramQuery()
-    
+
     const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
         createUser({
