@@ -1,6 +1,78 @@
+div.popup {
+    background: var(--background-color-3);
+    height: 100%;
+}
+
 .button {
     position: fixed;
     bottom: calc(var(--bottom-bar-height) + 16px);
     left: 32px;
     max-width: calc(100% - 64px);
+}
+
+.open {
+    bottom: calc(env(safe-area-inset-bottom) + 32px);
+}
+
+.block {
+    background: var(--background-color-1);
+    width: 100%;
+    border-radius: 16px;
+    border: 1px solid var(--stroke-color-1);
+    padding: 16px;
+}
+
+.participant {
+    gap: 8px;
+    display: flex;
+}
+
+.participantImg {
+    border-radius: 50%;
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+}
+
+.participantText {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.paymentMethod {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.paymentMethodSelect {
+    display: flex;
+    align-items: center;
+    text-align: left;
+    width: 100%;
+    height: 44px;
+    border-radius: 12px;
+    border: 1px solid var(--stroke-color-2);
+    gap: 8px;
+    padding: 12px;
+}
+
+.total {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.totalItems {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.totalItem {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    align-items: center;
 }

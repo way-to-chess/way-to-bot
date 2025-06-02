@@ -179,6 +179,7 @@ const Events = () => {
 };
 
 const EventsPage = () => {
+
     return (
         <div className={classes.page}>
             <div className={classes.top}>

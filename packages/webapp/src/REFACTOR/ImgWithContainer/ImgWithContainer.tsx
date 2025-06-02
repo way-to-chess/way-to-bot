@@ -5,7 +5,7 @@ import clsx from "clsx";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 interface IImgWithContainerProps {
-    previewUrl?: string;
+    previewUrl?: string | null;
     className?: string;
 }
 
@@ -26,6 +26,8 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
 
             img.onload = () => setLoadedSrc(src);
             img.onerror = () => setLoadedSrc("");
+        } else {
+            setLoadedSrc("");
         }
     }, [previewUrl]);
 

@@ -1,22 +1,22 @@
-import {webAppClientApi} from "../WebAppClientApi";
 import {
     ClientDTOEventGetMany,
     ClientDTOEventGetManyResponse,
     ClientDTOEventGetOne,
     ClientDTOEventGetOneResponse
 } from "@way-to-bot/shared/api/DTO/client/event.DTO";
+import {clientApi} from "../ClientApi";
 
-const eventApi = webAppClientApi.injectEndpoints({
+const eventApi = clientApi.injectEndpoints({
     endpoints: (build) => ({
         getAllEvents: build.query<ClientDTOEventGetMany[], void>({
             query: () => "event",
             transformResponse: (response: ClientDTOEventGetManyResponse) => response.data,
-            providesTags: () => [{type: 'EVENT', id: "ALL"}]
+            providesTags: () => [{type: 'EVENT', id: "ALL"}],
         }),
         getEventById: build.query<ClientDTOEventGetOne, string>({
             query: (id) => `event/${id}`,
             transformResponse: (response: ClientDTOEventGetOneResponse) => response.data,
-            providesTags: (_result, _err, id) => [{type: 'EVENT', id}]
+            providesTags: (_result, _err, id) => [{type: 'EVENT', id}],
         }),
     }),
 });

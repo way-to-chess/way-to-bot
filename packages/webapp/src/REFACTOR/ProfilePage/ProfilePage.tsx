@@ -5,8 +5,11 @@ import {Button} from "../../Button/Button";
 import {fileApi} from "../Store/File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../Store/User/UserApi";
-import {EUserRole} from "@way-to-bot/shared/api/enums";
 import {Input} from "../Input/Input";
+import {useSelector} from "react-redux";
+import {authSlice} from "@way-to-bot/shared/redux/authSlice";
+import {Navigate} from "react-router";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
 
 interface IFileInput {
     setFileId: (fileId: undefined | number) => void;
@@ -77,12 +80,14 @@ const FileInput: FC<IFileInput> = ({setFileId}) => {
     );
 };
 
-const ProfilePage = () => {
+const CreateProfile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [fileId, setFileId] = useState<undefined | number>(undefined);
 
     const [createUser] = userApi.useCreateUserMutation();
+
+    const [auth] = authApi.useLazyAuthByTelegramQuery()
 
     const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
@@ -90,9 +95,12 @@ const ProfilePage = () => {
             firstName,
             lastName,
             fileId,
-            roles: [EUserRole.USER],
-            tgId: Telegram.WebApp.initDataUnsafe.user?.id,
-        });
+        }).unwrap().then(() => {
+            auth({
+                tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+                username: Telegram.WebApp.initDataUnsafe.user?.username,
+            })
+        })
     };
 
     const isButtonDisabled = !lastName || !firstName;
@@ -111,6 +119,7 @@ const ProfilePage = () => {
 
             <Input placeholder={"Имя"} value={firstName} onChange={onFirstNameChange}/>
             <Input placeholder={"Фамилия"} value={lastName} onChange={onLastNameChange}/>
+
             <Button
                 type={"submit"}
                 disabled={isButtonDisabled}
@@ -118,8 +127,15 @@ const ProfilePage = () => {
             >
                 {"Создать профиль"}
             </Button>
+
         </form>
     );
+}
+
+const ProfilePage = () => {
+    const authId = useSelector(authSlice.selectors.id)
+
+    return authId ? <Navigate to={`/users/${authId}`}/> : <CreateProfile/>
 };
 
 export {ProfilePage};
