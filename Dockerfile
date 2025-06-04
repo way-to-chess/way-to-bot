@@ -10,14 +10,21 @@ COPY packages/server/package*.json ./packages/server/
 
 RUN npm ci --workspaces --include-workspace-root
 
+COPY typescript ./typescript
+
+COPY packages/shared ./packages/shared
+RUN npm run build --workspace @way-to-bot/shared
+
+COPY packages/adminui ./packages/adminui
+RUN npm run build --workspace @way-to-bot/adminui
+
+COPY packages/server ./packages/server
+RUN npm run build --workspace @way-to-bot/server
+
+COPY packages/webapp ./packages/webapp
+RUN npm run build --workspace @way-to-bot/webapp
+
 COPY . .
-
-# BUILD
-RUN npm run build --workspace @way-to-bot/shared && \
-    npm run build --workspace @way-to-bot/webapp && \
-    npm run build --workspace @way-to-bot/adminui && \
-    npm run build --workspace @way-to-bot/server
-
 
 FROM node:20.17.0-slim AS server
 

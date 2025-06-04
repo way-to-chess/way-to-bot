@@ -22,4 +22,7 @@ jobs:
             cd /home/way-to-bot
             git pull origin dev
             docker compose -f docker-compose.dev.yml up app web -d --build
-            docker system prune -f
+
+            # Cleanup
+            docker system prune -f --volumes
+            docker image prune -f
