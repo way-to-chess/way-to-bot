@@ -8,7 +8,7 @@ COPY packages/webapp/package*.json ./packages/webapp/
 COPY packages/adminui/package*.json ./packages/adminui/
 COPY packages/server/package*.json ./packages/server/
 
-RUN npm ci --workspaces
+RUN npm ci --workspaces --include-workspace-root
 
 COPY . .
 
