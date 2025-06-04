@@ -15,6 +15,7 @@ import {Skeleton} from "../../Skeleton/Skeleton";
 import clsx from "clsx";
 import {BanknoteIcon, ChevronDownIcon, CircleDollarSignIcon, CreditCardIcon, PaperclipIcon} from "lucide-react";
 import {IOption, Options} from "../../Options/Options";
+import {splitAmountAndCurrency} from "./SplitAmountAndCurrency";
 
 interface IWithEventId {
     eventId: string
@@ -101,8 +102,19 @@ const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
     </BottomSheet>
 }
 
-const Payment = () => {
+const Payment: FC<IWithEventId> = ({eventId}) => {
     const [paymentMethod, setPaymentMethod] = useState<null | TPaymentMethod>(null)
+    const {data: event} = eventApi.useGetEventByIdQuery(eventId)
+
+    const amountAndCurrency = event?.price ? splitAmountAndCurrency(event.price) : ["0", ""]
+
+    const amount = Number(amountAndCurrency[0])
+
+    if (Number.isNaN(amount)) {
+        throw new Error("Price num is NaN")
+    }
+
+    const total = amount + (amountAndCurrency[1] ?? "")
 
     return <BottomSheet title={"Оплата"}
                         className={classes.popup}
@@ -118,18 +130,14 @@ const Payment = () => {
             <div className={classes.totalItems}>
                 <div className={classes.totalItem}>
                     <Typography type={"text2"} color={"textColor2"} value={"Участник №1"}/>
-                    <Typography type={"title6"} value={"40р"}/>
-                </div>
-                <div className={classes.totalItem}>
-                    <Typography type={"text2"} color={"textColor2"} value={"Участник №2"}/>
-                    <Typography type={"title6"} value={"40р"}/>
+                    <Typography type={"title6"} value={amountAndCurrency.join("")}/>
                 </div>
             </div>
 
 
             <div className={classes.totalItem}>
                 <Typography type={"title4"} value={"Итого"}/>
-                <Typography type={"title4"} value={"80р"}/>
+                <Typography type={"title4"} value={total}/>
             </div>
 
         </div>
@@ -163,7 +171,7 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
         <Button className={clsx(classes.button, classes.open)}>
             {"Перейти к оплате"}
         </Button>
-        <Payment/>
+        <Payment eventId={eventId}/>
     </BottomSheet>
 
 })

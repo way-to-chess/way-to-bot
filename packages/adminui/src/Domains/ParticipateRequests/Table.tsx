@@ -1,6 +1,5 @@
 import {memo} from "react";
 import {Badge, Button, Flex, Table, TableProps, Typography} from "antd";
-import {IParticipateRequest} from "@way-to-bot/shared/interfaces/participate-request.interface";
 import {TEXT} from "@way-to-bot/shared/constants/text";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import type {IWithRequestId} from "@way-to-bot/shared/interfaces/with.interface";
@@ -10,11 +9,12 @@ import dayjs from "dayjs";
 import {entitySlice} from "../../EntitySlice";
 import {useActionCreator} from "@way-to-bot/shared/utils/UseActionCreator";
 import {PARTICIPATE_REQUESTS_DRAWER_ID} from "../../Constants/EntityIds";
-import {clientApi} from "@way-to-bot/webapp/REFACTOR/Store/ClientApi";
+import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
+import {AdminDTOParticipateRequestGetMany} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
-const COLUMNS: TableProps<IParticipateRequest>["columns"] = [
+const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     {
         title: TEXT.user,
         render: (_, {user}) => (
@@ -56,14 +56,14 @@ const OpenApproveDrawer = memo(({requestId}: IWithRequestId) => {
     );
 });
 
-const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
+const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
     expandRowByClick: true,
-    expandedRowRender: ({receipt, id, approved, updatedAt}) => {
+    expandedRowRender: ({receipt, id, approved,}) => {
         return (
             <Flex align={"center"} justify={"space-between"}>
                 {receipt ? (
                     <Typography.Link
-                        href={getPreviewSrc(receipt.url)}
+                        href={getPreviewSrc(receipt.previewUrl)}
                         target={"_blank"}
                         rel="noreferrer"
                     >
@@ -72,9 +72,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
                 ) : (
                     <Typography.Text type={"danger"}>{TEXT.noFile}</Typography.Text>
                 )}
-                {approved ? (
-                    dayjs(updatedAt).format(DATE_TIME_FORMAT)
-                ) : (
+                {approved ? null : (
                     <OpenApproveDrawer requestId={id}/>
                 )}
             </Flex>
@@ -82,16 +80,16 @@ const EXPANDABLE_CONFIG: ExpandableConfig<IParticipateRequest> = {
     },
 };
 
-const getRowKey = (request: IParticipateRequest) => request.id;
+const getRowKey = (request: AdminDTOParticipateRequestGetMany) => request.id;
 
 const ParticipateRequestsTable = () => {
-    const {data, isFetching} = clientApi.useGetAllParticipateRequestsQuery();
+    const {data, isFetching} = participateRequestApi.useGetAllParticipateRequestsQuery({});
 
     return (
         <Table
             style={{width: "100%"}}
             rowKey={getRowKey}
-            dataSource={data}
+            dataSource={data?.data}
             loading={isFetching}
             columns={COLUMNS}
             pagination={false}

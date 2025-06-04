@@ -1,8 +1,27 @@
 import { getNotNil } from "../utils/getNotNil";
 
+interface ViteTypeOptions {
+  // strictImportMetaEnv: unknown
+}
+
+type ImportMetaEnvFallbackKey =
+  "strictImportMetaEnv" extends keyof ViteTypeOptions ? never : string;
+
+interface ImportMetaEnv {
+  BASE_URL: string;
+  MODE: string;
+  DEV: boolean;
+  PROD: boolean;
+  SSR: boolean;
+
+  [key: ImportMetaEnvFallbackKey]: any;
+}
+
 declare global {
   interface ImportMeta {
-    readonly env: Record<string, string>;
+    url: string;
+
+    readonly env: ImportMetaEnv;
   }
 }
 

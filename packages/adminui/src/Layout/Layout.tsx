@@ -1,5 +1,5 @@
 import {ConfigProvider, ConfigProviderProps, Layout as AntLayout, Menu, MenuProps, theme as antdTheme} from "antd";
-import {NavLink, Outlet} from "react-router";
+import {Link, Outlet, useLocation} from "react-router";
 import {ROUTES} from "../Constants/Routes";
 import ru from "antd/locale/ru_RU";
 import {CSSProperties} from "react";
@@ -24,11 +24,19 @@ type TMenuItem = Required<MenuProps>["items"][number];
 
 const MENU_ITEMS: TMenuItem[] = [
     {
-        key: 1,
+        key: ROUTES.users,
         label: (
-            <NavLink to={ROUTES.users}>
+            <Link to={ROUTES.users}>
                 {"Пользователи"}
-            </NavLink>
+            </Link>
+        ),
+    },
+    {
+        key: ROUTES.participateRequestsRoute,
+        label: (
+            <Link to={ROUTES.participateRequestsRoute}>
+                {"Запросы"}
+            </Link>
         ),
     },
 ];
@@ -36,16 +44,13 @@ const MENU_ITEMS: TMenuItem[] = [
 const MAIN_STYLE: CSSProperties = {
     padding: 24,
 };
-
 const Layout = () => {
+    const location = useLocation()
+
     return <ConfigProvider {...APP_CONFIG}>
         <AntLayout style={LAYOUT_STYLE}>
             <AntLayout.Sider width="200px" theme={"light"}>
-                <Menu
-                    defaultSelectedKeys={["1"]}
-                    mode="inline"
-                    items={MENU_ITEMS}
-                />
+                <Menu mode="inline" items={MENU_ITEMS} defaultSelectedKeys={[location.pathname]}/>
             </AntLayout.Sider>
             <AntLayout.Content style={MAIN_STYLE}>
                 <Outlet/>

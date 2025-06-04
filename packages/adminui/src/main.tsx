@@ -8,7 +8,6 @@ import {FC, PropsWithChildren} from "react";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {Skeleton} from "antd";
 
-
 const WithAuth: FC<PropsWithChildren> = ({children}) => {
     const {isLoading, isError} = authApi.useAuthByTelegramQuery({
         tgId: 409658449,
@@ -25,10 +24,7 @@ const WithAuth: FC<PropsWithChildren> = ({children}) => {
     return children
 }
 
-
 const App = () => {
-
-
     return (
         <Provider store={store}>
             <WithAuth>

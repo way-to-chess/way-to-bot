@@ -8,32 +8,10 @@ import {LeaguesSelect} from "../Leagues/LeaguesSelect";
 import {TEXT} from "@way-to-bot/shared/constants/text";
 import {FORM_ITEM_REQUIRED_RULES} from "../../Constants/PersistedProps";
 import {IWithId, IWithRequestId,} from "@way-to-bot/shared/interfaces/with.interface";
-import {clientApi} from "@way-to-bot/webapp/REFACTOR/Store/ClientApi";
-
-// onQueryStarted: (_, { queryFulfilled, dispatch }) => {
-//   queryFulfilled
-//       .then(() => {
-//         message.success(TEXT.success);
-//
-//         return dispatch(
-//             api.endpoints.getAllParticipateRequests.initiate(),
-//         ).refetch();
-//       })
-//       .then(() => {
-//         dispatch(
-//             entitySlice.actions.removeEntity(PARTICIPATE_REQUESTS_DRAWER_ID),
-//         );
-//       })
-//       .catch((response) => {
-//         message.error(JSON.stringify(response.error.data, null, 2));
-//       });
-// },
+import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 
 const ApproveForm = memo(() => {
-    const [approve, {isLoading}] = clientApi.useApproveParticipateRequestMutation();
-
-    const [getAllParticipateRequests] =
-        clientApi.useLazyGetAllParticipateRequestsQuery();
+    const [approve, {isLoading}] = participateRequestApi.useApproveParticipateRequestMutation();
 
     const closeDrawer = useActionCreator(
         entitySlice.actions.removeEntity,
@@ -45,14 +23,11 @@ const ApproveForm = memo(() => {
         PARTICIPATE_REQUESTS_DRAWER_ID,
     );
 
-    const onFinish = async ({leagueId}: { leagueId: number }) => {
+    const onFinish = async () => {
         try {
             await approve({
-                leagueId,
                 id: (entity as IWithRequestId & IWithId).requestId,
             }).unwrap();
-
-            await getAllParticipateRequests().unwrap();
 
             closeDrawer();
         } catch (e: any) {
