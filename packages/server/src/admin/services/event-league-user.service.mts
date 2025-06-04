@@ -41,9 +41,9 @@ export class AdminEventLeagueUserService {
 
     if (newUserIds) await this.addUsers(newUserIds, eventLeague.id);
 
-    const updatedEventLeague = await this._eventLeagueRepository.getOneById(
-      eventLeague.id,
-    );
+    const updatedEventLeague = await this._eventLeagueRepository.getOne({
+      where: { id: eventLeague.id },
+    });
 
     if (!updatedEventLeague) {
       throw new InternalError(

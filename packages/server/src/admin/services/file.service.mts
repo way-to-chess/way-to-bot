@@ -33,10 +33,9 @@ export class AdminFileService {
       throw new BadRequestError("File was not passed");
     }
 
-    const existingResult =
-      await this._eventLeagueResultRepository.getOneByEventLeagueId(
-        eventLeagueId,
-      );
+    const existingResult = await this._eventLeagueResultRepository.getOne({
+      where: { eventLeagueId },
+    });
 
     if (existingResult?.roundsFileId)
       throw new BadRequestError("Rounds have been already counted");

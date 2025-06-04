@@ -1,6 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminParticipateRequestService } from "@way-to-bot/server/admin/services/participate-request.service.mjs";
-import { TAdminParticipateRequestApprovePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import {
@@ -9,6 +8,7 @@ import {
   AdminDTOParticipateRequestGetOne,
   AdminDTOParticipateRequestUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO.js";
+import { Request, Response } from "express";
 
 @injectable()
 export class AdminParticipateRequestController {
@@ -17,27 +17,30 @@ export class AdminParticipateRequestController {
     private readonly _participateRequestService: AdminParticipateRequestService,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<ParticipateRequestEntity>) {
-    const data = await this._participateRequestService.getMany(options);
-    return new AdminDTOParticipateRequestGetManyResponse(
-      data.data.map((i) => new AdminDTOParticipateRequestGetMany(i)),
+  async getMany(req: Request, res: Response) {
+    const options =
+      req.getManyOptions as GetManyOptionsDTO<ParticipateRequestEntity>;
+    const result = await this._participateRequestService.getMany(options);
+    const data = new AdminDTOParticipateRequestGetManyResponse(
+      result.data.map((i) => new AdminDTOParticipateRequestGetMany(i)),
       {
         limit: options?.getFindOptions?.take,
         offset: options?.getFindOptions?.skip,
-        totalRows: data.count
+        totalRows: result.count,
       },
     );
+    res.status(200).send(data);
   }
 
-  async approve(id: number, payload: TAdminParticipateRequestApprovePayload) {
-    const data =
+  async approve(req: Request, res: Response) {
+    const result =
       await this._participateRequestService.approveParticipateRequest(
-        id,
-        payload,
+        +req.params.id!,
+        req.body,
       );
-
-    return new AdminDTOParticipateRequestUpdateResponse(
-      new AdminDTOParticipateRequestGetOne(data),
+    const data = new AdminDTOParticipateRequestUpdateResponse(
+      new AdminDTOParticipateRequestGetOne(result),
     );
+    res.status(200).send(data);
   }
 }

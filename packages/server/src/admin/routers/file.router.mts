@@ -9,12 +9,5 @@ const adminFileController = DiContainer.get(AdminFileController);
 AdminFileRouter.post(
   "/import/csv/:eventLeagueId",
   uploadFileMddw.single("file"),
-  async (req, res) => {
-    const data = await adminFileController.importCsv(
-      +req.params.eventLeagueId!,
-      req.body.assigment,
-      req.file,
-    );
-    res.status(200).send(data);
-  },
+  (req, res) => adminFileController.importCsv(req, res),
 );

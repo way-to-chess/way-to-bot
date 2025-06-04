@@ -1,4 +1,3 @@
-import "express-async-errors";
 import "reflect-metadata";
 import "dotenv/config";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";

@@ -28,7 +28,7 @@ export class ClientFileService {
   }
 
   async delete(id: number) {
-    const file = await this._fileRepository.getOneById(id);
+    const file = await this._fileRepository.getOne({ where: { id } });
 
     if (!file) {
       throw new NotFoundError(`File with id ${id} not found`);

@@ -7,6 +7,7 @@ import {
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
+import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 
 @injectable()
 export class AdminUserService {
@@ -19,7 +20,11 @@ export class AdminUserService {
   }
 
   async getOne(id: number) {
-    return this._userRepository.getById(id);
+    const data = await this._userRepository.getOne({ where: { id } });
+    if (!data) {
+      throw new NotFoundError(`User with id ${id} not found`);
+    }
+    return data;
   }
 
   async create(payload: TAdminUserCreatePayload) {

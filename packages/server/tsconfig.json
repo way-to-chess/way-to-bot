@@ -3,7 +3,6 @@
   "compilerOptions": {
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "allowImportingTsExtensions": true,
     "resolveJsonModule": true,
     "types": ["node", "express"],
     "typeRoots": ["./src/@types", "../../node_modules/@types"],

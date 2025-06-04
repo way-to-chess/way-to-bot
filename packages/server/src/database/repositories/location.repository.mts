@@ -1,5 +1,10 @@
 import { inject, injectable } from "inversify";
-import { DeepPartial, FindManyOptions, QueryRunner } from "typeorm";
+import {
+  DeepPartial,
+  FindManyOptions,
+  FindOneOptions,
+  QueryRunner,
+} from "typeorm";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { LocationEntity } from "@way-to-bot/server/database/entities/location.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
@@ -29,22 +34,12 @@ export class LocationRepository {
     };
   }
 
-  getById(id: number, queryRunner?: QueryRunner, relations = true) {
+  getOne(options: FindOneOptions<LocationEntity>, queryRunner?: QueryRunner) {
     return this.getRepository(queryRunner).findOne({
-      where: { id },
-      ...(relations && {
-        relations: {
-          preview: true,
-        },
-      }),
-    });
-  }
-
-  getAll(queryRunner?: QueryRunner) {
-    return this.getRepository(queryRunner).find({
       relations: {
         preview: true,
       },
+      ...options,
     });
   }
 
@@ -55,7 +50,7 @@ export class LocationRepository {
     const repo = this.getRepository(queryRunner);
     const newLocation = repo.create(payload);
     await repo.save(newLocation);
-    return this.getById(newLocation.id, queryRunner);
+    return this.getOne({ where: { id: newLocation.id } }, queryRunner);
   }
 
   async update(
@@ -64,7 +59,10 @@ export class LocationRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const existingLocation = await this.getById(id, queryRunner, false);
+    const existingLocation = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingLocation) {
       throw new NotFoundError(`Location with id ${id} not found`);
@@ -76,12 +74,15 @@ export class LocationRepository {
     );
 
     await repo.save(updatedLocation);
-    return this.getById(updatedLocation.id, queryRunner);
+    return this.getOne({ where: { id: updatedLocation.id } }, queryRunner);
   }
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingLocation = await this.getById(id, queryRunner, false);
+    const existingLocation = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingLocation) {
       throw new NotFoundError(`Location with id ${id} not found`);

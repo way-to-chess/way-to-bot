@@ -21,7 +21,7 @@ export class AdminLeagueService {
   }
 
   async getOne(id: number) {
-    const data = await this._leagueRepository.getById(id);
+    const data = await this._leagueRepository.getOne({ where: { id } });
 
     if (!data) {
       throw new NotFoundError(`League with id ${id} not found`);

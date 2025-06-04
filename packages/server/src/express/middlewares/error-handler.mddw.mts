@@ -1,6 +1,10 @@
 import { NextFunction, Request, Response } from "express";
 import { ApiError } from "@way-to-bot/server/common/errors/api.error.mjs";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
+import { ZodError } from "zod";
+import { EntityNotFoundError, QueryFailedError } from "typeorm";
+import { ErrorDTO } from "@way-to-bot/shared/api/DTO/common/error.DTO.js";
+import { EErrorCode } from "@way-to-bot/shared/api/enums/index.js";
 
 export function errorHandlerMddw(
   err: Error,
@@ -9,14 +13,47 @@ export function errorHandlerMddw(
   next: NextFunction,
 ) {
   logger.error(err.message, { stack: err.stack });
-  const isAppError = err instanceof ApiError;
 
-  const status = isAppError ? err.status : 500;
-  const message = isAppError ? err.message : "Internal Server Error";
+  if (err instanceof ZodError) {
+    return res.status(400).json(
+      new ErrorDTO(
+        "Validation Error",
+        EErrorCode.BAD_REQUEST,
+        err.errors.map((e) => ({
+          path: e.path.join("."),
+          message: e.message,
+        })),
+      ),
+    );
+  }
 
-  res.status(status).json({
-    error: message,
-    ...("code" in err && { code: err.code }),
-    ...("details" in err && { details: err.details }),
-  });
+  if (err instanceof QueryFailedError) {
+    if (err.message.includes("duplicate key")) {
+      return res.status(409).json(
+        new ErrorDTO("Resource already exists", EErrorCode.BAD_REQUEST, {
+          message: err.message,
+        }),
+      );
+    }
+
+    return res
+      .status(500)
+      .json(new ErrorDTO("Database Error", EErrorCode.INTERNAL_ERROR));
+  }
+
+  if (err instanceof EntityNotFoundError) {
+    return res
+      .status(404)
+      .json(new ErrorDTO(err.message, EErrorCode.NOT_FOUND));
+  }
+
+  if (err instanceof ApiError) {
+    return res
+      .status(err.status)
+      .json(new ErrorDTO(err.message, err.code as EErrorCode, err.details));
+  }
+
+  return res
+    .status(500)
+    .json(new ErrorDTO("Internal Server Error", EErrorCode.INTERNAL_ERROR));
 }

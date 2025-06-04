@@ -12,8 +12,7 @@
     "build": "npm run check && swc src -d dist --strip-leading-paths",
     "dev": "tsx watch src/index.mts",
     "production": "node dist/index.mjs",
-    "lint": "eslint src --fix",
-    "swagger": "tsoa spec"
+    "lint": "eslint src --fix"
   },
   "keywords": [],
   "author": "",
@@ -23,10 +22,7 @@
     "convert-csv-to-json": "^2.49.0",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
-    "env-cmd": "^10.1.0",
-    "express": "^4.21.1",
-    "express-async-errors": "^3.1.1",
-    "express-validator": "^7.2.1",
+    "express": "^5.1.0",
     "inversify": "^7.5.1",
     "jsonwebtoken": "^9.0.2",
     "lodash": "^4.17.21",
@@ -38,8 +34,6 @@
     "pg": "^8.13.0",
     "reflect-metadata": "^0.2.2",
     "sharp": "^0.33.5",
-    "swagger-ui-express": "^5.0.1",
-    "tsoa": "^6.5.1",
     "typeorm": "^0.3.20",
     "winston": "^3.17.0",
     "winston-daily-rotate-file": "^5.0.0"
@@ -48,12 +42,12 @@
     "@swc/cli": "^0.7.3",
     "@swc/core": "^1.11.24",
     "@types/cors": "^2.8.17",
-    "@types/express": "^5.0.1",
+    "@types/express": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.9",
     "@types/lodash": "^4.17.16",
+    "@types/multer": "^1.4.12",
     "@types/node": "^22.15.14",
     "@types/node-telegram-bot-api": "^0.64.7",
-    "@types/swagger-ui-express": "^4.1.6",
     "ts-node": "^10.9.2",
     "tsx": "^4.19.4"
   }

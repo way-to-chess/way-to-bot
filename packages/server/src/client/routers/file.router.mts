@@ -11,13 +11,7 @@ ClientFileRouter.post(
   "/",
   uploadFileMddw.single("file"),
   fileConverterMiddleware,
-  async (req, res) => {
-    const data = await fileController.create(req.file, req.body.assigment);
-    res.status(201).send(data);
-  },
+  (req, res) => fileController.create(req, res),
 );
 
-ClientFileRouter.delete("/:id", async (req, res) => {
-  const data = await fileController.delete(+req.params.id);
-  res.status(200).send(data);
-});
+ClientFileRouter.delete("/:id", (req, res) => fileController.delete(req, res));

@@ -11,6 +11,7 @@ import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/p
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
 import { In } from "typeorm";
+import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -48,12 +49,19 @@ export class AdminParticipateRequestService {
       }
 
       const allEventLeaguesForEvent = await this._eventLeagueRepository.getMany(
-        { where: { eventId: updatedParticipateRequest.eventId } },
+        {
+          relations: { league: true },
+          where: { eventId: updatedParticipateRequest.eventId },
+        },
       );
 
-      if (!allEventLeaguesForEvent.length) {
+      const defaultEventLeague = allEventLeaguesForEvent.find(
+        (l) => l.league.name === DEFAULT_LEAGUE_NAME,
+      );
+
+      if (!defaultEventLeague) {
         throw new InternalError(
-          `No event leagues for event ${updatedParticipateRequest.eventId}`,
+          `Default league for event ${updatedParticipateRequest.eventId} was not found`,
         );
       }
 
@@ -73,18 +81,6 @@ export class AdminParticipateRequestService {
 
       const eluList: EventLeagueUserEntity[] = [];
       const eventLeagueIds = allEventLeaguesForEvent.map((el) => el.id);
-      const defaultEventLeague =
-        allEventLeaguesForEvent.length === 1
-          ? allEventLeaguesForEvent[0]
-          : await this._eventLeagueRepository.getOneByEventIdAndLeagueId(
-              updatedParticipateRequest.eventId,
-            );
-
-      if (!defaultEventLeague) {
-        throw new InternalError(
-          `Default league for event ${updatedParticipateRequest.eventId} was not found`,
-        );
-      }
 
       for (const pid of allParticipantsIds) {
         const existingElu = await this._eventLeagueUserRepository.getOne(

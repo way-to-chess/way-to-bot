@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { Request, Response } from "express";
 import { ClientParticipateRequestService } from "@way-to-bot/server/client/services/participate-request.service.mjs";
 import {
   TClientParticipateRequestCreatePayload,
@@ -13,8 +14,8 @@ import {
   ClientDTOParticipateRequestGetOneResponse,
   ClientDTOParticipateRequestUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/client/participate-request.DTO.js";
-import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
+import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 
 @injectable()
 export class ClientParticipateRequestController {
@@ -23,50 +24,62 @@ export class ClientParticipateRequestController {
     private readonly _participateRequestService: ClientParticipateRequestService,
   ) {}
 
-  async getMany(
-    userId: number,
-    options?: GetManyOptionsDTO<ParticipateRequestEntity>,
-  ) {
-    const data = await this._participateRequestService.getMany(userId, options);
-    return new ClientDTOParticipateRequestGetManyResponse(
-      data.data.map((i) => new ClientDTOParticipateRequestGetMany(i)),
+  async getMany(req: Request, res: Response) {
+    const options =
+      req.getManyOptions as GetManyOptionsDTO<ParticipateRequestEntity>;
+    const result = await this._participateRequestService.getMany(
+      req.user!.id,
+      options,
+    );
+    const data = new ClientDTOParticipateRequestGetManyResponse(
+      result.data.map((i) => new ClientDTOParticipateRequestGetMany(i)),
       {
         limit: options?.getFindOptions?.take,
         offset: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        totalRows: result.count,
       },
     );
+
+    res.status(200).send(data);
   }
 
-  async getById(id: number) {
-    const data = await this._participateRequestService.getById(id);
-    return new ClientDTOParticipateRequestGetOneResponse(
-      new ClientDTOParticipateRequestGetOne(data),
+  async getById(req: Request, res: Response) {
+    const result = await this._participateRequestService.getById(
+      +req.params.id!,
     );
+    const data = new ClientDTOParticipateRequestGetOneResponse(
+      new ClientDTOParticipateRequestGetOne(result),
+    );
+    res.status(200).send(data);
   }
 
-  async create(
-    userId: number,
-    payload: TClientParticipateRequestCreatePayload,
-  ) {
-    const data = await this._participateRequestService.create({
-      ...payload,
-      userId,
+  async create(req: Request, res: Response) {
+    const result = await this._participateRequestService.create({
+      ...req.body,
+      userId: req.user!.id,
     });
-    return new ClientDTOParticipateRequestCreateResponse(
-      new ClientDTOParticipateRequestGetOne(data),
+    const data = new ClientDTOParticipateRequestCreateResponse(
+      new ClientDTOParticipateRequestGetOne(result),
     );
+    res.status(201).send(data);
   }
 
-  async update(id: number, payload: TClientParticipateRequestUpdatePayload) {
-    const data = await this._participateRequestService.update(id, payload);
-    return new ClientDTOParticipateRequestUpdateResponse(
-      new ClientDTOParticipateRequestGetOne(data),
+  async update(req: Request, res: Response) {
+    const result = await this._participateRequestService.update(
+      +req.params.id!,
+      req.body,
     );
+    const data = new ClientDTOParticipateRequestUpdateResponse(
+      new ClientDTOParticipateRequestGetOne(result),
+    );
+    res.status(200).send(data);
   }
 
-  async delete(id: number) {
-    const data = await this._participateRequestService.delete(id);
-    return new ClientDTOParticipateRequestDeleteResponse(data);
+  async delete(req: Request, res: Response) {
+    const result = await this._participateRequestService.delete(
+      +req.params.id!,
+    );
+    const data = new ClientDTOParticipateRequestDeleteResponse(result);
+    res.status(200).send(data);
   }
 }

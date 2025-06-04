@@ -2,8 +2,6 @@ import express, { Express } from "express";
 import { injectable } from "inversify";
 import cors from "cors";
 import { MainRouter } from "@way-to-bot/server/express/routers/index.mjs";
-import swaggerUi from "swagger-ui-express";
-import { NODE_ENV } from "@way-to-bot/server/utils/constants.mjs";
 import { errorHandlerMddw } from "@way-to-bot/server/express/middlewares/error-handler.mddw.mjs";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { Server } from "http";
@@ -16,9 +14,6 @@ export class ExpressApp {
   constructor() {
     this._app = express();
     this.configureServer();
-    // this.generateSwaggerDocs().then(() => {
-    //   logger.info("Swagger docs generated successfully.");
-    // });
   }
 
   private configureServer() {
@@ -28,17 +23,6 @@ export class ExpressApp {
     this._app.use("/api", MainRouter);
 
     this._app.use(errorHandlerMddw);
-  }
-
-  async generateSwaggerDocs() {
-    if (NODE_ENV === "dev") {
-      const swaggerDocument = await import("./swagger/swagger.json");
-      this._app.use(
-        "/docs",
-        swaggerUi.serve,
-        swaggerUi.setup(swaggerDocument.default),
-      );
-    }
   }
 
   runServer() {

@@ -2,10 +2,7 @@ import { Router } from "express";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { AdminLocationController } from "@way-to-bot/server/admin/controllers/location.controller.mjs";
 import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw.mjs";
-import { CommonSchemaGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 import { getManyOptionsMddw } from "@way-to-bot/server/express/middlewares/get-many-options.mddw.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { LocationEntity } from "@way-to-bot/server/database/entities/location.entity.mjs";
 import {
   AdminSchemaLocationCreate,
   AdminSchemaLocationUpdate,
@@ -14,44 +11,26 @@ import {
 export const AdminLocationRouter = Router();
 const adminLocationController = DiContainer.get(AdminLocationController);
 
-AdminLocationRouter.get(
-  "/",
-  validatePayloadMddw(CommonSchemaGetManyOptions),
-  async (req, res) => {
-    const data = await adminLocationController.getMany(
-      req.getManyOptions as GetManyOptionsDTO<LocationEntity>,
-    );
-    res.status(200).send(data);
-  },
+AdminLocationRouter.get("/", getManyOptionsMddw, (req, res) =>
+  adminLocationController.getMany(req, res),
 );
 
-AdminLocationRouter.get("/:id", async (req, res) => {
-  const data = await adminLocationController.getOne(+req.params.id);
-  res.status(200).send(data);
-});
+AdminLocationRouter.get("/:id", (req, res) =>
+  adminLocationController.getOne(req, res),
+);
 
 AdminLocationRouter.post(
   "/",
   validatePayloadMddw(AdminSchemaLocationCreate),
-  async (req, res) => {
-    const data = await adminLocationController.create(req.body);
-    res.status(201).send(data);
-  },
+  (req, res) => adminLocationController.create(req, res),
 );
 
 AdminLocationRouter.patch(
   "/:id",
   validatePayloadMddw(AdminSchemaLocationUpdate),
-  async (req, res) => {
-    const data = await adminLocationController.update(
-      +req.params.id!,
-      req.body,
-    );
-    res.status(200).send(data);
-  },
+  (req, res) => adminLocationController.update(req, res),
 );
 
-AdminLocationRouter.delete("/:id", async (req, res) => {
-  const data = await adminLocationController.delete(+req.params.id);
-  res.status(200).send(data);
-});
+AdminLocationRouter.delete("/:id", (req, res) =>
+  adminLocationController.delete(req, res),
+);

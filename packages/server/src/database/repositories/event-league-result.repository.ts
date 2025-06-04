@@ -1,8 +1,7 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { EventLeagueResultEntity } from "@way-to-bot/server/database/entities/event-league-result.entity.mjs";
-import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 
 @injectable()
 export class EventLeagueResultRepository {
@@ -15,13 +14,11 @@ export class EventLeagueResultRepository {
     return this._dbService.dataSource.getRepository(EventLeagueResultEntity);
   }
 
-  async getOneByEventLeagueId(
-    eventLeagueId: number,
+  async getOne(
+    options: FindOneOptions<EventLeagueResultEntity>,
     queryRunner?: QueryRunner,
   ) {
-    return this.getRepository(queryRunner).findOne({
-      where: { eventLeagueId },
-    });
+    return this.getRepository(queryRunner).findOne(options);
   }
 
   async upsert(
@@ -38,6 +35,6 @@ export class EventLeagueResultRepository {
       conflictPaths: { eventLeagueId: true },
     });
 
-    return this.getOneByEventLeagueId(payload.eventLeagueId);
+    return this.getOne({ where: { eventLeagueId: payload.eventLeagueId } });
   }
 }

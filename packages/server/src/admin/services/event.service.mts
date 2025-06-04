@@ -9,6 +9,7 @@ import {
 } from "@way-to-bot/shared/api/zod/admin/event.schema.js";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
+import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 
 @injectable()
 export class AdminEventService {
@@ -22,7 +23,11 @@ export class AdminEventService {
   }
 
   async getById(id: number) {
-    return this._eventRepository.getById(id);
+    const data = await this._eventRepository.getOne({ where: { id } });
+    if (!data) {
+      throw new NotFoundError(`Event with id ${id} not found`);
+    }
+    return data;
   }
 
   async create(event: TAdminEventCreatePayload) {

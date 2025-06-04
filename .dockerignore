@@ -6,3 +6,17 @@ eslint.config.mjs
 .prettierrc
 .gitignore
 packages/server/scripts
+.git
+.github
+*.log
+docker-compose*
+README.md
+.env*
+coverage
+.vscode
+*.md
+tests
+__tests__
+*.test.*
+*.spec.*
+.DS_Store

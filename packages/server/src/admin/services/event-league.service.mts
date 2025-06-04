@@ -60,10 +60,9 @@ export class AdminEventLeagueService {
     }
 
     if (eventLeague.participants.length) {
-      const defaultEventLeague =
-        await this._eventLeagueRepository.getOneByEventIdAndLeagueId(
-          eventLeague.eventId,
-        );
+      const defaultEventLeague = await this._eventLeagueRepository.getOne({
+        where: { id: eventLeague.eventId },
+      });
 
       if (!defaultEventLeague) {
         throw new InternalError(`Default event league was not found`);

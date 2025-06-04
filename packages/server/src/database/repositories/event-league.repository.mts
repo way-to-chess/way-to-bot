@@ -34,28 +34,17 @@ export class EventLeagueRepository {
     return repo.find(options);
   }
 
-  async getOneById(
-    id: number,
-    queryRunner?: QueryRunner,
-    withRelations: boolean = true,
-  ) {
-    const repo = this.getRepository(queryRunner);
-    return repo.findOne({
-      where: { id },
-      ...(withRelations && {
-        relations: {
-          participants: true,
-        },
-      }),
-    });
-  }
-
   async getOne(
     options: FindOneOptions<EventLeagueEntity>,
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    return repo.findOne(options);
+    return repo.findOne({
+      relations: {
+        participants: true,
+      },
+      ...options,
+    });
   }
 
   async create(
@@ -78,7 +67,7 @@ export class EventLeagueRepository {
 
     const newEventLeague = repo.create(payload);
     const savedEventLeague = await repo.save(newEventLeague);
-    return this.getOneById(savedEventLeague.id, queryRunner);
+    return this.getOne({ where: { id: savedEventLeague.id } }, queryRunner);
   }
 
   async update(
@@ -87,7 +76,10 @@ export class EventLeagueRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const existingEventLeague = await this.getOneById(id, queryRunner, false);
+    const existingEventLeague = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingEventLeague) {
       throw new NotFoundError(`Event League with id ${id} not found`);
@@ -96,12 +88,15 @@ export class EventLeagueRepository {
     const updatedEventLeague = repo.merge(existingEventLeague, payload);
     const savedEventLeague = await repo.save(updatedEventLeague);
 
-    return this.getOneById(savedEventLeague.id, queryRunner);
+    return this.getOne({ where: { id: savedEventLeague.id } }, queryRunner);
   }
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingEventLeague = await this.getOneById(id, queryRunner, false);
+    const existingEventLeague = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingEventLeague) {
       throw new NotFoundError(`Event League with id ${id} not found`);
@@ -111,27 +106,28 @@ export class EventLeagueRepository {
     return result.affected === 1;
   }
 
-  async getOneByEventIdAndLeagueId(
-    eventId: number,
-    leagueId?: number,
-    queryRunner?: QueryRunner,
-  ) {
-    const repo = this.getRepository(queryRunner);
-
-    const query = repo
-      .createQueryBuilder("eventLeague")
-      .leftJoinAndSelect("eventLeague.participants", "participants")
-      .leftJoinAndSelect("eventLeague.league", "league")
-      .where("eventLeague.eventId = :eventId", { eventId });
-
-    if (leagueId) {
-      query.where("eventLeague.leagueId = :leagueId", { leagueId });
-    } else {
-      query.where("league.name = :leagueName", {
-        leagueName: DEFAULT_LEAGUE_NAME,
-      });
-    }
-
-    return query.getOne();
-  }
+  // TODO Do we need it ?
+  // async getOneByEventIdAndLeagueId(
+  //   eventId: number,
+  //   leagueId?: number,
+  //   queryRunner?: QueryRunner,
+  // ) {
+  //   const repo = this.getRepository(queryRunner);
+  //
+  //   const query = repo
+  //     .createQueryBuilder("eventLeague")
+  //     .leftJoinAndSelect("eventLeague.participants", "participants")
+  //     .leftJoinAndSelect("eventLeague.league", "league")
+  //     .where("eventLeague.eventId = :eventId", { eventId });
+  //
+  //   if (leagueId) {
+  //     query.where("eventLeague.leagueId = :leagueId", { leagueId });
+  //   } else {
+  //     query.where("league.name = :leagueName", {
+  //       leagueName: DEFAULT_LEAGUE_NAME,
+  //     });
+  //   }
+  //
+  //   return query.getOne();
+  // }
 }

@@ -2,23 +2,21 @@ FROM node:20.17.0-slim AS builder
 
 WORKDIR /app
 
-# COPY
-COPY . .
+COPY package*.json ./
+COPY packages/shared/package*.json ./packages/shared/
+COPY packages/webapp/package*.json ./packages/webapp/
+COPY packages/adminui/package*.json ./packages/adminui/
+COPY packages/server/package*.json ./packages/server/
 
-# INSTALL
 RUN npm ci --workspaces
 
-# INSTALL
-RUN npm install --workspace @way-to-bot/shared
-RUN npm install --workspace @way-to-bot/webapp
-RUN npm install --workspace @way-to-bot/adminui
-RUN npm install --workspace @way-to-bot/server
+COPY . .
 
 # BUILD
-RUN npm run build --workspace @way-to-bot/shared
-RUN npm run build --workspace @way-to-bot/webapp
-RUN npm run build --workspace @way-to-bot/adminui
-RUN npm run build --workspace @way-to-bot/server
+RUN npm run build --workspace @way-to-bot/shared && \
+    npm run build --workspace @way-to-bot/webapp && \
+    npm run build --workspace @way-to-bot/adminui && \
+    npm run build --workspace @way-to-bot/server
 
 
 FROM node:20.17.0-slim AS server
@@ -36,7 +34,7 @@ COPY --from=builder /app/packages/server/dist ./packages/server/dist
 COPY --from=builder /app/packages/server/.env ./packages/server/.env
 COPY --from=builder /app/packages/server/bin ./packages/server/bin
 
-RUN npm install --production
+RUN npm ci --production
 
 FROM nginx:alpine AS web
 COPY --from=builder /app/packages/webapp/dist /usr/share/nginx/html/webapp

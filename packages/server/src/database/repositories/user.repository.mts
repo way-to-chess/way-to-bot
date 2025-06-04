@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindManyOptions, FindOptionsWhere, QueryRunner } from "typeorm";
+import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
@@ -23,11 +23,8 @@ export class UserRepository {
     return this._dbService.dataSource.getRepository(UserEntity);
   }
 
-  async getById(id: number, queryRunner?: QueryRunner) {
-    const user = await this.getRepository(queryRunner).findOne({
-      where: {
-        id: id,
-      },
+  async getOne(options: FindOneOptions<UserEntity>, queryRunner?: QueryRunner) {
+    return this.getRepository(queryRunner).findOne({
       relations: {
         eventLeagues: {
           eventLeague: {
@@ -40,17 +37,8 @@ export class UserRepository {
         photo: true,
         participateRequests: { event: true },
       },
+      ...options,
     });
-
-    if (!user) {
-      throw new NotFoundError(`User with id ${id} not found`);
-    }
-
-    return user;
-  }
-
-  getBy(where: FindOptionsWhere<UserEntity>, queryRunner?: QueryRunner) {
-    return this.getRepository(queryRunner).findOneBy(where);
   }
 
   async getMany(
@@ -76,7 +64,7 @@ export class UserRepository {
     const repo = this.getRepository(queryRunner);
     const newUser = repo.create(payload);
     const savedUser = await repo.save(newUser);
-    return this.getById(savedUser.id, queryRunner);
+    return this.getOne({ where: { id: savedUser.id } }, queryRunner);
   }
 
   async findOrCreateByEmail(
@@ -104,7 +92,10 @@ export class UserRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const existingUser = await this.getBy({ id }, queryRunner);
+    const existingUser = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingUser) {
       throw new NotFoundError(`User with id ${id} not found`);
@@ -113,12 +104,15 @@ export class UserRepository {
     const updatedUser = repo.merge(existingUser, payload);
 
     const savedUser = await repo.save(updatedUser);
-    return this.getById(savedUser.id, queryRunner);
+    return this.getOne({ where: { id: savedUser.id } }, queryRunner);
   }
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingUser = await this.getBy({ id }, queryRunner);
+    const existingUser = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingUser) {
       throw new NotFoundError(`User with id ${id} not found`);

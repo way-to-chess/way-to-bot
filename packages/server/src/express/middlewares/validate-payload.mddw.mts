@@ -14,7 +14,7 @@ export function validatePayloadMddw(
 
     if (!result.success) {
       const { error } = result;
-      return next(new BadRequestError(error.message));
+      return next(error);
     }
 
     req[source] = result.data;

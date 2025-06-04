@@ -1,9 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminLeagueService } from "@way-to-bot/server/admin/services/league.service.mjs";
-import {
-  TAdminLeagueCreatePayload,
-  TAdminLeagueUpdatePayload,
-} from "@way-to-bot/shared/api/zod/admin/league.schema.js";
 import { LeagueEntity } from "@way-to-bot/server/database/entities/league.entity.mjs";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import {
@@ -15,6 +11,7 @@ import {
   AdminDTOLeagueGetOneResponse,
   AdminDTOLeagueUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/admin/league.DTO.js";
+import { Request, Response } from "express";
 
 @injectable()
 export class AdminLeagueController {
@@ -23,35 +20,47 @@ export class AdminLeagueController {
     private readonly _leagueService: AdminLeagueService,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<LeagueEntity>) {
-    const data = await this._leagueService.getMany(options);
-    return new AdminDTOLeagueGetManyResponse(
-      data.data.map((i) => new AdminDTOLeagueGetMany(i)),
+  async getMany(req: Request, res: Response) {
+    const options = req.getManyOptions as GetManyOptionsDTO<LeagueEntity>;
+    const result = await this._leagueService.getMany(options);
+    const data = new AdminDTOLeagueGetManyResponse(
+      result.data.map((i) => new AdminDTOLeagueGetMany(i)),
       {
         limit: options?.getFindOptions?.take,
         offset: options?.getFindOptions?.skip,
-        totalRows: data.count
+        totalRows: result.count,
       },
     );
+    res.status(200).send(data);
   }
 
-  async getOne(id: number) {
-    const data = await this._leagueService.getOne(id);
-    return new AdminDTOLeagueGetOneResponse(new AdminDTOLeagueGetOne(data));
+  async getOne(req: Request, res: Response) {
+    const result = await this._leagueService.getOne(+req.params.id!);
+    const data = new AdminDTOLeagueGetOneResponse(
+      new AdminDTOLeagueGetOne(result),
+    );
+    res.status(200).send(data);
   }
 
-  async create(payload: TAdminLeagueCreatePayload) {
-    const data = await this._leagueService.create(payload);
-    return new AdminDTOLeagueCreateResponse(new AdminDTOLeagueGetOne(data));
+  async create(req: Request, res: Response) {
+    const result = await this._leagueService.create(req.body);
+    const data = new AdminDTOLeagueCreateResponse(
+      new AdminDTOLeagueGetOne(result),
+    );
+    res.status(201).send(data);
   }
 
-  async update(id: number, payload: TAdminLeagueUpdatePayload) {
-    const data = await this._leagueService.update(id, payload);
-    return new AdminDTOLeagueUpdateResponse(new AdminDTOLeagueGetOne(data));
+  async update(req: Request, res: Response) {
+    const result = await this._leagueService.update(+req.params.id!, req.body);
+    const data = new AdminDTOLeagueUpdateResponse(
+      new AdminDTOLeagueGetOne(result),
+    );
+    res.status(200).send(data);
   }
 
-  async delete(id: number) {
-    const data = await this._leagueService.delete(id);
-    return new AdminDTOLeagueDeleteResponse(data);
+  async delete(req: Request, res: Response) {
+    const result = await this._leagueService.delete(+req.params.id!);
+    const data = new AdminDTOLeagueDeleteResponse(result);
+    res.status(200).send(data);
   }
 }

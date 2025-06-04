@@ -21,7 +21,7 @@ export class AdminLocationService {
   }
 
   async getOne(id: number) {
-    const data = await this._locationRepository.getById(id);
+    const data = await this._locationRepository.getOne({ where: { id } });
 
     if (!data) {
       throw new NotFoundError(`Location with id ${id} not found`);

@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindManyOptions, QueryRunner } from "typeorm";
+import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import {
@@ -20,16 +20,17 @@ export class ParticipateRequestRepository {
     return this._dbService.dataSource.getRepository(ParticipateRequestEntity);
   }
 
-  getById(id: number, queryRunner?: QueryRunner, relations = true) {
+  getOne(
+    options: FindOneOptions<ParticipateRequestEntity>,
+    queryRunner?: QueryRunner,
+  ) {
     return this.getRepository(queryRunner).findOne({
-      where: { id },
-      ...(relations && {
-        relations: {
-          receipt: true,
-          user: { photo: true },
-          event: true,
-        },
-      }),
+      relations: {
+        receipt: true,
+        user: { photo: true },
+        event: true,
+      },
+      ...options,
     });
   }
 
@@ -55,7 +56,10 @@ export class ParticipateRequestRepository {
     const repo = this.getRepository(queryRunner);
     const newParticipateRequest = repo.create(payload);
     const savedParticipateRequest = await repo.save(newParticipateRequest);
-    return this.getById(savedParticipateRequest.id, queryRunner);
+    return this.getOne(
+      { where: { id: savedParticipateRequest.id } },
+      queryRunner,
+    );
   }
 
   async update(
@@ -66,10 +70,9 @@ export class ParticipateRequestRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const existingParticipateRequest = await this.getById(
-      id,
+    const existingParticipateRequest = await this.getOne(
+      { where: { id }, relations: undefined },
       queryRunner,
-      false,
     );
 
     if (!existingParticipateRequest) {
@@ -82,15 +85,17 @@ export class ParticipateRequestRepository {
     );
 
     const savedParticipateRequest = await repo.save(updatedParticipateRequest);
-    return this.getById(savedParticipateRequest.id, queryRunner);
+    return this.getOne(
+      { where: { id: savedParticipateRequest.id } },
+      queryRunner,
+    );
   }
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingParticipateRequest = await this.getById(
-      id,
+    const existingParticipateRequest = await this.getOne(
+      { where: { id }, relations: undefined },
       queryRunner,
-      false,
     );
 
     if (!existingParticipateRequest) {

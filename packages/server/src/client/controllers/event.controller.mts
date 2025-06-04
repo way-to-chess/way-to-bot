@@ -8,6 +8,7 @@ import {
   ClientDTOEventGetOne,
   ClientDTOEventGetOneResponse,
 } from "@way-to-bot/shared/api/DTO/client/event.DTO.js";
+import { Request, Response } from "express";
 
 @injectable()
 export class ClientEventController {
@@ -16,20 +17,28 @@ export class ClientEventController {
     private readonly _eventService: ClientEventService,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<EventEntity>) {
-    const data = await this._eventService.getMany(options);
-    return new ClientDTOEventGetManyResponse(
-      data.data.map((i) => new ClientDTOEventGetMany(i)),
+  async getMany(req: Request, res: Response) {
+    const options = req.getManyOptions as GetManyOptionsDTO<EventEntity>;
+    const result = await this._eventService.getMany(options);
+    const data = new ClientDTOEventGetManyResponse(
+      result.data.map((i) => new ClientDTOEventGetMany(i)),
       {
         limit: options?.getFindOptions?.take,
         offset: options?.getFindOptions?.skip,
-        totalRows: data.count,
+        totalRows: result.count,
       },
     );
+
+    res.status(200).send(data);
   }
 
-  async getById(id: number) {
-    const data = await this._eventService.getById(id);
-    return new ClientDTOEventGetOneResponse(new ClientDTOEventGetOne(data));
+  async getById(req: Request, res: Response) {
+    const id = +req.params.id!;
+    const result = await this._eventService.getById(id);
+    const data = new ClientDTOEventGetOneResponse(
+      new ClientDTOEventGetOne(result),
+    );
+
+    res.status(200).send(data);
   }
 }

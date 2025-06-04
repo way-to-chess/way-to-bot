@@ -1,9 +1,9 @@
 import TelegramApi, { Message } from "node-telegram-bot-api";
 import { inject, injectable } from "inversify";
 import { IsNull, Not } from "typeorm";
-import { UserRepository } from '@way-to-bot/server/database/repositories/user.repository.mjs';
-import { TG_BOT_TOKEN } from '@way-to-bot/server/utils/constants.mjs';
-import { logger } from '@way-to-bot/server/services/logger.service.mjs';
+import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
+import { TG_BOT_TOKEN } from "@way-to-bot/server/utils/constants.mjs";
+import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 
 @injectable()
 export class TgBotService {
@@ -62,8 +62,8 @@ export class TgBotService {
 
           setImmediate(async () => {
             try {
-              const userFromDb = await this._userRepository.getBy({
-                username: `@${user.username}`,
+              const userFromDb = await this._userRepository.getOne({
+                where: { username: `@${user.username}` },
               });
 
               if (userFromDb && !userFromDb.tgId) {

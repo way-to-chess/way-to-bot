@@ -7,6 +7,7 @@ import {
 } from "@way-to-bot/shared/api/zod/client/user.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
+import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 
 @injectable()
 export class ClientUserService {
@@ -18,14 +19,20 @@ export class ClientUserService {
     return this._userRepository.getMany(options?.getFindOptions);
   }
 
-  getById(id: number) {
-    return this._userRepository.getById(id);
+  async getById(id: number) {
+    const data = await this._userRepository.getOne({ where: { id } });
+    if (!data) {
+      throw new NotFoundError(`User with id ${id} not found`);
+    }
+    return data;
   }
 
   async getByTgIdOrUsername(tgId: string, username: string) {
-    const user = await this._userRepository.getBy({
-      ...(tgId && { tgId: String(tgId) }),
-      ...(username && { username: `@${username}` }),
+    const user = await this._userRepository.getOne({
+      where: {
+        ...(tgId && { tgId: String(tgId) }),
+        ...(username && { username: `@${username}` }),
+      },
     });
 
     if (!user) {
@@ -42,11 +49,15 @@ export class ClientUserService {
     return user;
   }
 
-  create(payload: TClientUserCreatePayload) {
-    return this._userRepository.create(payload);
+  async create(payload: TClientUserCreatePayload) {
+    const data = await this._userRepository.create(payload);
+    if (!data) throw new InternalError(`User was not created`);
+    return data;
   }
 
-  update(id: number, payload: TClientUserUpdatePayload) {
-    return this._userRepository.update(id, payload);
+  async update(id: number, payload: TClientUserUpdatePayload) {
+    const data = await this._userRepository.update(id, payload);
+    if (!data) throw new InternalError(`User was not created`);
+    return data;
   }
 }

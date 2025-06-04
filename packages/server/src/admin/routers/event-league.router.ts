@@ -13,26 +13,16 @@ const adminEventLeagueController = DiContainer.get(AdminEventLeagueController);
 AdminEventLeagueRouter.post(
   "/",
   validatePayloadMddw(AdminSchemaEventLeagueCreate),
-  async (req, res) => {
-    const data = await adminEventLeagueController.create(req.body);
-    res.status(200).send(data);
-  },
+  (req, res) => adminEventLeagueController.create(req, res),
 );
 
-AdminEventLeagueRouter.delete("/:id", async (req, res) => {
-  const data = await adminEventLeagueController.delete(+req.params.id);
-  res.status(200).send(data);
-});
+AdminEventLeagueRouter.delete("/:id", (req, res) =>
+  adminEventLeagueController.delete(req, res),
+);
 
 AdminEventLeagueRouter.put(
   "/participants-list/:id",
   validatePayloadMddw(AdminSchemaEventLeagueUsersUpdate),
-  async (req, res) => {
-    const data =
-      await adminEventLeagueController.updateEventLeagueParticipantsList(
-        +req.params.id!,
-        req.body,
-      );
-    res.status(200).send(data);
-  },
+  (req, res) =>
+    adminEventLeagueController.updateEventLeagueParticipantsList(req, res),
 );

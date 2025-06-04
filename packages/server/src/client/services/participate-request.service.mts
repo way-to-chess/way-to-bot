@@ -31,7 +31,9 @@ export class ClientParticipateRequestService {
   }
 
   async getById(id: number) {
-    const data = await this._participateRequestRepository.getById(id);
+    const data = await this._participateRequestRepository.getOne({
+      where: { id },
+    });
 
     if (!data) {
       throw new NotFoundError(`Participate request with id ${id} not found`);

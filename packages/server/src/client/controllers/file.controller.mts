@@ -1,12 +1,11 @@
 import { inject, injectable } from "inversify";
+import { Request, Response } from "express";
 import { ClientFileService } from "@way-to-bot/server/client/services/file.service.mjs";
-import { EFileAssigment } from "@way-to-bot/shared/api/enums";
 import {
   ClientDTOFileCreateResponse,
   ClientDTOFileDeleteResponse,
   ClientDTOFileGetOne,
 } from "@way-to-bot/shared/api/DTO/client/file.DTO.js";
-import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
 
 @injectable()
 export class ClientFileController {
@@ -15,17 +14,17 @@ export class ClientFileController {
     private readonly _clientFileService: ClientFileService,
   ) {}
 
-  async create(file?: Express.Multer.File, assigment?: EFileAssigment) {
-    if (!file) {
-      throw new BadRequestError("No file found in request");
-    }
-
-    const data = await this._clientFileService.create(file);
-    return new ClientDTOFileCreateResponse(new ClientDTOFileGetOne(data));
+  async create(req: Request, res: Response) {
+    const result = await this._clientFileService.create(req.file!);
+    const data = new ClientDTOFileCreateResponse(
+      new ClientDTOFileGetOne(result),
+    );
+    res.status(201).send(data);
   }
 
-  async delete(id: number) {
-    const data = await this._clientFileService.delete(id);
-    return new ClientDTOFileDeleteResponse(data);
+  async delete(req: Request, res: Response) {
+    const result = await this._clientFileService.delete(+req.params.id!);
+    const data = new ClientDTOFileDeleteResponse(result);
+    res.status(200).send(data);
   }
 }

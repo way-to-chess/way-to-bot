@@ -1,7 +1,7 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
-import { FindManyOptions, FindOptionsWhere, QueryRunner } from "typeorm";
+import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
 import {
   TAdminEventCreatePayload,
   TAdminEventUpdatePayload,
@@ -19,9 +19,11 @@ export class EventRepository {
     return this._dbService.dataSource.getRepository(EventEntity);
   }
 
-  async getById(id: number, queryRunner?: QueryRunner) {
-    const event = await this.getRepository(queryRunner).findOne({
-      where: { id },
+  async getOne(
+    options: FindOneOptions<EventEntity>,
+    queryRunner?: QueryRunner,
+  ) {
+    return this.getRepository(queryRunner).findOne({
       relations: {
         location: true,
         preview: true,
@@ -34,17 +36,8 @@ export class EventRepository {
         },
         host: true,
       },
+      ...options,
     });
-
-    if (!event) {
-      throw new NotFoundError(`Event with id ${id} not found`);
-    }
-
-    return event;
-  }
-
-  getBy(where: FindOptionsWhere<EventEntity>, queryRunner?: QueryRunner) {
-    return this.getRepository(queryRunner).findOneBy(where);
   }
 
   async getMany(
@@ -62,7 +55,7 @@ export class EventRepository {
         },
         host: true,
       },
-      ...(options && options),
+      ...options,
     });
 
     return {
@@ -75,7 +68,7 @@ export class EventRepository {
     const repo = this.getRepository(queryRunner);
     const newEvent = repo.create(event);
     const savedEvent = await this.getRepository(queryRunner).save(newEvent);
-    return this.getById(savedEvent.id, queryRunner);
+    return this.getOne({ where: { id: savedEvent.id } }, queryRunner);
   }
 
   async update(
@@ -84,7 +77,10 @@ export class EventRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const existingEvent = await this.getBy({ id }, queryRunner);
+    const existingEvent = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingEvent) {
       throw new Error(`Event with id ${id} not found`);
@@ -93,12 +89,15 @@ export class EventRepository {
     const updatedEvent = repo.merge(existingEvent, payload);
     const savedEvent = await repo.save(updatedEvent);
 
-    return this.getById(savedEvent.id, queryRunner);
+    return this.getOne({ where: { id: savedEvent.id } }, queryRunner);
   }
 
   async delete(id: number, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    const existingEvent = await this.getBy({ id }, queryRunner);
+    const existingEvent = await this.getOne(
+      { where: { id }, relations: undefined },
+      queryRunner,
+    );
 
     if (!existingEvent) {
       throw new NotFoundError(`Event with id ${id} not found`);
