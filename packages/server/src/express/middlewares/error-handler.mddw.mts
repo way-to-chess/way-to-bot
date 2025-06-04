@@ -15,7 +15,7 @@ export function errorHandlerMddw(
   logger.error(err.message, { stack: err.stack });
 
   if (err instanceof ZodError) {
-    return res.status(400).json(
+    res.status(400).json(
       new ErrorDTO(
         "Validation Error",
         EErrorCode.BAD_REQUEST,
@@ -25,35 +25,38 @@ export function errorHandlerMddw(
         })),
       ),
     );
+    return;
   }
 
   if (err instanceof QueryFailedError) {
     if (err.message.includes("duplicate key")) {
-      return res.status(409).json(
+      res.status(409).json(
         new ErrorDTO("Resource already exists", EErrorCode.BAD_REQUEST, {
           message: err.message,
         }),
       );
+      return;
     }
 
-    return res
+    res
       .status(500)
       .json(new ErrorDTO("Database Error", EErrorCode.INTERNAL_ERROR));
+    return;
   }
 
   if (err instanceof EntityNotFoundError) {
-    return res
-      .status(404)
-      .json(new ErrorDTO(err.message, EErrorCode.NOT_FOUND));
+    res.status(404).json(new ErrorDTO(err.message, EErrorCode.NOT_FOUND));
+    return;
   }
 
   if (err instanceof ApiError) {
-    return res
+    res
       .status(err.status)
       .json(new ErrorDTO(err.message, err.code as EErrorCode, err.details));
+    return;
   }
 
-  return res
+  res
     .status(500)
     .json(new ErrorDTO("Internal Server Error", EErrorCode.INTERNAL_ERROR));
 }

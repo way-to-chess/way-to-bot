@@ -1,6 +1,5 @@
 import { ZodSchema } from "zod";
 import { NextFunction, Request, Response } from "express";
-import { BadRequestError } from '@way-to-bot/server/common/errors/bad-request.error.mjs';
 
 type PayloadSource = "body" | "query" | "params";
 
