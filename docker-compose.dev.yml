@@ -1,14 +1,34 @@
 services:
   postgres:
     container_name: wtb_postgres
-    image: postgres
+    image: postgres:15-alpine
     env_file:
       - ./packages/server/.env
     restart: on-failure:3
     volumes:
       - pg_data:/var/lib/postgresql/data
+      - ./docker_data/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./docker_data/postgres/config/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
+    command: postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - FOWNER
+      - SETGID
+      - SETUID
     healthcheck:
       test:
         ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
