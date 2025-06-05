@@ -1,7 +1,7 @@
 services:
   postgres:
     container_name: wtb_postgres
-    image: postgres:15-alpine
+    image: postgres:15
     env_file:
       - ./packages/server/.env
     restart: on-failure:3
@@ -11,7 +11,11 @@ services:
       - ./docker_data/postgres/config/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
     ports:
       - "127.0.0.1:5432:5432"
-    command: postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
+    command: bash -c "
+      chown postgres:postgres /var/lib/postgresql/data &&
+      chmod 700 /var/lib/postgresql/data &&
+      docker-entrypoint.sh postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
+      "
     deploy:
       resources:
         limits:
