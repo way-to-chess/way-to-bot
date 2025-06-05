@@ -5,6 +5,7 @@ services:
     env_file:
       - ./packages/server/.env
     restart: on-failure:3
+    user: "999:999"
     volumes:
       - pg_data:/var/lib/postgresql/data
       - ./docker_data/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
@@ -12,7 +13,8 @@ services:
     ports:
       - "127.0.0.1:5432:5432"
     command: bash -c "
-      chown postgres:postgres /var/lib/postgresql/data &&
+      mkdir -p /var/lib/postgresql/data &&
+      chown -R 999:999 /var/lib/postgresql/data &&
       chmod 700 /var/lib/postgresql/data &&
       docker-entrypoint.sh postgres -c config_file=/etc/postgresql/postgresql.conf -c hba_file=/etc/postgresql/pg_hba.conf
       "
@@ -96,3 +98,8 @@ services:
 
 volumes:
   pg_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: /var/lib/postgresql/data
