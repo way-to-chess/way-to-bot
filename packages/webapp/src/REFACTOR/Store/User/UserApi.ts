@@ -7,11 +7,13 @@ import {
 } from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 import {clientApi} from "../ClientApi";
+import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
+import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchParams";
 
 const userApi = clientApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllUsers: build.query<ClientDTOUserGetMany[], void>({
-            query: () => "user",
+        getAllUsers: build.query<ClientDTOUserGetMany[], TCommonGetManyOptions>({
+            query: (options) => options ? getUrlWithSearchParams("user", options) : "user",
             transformResponse: (data: ClientDTOUserGetManyResponse) => data.data,
             providesTags: () => [{type: "USER", id: "ALL"}]
         }),

@@ -63,7 +63,7 @@ const Loading = () => {
 }
 
 const LeaderboardPage = () => {
-    const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery();
+    const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery({});
 
     const [sort, setSort] = useState<TISortOptionValue>(DEFAULT_SORT_OPTION.value)
 
