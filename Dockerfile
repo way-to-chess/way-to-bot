@@ -41,7 +41,7 @@ COPY --from=builder /app/packages/server/dist ./packages/server/dist
 COPY --from=builder /app/packages/server/.env ./packages/server/.env
 COPY --from=builder /app/packages/server/bin ./packages/server/bin
 
-RUN npm ci --production
+RUN npm ci --production --workspaces
 
 FROM nginx:alpine AS web
 COPY --from=builder /app/packages/webapp/dist /usr/share/nginx/html/webapp
