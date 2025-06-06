@@ -2,10 +2,7 @@ version: "3.9"
 services:
   app:
     container_name: wtb_app
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: server
+    image: traktirwik/way_to_bot:server_${TAG:?err}
     ports:
       - "3000:3000"
     env_file:
@@ -17,10 +14,7 @@ services:
 
   web:
     container_name: wtb_web
-    build:
-      context: .
-      dockerfile: Dockerfile
-      target: web
+    image: traktirwik/way_to_bot:web_${TAG:?err}
     volumes:
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
       - ./docker_data/certbot/www/:/var/www/certbot/:ro

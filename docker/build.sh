@@ -36,42 +36,51 @@ fi
 
 COMMIT_HASH=$1
 IMAGE_NAME="traktirwik/way_to_bot"
-TAG="${COMMIT_HASH}"
+SERVER_TAG="server_${COMMIT_HASH}"
+WEB_TAG="web_${COMMIT_HASH}"
 
 check_docker() {
     if ! command -v docker &> /dev/null; then
         log_error "Docker is not installed"
         exit 1
+    fi
 
     if ! docker info &> /dev/null; then
         log_error "Docker engine is not running"
         exit 1
+    fi
 }
-
 
 build_and_push() {
     local start_time=$(date +%s)
 
     log_info "Starting build process for commit: ${COMMIT_HASH}"
 
-    log_info "Building Docker image..."
-    if ! docker build -t "${IMAGE_NAME}:${TAG}" .; then
-        log_error "Docker build failed"
+    # Build server image
+    log_info "Building server image..."
+    if ! docker build --target server -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
+        log_error "Server image build failed"
         exit 1
     fi
 
-    log_info "Tagging as latest..."
-    docker tag "${IMAGE_NAME}:${TAG}" "${IMAGE_NAME}:latest"
-
-    log_info "Pushing image to Docker Hub..."
-    if ! docker push "${IMAGE_NAME}:${TAG}"; then
-        log_error "Failed to push image to Docker Hub"
+    # Build web image
+    log_info "Building web image..."
+    if ! docker build --target web -t "${IMAGE_NAME}:${WEB_TAG}" .; then
+        log_error "Web image build failed"
         exit 1
     fi
 
-    log_info "Pushing latest tag..."
-    if ! docker push "${IMAGE_NAME}:latest"; then
-        log_error "Failed to push latest tag to Docker Hub"
+    # Push server image
+    log_info "Pushing server image to Docker Hub..."
+    if ! docker push "${IMAGE_NAME}:${SERVER_TAG}"; then
+        log_error "Failed to push server image"
+        exit 1
+    fi
+
+    # Push web image
+    log_info "Pushing web image to Docker Hub..."
+    if ! docker push "${IMAGE_NAME}:${WEB_TAG}"; then
+        log_error "Failed to push web image"
         exit 1
     fi
 
@@ -79,6 +88,8 @@ build_and_push() {
     local duration=$((end_time - start_time))
 
     log_info "Build and push completed successfully in ${duration} seconds"
+    log_info "Server image: ${IMAGE_NAME}:${SERVER_TAG}"
+    log_info "Web image: ${IMAGE_NAME}:${WEB_TAG}"
 }
 
 main() {

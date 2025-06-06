@@ -1,28 +1,57 @@
-name: DEV
+name: Manual Deploy
 
 on:
-  push:
-    branches:
-      - dev
+  workflow_dispatch:
+    inputs:
+      commit_hash:
+        description: 'Commit hash to deploy'
+        required: true
+        type: string
+      environment:
+        description: 'Environment to deploy to'
+        required: true
+        type: choice
+        options:
+          - dev
+          - prod
+        default: 'dev'
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
-    environment: production
+    environment: ${{ github.event.inputs.environment }}
 
     steps:
+      - name: Set environment specific variables
+        id: vars
+        run: |
+          if [ "${{ github.event.inputs.environment }}" = "dev" ]; then
+            echo "server_host=${{ secrets.DEV_SERVER_HOST }}" >> $GITHUB_OUTPUT
+            echo "ssh_username=${{ secrets.DEV_SSH_USERNAME }}" >> $GITHUB_OUTPUT
+            echo "ssh_key=${{ secrets.DEV_SSH_PRIVATE_KEY }}" >> $GITHUB_OUTPUT
+            echo "docker_compose_file=docker-compose.dev.yml" >> $GITHUB_OUTPUT
+          else
+            echo "server_host=${{ secrets.SERVER_HOST }}" >> $GITHUB_OUTPUT
+            echo "ssh_username=${{ secrets.SSH_USERNAME }}" >> $GITHUB_OUTPUT
+            echo "ssh_key=${{ secrets.SSH_PRIVATE_KEY }}" >> $GITHUB_OUTPUT
+            echo "docker_compose_file=docker-compose.yml" >> $GITHUB_OUTPUT
+          fi
+
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.0.3
-
         with:
-          host: ${{ secrets.DEV_SERVER_HOST }}
-          username: ${{ secrets.DEV_SSH_USERNAME }}
-          key: ${{ secrets.DEV_SSH_PRIVATE_KEY }}
+          host: ${{ steps.vars.outputs.server_host }}
+          username: ${{ steps.vars.outputs.ssh_username }}
+          key: ${{ steps.vars.outputs.ssh_key }}
           script: |
             cd /home/way-to-bot
-            git pull origin dev
-            docker compose -f docker-compose.dev.yml up app web -d --build
+            
+            ./docker/login.sh
+
+            export TAG=${{ github.event.inputs.commit_hash }}
+            
+            docker compose -f ${{ steps.vars.outputs.docker_compose_file }} pull app web
+            docker compose -f ${{ steps.vars.outputs.docker_compose_file }} up -d app web
 
             # Cleanup
-            docker system prune -f --volumes
             docker image prune -f
