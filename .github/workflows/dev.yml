@@ -45,8 +45,9 @@ jobs:
           key: ${{ steps.vars.outputs.ssh_key }}
           script: |
             cd /home/way-to-bot
+            git pull origin dev
             
-            ./docker/login.sh
+            bash ./docker/login.sh
 
             export TAG=${{ github.event.inputs.commit_hash }}
             
