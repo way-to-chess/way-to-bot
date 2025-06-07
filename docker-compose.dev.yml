@@ -63,6 +63,7 @@ services:
       "
 
   web:
+    container_name: wtb_web
     image: traktirwik/way_to_bot:web_${TAG:?err}
     ports:
       - "80:80"
