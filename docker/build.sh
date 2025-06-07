@@ -38,7 +38,7 @@ COMMIT_HASH=$1
 IMAGE_NAME="traktirwik/way_to_bot"
 SERVER_TAG="server_${COMMIT_HASH}"
 WEB_TAG="web_${COMMIT_HASH}"
-PLATFORMS="linux/amd64,linux/arm64"
+PLATFORM="linux/amd64"
 
 check_docker() {
     if ! command -v docker &> /dev/null; then
@@ -52,39 +52,47 @@ check_docker() {
     fi
 }
 
-setup_buildx() {
-    log_info "Setting up Docker Buildx..."
-    if ! docker buildx inspect multiarch > /dev/null 2>&1; then
-        docker buildx create --name multiarch --driver docker-container --use
-    else
-        docker buildx use multiarch
-    fi
-}
-
 build_and_push() {
     local start_time=$(date +%s)
 
     log_info "Starting build process for commit: ${COMMIT_HASH}"
 
-    # Build and push server image
-    log_info "Building and pushing server image..."
-    if ! docker buildx build --platform ${PLATFORMS} \
+    # Build server image
+    log_info "Building server image..."
+    if ! docker build \
+        --platform ${PLATFORM} \
         --target server \
-        -t "${IMAGE_NAME}:${SERVER_TAG}" \
-        --push .; then
-        log_error "Server image build and push failed"
+        -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
+        log_error "Server image build failed"
         exit 1
     fi
+    log_info "Server image built successfully"
 
-    # Build and push web image
-    log_info "Building and pushing web image..."
-    if ! docker buildx build --platform ${PLATFORMS} \
+    # Build web image
+    log_info "Building web image..."
+    if ! docker build \
+        --platform ${PLATFORM} \
         --target web \
-        -t "${IMAGE_NAME}:${WEB_TAG}" \
-        --push .; then
-        log_error "Web image build and push failed"
+        -t "${IMAGE_NAME}:${WEB_TAG}" .; then
+        log_error "Web image build failed"
         exit 1
     fi
+    log_info "Web image built successfully"
+
+    # Push images
+    log_info "Pushing server image..."
+    if ! docker push "${IMAGE_NAME}:${SERVER_TAG}"; then
+        log_error "Server image push failed"
+        exit 1
+    fi
+    log_info "Server image pushed successfully"
+
+    log_info "Pushing web image..."
+    if ! docker push "${IMAGE_NAME}:${WEB_TAG}"; then
+        log_error "Web image push failed"
+        exit 1
+    fi
+    log_info "Web image pushed successfully"
 
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
@@ -92,13 +100,12 @@ build_and_push() {
     log_info "Build and push completed successfully in ${duration} seconds"
     log_info "Server image: ${IMAGE_NAME}:${SERVER_TAG}"
     log_info "Web image: ${IMAGE_NAME}:${WEB_TAG}"
-    log_info "Platforms: ${PLATFORMS}"
+    log_info "Platform: ${PLATFORM}"
 }
 
 main() {
     log_info "Starting docker build script"
     check_docker
-    setup_buildx
     build_and_push
 }
 
