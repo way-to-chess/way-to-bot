@@ -61,84 +61,45 @@ setup_buildx() {
     fi
 }
 
-build_images() {
+build_and_push() {
+    local start_time=$(date +%s)
+
     log_info "Starting build process for commit: ${COMMIT_HASH}"
-    
-    # Build server image
-    log_info "Building server image..."
+
+    # Build and push server image
+    log_info "Building and pushing server image..."
     if ! docker buildx build --platform ${PLATFORMS} \
         --target server \
         -t "${IMAGE_NAME}:${SERVER_TAG}" \
-        --load .; then
-        log_error "Server image build failed"
-        return 1
+        --push .; then
+        log_error "Server image build and push failed"
+        exit 1
     fi
-    log_info "Server image built successfully"
 
-    # Build web image
-    log_info "Building web image..."
+    # Build and push web image
+    log_info "Building and pushing web image..."
     if ! docker buildx build --platform ${PLATFORMS} \
         --target web \
         -t "${IMAGE_NAME}:${WEB_TAG}" \
-        --load .; then
-        log_error "Web image build failed"
-        return 1
-    fi
-    log_info "Web image built successfully"
-
-    return 0
-}
-
-push_images() {
-    log_info "Starting push process..."
-
-    # Push server image
-    log_info "Pushing server image to Docker Hub..."
-    if ! docker push "${IMAGE_NAME}:${SERVER_TAG}"; then
-        log_error "Failed to push server image"
-        return 1
-    fi
-    log_info "Server image pushed successfully"
-
-    # Push web image
-    log_info "Pushing web image to Docker Hub..."
-    if ! docker push "${IMAGE_NAME}:${WEB_TAG}"; then
-        log_error "Failed to push web image"
-        return 1
-    fi
-    log_info "Web image pushed successfully"
-
-    return 0
-}
-
-main() {
-    local start_time=$(date +%s)
-    
-    log_info "Starting docker build and push process"
-    check_docker
-    setup_buildx
-
-    log_info "Building images..."
-    if ! build_images; then
-        log_error "Build stage failed"
+        --push .; then
+        log_error "Web image build and push failed"
         exit 1
     fi
-    log_info "All images built successfully"
-
-    log_info "Pushing images..."
-    if ! push_images; then
-        log_error "Push stage failed"
-        exit 1
-    fi
-    log_info "All images pushed successfully"
 
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
 
-    log_info "Process completed successfully in ${duration} seconds"
+    log_info "Build and push completed successfully in ${duration} seconds"
     log_info "Server image: ${IMAGE_NAME}:${SERVER_TAG}"
     log_info "Web image: ${IMAGE_NAME}:${WEB_TAG}"
     log_info "Platforms: ${PLATFORMS}"
+}
+
+main() {
+    log_info "Starting docker build script"
+    check_docker
+    setup_buildx
+    build_and_push
 }
 
 main
