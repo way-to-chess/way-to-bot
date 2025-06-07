@@ -16,6 +16,7 @@ COPY packages/shared ./packages/shared
 RUN npm run build --workspace @way-to-bot/shared
 
 COPY packages/adminui ./packages/adminui
+COPY packages/adminui/.env.dev ./packages/adminui/.env
 RUN npm run build --workspace @way-to-bot/adminui
 
 COPY packages/server ./packages/server
@@ -23,6 +24,7 @@ RUN npm run build --workspace @way-to-bot/server
 
 COPY packages/webapp ./packages/webapp
 COPY packages/webapp/.env.dev ./packages/webapp/.env
+RUN echo "Content of .env file:" && cat packages/webapp/.env
 RUN npm run build --workspace @way-to-bot/webapp
 
 COPY . .
