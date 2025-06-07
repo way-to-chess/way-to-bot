@@ -29,16 +29,30 @@ error_handler() {
 
 trap 'error_handler ${LINENO} $?' ERR
 
-if [ $# -ne 1 ]; then
-    log_error "Usage: $0 <commit-hash>"
+if [ $# -eq 1 ]; then
+    COMMIT_HASH=$1
+    ENVIRONMENT="dev"
+    log_warn "Environment not specified, using default: ${ENVIRONMENT}"
+elif [ $# -eq 2 ]; then
+    COMMIT_HASH=$1
+    ENVIRONMENT=$2
+else
+    log_error "Usage: $0 <commit-hash> [environment]"
+    log_error "Environment should be 'dev' or 'prod', defaults to 'dev' if not specified"
     exit 1
 fi
 
-COMMIT_HASH=$1
+if [ "$ENVIRONMENT" != "dev" ] && [ "$ENVIRONMENT" != "prod" ]; then
+    log_error "Environment should be 'dev' or 'prod'"
+    exit 1
+fi
+
 IMAGE_NAME="traktirwik/way_to_bot"
-SERVER_TAG="server_${COMMIT_HASH}"
-WEB_TAG="web_${COMMIT_HASH}"
+SERVER_TAG="server_${COMMIT_HASH}_${ENVIRONMENT}"
+WEB_TAG="web_${COMMIT_HASH}_${ENVIRONMENT}"
 PLATFORM="linux/amd64"
+export DOCKER_BUILDKIT=1
+
 
 check_docker() {
     if ! command -v docker &> /dev/null; then
@@ -55,13 +69,16 @@ check_docker() {
 build_and_push() {
     local start_time=$(date +%s)
 
-    log_info "Starting build process for commit: ${COMMIT_HASH}"
+    log_info "Starting build process for commit: ${COMMIT_HASH} in ${ENVIRONMENT} environment"
 
     # Build server image
     log_info "Building server image..."
     if ! docker build \
         --platform ${PLATFORM} \
         --target server \
+        --build-arg ENV=${ENVIRONMENT} \
+        --cache-from=type=registry,ref=traktirwik/way_to_bot:server_cache \
+        --cache-to=type=registry,ref=traktirwik/way_to_bot:server_cache,mode=max \
         -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
         log_error "Server image build failed"
         exit 1
@@ -73,6 +90,9 @@ build_and_push() {
     if ! docker build \
         --platform ${PLATFORM} \
         --target web \
+        --build-arg ENV=${ENVIRONMENT} \
+        --cache-from=type=registry,ref=traktirwik/way_to_bot:web_cache \
+        --cache-to=type=registry,ref=traktirwik/way_to_bot:web_cache,mode=max \
         -t "${IMAGE_NAME}:${WEB_TAG}" .; then
         log_error "Web image build failed"
         exit 1
@@ -101,6 +121,7 @@ build_and_push() {
     log_info "Server image: ${IMAGE_NAME}:${SERVER_TAG}"
     log_info "Web image: ${IMAGE_NAME}:${WEB_TAG}"
     log_info "Platform: ${PLATFORM}"
+    log_info "Environment: ${ENVIRONMENT}"
 }
 
 main() {
