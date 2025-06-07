@@ -22,6 +22,7 @@ COPY packages/server ./packages/server
 RUN npm run build --workspace @way-to-bot/server
 
 COPY packages/webapp ./packages/webapp
+COPY packages/webapp/.env.dev ./packages/webapp/.env
 RUN npm run build --workspace @way-to-bot/webapp
 
 COPY . .
@@ -38,7 +39,6 @@ COPY --from=builder /app/packages/shared/package.json ./packages/shared/package.
 
 COPY --from=builder /app/packages/server/package.json ./packages/server/package.json
 COPY --from=builder /app/packages/server/dist ./packages/server/dist
-COPY --from=builder /app/packages/server/.env ./packages/server/.env
 COPY --from=builder /app/packages/server/bin ./packages/server/bin
 
 RUN npm ci --production --workspaces

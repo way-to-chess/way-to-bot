@@ -52,6 +52,7 @@ services:
       - ./packages/server/.env
     restart: on-failure:3
     volumes:
+      - ./packages/server/.env:/app/packages/server/.env
       - ./docker_data/uploads:/app/docker_data/uploads
       - ./docker_data/api_logs:/app/docker_data/api_logs
     command: >
