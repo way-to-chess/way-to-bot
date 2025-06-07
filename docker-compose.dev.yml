@@ -42,7 +42,7 @@ services:
 
   app:
     container_name: wtb_app
-    image: traktirwik/way_to_bot:server_${TAG:?err}
+    image: traktirwik/way_to_bot:server_${TAG:?err}_${ENV:?err}
     ports:
       - "3000:3000"
     depends_on:
@@ -64,7 +64,7 @@ services:
 
   web:
     container_name: wtb_web
-    image: traktirwik/way_to_bot:web_${TAG:?err}
+    image: traktirwik/way_to_bot:web_${TAG:?err}_${ENV:?err}
     ports:
       - "80:80"
       - "443:443"
