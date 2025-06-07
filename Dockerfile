@@ -24,7 +24,6 @@ RUN npm run build --workspace @way-to-bot/server
 
 COPY packages/webapp ./packages/webapp
 COPY packages/webapp/.env.dev ./packages/webapp/.env
-RUN echo "Content of .env file:" && cat packages/webapp/.env
 RUN npm run build --workspace @way-to-bot/webapp
 
 COPY . .
