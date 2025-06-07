@@ -42,9 +42,9 @@ COPY --from=base /app/package-lock.json ./package-lock.json
 COPY --from=base /app/packages/shared/dist ./packages/shared/dist
 COPY --from=base /app/packages/shared/package.json ./packages/shared/package.json
 
-COPY --from=builder /app/packages/server/package.json ./packages/server/package.json
-COPY --from=builder /app/packages/server/dist ./packages/server/dist
-COPY --from=builder /app/packages/server/bin ./packages/server/bin
+COPY --from=server-build /app/packages/server/package.json ./packages/server/package.json
+COPY --from=server-build /app/packages/server/dist ./packages/server/dist
+COPY --from=server-build /app/packages/server/bin ./packages/server/bin
 
 RUN npm ci --production --workspaces --include-workspace-root
 
