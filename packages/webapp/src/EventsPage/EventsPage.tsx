@@ -10,7 +10,7 @@ import {ClockIcon} from "../Icons/ClockIcon";
 import {PriceIcon} from "../Icons/PriceIcon";
 import {LocationIcon} from "../Icons/LocationIcon";
 import {Button} from "../Button/Button";
-import {generatePath} from "react-router";
+import {generatePath, Link} from "react-router";
 import clsx from "clsx";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
@@ -57,7 +57,7 @@ const Event: FC<IEventProps> = (
     const isFinished = status === EEventStatus.FINISHED;
 
     return (
-        <div className={clsx(classes.event, isFinished && classes.finished)}>
+        <Link to={eventPath} className={clsx(classes.event, isFinished && classes.finished)}>
             <ImgWithContainer
                 previewUrl={preview?.url}
                 className={classes.imgContainer}
@@ -105,10 +105,8 @@ const Event: FC<IEventProps> = (
                 </Typography>
             </div>
 
-            <Button as={"link"} to={eventPath}>
-                {"Узнать больше"}
-            </Button>
-        </div>
+            <Button>{"Узнать больше"}</Button>
+        </Link>
     );
 };
 
