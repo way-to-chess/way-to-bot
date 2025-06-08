@@ -160,11 +160,6 @@ const SingleEventPage = () => {
                 ) : null}
 
                 <div className={classes.block}>
-                    <Typography type={"title4"} value={"Детали турнира"}/>
-                    <Typography type={"text2"}>{description || "Детали не добавлены"}</Typography>
-                </div>
-
-                <div className={classes.block}>
                     <Typography type={"title4"} value={"Что на локации"}/>
                     <div className={classes.benefits}>
                         {LOCATION_BENEFITS.map(({icon, title}, index) => (
@@ -181,7 +176,7 @@ const SingleEventPage = () => {
                 </div>
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Как всё будет"}/>
-                    <Typography type={"text2"}>{"Описание не добавлено"}</Typography>
+                    <Typography type={"text2"}>{description ?? "Описание не добавлено"}</Typography>
                 </div>
                 <div className={classes.block}>
                     <div className={classes.participantBlock}>
