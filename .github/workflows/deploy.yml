@@ -26,19 +26,19 @@ jobs:
         id: vars
         run: |
           if [ "${{ github.event.inputs.environment }}" = "prod" ]; then
-            {
-              echo "server_host=${{ secrets.SERVER_HOST }}"
-              echo "ssh_username=${{ secrets.SSH_USERNAME }}"
-              echo "ssh_key=${{ secrets.SSH_PRIVATE_KEY }}"
-              echo "docker_compose_file=docker-compose.yml"
-            } >> "$GITHUB_OUTPUT"
+            echo "server_host=${{ secrets.SERVER_HOST }}" >> "$GITHUB_OUTPUT"
+            echo "ssh_username=${{ secrets.SSH_USERNAME }}" >> "$GITHUB_OUTPUT"
+            echo "docker_compose_file=docker-compose.yml" >> "$GITHUB_OUTPUT"
+            echo "ssh_key<<EOF" >> "$GITHUB_OUTPUT"
+            echo "${{ secrets.SSH_PRIVATE_KEY }}" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
           else
-            {
-              echo "server_host=${{ secrets.DEV_SERVER_HOST }}"
-              echo "ssh_username=${{ secrets.DEV_SSH_USERNAME }}"
-              echo "ssh_key=${{ secrets.DEV_SSH_PRIVATE_KEY }}"
-              echo "docker_compose_file=docker-compose.dev.yml"
-            } >> "$GITHUB_OUTPUT"
+            echo "server_host=${{ secrets.DEV_SERVER_HOST }}" >> "$GITHUB_OUTPUT"
+            echo "ssh_username=${{ secrets.DEV_SSH_USERNAME }}" >> "$GITHUB_OUTPUT"
+            echo "docker_compose_file=docker-compose.dev.yml" >> "$GITHUB_OUTPUT"
+            echo "ssh_key<<EOF" >> "$GITHUB_OUTPUT"
+            echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" >> "$GITHUB_OUTPUT"
+            echo "EOF" >> "$GITHUB_OUTPUT"
           fi
 
       - name: SSH Remote Commands
