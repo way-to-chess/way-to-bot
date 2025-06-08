@@ -50,9 +50,10 @@ jobs:
             bash ./docker/login.sh
 
             export TAG=${{ github.event.inputs.commit_hash }}
+            export ENV=${{ github.event.inputs.environment }}
             
             docker compose -f ${{ steps.vars.outputs.docker_compose_file }} pull app web
             docker compose -f ${{ steps.vars.outputs.docker_compose_file }} up -d app web
 
             # Cleanup
-            docker image prune -f
+            docker image prune -a -f

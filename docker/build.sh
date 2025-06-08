@@ -124,10 +124,33 @@ build_and_push() {
     log_info "Environment: ${ENVIRONMENT}"
 }
 
+cleanup_images() {
+    log_info "Starting cleanup of local images..."
+    
+    # Remove server image
+    if docker images "${IMAGE_NAME}:${SERVER_TAG}" --quiet | grep -q .; then
+        log_info "Removing server image..."
+        if ! docker rmi "${IMAGE_NAME}:${SERVER_TAG}"; then
+            log_warn "Failed to remove server image"
+        fi
+    fi
+
+    # Remove web image
+    if docker images "${IMAGE_NAME}:${WEB_TAG}" --quiet | grep -q .; then
+        log_info "Removing web image..."
+        if ! docker rmi "${IMAGE_NAME}:${WEB_TAG}"; then
+            log_warn "Failed to remove web image"
+        fi
+    fi
+
+    log_info "Cleanup completed"
+}
+
 main() {
     log_info "Starting docker build script"
     check_docker
     build_and_push
+    cleanup_images
 }
 
 main
