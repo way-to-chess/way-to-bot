@@ -14,6 +14,7 @@ import dayjs from "dayjs";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
 import {Button} from "../Button/Button";
+import {sortByKey} from "../Utils/SortByKey";
 
 interface IStatItem {
     icon: ReactNode;
@@ -137,7 +138,7 @@ const SingleUserPage = () => {
             </Block>
 
             <Block title={"История событий"}>
-                {events.map((event) => <HistoryItem {...event} key={event.id}/>)}
+                {sortByKey(events, "dateTime").map((event) => <HistoryItem {...event} key={event.id}/>)}
             </Block>
         </div>
     </div>
