@@ -29,7 +29,7 @@ const UserListItem: FC<IUserListItemProps> = (
         <Link to={pathToUser} className={clsx(classes.user, className)}>
             {prefix}
 
-            <ImgWithContainer className={classes.userImg} previewUrl={photo?.url}/>
+            <ImgWithContainer className={classes.userImg} previewUrl={photo?.previewUrl}/>
             <div className={classes.userInfo}>
                 <Typography
                     type={"title5"}

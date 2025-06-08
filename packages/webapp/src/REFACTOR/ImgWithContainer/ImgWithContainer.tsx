@@ -37,7 +37,7 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
                 <div className={classes.emptyImg}>
                     <CameraIcon width={"70%"} height={"70%"}/>
                 </div>
-            ) : <img alt={"image"} src={loadedSrc}/>}
+            ) : <img alt={"image"} src={loadedSrc} loading={"lazy"}/>}
         </div>
     );
 };
