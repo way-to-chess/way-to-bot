@@ -10,9 +10,7 @@ const encodeToBase64Binary = (str: string) => {
   return window.btoa(binary);
 };
 
-const getUrlWithSearchParams = (
-  url: string,
-  options: TCommonGetManyOptions,
-): string => `${url}?q=${encodeToBase64Binary(JSON.stringify(options))}`;
+const getUrlWithSearchParams = (url: string, options: TCommonGetManyOptions) =>
+  `${url}?q=${encodeToBase64Binary(JSON.stringify(options))}`;
 
 export { getUrlWithSearchParams };
