@@ -9,7 +9,7 @@ import {SortIcon} from "../Icons/SortIcon";
 import {ChangeEvent, useRef, useState} from "react";
 import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
-import {RefetchError} from "../Error/Error";
+import {Error, RefetchError} from "../Error/Error";
 import {Options} from "../Options/Options";
 import {EOperandPredicate, EPredicate, ESortDirection} from "@way-to-bot/shared/api/enums";
 import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
@@ -118,7 +118,7 @@ const LeaderboardPage = () => {
             <Typography type={"title2"} value={"Лидерборд"}/>
 
             <div className={classes.top}>
-                <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange}/>
+                <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange} type={"search"}/>
 
                 <BottomSheet title={"Сортировка"} trigger={renderSortButton}>
                     <Options options={SORT_OPTIONS} value={sort} onValueChange={onValueChange}/>
@@ -126,14 +126,16 @@ const LeaderboardPage = () => {
             </div>
             {
                 isFetching ? <Loading/> : <div className={classes.users}>
-                    {users?.map((user, index) => (
-                        <UserListItem
-                            {...user}
-                            prefix={index + 1}
-                            className={classes.user}
-                            key={user.id}
-                        />
-                    ))}
+                    {
+                        users?.length ? users.map((user, index) => (
+                            <UserListItem
+                                {...user}
+                                prefix={index + 1}
+                                className={classes.user}
+                                key={user.id}
+                            />
+                        )) : <Error title={"Ничего не нашли"} text={"Имя или фамилия должны точно совпадать"}/>
+                    }
                 </div>
             }
 
