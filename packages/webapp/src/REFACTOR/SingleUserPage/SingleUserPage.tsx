@@ -119,7 +119,11 @@ const SingleUserPage = () => {
             <ImgWithContainer previewUrl={photo?.url} className={classes.img}/>
             <div className={classes.name}>
                 <Typography type={"title3"} value={getUserFullName(firstName, lastName)}/>
-                {username ? <Typography type={"text1"} value={username} color={"textColor2"}/> : null}
+                {username ? <a href={`https://t.me/${username?.replace("@", "")}`}
+                               rel={"noreferrer noopener"}
+                               target={"_blank"}>
+                    <Typography type={"text1"} value={username} color={"textColor2"}/>
+                </a> : null}
             </div>
         </div>
         <div className={classes.content}>
