@@ -1,0 +1,31 @@
+.error {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 0 32px;
+}
+
+.imgContainer {
+    background-image: image-set(
+            url("../Assets/Images/Error/webapp.png") 1x,
+            url("../Assets/Images/Error/webapp@2x.png") 2x
+    );
+    background-position: center;
+    background-size: cover;
+    width: 240px;
+    height: 240px;
+    flex-shrink: 0;
+    margin-bottom: 40px;
+}
+
+.title {
+    margin-bottom: 12px;
+}
+
+.text {
+    margin-bottom: 32px;
+    white-space: break-spaces;
+}
