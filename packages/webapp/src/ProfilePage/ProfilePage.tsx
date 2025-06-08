@@ -5,7 +5,7 @@ import {Button} from "../Button/Button";
 import {fileApi} from "../Store/File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../Store/User/UserApi";
-import {Input} from "../Input/Input";
+import {Field} from "../Field/Field";
 import {useSelector} from "react-redux";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {Navigate} from "react-router";
@@ -80,10 +80,35 @@ const FileInput: FC<IFileInput> = ({setFileId}) => {
     );
 };
 
+const validateValue = (value: string) => {
+    let error: undefined | string = undefined;
+
+    // Проверка на пустоту
+    if (!value.trim()) {
+        error = 'Обязательное поле';
+    }
+    // Проверка на минимальную длину
+    else if (value.trim().length < 2) {
+        error = 'Минимум 2 символа';
+    }
+    // Проверка на разрешенные символы
+    else if (!/^[\p{L}\s\-']+$/u.test(value)) {
+        error = 'Допустимы только буквы, дефисы и апострофы';
+    }
+    // Проверка на максимальную длину
+    else if (value.length > 30) {
+        error = 'Максимум 30 символов';
+    }
+
+    return error;
+}
+
 const CreateProfile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
     const [fileId, setFileId] = useState<undefined | number>(undefined);
+    const [firstNameError, setFirstNameError] = useState<string | undefined>(undefined);
+    const [lastNameError, setLastNameError] = useState<string | undefined>(undefined);
 
     const [createUser] = userApi.useCreateUserMutation();
 
@@ -91,6 +116,16 @@ const CreateProfile = () => {
 
     const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
         e.preventDefault();
+
+        const _firstNameError = validateValue(firstName)
+        const _lastNameError = validateValue(lastName)
+
+        if (_firstNameError || _lastNameError) {
+            setFirstNameError(_firstNameError)
+            setLastNameError(_lastNameError)
+            return
+        }
+
         createUser({
             firstName,
             lastName,
@@ -109,18 +144,45 @@ const CreateProfile = () => {
 
     const onFirstNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setFirstName(e.target.value ?? "");
+        setFirstNameError(undefined)
     };
 
     const onLastNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
         setLastName(e.target.value ?? "");
+        setLastNameError(undefined)
+
     };
+
+    const onFirstNameBlur = () => {
+        setFirstNameError(validateValue(firstName))
+    }
+    const onLastNameBlur = () => {
+        setLastNameError(validateValue(firstName))
+    }
 
     return (
         <form className={classes.page} onSubmit={onSubmit}>
             <FileInput setFileId={setFileId}/>
 
-            <Input placeholder={"Имя"} value={firstName} onChange={onFirstNameChange}/>
-            <Input placeholder={"Фамилия"} value={lastName} onChange={onLastNameChange}/>
+            <Field
+                error={firstNameError}
+                inputProps={{
+                    onBlur: onFirstNameBlur,
+                    placeholder: "Имя",
+                    value: firstName,
+                    onChange: onFirstNameChange
+                }}
+            />
+
+            <Field
+                error={lastNameError}
+                inputProps={{
+                    onBlur: onLastNameBlur,
+                    placeholder: "Фамилия",
+                    value: lastName,
+                    onChange: onLastNameChange
+                }}
+            />
 
             <Button
                 type={"submit"}

@@ -5,10 +5,11 @@ import classes from "./Input.module.css";
 
 interface IInputProps extends BaseInput.Props {
     before?: ReactNode
+    invalid?: boolean
 }
 
-const Input: FC<IInputProps> = ({children, className, before, ...rest}) => {
-    return <div className={clsx(classes.container, className)}>
+const Input: FC<IInputProps> = ({children, className, before, invalid, ...rest}) => {
+    return <div className={clsx(classes.container, className, invalid && classes.invalid)}>
         {before}
         <BaseInput className={classes.input} {...rest}/>
     </div>
