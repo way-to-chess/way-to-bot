@@ -22,6 +22,9 @@
     background: var(--background-color-1);
     width: 100%;
     transition: all 150ms;
+    max-height: 100%;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .popup[data-ending-style], .popup[data-starting-style] {

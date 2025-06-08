@@ -106,11 +106,13 @@
     display: flex;
     flex-direction: column;
     gap: 4px;
+    overflow: auto;
 }
 
 .participant {
     height: 60px;
     gap: 4px;
+    flex: 0 0 60px;
 }
 
 .participant:not(:last-child) {
