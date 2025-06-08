@@ -36,7 +36,7 @@ const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username})
     return (
         <a
             className={classes.host}
-            href={`https://web.telegram.org/k/#${username}`}
+            href={`https://t.me/${username?.replace("@", "")}`}
             rel={"noreferrer noopener"}
             target={"_blank"}
         >
