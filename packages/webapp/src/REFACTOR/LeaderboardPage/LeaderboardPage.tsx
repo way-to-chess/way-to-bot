@@ -6,12 +6,13 @@ import {Typography} from "../Typography/Typography";
 import {Input} from "../Input/Input";
 import {SearchIcon} from "../Icons/SearchIcon";
 import {SortIcon} from "../Icons/SortIcon";
-import {useState} from "react";
+import {ChangeEvent, useRef, useState} from "react";
 import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {RefetchError} from "../Error/Error";
 import {Options} from "../Options/Options";
-import {ESortDirection} from "@way-to-bot/shared/api/enums";
+import {EOperandPredicate, EPredicate, ESortDirection} from "@way-to-bot/shared/api/enums";
+import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 const renderSortButton: TBottomSheetTrigger = (props) => {
     return <button className={classes.sortButton} {...props}>
@@ -57,12 +58,51 @@ const Loading = () => {
 
 const LeaderboardPage = () => {
     const [sort, setSort] = useState<TISortOptionValue>(DEFAULT_SORT_OPTION.value)
-    const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery({
+    const [searchValue, setSearchValue] = useState("")
+    const timeout = useRef<ReturnType<typeof setTimeout>>()
+
+    const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        if (timeout.current) {
+            clearTimeout(timeout.current)
+        }
+
+        timeout.current = setTimeout(() => {
+            setSearchValue(e.target.value);
+        }, 1000)
+    }
+    const options: TCommonGetManyOptions = {
         sort: {
             field: sort[0],
             direction: sort[1]
         },
-    });
+    }
+
+    const searchValueToSend = searchValue.trim()
+
+    if (searchValueToSend) {
+        options.where = {
+            predicate: EPredicate.OR,
+            operands: [
+                {
+                    field: "firstName",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValueToSend
+                },
+                {
+                    field: "lastName",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValueToSend
+                },
+                {
+                    field: "username",
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValueToSend
+                }
+            ]
+        }
+    }
+
+    const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery(options);
 
 
     if (isError) {
@@ -78,7 +118,7 @@ const LeaderboardPage = () => {
             <Typography type={"title2"} value={"Лидерборд"}/>
 
             <div className={classes.top}>
-                <Input placeholder={"Найти участника"} before={SearchIcon}/>
+                <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange}/>
 
                 <BottomSheet title={"Сортировка"} trigger={renderSortButton}>
                     <Options options={SORT_OPTIONS} value={sort} onValueChange={onValueChange}/>
