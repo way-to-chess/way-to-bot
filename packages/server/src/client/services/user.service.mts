@@ -28,25 +28,30 @@ export class ClientUserService {
   }
 
   async getByTgIdOrUsername(tgId: string, username: string) {
-    const user = await this._userRepository.getOne({
-      where: {
-        ...(tgId && { tgId: String(tgId) }),
-        ...(username && { username: `@${username}` }),
-      },
+    const userByTgId = tgId && await this._userRepository.getOne({
+      where: { tgId: String(tgId) }
     });
+  
+    if (userByTgId) {
+      return userByTgId;
+    }
 
-    if (!user) {
+    const userByUsername = username && await this._userRepository.getOne({
+      where: { username: `@${username}` }
+    });
+  
+    if (!userByUsername) {
       throw new NotFoundError(
         `User with tgId: ${tgId} and username: ${username} not found`,
       );
     }
 
-    if (tgId && !user.tgId) {
-      user.tgId = String(tgId);
-      await this._userRepository.update(user.id, { tgId: String(tgId) });
+    if (tgId && !userByUsername.tgId) {
+      userByUsername.tgId = String(tgId);
+      await this._userRepository.update(userByUsername.id, { tgId: String(tgId) });
     }
 
-    return user;
+    return userByUsername;
   }
 
   async create(payload: TClientUserCreatePayload) {
