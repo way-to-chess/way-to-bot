@@ -9,7 +9,6 @@ import {
   UpdateDateColumn,
   ManyToOne,
   OneToMany,
-  Unique,
   type Relation,
   VirtualColumn,
 } from "typeorm";
@@ -19,26 +18,26 @@ import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
+import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
 
 @Entity("users")
-@Unique(["username", "firstName", "lastName"])
 export class UserEntity implements IUserEntity {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column("varchar", { unique: true, nullable: true, length: 255 })
+  @Column({ type: "varchar", unique: true, nullable: true, length: 64 })
   username?: string | null = null;
 
-  @Column("bigint", { unique: true, nullable: true, name: "tg_id" })
+  @Column({type: "bigint", unique: true, nullable: true, name: "tg_id" })
   tgId?: string | null = null;
 
   @Column({ type: "varchar", length: 255, unique: true, nullable: true })
   email?: string | null;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 50 })
   firstName!: string;
 
-  @Column({ type: "varchar", length: 255 })
+  @Column({ type: "varchar", length: 50 })
   lastName!: string;
 
   @Column({ type: "date", nullable: true, name: "birth_date" })
@@ -46,7 +45,7 @@ export class UserEntity implements IUserEntity {
 
   @VirtualColumn({
     type: "integer",
-    query: (alias) => `
+    query: (alias: any) => `
       EXTRACT(YEAR FROM AGE(${alias}.birth_date))::integer
     `,
   })
@@ -122,18 +121,31 @@ export class UserEntity implements IUserEntity {
   @BeforeInsert()
   @BeforeUpdate()
   trimValues() {
-    if (this.username) {
+    if (this.username !== undefined && this.username !== null) {
       this.username = this.username.trim();
+
+      if (!this.username || this.username === "") {
+        throw new BadRequestError("Username is required");
+      }
+
       this.username =
         this.username.charAt(0) === "@" ? this.username : "@" + this.username;
     }
 
-    if (this.firstName) {
+    if (this.firstName !== undefined && this.firstName !== null) {
       this.firstName = this.firstName.trim();
+
+      if (!this.firstName || this.firstName === "") {
+        throw new BadRequestError("First name is required");
+      }
     }
 
-    if (this.lastName) {
+    if (this.lastName !== undefined && this.lastName !== null) {
       this.lastName = this.lastName.trim();
+
+      if (!this.lastName || this.lastName === "") {
+        throw new BadRequestError("Last name is required");
+      }
     }
   }
 }
