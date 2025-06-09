@@ -56,8 +56,17 @@ jobs:
             export TAG=${{ github.event.inputs.commit_hash }}
             export ENV=${{ github.event.inputs.environment }}
             
+            echo "=== Deployment Info ==="
+            echo "Environment: $ENV"
+            echo "Tag: $TAG"
+            echo "===================="
+            
             docker compose -f ${{ steps.vars.outputs.docker_compose_file }} pull app web
             docker compose -f ${{ steps.vars.outputs.docker_compose_file }} up -d app web
+
+            echo "=== Containers Status ==="
+            docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
+            echo "===================="
 
             # Cleanup
             docker image prune -a -f

@@ -129,7 +129,6 @@ cleanup_images() {
     
     # Remove server image
     if docker images "${IMAGE_NAME}:${SERVER_TAG}" --quiet | grep -q .; then
-        log_info "Removing server image..."
         if ! docker rmi "${IMAGE_NAME}:${SERVER_TAG}"; then
             log_warn "Failed to remove server image"
         fi
@@ -137,7 +136,6 @@ cleanup_images() {
 
     # Remove web image
     if docker images "${IMAGE_NAME}:${WEB_TAG}" --quiet | grep -q .; then
-        log_info "Removing web image..."
         if ! docker rmi "${IMAGE_NAME}:${WEB_TAG}"; then
             log_warn "Failed to remove web image"
         fi
