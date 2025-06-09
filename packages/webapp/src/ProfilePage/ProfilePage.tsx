@@ -1,8 +1,5 @@
 import classes from "./ProfilePage.module.css";
-import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
-import {Typography} from "../Typography/Typography";
 import {Button} from "../Button/Button";
-import {fileApi} from "../Store/File/FileApi";
 import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
 import {userApi} from "../Store/User/UserApi";
 import {Field} from "../Field/Field";
@@ -10,35 +7,17 @@ import {useSelector} from "react-redux";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {Navigate} from "react-router";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
+import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
+import {Typography} from "../Typography/Typography";
+import {useUploadFile} from "../Hooks/UseUploadFile";
 
 interface IFileInput {
-    setFileId: (fileId: undefined | number) => void;
+    onChange: ChangeEventHandler<HTMLInputElement>
+    previewUrl: string | undefined;
+    clearPreviewUrl: () => void
 }
 
-const FileInput: FC<IFileInput> = ({setFileId}) => {
-    const [uploadFile] = fileApi.useUploadFileMutation();
-    const [previewUrl, setPreviewUrl] = useState<string | undefined>(undefined);
-
-    const onChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        const file = e.target.files?.item(0);
-
-        if (file) {
-            const formData = new FormData();
-            formData.append("file", file);
-
-            uploadFile(formData)
-                .unwrap()
-                .then(({url, id}) => {
-                    setFileId(id);
-                    setPreviewUrl(url);
-                });
-        }
-    };
-
-    const clearPreviewUrl = () => {
-        setFileId(undefined);
-        setPreviewUrl(undefined);
-    };
+const FileInput: FC<IFileInput> = ({onChange, previewUrl, clearPreviewUrl}) => {
 
     return (
         <div className={classes.preview}>
@@ -106,7 +85,7 @@ const validateValue = (value: string) => {
 const CreateProfile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const [fileId, setFileId] = useState<undefined | number>(undefined);
+    const {onChange, fileId, fileUrl, clearFile} = useUploadFile()
     const [firstNameError, setFirstNameError] = useState<string | undefined>(undefined);
     const [lastNameError, setLastNameError] = useState<string | undefined>(undefined);
 
@@ -162,7 +141,7 @@ const CreateProfile = () => {
 
     return (
         <form className={classes.page} onSubmit={onSubmit}>
-            <FileInput setFileId={setFileId}/>
+            <FileInput onChange={onChange} previewUrl={fileUrl} clearPreviewUrl={clearFile}/>
 
             <Field
                 error={firstNameError}

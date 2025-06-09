@@ -1,6 +1,6 @@
 import {Button} from "../../Button/Button";
 import classes from "./ParticipateEventButton.module.css";
-import {Dispatch, FC, memo, SetStateAction, useState} from "react";
+import {FC, memo, useRef, useState} from "react";
 import {eventApi} from "../../Store/Event/EventApi";
 import {EEventStatus} from "@way-to-bot/shared/api/enums";
 import {BottomSheet} from "../../BottomSheet/BottomSheet";
@@ -13,9 +13,17 @@ import {Typography} from "../../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {Skeleton} from "../../Skeleton/Skeleton";
 import clsx from "clsx";
-import {BanknoteIcon, ChevronDownIcon, CircleDollarSignIcon, CreditCardIcon, PaperclipIcon} from "lucide-react";
+import {
+    BanknoteIcon,
+    ChevronDownIcon,
+    CircleDollarSignIcon,
+    CreditCardIcon,
+    PaperclipIcon,
+    UploadIcon
+} from "lucide-react";
 import {IOption, Options} from "../../Options/Options";
 import {splitAmountAndCurrency} from "./SplitAmountAndCurrency";
+import {useUploadFile} from "../../Hooks/UseUploadFile";
 
 interface IWithEventId {
     eventId: string
@@ -51,6 +59,7 @@ const PAYMENT_METHODS: IOption<TPaymentMethod>[] = [
         description: "Оплата онлайн через приложение",
         icon: <CreditCardIcon color={"#007AFF"}/>,
         disabled: true
+
     },
     {
         value: "cash",
@@ -68,7 +77,7 @@ const PAYMENT_METHODS: IOption<TPaymentMethod>[] = [
 
 interface ISelectMethodProps {
     value: null | TPaymentMethod;
-    onChange: Dispatch<SetStateAction<TPaymentMethod | null>>
+    onChange: (method: TPaymentMethod | null) => void
 }
 
 const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
@@ -97,6 +106,7 @@ const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
         setOpen(false)
     }
 
+
     return <BottomSheet trigger={trigger} title={"Оплата"} open={open} onOpenChange={setOpen}>
         <Options options={PAYMENT_METHODS} value={value} onValueChange={onValueChange}/>
     </BottomSheet>
@@ -116,35 +126,60 @@ const Payment: FC<IWithEventId> = ({eventId}) => {
 
     const total = amount + (amountAndCurrency[1] ?? "")
 
-    return <BottomSheet title={"Оплата"}
-                        className={classes.popup}
-                        description={"Добавьте способ оплаты и оплатите"}
-                        trigger={<Button className={clsx(classes.button, classes.open)} value={"Перейти к оплате"}/>}>
+
+    const fileInputRef = useRef<HTMLInputElement>(null)
+
+    const setPaymentMethodChange = (method: TPaymentMethod | null) => {
+        if (method === "receipt") {
+            fileInputRef.current?.click()
+        }
+
+        setPaymentMethod(method)
+    }
+
+    const {onChange, fileName, isLoading} = useUploadFile()
+    return <>
         <div className={clsx(classes.block, classes.paymentMethod)}>
             <Typography type={"title4"} value={"Способ оплаты"}/>
-            <SelectMethod value={paymentMethod} onChange={setPaymentMethod}/>
+            <SelectMethod value={paymentMethod} onChange={setPaymentMethodChange}/>
         </div>
 
         <div className={clsx(classes.block, classes.total)}>
-            <Typography type={"title4"} value={"К оплате"}/>
-            <div className={classes.totalItems}>
-                <div className={classes.totalItem}>
-                    <Typography type={"text2"} color={"textColor2"} value={"Участник №1"}/>
-                    <Typography type={"title6"} value={amountAndCurrency.join("")}/>
-                </div>
-            </div>
+            {/*<Typography type={"title4"} value={"К оплате"}/>*/}
+            {/*<div className={classes.totalItems}>*/}
+            {/*    <div className={classes.totalItem}>*/}
+            {/*        <Typography type={"text2"} color={"textColor2"} value={"Участник №1"}/>*/}
+            {/*        <Typography type={"title6"} value={amountAndCurrency.join("")}/>*/}
+            {/*    </div>*/}
+            {/*</div>*/}
 
 
             <div className={classes.totalItem}>
-                <Typography type={"title4"} value={"Итого"}/>
+                <Typography type={"title4"} value={"К оплате"}/>
                 <Typography type={"title4"} value={total}/>
             </div>
 
+            <Button variant={"secondary"} as={"label"} loading={isLoading} className={classes.upload}>
+                <input type={"file"} onChange={onChange}/>
+                <UploadIcon/>
+                {fileName ?? "Загрузить документ"}
+            </Button>
+
         </div>
 
-        <Button className={clsx(classes.button, classes.open)} disabled={!paymentMethod}>
-            {"Отправить заявку"}
-        </Button>
+        <Button className={clsx(classes.button, classes.open)} value={"Отправить запрос"}/>
+    </>
+}
+
+
+const AddParticipant = () => {
+    const trigger = (<button>
+        <Typography type={"buttonTitle"} color={"mainColor"} value={"+ Добавить участника"}/>
+    </button>)
+
+
+    return <BottomSheet trigger={trigger} title={"Добавить участника"}>
+        {"hello"}
     </BottomSheet>
 }
 
@@ -162,15 +197,10 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
 
     return <BottomSheet className={classes.popup}
                         trigger={<Button className={classes.button} value={"Участвовать"}/>}
-                        title={"Участники заявки"}
-                        description={"Проверь данные или добавь ещё участника"}>
+                        title={"Отправить заявку"}
+                        description={"Проверь данные"}>
         <User id={authId}/>
-        <button>
-            <Typography type={"buttonTitle"} color={"mainColor"} value={"+ Добавить участника"}/>
-        </button>
-        <Button className={clsx(classes.button, classes.open)}>
-            {"Перейти к оплате"}
-        </Button>
+        {/*<AddParticipant/>*/}
         <Payment eventId={eventId}/>
     </BottomSheet>
 

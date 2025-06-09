@@ -1,27 +1,34 @@
-import {AnchorHTMLAttributes, ButtonHTMLAttributes, CSSProperties, FC, ReactNode, Ref,} from "react";
+import {
+    AnchorHTMLAttributes,
+    ButtonHTMLAttributes,
+    CSSProperties,
+    FC,
+    LabelHTMLAttributes,
+    ReactNode,
+    Ref,
+} from "react";
 import classes from "./Button.module.css";
 import clsx from "clsx";
 import {Link} from "react-router";
 
 interface IButtonBaseProps {
-    variant?: "primary";
+    variant?: "primary" | "secondary";
     size?: "L";
-    as?: "button" | "a" | "link";
+    as?: "button" | "a" | "link" | "label";
     to?: string;
     textAlign?: CSSProperties["textAlign"];
     ref?: Ref<HTMLAnchorElement>;
     value?: ReactNode;
     loading?: boolean;
+    disabled?: boolean
 }
 
 type IButtonProps = IButtonBaseProps &
     (
         | ({ as?: "button" } & ButtonHTMLAttributes<HTMLButtonElement>)
         | ({ as: "a" } & AnchorHTMLAttributes<HTMLAnchorElement>)
-        | ({ as: "link"; to: string } & Omit<
-        AnchorHTMLAttributes<HTMLAnchorElement>,
-        "href"
-    >)
+        | ({ as: "link"; to: string } & Omit<AnchorHTMLAttributes<HTMLAnchorElement>, "href">)
+        | ({ as: "label" } & LabelHTMLAttributes<HTMLLabelElement>)
         );
 
 const Button: FC<IButtonProps> = (
@@ -35,20 +42,23 @@ const Button: FC<IButtonProps> = (
         textAlign,
         value,
         loading,
+        disabled,
         ...props
     }) => {
+    const buttonProps = loading ? {...props, disabled: true} : props;
+
     const buttonClassName = clsx(
         classes.button,
         classes[variant],
         classes[size],
         loading && classes.loading,
+        (disabled || loading) && classes.disabled,
         className,
     );
 
     const style = textAlign ? {textAlign} : undefined;
 
     // When loading, we should disable the button to prevent multiple submissions
-    const buttonProps = loading ? { ...props, disabled: true } : props;
 
     if (as === "link" && to) {
         return (
@@ -73,6 +83,18 @@ const Button: FC<IButtonProps> = (
                 {children || value}
             </a>
         );
+    }
+
+    if (as === "label") {
+        return (
+            <label
+                className={buttonClassName}
+                style={style}
+                {...(buttonProps as LabelHTMLAttributes<HTMLLabelElement>)}
+            >
+                {children || value}
+            </label>
+        )
     }
 
     return (

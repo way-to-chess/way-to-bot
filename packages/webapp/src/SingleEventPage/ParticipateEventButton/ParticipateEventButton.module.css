@@ -76,3 +76,11 @@ div.popup {
     width: 100%;
     align-items: center;
 }
+
+.upload {
+    cursor: pointer;
+}
+
+.upload input {
+    display: none;
+}
