@@ -3,6 +3,7 @@ import {
   FindManyOptions,
   FindOptionsWhere,
   In,
+  IsNull,
   Like,
   Not,
 } from "typeorm";
@@ -63,9 +64,9 @@ export class GetManyOptionsDTO<Entity> {
   private getPredicate(predicate: EOperandPredicate, value: any) {
     switch (predicate) {
       case EOperandPredicate.EQ:
-        return Equal(value);
+        return Equal(value === null ? IsNull() : value);
       case EOperandPredicate.NOT_EQ:
-        return Not(value);
+        return Not(value === null ? IsNull() : value);
       case EOperandPredicate.IN:
         return In(value);
       case EOperandPredicate.NOT_IN:
