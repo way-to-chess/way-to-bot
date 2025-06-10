@@ -28,11 +28,23 @@ export class TgBotService {
         });
 
         let usersCount = 0;
+        let failedCount = 0;
         for (const u of usersWithTgId) {
-          await this._bot.sendMessage(u.tgId!, message);
-          usersCount++;
-          if (usersCount === 25) {
-            await new Promise((resolve) => setTimeout(resolve, 1000));
+          try {
+            await this._bot.sendMessage(u.tgId!, message);
+            usersCount++;
+            if (usersCount === 25) {
+              await new Promise((resolve) => setTimeout(resolve, 1000));
+            }
+          } catch (e: any) {
+            failedCount++;
+            logger.error(
+              `Failed to send message to user. TG ID: ${u.tgId} --  ${u.lastName} ${u.firstName}.  Failed count: ${failedCount}`,
+              {
+                message: e.message,
+                stack: e.stack,
+              },
+            );
           }
         }
       } catch (e: any) {
