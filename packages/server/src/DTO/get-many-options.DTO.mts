@@ -2,9 +2,9 @@ import {
   Equal,
   FindManyOptions,
   FindOptionsWhere,
+  ILike,
   In,
   IsNull,
-  Like,
   Not,
 } from "typeorm";
 import {
@@ -72,7 +72,7 @@ export class GetManyOptionsDTO<Entity> {
       case EOperandPredicate.NOT_IN:
         return Not(In(value));
       case EOperandPredicate.LIKE:
-        return Like(`%${value}%`);
+        return ILike(`%${value}%`);
       default:
         throw new Error(`Unknown predicate ${predicate}`);
     }
