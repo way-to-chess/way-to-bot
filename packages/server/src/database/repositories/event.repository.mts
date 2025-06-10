@@ -1,12 +1,14 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
-import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import {
   TAdminEventCreatePayload,
   TAdminEventUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/event.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class EventRepository {
@@ -40,23 +42,23 @@ export class EventRepository {
     });
   }
 
-  async getMany(
-    options?: FindManyOptions<EventEntity>,
-    queryRunner?: QueryRunner,
-  ) {
-    const [data, count] = await this.getRepository(queryRunner).findAndCount({
-      relations: {
-        location: true,
-        preview: true,
-        eventLeagues: {
-          participants: {
-            user: true,
-          },
-        },
-        host: true,
-      },
-      ...options,
-    });
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo
+      .createQueryBuilder("event")
+      .leftJoinAndSelect("event.location", "location")
+      .leftJoinAndSelect("event.preview", "preview")
+      .leftJoinAndSelect("event.eventLeagues", "eventLeagues")
+      .leftJoinAndSelect("eventLeagues.participants", "participants")
+      .leftJoinAndSelect("participants.user", "user")
+      .leftJoinAndSelect("event.host", "host");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<EventEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "event");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
 
     return {
       data,

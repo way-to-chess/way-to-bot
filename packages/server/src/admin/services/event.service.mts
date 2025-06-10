@@ -7,9 +7,8 @@ import {
   TAdminEventCreatePayload,
   TAdminEventUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/event.schema.js";
-import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 
 @injectable()
 export class AdminEventService {
@@ -18,8 +17,8 @@ export class AdminEventService {
     @inject(TgBotService) private readonly _tgBotService: TgBotService,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<EventEntity>) {
-    return this._eventRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._eventRepository.getMany(options);
   }
 
   async getById(id: number) {

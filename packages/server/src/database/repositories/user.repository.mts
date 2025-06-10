@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
@@ -11,6 +11,8 @@ import {
   TClientUserCreatePayload,
   TClientUserUpdatePayload,
 } from "@way-to-bot/shared/api/zod/client/user.schema.js";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class UserRepository {
@@ -41,16 +43,18 @@ export class UserRepository {
     });
   }
 
-  async getMany(
-    options?: FindManyOptions<UserEntity>,
-    queryRunner?: QueryRunner,
-  ) {
-    const [data, count] = await this.getRepository(queryRunner).findAndCount({
-      relations: {
-        photo: true,
-      },
-      ...options,
-    });
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo.createQueryBuilder("user");
+
+    queryBuilder.leftJoinAndSelect("user.photo", "photo");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<UserEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "user");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
 
     return {
       data,

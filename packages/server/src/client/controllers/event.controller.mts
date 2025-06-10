@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { ClientEventService } from "@way-to-bot/server/client/services/event.service.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import {
   ClientDTOEventGetMany,
   ClientDTOEventGetManyResponse,
@@ -18,13 +16,13 @@ export class ClientEventController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<EventEntity>;
+    const options = req.getManyOptions;
     const result = await this._eventService.getMany(options);
     const data = new ClientDTOEventGetManyResponse(
       result.data.map((i) => new ClientDTOEventGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );

@@ -1,15 +1,12 @@
 import { inject, injectable } from "inversify";
-import {
-  DeepPartial,
-  FindManyOptions,
-  FindOneOptions,
-  QueryRunner,
-} from "typeorm";
+import { DeepPartial, FindOneOptions, QueryRunner } from "typeorm";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { LocationEntity } from "@way-to-bot/server/database/entities/location.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TAdminLocationCreatePayload } from "@way-to-bot/shared/api/zod/admin/location.schema.js";
 import { TAdminLeagueUpdatePayload } from "@way-to-bot/shared/api/zod/admin/league.schema.js";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class LocationRepository {
@@ -22,12 +19,19 @@ export class LocationRepository {
     return this._dbService.dataSource.getRepository(LocationEntity);
   }
 
-  async getMany(
-    options?: FindManyOptions<LocationEntity>,
-    queryRunner?: QueryRunner,
-  ) {
-    const [data, count] =
-      await this.getRepository(queryRunner).findAndCount(options);
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo
+      .createQueryBuilder("location")
+      .leftJoinAndSelect("location.preview", "preview");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<LocationEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "location");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
     return {
       data,
       count,

@@ -1,13 +1,12 @@
 import { inject, injectable } from "inversify";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import {
   TClientUserCreatePayload,
   TClientUserUpdatePayload,
 } from "@way-to-bot/shared/api/zod/client/user.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
-import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 
 @injectable()
 export class ClientUserService {
@@ -15,8 +14,8 @@ export class ClientUserService {
     @inject(UserRepository) private readonly _userRepository: UserRepository,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<UserEntity>) {
-    return this._userRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._userRepository.getMany(options);
   }
 
   async getById(id: number) {
@@ -28,18 +27,22 @@ export class ClientUserService {
   }
 
   async getByTgIdOrUsername(tgId: string, username: string) {
-    const userByTgId = tgId && await this._userRepository.getOne({
-      where: { tgId: String(tgId) }
-    });
-  
+    const userByTgId =
+      tgId &&
+      (await this._userRepository.getOne({
+        where: { tgId: String(tgId) },
+      }));
+
     if (userByTgId) {
       return userByTgId;
     }
 
-    const userByUsername = username && await this._userRepository.getOne({
-      where: { username: `@${username}` }
-    });
-  
+    const userByUsername =
+      username &&
+      (await this._userRepository.getOne({
+        where: { username: `@${username}` },
+      }));
+
     if (!userByUsername) {
       throw new NotFoundError(
         `User with tgId: ${tgId} and username: ${username} not found`,
@@ -48,7 +51,9 @@ export class ClientUserService {
 
     if (tgId && !userByUsername.tgId) {
       userByUsername.tgId = String(tgId);
-      await this._userRepository.update(userByUsername.id, { tgId: String(tgId) });
+      await this._userRepository.update(userByUsername.id, {
+        tgId: String(tgId),
+      });
     }
 
     return userByUsername;

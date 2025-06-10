@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import {
@@ -8,6 +8,8 @@ import {
   TClientParticipateRequestUpdatePayload,
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { TAdminParticipateRequestUpdatePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class ParticipateRequestRepository {
@@ -34,19 +36,28 @@ export class ParticipateRequestRepository {
     });
   }
 
-  async getMany(
-    options?: FindManyOptions<ParticipateRequestEntity>,
-    queryRunner?: QueryRunner,
-  ) {
-    const [data, count] = await this.getRepository(queryRunner).findAndCount({
-      relations: {
-        receipt: true,
-        user: { photo: true },
-        event: true,
-      },
-      ...options,
-    });
-    return { data, count };
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo
+      .createQueryBuilder("participateRequest")
+      .leftJoinAndSelect("participateRequest.receipt", "receipt")
+      .leftJoinAndSelect("participateRequest.user", "user")
+      .leftJoinAndSelect("user.photo", "userPhoto")
+      .leftJoinAndSelect("participateRequest.event", "event");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<ParticipateRequestEntity>(
+        options,
+      );
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "participateRequest");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      count,
+    };
   }
 
   async create(

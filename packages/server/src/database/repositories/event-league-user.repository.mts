@@ -2,6 +2,8 @@ import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { FindOneOptions, FindOptionsWhere, QueryRunner } from "typeorm";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class EventLeagueUserRepository {
@@ -20,6 +22,28 @@ export class EventLeagueUserRepository {
   ) {
     const repo = this.getRepository(queryRunner);
     return repo.findOne(options);
+  }
+
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo
+      .createQueryBuilder("eventLeagueUser")
+      .leftJoinAndSelect("eventLeagueUser.user", "user")
+      .leftJoinAndSelect("eventLeagueUser.eventLeague", "eventLeague");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<EventLeagueUserEntity>(
+        options,
+      );
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "eventLeagueUser");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      count,
+    };
   }
 
   addRows(eluList: EventLeagueUserEntity[], queryRunner?: QueryRunner) {

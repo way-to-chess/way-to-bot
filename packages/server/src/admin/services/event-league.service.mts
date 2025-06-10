@@ -9,7 +9,6 @@ import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
 import { AdminEventLeagueUserService } from "@way-to-bot/server/admin/services/event-league-user.service.mjs";
-import { LeagueRepository } from "@way-to-bot/server/database/repositories/league.repository.mjs";
 
 @injectable()
 export class AdminEventLeagueService {

@@ -12,18 +12,22 @@ export const PaginationSchema = z
   })
   .strict();
 
-export const WhereOperand = z.object({
-  field: z.string(),
-  predicate: z.nativeEnum(EOperandPredicate),
-  value: z.any(),
-});
-
-export const WhereSchema = z
+export const BaseOperand = z
   .object({
-    predicate: z.nativeEnum(EPredicate),
-    operands: z.array(WhereOperand),
+    field: z.string(),
+    predicate: z.nativeEnum(EOperandPredicate),
+    value: z.any(),
   })
   .strict();
+
+export const WhereSchema: z.ZodType<any> = z.lazy(() =>
+  z
+    .object({
+      predicate: z.nativeEnum(EPredicate),
+      operands: z.array(z.union([BaseOperand, WhereSchema])),
+    })
+    .strict(),
+);
 
 export const SortSchema = z
   .object({
@@ -40,6 +44,8 @@ export const CommonSchemaGetManyOptions = z
   })
   .strict();
 
+export type TBaseOperand = z.infer<typeof BaseOperand>;
+export type TWhereSchema = z.infer<typeof WhereSchema>;
 export type TCommonGetManyOptions = z.infer<typeof CommonSchemaGetManyOptions>;
 export type TCommonPagination = z.infer<typeof PaginationSchema>;
 export type TCommonWhere = z.infer<typeof WhereSchema>;

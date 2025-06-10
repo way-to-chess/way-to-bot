@@ -1,34 +1,34 @@
 import { inject, injectable } from "inversify";
 import { ClientUserService } from "@way-to-bot/server/client/services/user.service.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import {
-  ClientDTOUserCreateResponse,
   ClientDTOUserGetMany,
   ClientDTOUserGetManyResponse,
   ClientDTOUserGetOne,
   ClientDTOUserGetOneResponse,
+  ClientDTOUserCreateResponse,
   ClientDTOUserUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/client/user.DTO.js";
-import { Response, Request } from "express";
+import { Request, Response } from "express";
 
 @injectable()
 export class ClientUserController {
   constructor(
-    @inject(ClientUserService) private _userService: ClientUserService,
+    @inject(ClientUserService)
+    private readonly _userService: ClientUserService,
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<UserEntity>;
+    const options = req.getManyOptions;
     const result = await this._userService.getMany(options);
     const data = new ClientDTOUserGetManyResponse(
       result.data.map((i) => new ClientDTOUserGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );
+
     res.status(200).send(data);
   }
 

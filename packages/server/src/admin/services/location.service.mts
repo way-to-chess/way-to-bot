@@ -5,9 +5,8 @@ import {
   TAdminLocationCreatePayload,
   TAdminLocationUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/location.schema.js";
-import { LocationEntity } from "@way-to-bot/server/database/entities/location.entity.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 
 @injectable()
 export class AdminLocationService {
@@ -16,8 +15,8 @@ export class AdminLocationService {
     private readonly _locationRepository: LocationRepository,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<LocationEntity>) {
-    return this._locationRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._locationRepository.getMany(options);
   }
 
   async getOne(id: number) {

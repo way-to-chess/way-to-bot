@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminParticipateRequestService } from "@way-to-bot/server/admin/services/participate-request.service.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import {
   AdminDTOParticipateRequestGetMany,
   AdminDTOParticipateRequestGetManyResponse,
@@ -18,17 +16,17 @@ export class AdminParticipateRequestController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options =
-      req.getManyOptions as GetManyOptionsDTO<ParticipateRequestEntity>;
+    const options = req.getManyOptions;
     const result = await this._participateRequestService.getMany(options);
     const data = new AdminDTOParticipateRequestGetManyResponse(
       result.data.map((i) => new AdminDTOParticipateRequestGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );
+
     res.status(200).send(data);
   }
 

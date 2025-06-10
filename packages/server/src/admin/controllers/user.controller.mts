@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminUserService } from "@way-to-bot/server/admin/services/user.service.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import {
   AdminDTOUserCreateResponse,
   AdminDTOUserDeleteResponse,
@@ -20,13 +18,13 @@ export class AdminUserController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<UserEntity>;
+    const options = req.getManyOptions;
     const result = await this._userService.getMany(options);
     const data = new AdminDTOUserGetManyResponse(
       result.data.map((i) => new AdminDTOUserGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );

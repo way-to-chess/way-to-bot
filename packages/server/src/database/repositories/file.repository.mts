@@ -1,8 +1,10 @@
 import { inject, injectable } from "inversify";
-import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class FileRepository {
@@ -19,8 +21,21 @@ export class FileRepository {
     return this.getRepository(queryRunner).findOne(options);
   }
 
-  getMany(options?: FindManyOptions<FileEntity>, queryRunner?: QueryRunner) {
-    return this.getRepository(queryRunner).find(options);
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo.createQueryBuilder("file");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<FileEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "file");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      count,
+    };
   }
 
   async create(

@@ -2,10 +2,6 @@ import { inject, injectable } from "inversify";
 import { Request, Response } from "express";
 import { ClientParticipateRequestService } from "@way-to-bot/server/client/services/participate-request.service.mjs";
 import {
-  TClientParticipateRequestCreatePayload,
-  TClientParticipateRequestUpdatePayload,
-} from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
-import {
   ClientDTOParticipateRequestCreateResponse,
   ClientDTOParticipateRequestDeleteResponse,
   ClientDTOParticipateRequestGetMany,
@@ -14,8 +10,6 @@ import {
   ClientDTOParticipateRequestGetOneResponse,
   ClientDTOParticipateRequestUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/client/participate-request.DTO.js";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 
 @injectable()
 export class ClientParticipateRequestController {
@@ -25,8 +19,7 @@ export class ClientParticipateRequestController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options =
-      req.getManyOptions as GetManyOptionsDTO<ParticipateRequestEntity>;
+    const options = req.getManyOptions;
     const result = await this._participateRequestService.getMany(
       req.user!.id,
       options,
@@ -34,8 +27,8 @@ export class ClientParticipateRequestController {
     const data = new ClientDTOParticipateRequestGetManyResponse(
       result.data.map((i) => new ClientDTOParticipateRequestGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );

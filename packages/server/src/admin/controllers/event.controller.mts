@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminEventService } from "@way-to-bot/server/admin/services/event.service.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import {
   AdminDTOEventCreateResponse,
   AdminDTOEventDeleteResponse,
@@ -21,16 +19,17 @@ export class AdminEventController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<EventEntity>;
+    const options = req.getManyOptions;
     const result = await this._eventService.getMany(options);
     const data = new AdminDTOEventGetManyResponse(
       result.data.map((i) => new AdminDTOEventGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );
+
     res.status(200).send(data);
   }
 

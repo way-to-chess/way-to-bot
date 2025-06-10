@@ -6,12 +6,11 @@ import { InternalError } from "@way-to-bot/server/common/errors/internal.error.m
 import { EventLeagueUserRepository } from "@way-to-bot/server/database/repositories/event-league-user.repository.mjs";
 import { EventLeagueRepository } from "@way-to-bot/server/database/repositories/event-league.repository.mjs";
 import { TAdminParticipateRequestApprovePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
 import { In } from "typeorm";
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -48,12 +47,11 @@ export class AdminParticipateRequestService {
         throw new InternalError("Participate request was not approved");
       }
 
-      const allEventLeaguesForEvent = await this._eventLeagueRepository.getMany(
-        {
-          relations: { league: true },
-          where: { eventId: updatedParticipateRequest.eventId },
-        },
-      );
+      const elRepo = this._eventLeagueRepository.getRepository(queryRunner);
+      const allEventLeaguesForEvent = await elRepo.find({
+        relations: { league: true },
+        where: { eventId: updatedParticipateRequest.eventId },
+      });
 
       const defaultEventLeague = allEventLeaguesForEvent.find(
         (l) => l.league.name === DEFAULT_LEAGUE_NAME,
@@ -120,7 +118,7 @@ export class AdminParticipateRequestService {
     }
   }
 
-  async getMany(options?: GetManyOptionsDTO<ParticipateRequestEntity>) {
-    return this._participateRequestRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._participateRequestRepository.getMany(options);
   }
 }

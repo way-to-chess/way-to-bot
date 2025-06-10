@@ -5,9 +5,8 @@ import {
   TAdminLeagueCreatePayload,
   TAdminLeagueUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/league.schema.js";
-import { LeagueEntity } from "@way-to-bot/server/database/entities/league.entity.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 
 @injectable()
 export class AdminLeagueService {
@@ -16,8 +15,8 @@ export class AdminLeagueService {
     private readonly _leagueRepository: LeagueRepository,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<LeagueEntity>) {
-    return this._leagueRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._leagueRepository.getMany(options);
   }
 
   async getOne(id: number) {

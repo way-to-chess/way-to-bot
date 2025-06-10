@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminLocationService } from "@way-to-bot/server/admin/services/location.service.mjs";
-import { LocationEntity } from "@way-to-bot/server/database/entities/location.entity.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import {
   AdminDTOLocationCreateResponse,
   AdminDTOLocationDeleteResponse,
@@ -21,16 +19,17 @@ export class AdminLocationController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<LocationEntity>;
+    const options = req.getManyOptions;
     const result = await this._locationService.getMany(options);
     const data = new AdminDTOLocationGetManyResponse(
       result.data.map((i) => new AdminDTOLocationGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );
+
     res.status(200).send(data);
   }
 

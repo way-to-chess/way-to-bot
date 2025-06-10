@@ -5,8 +5,8 @@ import {
   TClientParticipateRequestUpdatePayload,
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { EOperandPredicate, EPredicate } from "@way-to-bot/shared/api/enums";
 
 @injectable()
 export class ClientParticipateRequestService {
@@ -15,19 +15,21 @@ export class ClientParticipateRequestService {
     private readonly _participateRequestRepository: ParticipateRequestRepository,
   ) {}
 
-  async getMany(
-    userId: number,
-    options?: GetManyOptionsDTO<ParticipateRequestEntity>,
-  ) {
-    const findOptions = {
-      ...options?.getFindOptions,
-      where: {
-        ...options?.getFindOptions?.where,
-        userId,
-      },
+  async getMany(userId: number, options?: TCommonGetManyOptions) {
+    if (!options) {
+      options = {};
+    }
+    const savedOptionsWhere = options.where ? options.where : null;
+    options.where = {
+      predicate: EPredicate.AND,
+      operands: [
+        { field: "userId", predicate: EOperandPredicate.EQ, value: userId },
+      ],
     };
 
-    return this._participateRequestRepository.getMany(findOptions);
+    if (savedOptionsWhere) options.where.operands.push(savedOptionsWhere);
+
+    return this._participateRequestRepository.getMany(options);
   }
 
   async getById(id: number) {

@@ -5,9 +5,8 @@ import {
   TAdminUserUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/user.schema.js";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
-import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 
 @injectable()
 export class AdminUserService {
@@ -15,8 +14,8 @@ export class AdminUserService {
     @inject(UserRepository) private readonly _userRepository: UserRepository,
   ) {}
 
-  async getMany(options?: GetManyOptionsDTO<UserEntity>) {
-    return this._userRepository.getMany(options?.getFindOptions);
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._userRepository.getMany(options);
   }
 
   async getOne(id: number) {

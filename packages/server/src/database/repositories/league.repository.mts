@@ -1,17 +1,14 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import {
-  FindManyOptions,
-  FindOneOptions,
-  FindOptionsWhere,
-  QueryRunner,
-} from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { LeagueEntity } from "@way-to-bot/server/database/entities/league.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
   TAdminLeagueCreatePayload,
   TAdminLeagueUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/league.schema.js";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class LeagueRepository {
@@ -28,12 +25,17 @@ export class LeagueRepository {
     return this.getRepository(queryRunner).findOne(options);
   }
 
-  async getMany(
-    options?: FindManyOptions<LeagueEntity>,
-    queryRunner?: QueryRunner,
-  ) {
-    const [data, count] =
-      await this.getRepository(queryRunner).findAndCount(options);
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
+    const repo = this.getRepository(queryRunner);
+    const queryBuilder = repo.createQueryBuilder("league");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<LeagueEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "league");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
     return {
       data,
       count,

@@ -1,7 +1,5 @@
 import { inject, injectable } from "inversify";
 import { AdminLeagueService } from "@way-to-bot/server/admin/services/league.service.mjs";
-import { LeagueEntity } from "@way-to-bot/server/database/entities/league.entity.mjs";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 import {
   AdminDTOLeagueCreateResponse,
   AdminDTOLeagueDeleteResponse,
@@ -21,16 +19,17 @@ export class AdminLeagueController {
   ) {}
 
   async getMany(req: Request, res: Response) {
-    const options = req.getManyOptions as GetManyOptionsDTO<LeagueEntity>;
+    const options = req.getManyOptions;
     const result = await this._leagueService.getMany(options);
     const data = new AdminDTOLeagueGetManyResponse(
       result.data.map((i) => new AdminDTOLeagueGetMany(i)),
       {
-        limit: options?.getFindOptions?.take,
-        offset: options?.getFindOptions?.skip,
+        limit: options?.pagination?.limit,
+        offset: options?.pagination?.offset,
         totalRows: result.count,
       },
     );
+
     res.status(200).send(data);
   }
 

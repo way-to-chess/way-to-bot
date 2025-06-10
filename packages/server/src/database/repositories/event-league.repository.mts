@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindManyOptions, FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner } from "typeorm";
 import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-league.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
@@ -10,6 +10,8 @@ import {
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
 import { LeagueRepository } from "@way-to-bot/server/database/repositories/league.repository.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
 
 @injectable()
 export class EventLeagueRepository {
@@ -26,12 +28,25 @@ export class EventLeagueRepository {
     return this._dbService.dataSource.getRepository(EventLeagueEntity);
   }
 
-  getMany(
-    options?: FindManyOptions<EventLeagueEntity>,
-    queryRunner?: QueryRunner,
-  ) {
+  async getMany(options?: TCommonGetManyOptions, queryRunner?: QueryRunner) {
     const repo = this.getRepository(queryRunner);
-    return repo.find(options);
+    const queryBuilder = repo
+      .createQueryBuilder("eventLeague")
+      .leftJoinAndSelect("eventLeague.participants", "participants")
+      .leftJoinAndSelect("eventLeague.league", "league")
+      .leftJoinAndSelect("eventLeague.event", "event");
+
+    if (options) {
+      const manyOptionsDTO = new GetManyOptionsDTO<EventLeagueEntity>(options);
+      manyOptionsDTO.applyToQueryBuilder(queryBuilder, "eventLeague");
+    }
+
+    const [data, count] = await queryBuilder.getManyAndCount();
+
+    return {
+      data,
+      count,
+    };
   }
 
   async getOne(
