@@ -33,7 +33,7 @@ const LOCATION_BENEFITS = [
     {icon: CoffeeIcon, title: "Напитки"},
 ];
 
-const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username}) => {
+const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username, photo}) => {
     return (
         <a
             className={classes.host}
@@ -41,7 +41,7 @@ const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username})
             rel={"noreferrer noopener"}
             target={"_blank"}
         >
-            <ImgWithContainer className={classes.hostImg}/>
+            <ImgWithContainer previewUrl={photo?.previewUrl} className={classes.hostImg}/>
             <div className={classes.hostInfo}>
                 <Typography type={"title5"} value={getUserFullName(firstName, lastName)}/>
                 <Typography type={"text2"} value={"Написать"} color={"textColor2"}/>
