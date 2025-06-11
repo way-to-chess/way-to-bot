@@ -1,5 +1,5 @@
 import moment from "moment";
-import "moment/locale/ru";
+import "moment/locale/ru.js";
 import * as constants from "./constants.mjs";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 

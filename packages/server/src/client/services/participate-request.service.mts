@@ -6,7 +6,10 @@ import {
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { EOperandPredicate, EPredicate } from "@way-to-bot/shared/api/enums";
+import {
+  EOperandPredicate,
+  EPredicate,
+} from "@way-to-bot/shared/api/enums/index.js";
 
 @injectable()
 export class ClientParticipateRequestService {
