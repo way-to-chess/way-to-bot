@@ -59,6 +59,7 @@ const Loading = () => {
 const LeaderboardPage = () => {
     const [sort, setSort] = useState<TISortOptionValue>(DEFAULT_SORT_OPTION.value)
     const [searchValue, setSearchValue] = useState("")
+    const [open, setOpen] = useState(true)
     const timeout = useRef<ReturnType<typeof setTimeout>>()
 
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +123,7 @@ const LeaderboardPage = () => {
 
     const onValueChange = (value: unknown) => {
         setSort(value as TISortOptionValue)
+        setOpen(false)
     }
 
     return (
@@ -131,7 +133,7 @@ const LeaderboardPage = () => {
             <div className={classes.top}>
                 <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange} type={"search"}/>
 
-                <BottomSheet title={"Сортировка"} trigger={renderSortButton}>
+                <BottomSheet title={"Сортировка"} trigger={renderSortButton} open={open} onOpenChange={setOpen}>
                     <Options options={SORT_OPTIONS} value={sort} onValueChange={onValueChange}/>
                 </BottomSheet>
             </div>

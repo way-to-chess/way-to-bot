@@ -30,6 +30,13 @@
     width: 100%;
 }
 
+.input:-webkit-autofill,
+.input:-webkit-autofill:hover,
+.input:-webkit-autofill:focus,
+.input:-webkit-autofill:active {
+    -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+
 .container:has(.input:focus) {
     border-color: var(--main-color);
     box-shadow: 0 0 0 2px rgba(0, 122, 255, 0.2);
