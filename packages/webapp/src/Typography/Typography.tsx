@@ -15,6 +15,7 @@ type TTypographyType =
 type TColor =
     | "textColor1"
     | "textColor2"
+    | "textColor3"
     | "textColor5"
     | "mainColor"
     | "redColor"
@@ -61,6 +62,7 @@ const TAG_BY_TYPE: Record<TTypographyType, ElementType> = {
 const CLASSNAME_BY_COLOR: Record<TColor, string | undefined> = {
     textColor1: classes.textColor1,
     textColor2: classes.textColor2,
+    textColor3: classes.textColor3,
     textColor5: classes.textColor5,
     mainColor: classes.mainColor,
     redColor: classes.redColor,

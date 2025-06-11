@@ -31,9 +31,7 @@ const useUploadFile = () => {
                     url,
                     name: fileName
                 })
-            }).catch((error) => {
-            console.log(error, 123)
-        });
+            });
     }, []);
 
     const clearFile = useCallback(() => {

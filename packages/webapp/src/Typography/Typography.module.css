@@ -68,6 +68,10 @@
     color: var(--text-color-2);
 }
 
+.textColor3 {
+    color: var(--text-color-3);
+}
+
 .textColor5 {
     color: var(--text-color-5);
 }

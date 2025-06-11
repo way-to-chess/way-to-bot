@@ -18,12 +18,17 @@ import {
     ChevronDownIcon,
     CircleDollarSignIcon,
     CreditCardIcon,
+    EditIcon,
+    Hourglass,
     PaperclipIcon,
     UploadIcon
 } from "lucide-react";
 import {IOption, Options} from "../../Options/Options";
 import {splitAmountAndCurrency} from "./SplitAmountAndCurrency";
 import {useUploadFile} from "../../Hooks/UseUploadFile";
+import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
+import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
+import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 interface IWithEventId {
     eventId: string
@@ -65,7 +70,8 @@ const PAYMENT_METHODS: IOption<TPaymentMethod>[] = [
         value: "cash",
         title: "Наличными на месте",
         description: "Оплата при встрече на месте",
-        icon: <BanknoteIcon color={"#007AFF"}/>
+        icon: <BanknoteIcon color={"#007AFF"}/>,
+        disabled: true
     },
     {
         value: "receipt",
@@ -112,7 +118,8 @@ const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
     </BottomSheet>
 }
 
-const Payment: FC<IWithEventId> = ({eventId}) => {
+const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeModal}) => {
+
     const [paymentMethod, setPaymentMethod] = useState<null | TPaymentMethod>(null)
     const {data: event} = eventApi.useGetEventByIdQuery(eventId)
 
@@ -137,7 +144,27 @@ const Payment: FC<IWithEventId> = ({eventId}) => {
         setPaymentMethod(method)
     }
 
-    const {onChange, fileName, isLoading} = useUploadFile()
+    const {onChange, fileName, fileId, isLoading: fileUploadLoading, error} = useUploadFile()
+
+    const disabled = !paymentMethod || (paymentMethod === "receipt" && !fileId)
+
+    const text = fileName ?? (error ? "Ошибка при загрузке" : "Загрузить документ")
+
+
+    const [createParticipateRequest, {isLoading}] = participateRequestApi.useCreateParticipateRequestMutation()
+
+    const send = () => {
+        if (disabled) {
+            return
+        }
+
+        createParticipateRequest({
+            eventId: Number(eventId),
+            fileId: getNotNil(fileId, "ParticipateEventButton -> Payment -> createParticipateRequest -> fileId"),
+            additionalUsers: []
+        }).unwrap().then(closeModal)
+    }
+
     return <>
         <div className={clsx(classes.block, classes.paymentMethod)}>
             <Typography type={"title4"} value={"Способ оплаты"}/>
@@ -159,28 +186,77 @@ const Payment: FC<IWithEventId> = ({eventId}) => {
                 <Typography type={"title4"} value={total}/>
             </div>
 
-            <Button variant={"secondary"} as={"label"} loading={isLoading} className={classes.upload}>
-                <input type={"file"} onChange={onChange}/>
-                <UploadIcon/>
-                {fileName ?? "Загрузить документ"}
-            </Button>
+            {
+                paymentMethod === "receipt" ?
+                    <Button variant={"secondary"} as={"label"} loading={fileUploadLoading} className={classes.upload}>
+                        <input type={"file"} onChange={onChange}/>
+                        {fileId ? null : <UploadIcon/>}
+                        {text}
+                        {fileId ? <EditIcon width={14} height={14}/> : null}
+                    </Button>
+                    : null
+            }
 
         </div>
 
-        <Button className={clsx(classes.button, classes.open)} value={"Отправить запрос"}/>
+        <Button disabled={disabled} onClick={send} value={"Отправить заявку"} loading={isLoading}/>
     </>
 }
 
-
-const AddParticipant = () => {
-    const trigger = (<button>
-        <Typography type={"buttonTitle"} color={"mainColor"} value={"+ Добавить участника"}/>
-    </button>)
+const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) => {
+    const [open, setOpen] = useState(false)
+    const {data, isLoading} = participateRequestApi.useGetAllParticipateRequestsQuery()
 
 
-    return <BottomSheet trigger={trigger} title={"Добавить участника"}>
-        {"hello"}
+    if (isLoading) {
+        return null
+    }
+
+    const lastRequest = data?.find((request) => String(request.eventId) === eventId)
+
+    const closeModal = () => setOpen(false)
+
+
+    const titleNode = (
+        <div className={classes.statusBlock}>
+            <div className={classes.status}>
+                <Hourglass color={"#fff"} width={20} height={20}/>
+            </div>
+
+            <div className={classes.participantText}>
+                <Typography type={"title4"} value={"Заявка на рассмотрении"} color={"textColor2"}/>
+                <Typography type={"text2"} value={"Сегодня, 8 марта, 12:23"} color={"textColor3"}/>
+            </div>
+        </div>
+    )
+
+    return <BottomSheet className={classes.popup} title={lastRequest ? undefined : "Отправить заявку"}
+                        onOpenChange={setOpen} open={open}
+                        titleNode={lastRequest ? titleNode : null}
+                        trigger={<Button className={classes.button}
+                                         value={lastRequest ? "Моя заявка" : "Участвовать"}/>}>
+
+        <User id={authId}/>
+
+        {
+            lastRequest ?
+                <div className={clsx(classes.block, classes.paymentMethod)}>
+                    <Typography type={"title4"} value={"Способ оплаты"}/>
+                    <a href={getPreviewSrc(lastRequest.receipt?.url)} target={"_blank"} rel={"noreferrer noopener"}
+                       className={clsx(classes.paymentMethodSelect, classes.selected)}>
+                        <PaperclipIcon color={"#007AFF"}/>
+
+                        <Typography type={"title5"} color={"mainColor"} className={"flex1"} value={"Посмотреть чек"}/>
+
+                        <ImgWithContainer className={classes.receiptContainer}
+                                          previewUrl={lastRequest.receipt?.previewUrl}/>
+                    </a>
+                </div> :
+                <Payment eventId={eventId} closeModal={closeModal}/>
+
+        }
     </BottomSheet>
+
 }
 
 const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
@@ -195,15 +271,7 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
         return <Button as={"link"} className={classes.button} value={"Создать профиль"} to={"/profile"}/>
     }
 
-    return <BottomSheet className={classes.popup}
-                        trigger={<Button className={classes.button} value={"Участвовать"}/>}
-                        title={"Отправить заявку"}
-                        description={"Проверь данные"}>
-        <User id={authId}/>
-        {/*<AddParticipant/>*/}
-        <Payment eventId={eventId}/>
-    </BottomSheet>
-
+    return <Participate eventId={eventId} authId={authId}/>
 })
 
 export {ParticipateEventButton}

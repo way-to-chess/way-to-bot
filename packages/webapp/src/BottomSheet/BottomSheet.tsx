@@ -2,21 +2,30 @@ import {Dialog,} from "@base-ui-components/react";
 import {Typography} from "../Typography/Typography";
 import classes from "./BottomSheet.module.css";
 import {CloseIcon} from "../Icons/CloseIcon";
-import {FC, Fragment, PropsWithChildren} from "react";
+import {FC, Fragment, PropsWithChildren, ReactNode} from "react";
 import clsx from "clsx";
 
-type TBottomSheetTrigger = Dialog.Trigger.Props["render"]
+type TBottomSheetTrigger = Dialog.Trigger.Props["render"] | undefined
 
-interface IBottomSheetProps extends PropsWithChildren {
+interface IBottomSheetProps extends PropsWithChildren, Pick<Dialog.Root.Props, "onOpenChange"> {
     title?: string
     description?: string
-    trigger: TBottomSheetTrigger
+    trigger?: TBottomSheetTrigger
     className?: string
     open?: boolean;
-    onOpenChange?: Dialog.Root.Props["onOpenChange"]
+    titleNode?: ReactNode
 }
 
-const BottomSheet: FC<IBottomSheetProps> = ({trigger, title, description, children, className, open, onOpenChange}) => {
+const BottomSheet: FC<IBottomSheetProps> = ({
+                                                trigger,
+                                                title,
+                                                description,
+                                                children,
+                                                className,
+                                                open,
+                                                onOpenChange,
+                                                titleNode
+                                            }) => {
     const Wrapper = title && description ? "div" : Fragment
 
     return (
@@ -27,6 +36,7 @@ const BottomSheet: FC<IBottomSheetProps> = ({trigger, title, description, childr
                 <Dialog.Popup className={clsx(classes.popup, className)}>
                     <div className={classes.top}>
                         <Wrapper>
+                            {titleNode}
                             {
                                 title ?
                                     <Dialog.Title render={<Typography type={"title3"} value={title}/>}/>

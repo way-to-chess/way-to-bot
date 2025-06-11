@@ -1,6 +1,5 @@
 div.popup {
     background: var(--background-color-3);
-    height: 100%;
 }
 
 .button {
@@ -58,6 +57,10 @@ div.popup {
     padding: 12px;
 }
 
+.paymentMethodSelect.selected {
+    height: 60px
+}
+
 .total {
     display: flex;
     flex-direction: column;
@@ -83,4 +86,30 @@ div.popup {
 
 .upload input {
     display: none;
+}
+
+.receiptContainer {
+    width: 44px;
+    height: 44px;
+    flex-shrink: 0;
+    border-radius: 8px;
+    border: 1px solid var(--stroke-color-1);
+}
+
+.statusBlock {
+    display: flex;
+    align-items: center;
+    gap: 14px
+}
+
+.status {
+    width: 32px;
+    height: 32px;
+    flex-shrink: 0;
+    background: #707579;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 6px
 }
