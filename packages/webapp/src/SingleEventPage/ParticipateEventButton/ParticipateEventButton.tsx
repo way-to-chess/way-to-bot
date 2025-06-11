@@ -225,7 +225,7 @@ const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) =
 
             <div className={classes.participantText}>
                 <Typography type={"title4"} value={"Заявка на рассмотрении"} color={"textColor2"}/>
-                <Typography type={"text2"} value={"Сегодня, 8 марта, 12:23"} color={"textColor3"}/>
+                {/*<Typography type={"text2"} value={"Сегодня, 8 марта, 12:23"} color={"textColor3"}/>*/}
             </div>
         </div>
     )
