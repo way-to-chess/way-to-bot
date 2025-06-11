@@ -81,26 +81,37 @@ const LeaderboardPage = () => {
 
     if (searchValueToSend) {
         options.where = {
-            predicate: EPredicate.OR,
+            predicate: EPredicate.AND,
             operands: [
                 {
-                    field: "firstName",
-                    predicate: EOperandPredicate.LIKE,
-                    value: searchValueToSend
+                    field: "tgId",
+                    predicate: EOperandPredicate.NOT_EQ,
+                    value: null
                 },
                 {
-                    field: "lastName",
-                    predicate: EOperandPredicate.LIKE,
-                    value: searchValueToSend
-                },
-                {
-                    field: "username",
-                    predicate: EOperandPredicate.LIKE,
-                    value: searchValueToSend
+                    predicate: EPredicate.OR,
+                    operands: [
+                        {
+                            field: "firstName",
+                            predicate: EOperandPredicate.LIKE,
+                            value: searchValueToSend
+                        },
+                        {
+                            field: "lastName",
+                            predicate: EOperandPredicate.LIKE,
+                            value: searchValueToSend
+                        },
+                        {
+                            field: "username",
+                            predicate: EOperandPredicate.LIKE,
+                            value: searchValueToSend
+                        }
+                    ]
                 }
             ]
         }
     }
+
 
     const {data: users, isFetching, isError, refetch, error} = userApi.useGetAllUsersQuery(options);
 
@@ -131,6 +142,7 @@ const LeaderboardPage = () => {
                             <UserListItem
                                 {...user}
                                 prefix={index + 1}
+                                postfix={<Typography type={"title4"} value={String(user[sort[0]])}/>}
                                 className={classes.user}
                                 key={user.id}
                             />

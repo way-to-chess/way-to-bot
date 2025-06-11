@@ -10,6 +10,7 @@ import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 interface IUserListItemProps extends ClientDTOUserGetMany {
     className?: string;
     prefix?: ReactNode;
+    postfix?: ReactNode
 }
 
 const UserListItem: FC<IUserListItemProps> = (
@@ -21,6 +22,7 @@ const UserListItem: FC<IUserListItemProps> = (
         photo,
         className,
         prefix,
+        postfix,
         rating,
     }) => {
     const pathToUser = generatePath("/users/:id", {id: id.toString()});
@@ -37,7 +39,7 @@ const UserListItem: FC<IUserListItemProps> = (
                 />
                 {!username || username.includes("wtb_test") ? "" : username}
             </div>
-            <Typography type={"title4"} value={rating}/>
+            {postfix ?? <Typography type={"title4"} value={rating}/>}
         </Link>
     );
 };

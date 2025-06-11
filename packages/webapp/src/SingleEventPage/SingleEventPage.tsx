@@ -4,7 +4,6 @@ import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import classes from "./SingleEventPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {Typography} from "../Typography/Typography";
-import {ShareIcon} from "../Icons/ShareIcon";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {CalendarIcon} from "../Icons/CalendarIcon";
 import {ClockIcon} from "../Icons/ClockIcon";
@@ -174,7 +173,7 @@ const SingleEventPage = () => {
                                 type={"title3"}
                                 value={name ?? "Турнир без названия"}
                             />
-                            <button className={classes.shareLink}>{ShareIcon}</button>
+                            {/*<button className={classes.shareLink}>{ShareIcon}</button>*/}
                         </div>
                         <EventParticipantCount
                             currentCount={users.length}
