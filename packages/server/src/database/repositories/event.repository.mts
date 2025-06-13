@@ -36,7 +36,9 @@ export class EventRepository {
             },
           },
         },
-        host: true,
+        host: {
+          photo: true,
+        },
       },
       ...options,
     });
@@ -51,7 +53,8 @@ export class EventRepository {
       .leftJoinAndSelect("event.eventLeagues", "eventLeagues")
       .leftJoinAndSelect("eventLeagues.participants", "participants")
       .leftJoinAndSelect("participants.user", "user")
-      .leftJoinAndSelect("event.host", "host");
+      .leftJoinAndSelect("event.host", "host")
+      .leftJoinAndSelect("host.photo", "hostPhoto");
 
     if (options) {
       const manyOptionsDTO = new GetManyOptionsDTO<EventEntity>(options);
