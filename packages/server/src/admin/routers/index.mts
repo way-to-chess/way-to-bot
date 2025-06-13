@@ -6,6 +6,7 @@ import { AdminLocationRouter } from "@way-to-bot/server/admin/routers/location.r
 import { AdminParticipateRequestRouter } from "@way-to-bot/server/admin/routers/participate-request.router.mjs";
 import { AdminUserRouter } from "@way-to-bot/server/admin/routers/user.router.mjs";
 import { AdminEventLeagueRouter } from "@way-to-bot/server/admin/routers/event-league.router.js";
+import { AdminTgRouter } from "./tg.router";
 
 export const AdminRouter = Router();
 
@@ -16,3 +17,4 @@ AdminRouter.use("/location", AdminLocationRouter);
 AdminRouter.use("/participate-request", AdminParticipateRequestRouter);
 AdminRouter.use("/user", AdminUserRouter);
 AdminRouter.use("/event-league", AdminEventLeagueRouter);
+AdminRouter.use("/tg", AdminTgRouter);

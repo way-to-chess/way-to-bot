@@ -1,20 +1,23 @@
 import { inject, injectable } from "inversify";
 import { EventRepository } from "@way-to-bot/server/database/repositories/event.repository.mjs";
-import { TgBotService } from "@way-to-bot/server/services/tg-bot.service.mjs";
+import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
-import { messageForNewEvent } from "@way-to-bot/server/utils/helpers.mjs";
+import { botMessageNewEvent } from "@way-to-bot/server/services/tg_bot/messages.mjs";
 import {
   TAdminEventCreatePayload,
   TAdminEventUpdatePayload,
 } from "@way-to-bot/shared/api/zod/admin/event.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
+import { IsNull, Not } from "typeorm";
 
 @injectable()
 export class AdminEventService {
   constructor(
     @inject(EventRepository) private readonly _eventRepository: EventRepository,
     @inject(TgBotService) private readonly _tgBotService: TgBotService,
+    @inject(UserRepository) private readonly _userRepository: UserRepository,
   ) {}
 
   async getMany(options?: TCommonGetManyOptions) {
@@ -36,9 +39,19 @@ export class AdminEventService {
       throw new InternalError(`Event was not created`);
     }
 
-    const message = messageForNewEvent(createdEvent);
+    const userRepo = this._userRepository.getRepository();
+    const users = await userRepo.find({
+      where: {
+        tgId: Not(IsNull()),
+      },
+    });
+
+    const { message, options } = botMessageNewEvent(createdEvent);
+
     // TODO: use some queue
-    this._tgBotService.sendMessagesToUsersTg(message);
+    setImmediate(async () => {
+      this._tgBotService.sendMessagesToUsers(users, message, options);
+    });
 
     return createdEvent;
   }

@@ -4,7 +4,7 @@ import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { DiContainer } from "@way-to-bot/server/services/DI.service.mjs";
 import { ExpressApp } from "@way-to-bot/server/express/index.mjs";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { TgBotService } from "@way-to-bot/server/services/tg-bot.service.mjs";
+import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 import { validateConstants } from "@way-to-bot/server/utils/helpers.mjs";
 
 const emptyConstants = validateConstants();

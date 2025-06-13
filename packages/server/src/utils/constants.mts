@@ -9,6 +9,7 @@ import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/p
 import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-league.entity.mjs";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
 import { EventLeagueResultEntity } from "@way-to-bot/server/database/entities/event-league-result.entity.mjs";
+import { FeedbackEntity } from "@way-to-bot/server/database/entities/feedback.entity.mjs";
 
 export const DEFAULT_LEAGUE_NAME = "DEFAULT";
 
@@ -40,6 +41,7 @@ export const dbConnectionOptions: DataSourceOptions = {
     EventLeagueEntity,
     EventLeagueUserEntity,
     EventLeagueResultEntity,
+    FeedbackEntity,
   ],
   subscribers: [EventEntitySubscriber],
   ssl: NODE_ENV === "production" ? { rejectUnauthorized: false } : false,
@@ -47,6 +49,7 @@ export const dbConnectionOptions: DataSourceOptions = {
 
 // TG
 export const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN!;
+export const WEB_URL = process.env.WEB_URL!;
 
 // PATHS
 export const PATH_TO_PROJECT_FOLDER = process.env.PATH_TO_PROJECT_FOLDER!;

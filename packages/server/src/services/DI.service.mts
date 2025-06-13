@@ -1,6 +1,6 @@
 import { Container } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { TgBotService } from "@way-to-bot/server/services/tg-bot.service.mjs";
+import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 import { AdminEventController } from "@way-to-bot/server/admin/controllers/event.controller.mjs";
 import { AdminFileController } from "@way-to-bot/server/admin/controllers/file.controller.mjs";
 import { AdminLeagueController } from "@way-to-bot/server/admin/controllers/league.controller.mjs";
@@ -32,8 +32,10 @@ import { ClientFileService } from "@way-to-bot/server/client/services/file.servi
 import { ClientParticipateRequestService } from "@way-to-bot/server/client/services/participate-request.service.mjs";
 import { ClientUserService } from "@way-to-bot/server/client/services/user.service.mjs";
 import { CommonAuthController } from "@way-to-bot/server/express/controllers/auth.controller.mjs";
-import { AdminEventLeagueController } from "@way-to-bot/server/admin/controllers/event-league.controller.js";
+import { AdminEventLeagueController } from "@way-to-bot/server/admin/controllers/event-league.controller.mjs";
 import { EventLeagueResultRepository } from "@way-to-bot/server/database/repositories/event-league-result.repository.js";
+import { AdminTgController } from "@way-to-bot/server/admin/controllers/tg.controller.mjs";
+import { FeedbackRepository } from "@way-to-bot/server/database/repositories/feedback.repository.mjs";
 
 // singleton
 class DIService {
@@ -77,6 +79,7 @@ class DIService {
       .bind(EventLeagueResultRepository)
       .toSelf()
       .inSingletonScope();
+    this._container.bind(FeedbackRepository).toSelf().inSingletonScope();
 
     this._container.bind(CommonAuthController).toSelf().inRequestScope();
 
@@ -91,6 +94,7 @@ class DIService {
       .inRequestScope();
     this._container.bind(AdminUserController).toSelf().inRequestScope();
     this._container.bind(AdminEventLeagueController).toSelf().inRequestScope();
+    this._container.bind(AdminTgController).toSelf().inRequestScope();
 
     this._container.bind(AdminEventService).toSelf().inRequestScope();
     this._container.bind(AdminEventLeagueService).toSelf().inRequestScope();
