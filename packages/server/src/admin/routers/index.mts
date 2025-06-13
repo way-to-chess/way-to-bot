@@ -6,7 +6,7 @@ import { AdminLocationRouter } from "@way-to-bot/server/admin/routers/location.r
 import { AdminParticipateRequestRouter } from "@way-to-bot/server/admin/routers/participate-request.router.mjs";
 import { AdminUserRouter } from "@way-to-bot/server/admin/routers/user.router.mjs";
 import { AdminEventLeagueRouter } from "@way-to-bot/server/admin/routers/event-league.router.js";
-import { AdminTgRouter } from "./tg.router";
+import { AdminTgRouter } from "@way-to-bot/server/admin/routers/tg.router.mjs";
 
 export const AdminRouter = Router();
 

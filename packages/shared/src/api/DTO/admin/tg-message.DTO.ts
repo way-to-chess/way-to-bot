@@ -1,5 +1,5 @@
-import { BaseDTOTgMessage } from "../base/tg-message.DTO";
-import { GetOneDTO } from "../common/get-one.DTO";
+import { BaseDTOTgMessage } from "@way-to-bot/shared/api/DTO/base/tg-message.DTO.js";
+import { GetOneDTO } from "@way-to-bot/shared/api/DTO/common/get-one.DTO.js";
 
 // response DTO
 export class AdminDTOTgMessageResponse extends GetOneDTO<AdminDTOTgMessage> {
