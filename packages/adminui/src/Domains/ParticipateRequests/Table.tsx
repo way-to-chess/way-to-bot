@@ -11,6 +11,7 @@ import {useActionCreator} from "@way-to-bot/shared/utils/UseActionCreator";
 import {PARTICIPATE_REQUESTS_DRAWER_ID} from "../../Constants/EntityIds";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {AdminDTOParticipateRequestGetMany} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
@@ -29,10 +30,10 @@ const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     {title: TEXT.event, render: (_, {event}) => event.name},
     {
         title: TEXT.status,
-        render: (_, {approved}) => (
+        render: (_, {status}) => (
             <Badge
-                status={approved ? "success" : "processing"}
-                text={approved ? TEXT.approvedStatus : TEXT.waitingStatus}
+                status={status === EParticipateRequestStatus.APPROVED ? "success" : "processing"}
+                text={status === EParticipateRequestStatus.APPROVED ? TEXT.approvedStatus : TEXT.waitingStatus}
             />
         ),
     },
@@ -58,7 +59,7 @@ const OpenApproveDrawer = memo(({requestId}: IWithRequestId) => {
 
 const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
     expandRowByClick: true,
-    expandedRowRender: ({receipt, id, approved,}) => {
+    expandedRowRender: ({receipt, id, status,}) => {
         return (
             <Flex align={"center"} justify={"space-between"}>
                 {receipt ? (
@@ -72,7 +73,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
                 ) : (
                     <Typography.Text type={"danger"}>{TEXT.noFile}</Typography.Text>
                 )}
-                {approved ? null : (
+                {status === EParticipateRequestStatus.APPROVED ? null : (
                     <OpenApproveDrawer requestId={id}/>
                 )}
             </Flex>
