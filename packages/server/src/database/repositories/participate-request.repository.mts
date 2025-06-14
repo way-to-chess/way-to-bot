@@ -3,10 +3,7 @@ import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { FindOneOptions, QueryRunner } from "typeorm";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
-import {
-  TClientParticipateRequestCreatePayload,
-  TClientParticipateRequestUpdatePayload,
-} from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
+import { TClientParticipateRequestCreatePayload } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { TAdminParticipateRequestUpdatePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
@@ -75,9 +72,7 @@ export class ParticipateRequestRepository {
 
   async update(
     id: number,
-    payload:
-      | TClientParticipateRequestUpdatePayload
-      | TAdminParticipateRequestUpdatePayload,
+    payload: TAdminParticipateRequestUpdatePayload,
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);

@@ -2,7 +2,11 @@ import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/ent
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
-import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index";
+import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
+import {
+  EParticipateRequestPaymentType,
+  EParticipateRequestStatus,
+} from "../../enums/index.js";
 
 export class BaseDTOParticipateRequest {
   readonly id: number;
@@ -12,7 +16,9 @@ export class BaseDTOParticipateRequest {
   readonly user: IUserEntity;
   readonly fileId: number | null;
   readonly receipt: IFileEntity | null;
-  readonly approved: boolean;
+  readonly status: EParticipateRequestStatus;
+  readonly message: string | null;
+  readonly paymentType: EParticipateRequestPaymentType;
   readonly additionalUsers: TCommonParticipateRequestAdditionalUser[];
 
   constructor(request: IParticipateRequestEntity) {
@@ -23,7 +29,9 @@ export class BaseDTOParticipateRequest {
     this.user = request.user;
     this.fileId = request.fileId ?? null;
     this.receipt = request.receipt ?? null;
-    this.approved = request.approved;
+    this.status = request.status;
+    this.message = request.message ?? null;
+    this.paymentType = request.paymentType;
     this.additionalUsers = request.additionalUsers;
   }
 }

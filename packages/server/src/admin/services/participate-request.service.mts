@@ -5,12 +5,13 @@ import { DbService } from "@way-to-bot/server/services/db.service.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 import { EventLeagueUserRepository } from "@way-to-bot/server/database/repositories/event-league-user.repository.mjs";
 import { EventLeagueRepository } from "@way-to-bot/server/database/repositories/event-league.repository.mjs";
-import { TAdminParticipateRequestApprovePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
+import { TAdminParticipateRequestUpdatePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema.js";
 import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
 import { In } from "typeorm";
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
-import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -27,9 +28,9 @@ export class AdminParticipateRequestService {
     private readonly _userRepository: UserRepository,
   ) {}
 
-  async approveParticipateRequest(
+  async updateParticipateRequest(
     id: number,
-    payload: TAdminParticipateRequestApprovePayload,
+    payload: TAdminParticipateRequestUpdatePayload,
   ) {
     const queryRunner = this._dbService.dataSource.createQueryRunner();
     await queryRunner.connect();
@@ -39,12 +40,21 @@ export class AdminParticipateRequestService {
       const updatedParticipateRequest =
         await this._participateRequestRepository.update(
           id,
-          { approved: true },
+          { status: payload.status, message: payload.message },
           queryRunner,
         );
 
       if (!updatedParticipateRequest) {
-        throw new InternalError("Participate request was not approved");
+        throw new InternalError(
+          "Server error while updating participate request",
+        );
+      }
+
+      if (
+        updatedParticipateRequest.status !== EParticipateRequestStatus.APPROVED
+      ) {
+        await queryRunner.commitTransaction();
+        return updatedParticipateRequest;
       }
 
       const elRepo = this._eventLeagueRepository.getRepository(queryRunner);

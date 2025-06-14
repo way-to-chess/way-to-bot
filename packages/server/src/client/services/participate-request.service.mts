@@ -1,9 +1,6 @@
 import { inject, injectable } from "inversify";
 import { ParticipateRequestRepository } from "@way-to-bot/server/database/repositories/participate-request.repository.mjs";
-import {
-  TClientParticipateRequestCreatePayload,
-  TClientParticipateRequestUpdatePayload,
-} from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
+import { TClientParticipateRequestCreatePayload } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 import {
@@ -54,16 +51,6 @@ export class ClientParticipateRequestService {
 
     if (!data) {
       throw new NotFoundError(`Participate request was not created`);
-    }
-
-    return data;
-  }
-
-  async update(id: number, payload: TClientParticipateRequestUpdatePayload) {
-    const data = await this._participateRequestRepository.update(id, payload);
-
-    if (!data) {
-      throw new NotFoundError(`Participate request was not updated`);
     }
 
     return data;

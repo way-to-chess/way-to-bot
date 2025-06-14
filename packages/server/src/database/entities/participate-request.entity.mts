@@ -13,6 +13,10 @@ import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/ent
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
+import {
+  EParticipateRequestPaymentType,
+  EParticipateRequestStatus,
+} from "@way-to-bot/shared/api/enums/index.js";
 
 @Entity("participate_requests")
 export class ParticipateRequestEntity implements IParticipateRequestEntity {
@@ -33,7 +37,7 @@ export class ParticipateRequestEntity implements IParticipateRequestEntity {
   @JoinColumn({ name: "user_id" })
   user!: Relation<UserEntity>;
 
-  @Column({ type: "jsonb", default: [] })
+  @Column({ type: "jsonb", default: [], name: "additional_users" })
   additionalUsers!: TCommonParticipateRequestAdditionalUser[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
@@ -43,8 +47,25 @@ export class ParticipateRequestEntity implements IParticipateRequestEntity {
   @JoinColumn({ name: "file_id" })
   receipt?: Relation<FileEntity> | null;
 
-  @Column({ nullable: false, type: "boolean" })
-  approved: boolean = false;
+  @Column({
+    type: "enum",
+    enum: EParticipateRequestStatus,
+    nullable: false,
+    default: EParticipateRequestStatus.WAITING,
+  })
+  status!: EParticipateRequestStatus;
+
+  @Column({
+    name: "payment_type",
+    type: "enum",
+    enum: EParticipateRequestPaymentType,
+    nullable: false,
+    default: EParticipateRequestPaymentType.CASH,
+  })
+  paymentType!: EParticipateRequestPaymentType;
+
+  @Column({ name: "message", type: "text", nullable: true })
+  message?: string | null;
 
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;

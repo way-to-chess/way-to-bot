@@ -30,9 +30,9 @@ export class AdminParticipateRequestController {
     res.status(200).send(data);
   }
 
-  async approve(req: Request, res: Response) {
+  async update(req: Request, res: Response) {
     const result =
-      await this._participateRequestService.approveParticipateRequest(
+      await this._participateRequestService.updateParticipateRequest(
         +req.params.id!,
         req.body,
       );

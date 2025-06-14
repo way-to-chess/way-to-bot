@@ -65,3 +65,15 @@ export enum ESortDirection {
   ASC = "ASC",
   DESC = "DESC",
 }
+
+export enum EParticipateRequestStatus {
+  WAITING = "waiting",
+  APPROVED = "approved",
+  REJECTED = "rejected",
+}
+
+export enum EParticipateRequestPaymentType {
+  CASH = "cash",
+  ONLINE = "online",
+  RECEIPT = "receipt",
+}

@@ -28,16 +28,16 @@ export class UserEntity implements IUserEntity {
   @Column({ type: "varchar", unique: true, nullable: true, length: 64 })
   username?: string | null = null;
 
-  @Column({type: "bigint", unique: true, nullable: true, name: "tg_id" })
+  @Column({ type: "bigint", unique: true, nullable: true, name: "tg_id" })
   tgId?: string | null = null;
 
   @Column({ type: "varchar", length: 255, unique: true, nullable: true })
   email?: string | null;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: "varchar", length: 50, name: "first_name" })
   firstName!: string;
 
-  @Column({ type: "varchar", length: 50 })
+  @Column({ type: "varchar", length: 50, name: "last_name" })
   lastName!: string;
 
   @Column({ type: "date", nullable: true, name: "birth_date" })

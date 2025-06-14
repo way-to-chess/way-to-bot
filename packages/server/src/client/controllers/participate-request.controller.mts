@@ -56,18 +56,7 @@ export class ClientParticipateRequestController {
     );
     res.status(201).send(data);
   }
-
-  async update(req: Request, res: Response) {
-    const result = await this._participateRequestService.update(
-      +req.params.id!,
-      req.body,
-    );
-    const data = new ClientDTOParticipateRequestUpdateResponse(
-      new ClientDTOParticipateRequestGetOne(result),
-    );
-    res.status(200).send(data);
-  }
-
+  
   async delete(req: Request, res: Response) {
     const result = await this._participateRequestService.delete(
       +req.params.id!,

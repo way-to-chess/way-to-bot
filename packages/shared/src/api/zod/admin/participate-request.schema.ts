@@ -1,17 +1,13 @@
 import { z } from "zod";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
 
 export const AdminSchemaParticipateRequestUpdate = z
   .object({
-    approved: z.boolean(),
+    status: z.nativeEnum(EParticipateRequestStatus),
+    message: z.string().optional(),
   })
   .strict();
 
-export const AdminSchemaParticipateRequestApprove = z.object({}).strict();
-
 export type TAdminParticipateRequestUpdatePayload = z.infer<
   typeof AdminSchemaParticipateRequestUpdate
->;
-
-export type TAdminParticipateRequestApprovePayload = z.infer<
-  typeof AdminSchemaParticipateRequestApprove
 >;
