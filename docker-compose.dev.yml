@@ -70,6 +70,7 @@ services:
       - "443:443"
     volumes:
       - ./nginx/nginx-dev.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/service_unavailable:/usr/share/nginx/html/service_unavailable:ro
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
       - ./docker_data/certbot/www/:/var/www/certbot/:ro
       - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro

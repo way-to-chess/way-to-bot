@@ -1,6 +1,7 @@
 import { createLogger, format, transports } from "winston";
 import DailyRotateFile from "winston-daily-rotate-file";
-import {PATH_TO_LOGS} from '@way-to-bot/server/utils/constants.mjs';
+import { PATH_TO_LOGS } from "@way-to-bot/server/utils/constants.mjs";
+import path from "path";
 
 const { combine, timestamp, errors, printf, colorize } = format;
 
@@ -27,8 +28,8 @@ export const logger = createLogger({
     }),
 
     new DailyRotateFile({
-      filename: `${PATH_TO_LOGS}/error-%DATE%.log`,
-      datePattern: "YYYY-MM-DD",
+      filename: path.join(PATH_TO_LOGS, "%DATE%", "error.log"),
+      datePattern: "YYYYMM/DD",
       level: "error",
       zippedArchive: true,
       maxFiles: "30d",

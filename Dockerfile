@@ -48,9 +48,8 @@ COPY --from=server-build /app/packages/server/bin ./packages/server/bin
 
 RUN npm ci --production --workspaces --include-workspace-root
 
-FROM nginx:alpine AS web
+FROM nginx:stable AS web
 COPY --from=admin-build /app/packages/adminui/dist /usr/share/nginx/html/admin
 COPY --from=webapp-build /app/packages/webapp/dist /usr/share/nginx/html/webapp
-COPY nginx/service_unavailable /usr/share/nginx/html/service_unavailable
 
 CMD ["nginx", "-g", "daemon off;"]
