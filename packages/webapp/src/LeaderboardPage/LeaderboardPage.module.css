@@ -35,15 +35,15 @@
     border-radius: 12px;
 }
 
-.user:nth-child(1) {
+.user.colored:nth-child(1) {
     background: #FFCC0033;
 }
 
-.user:nth-child(2) {
+.user.colored:nth-child(2) {
     background: #94949433;
 }
 
-.user:nth-child(3) {
+.user.colored:nth-child(3) {
     background: #8B420133;
     margin-bottom: 16px;
 }

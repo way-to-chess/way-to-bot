@@ -13,6 +13,7 @@ import {Error, RefetchError} from "../Error/Error";
 import {Options} from "../Options/Options";
 import {EOperandPredicate, EPredicate, ESortDirection} from "@way-to-bot/shared/api/enums";
 import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
+import clsx from "clsx";
 
 const renderSortButton: TBottomSheetTrigger = (props) => {
     return <button className={classes.sortButton} {...props}>
@@ -59,7 +60,7 @@ const Loading = () => {
 const LeaderboardPage = () => {
     const [sort, setSort] = useState<TISortOptionValue>(DEFAULT_SORT_OPTION.value)
     const [searchValue, setSearchValue] = useState("")
-    const [open, setOpen] = useState(true)
+    const [open, setOpen] = useState(false)
     const timeout = useRef<ReturnType<typeof setTimeout>>()
 
     const onSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -76,6 +77,16 @@ const LeaderboardPage = () => {
             field: sort[0],
             direction: sort[1]
         },
+        where: {
+            predicate: EPredicate.AND,
+            operands: [
+                {
+                    field: "tgId",
+                    predicate: EOperandPredicate.NOT_EQ,
+                    value: null
+                },
+            ]
+        }
     }
 
     const searchValueToSend = searchValue.trim()
@@ -131,7 +142,8 @@ const LeaderboardPage = () => {
             <Typography type={"title2"} value={"Лидерборд"}/>
 
             <div className={classes.top}>
-                <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange} type={"search"}/>
+                <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange} type={"search"}
+                       maxLength={30}/>
 
                 <BottomSheet title={"Сортировка"} trigger={renderSortButton} open={open} onOpenChange={setOpen}>
                     <Options options={SORT_OPTIONS} value={sort} onValueChange={onValueChange}/>
@@ -143,9 +155,9 @@ const LeaderboardPage = () => {
                         users?.length ? users.map((user, index) => (
                             <UserListItem
                                 {...user}
-                                prefix={index + 1}
+                                prefix={searchValue ? null : index + 1}
                                 postfix={<Typography type={"title4"} value={String(user[sort[0]])}/>}
-                                className={classes.user}
+                                className={clsx(classes.user, !searchValue && classes.colored)}
                                 key={user.id}
                             />
                         )) : <Error title={"Ничего не нашли"} text={"Имя или фамилия должны точно совпадать"}/>
