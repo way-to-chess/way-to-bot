@@ -17,6 +17,7 @@ export class BaseDTOParticipateRequest {
   readonly fileId: number | null;
   readonly receipt: IFileEntity | null;
   readonly status: EParticipateRequestStatus;
+  readonly createdAt: string;
   readonly message: string | null;
   readonly paymentType: EParticipateRequestPaymentType;
   readonly additionalUsers: TCommonParticipateRequestAdditionalUser[];
@@ -30,6 +31,7 @@ export class BaseDTOParticipateRequest {
     this.fileId = request.fileId ?? null;
     this.receipt = request.receipt ?? null;
     this.status = request.status;
+    this.createdAt = request.createdAt.toISOString();
     this.message = request.message ?? null;
     this.paymentType = request.paymentType;
     this.additionalUsers = request.additionalUsers;
