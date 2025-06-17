@@ -79,7 +79,7 @@ export class AdminFileService {
         { firstNames: new Set<string>(), lastNames: new Set<string>() },
       );
 
-      const { data: users } = await this._userRepository.getMany({
+      const users = await this._userRepository.getRepository(queryRunner).find({
         where: {
           firstName: In(Array.from(participantsData.firstNames)),
           lastName: In(Array.from(participantsData.lastNames)),
@@ -223,7 +223,7 @@ export class AdminFileService {
         { firstNames: new Set<string>(), lastNames: new Set<string>() },
       );
 
-      const { data: users } = await this._userRepository.getMany({
+      const users = await this._userRepository.getRepository(queryRunner).find({
         where: {
           firstName: In(Array.from(participantsData.firstNames)),
           lastName: In(Array.from(participantsData.lastNames)),
