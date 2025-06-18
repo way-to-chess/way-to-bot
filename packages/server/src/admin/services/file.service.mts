@@ -91,7 +91,7 @@ export class AdminFileService {
         const blackSplitted = result.Black.split(" ");
 
         if (whiteSplitted.length !== 2 || blackSplitted.length !== 2) {
-          return;
+          continue;
         }
 
         const whiteUser = users.find(
@@ -236,7 +236,7 @@ export class AdminFileService {
         const nameSplitted = result.Name.split(" ");
 
         if (nameSplitted.length !== 2) {
-          return;
+          continue;
         }
 
         const user = users.find(
