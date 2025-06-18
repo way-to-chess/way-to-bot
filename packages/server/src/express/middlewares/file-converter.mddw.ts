@@ -37,13 +37,20 @@ export async function fileConverterMiddleware(
     // @ts-expect-error Ignat
     req.file.previewFilePath = previewFilePath;
 
-    const jpegFilePath = path.join(parsed.dir, `${parsed.name}.jpeg`);
-    await sharp(originalFilePath).rotate().jpeg().toFile(jpegFilePath);
+    const metadata = await sharp(originalFilePath).metadata();
+    const outputFileName = `s_${parsed.name}.jpeg`;
+    const outputFilePath = path.join(parsed.dir, outputFileName);
+
+    if (metadata.format === "jpeg" || metadata.format === "jpg") {
+      await sharp(originalFilePath).rotate().toFile(outputFilePath);
+    } else {
+      await sharp(originalFilePath).rotate().jpeg().toFile(outputFilePath);
+    }
 
     await fsAsync.unlink(originalFilePath);
 
-    req.file.path = jpegFilePath;
-    req.file.filename = path.basename(jpegFilePath);
+    req.file.path = outputFilePath;
+    req.file.filename = path.basename(outputFilePath);
 
     next();
   } catch (e) {
