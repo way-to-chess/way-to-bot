@@ -29,6 +29,7 @@ jobs:
             echo "server_host=${{ secrets.SERVER_HOST }}" >> "$GITHUB_OUTPUT"
             echo "ssh_username=${{ secrets.SSH_USERNAME }}" >> "$GITHUB_OUTPUT"
             echo "docker_compose_file=docker-compose.yml" >> "$GITHUB_OUTPUT"
+            echo "branch=master" >> "$GITHUB_OUTPUT"
             echo "ssh_key<<EOF" >> "$GITHUB_OUTPUT"
             echo "${{ secrets.SSH_PRIVATE_KEY }}" >> "$GITHUB_OUTPUT"
             echo "EOF" >> "$GITHUB_OUTPUT"
@@ -36,6 +37,7 @@ jobs:
             echo "server_host=${{ secrets.DEV_SERVER_HOST }}" >> "$GITHUB_OUTPUT"
             echo "ssh_username=${{ secrets.DEV_SSH_USERNAME }}" >> "$GITHUB_OUTPUT"
             echo "docker_compose_file=docker-compose.dev.yml" >> "$GITHUB_OUTPUT"
+            echo "branch=dev" >> "$GITHUB_OUTPUT"
             echo "ssh_key<<EOF" >> "$GITHUB_OUTPUT"
             echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" >> "$GITHUB_OUTPUT"
             echo "EOF" >> "$GITHUB_OUTPUT"
@@ -49,7 +51,7 @@ jobs:
           key: ${{ steps.vars.outputs.ssh_key }}
           script: |
             cd /home/way-to-bot
-            git pull origin dev
+            git pull origin ${{ steps.vars.outputs.branch }}
             
             bash ./docker/login.sh
 
