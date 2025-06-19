@@ -90,9 +90,10 @@ const Participants: FC<{ eventId: string }> = ({eventId}) => {
     const event = getNotNil(data, "SingleEventPage -> Participants -> event can't be null")
 
     const {
-        users,
-        participantsLimit
+        participantsLimit,
+        users
     } = event
+
 
     const sliced = users.slice(0, 5)
 
@@ -145,13 +146,13 @@ const SingleEventPage = () => {
     const {
         preview,
         name,
-        users,
         participantsLimit,
         price,
         dateTime,
         location,
         host,
         description,
+        users
     } = event;
 
     const date = dayjs(dateTime);
