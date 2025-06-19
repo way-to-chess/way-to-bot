@@ -30,6 +30,7 @@ export class EventRepository {
         location: true,
         preview: true,
         eventLeagues: {
+          league: true,
           participants: {
             user: {
               photo: true,

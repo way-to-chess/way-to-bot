@@ -30,6 +30,7 @@ export class UserRepository {
       relations: {
         eventLeagues: {
           eventLeague: {
+            league: true,
             event: {
               location: true,
               preview: true,

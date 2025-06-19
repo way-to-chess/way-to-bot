@@ -39,7 +39,10 @@ export class ClientDTOUserGetMany extends BaseDTOUser {
 }
 
 export class ClientDTOUserGetOne extends BaseDTOUser {
-  events: (IEventEntity & { points: number | undefined | null })[];
+  events: (IEventEntity & {
+    points: number | undefined | null;
+    place: number | undefined | null;
+  })[];
   constructor(data: IUserEntity) {
     super(data);
     this.events = data.eventLeagues
@@ -49,7 +52,11 @@ export class ClientDTOUserGetOne extends BaseDTOUser {
 
   private generateEventsList(eventLeagues: IEventLeagueUserEntity[]) {
     return eventLeagues.flatMap((elu) => {
-      return { ...elu.eventLeague.event, points: elu.points };
+      return {
+        ...elu.eventLeague.event,
+        points: elu.points,
+        place: elu.place,
+      };
     });
   }
 }
