@@ -1,29 +1,30 @@
 services:
   app:
     container_name: wtb_app
-    image: traktirwik/way_to_bot:server_${TAG:?err}
+    image: traktirwik/way_to_bot:server_${TAG:?err}_${ENV:?err}
     ports:
       - "3000:3000"
     env_file:
-      - packages/server/.env
+      - ./packages/server/.env
     volumes:
+      - ./packages/server/.env:/app/packages/server/.env
       - ./docker_data/uploads:/app/uploads
       - ./docker_data/api_logs:/app/api_logs
-    restart: unless-stopped
+    restart: on-failure:3
 
   web:
     container_name: wtb_web
-    image: traktirwik/way_to_bot:web_${TAG:?err}
+    image: traktirwik/way_to_bot:web_${TAG:?err}_${ENV:?err}
+    ports:
+      - "80:80"
+      - "443:443"
     volumes:
-      - ./nginx/nginx-dev.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
       - ./nginx/service_unavailable:/usr/share/nginx/html/service_unavailable:ro
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
       - ./docker_data/certbot/www/:/var/www/certbot/:ro
       - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
-    ports:
-      - "80:80"
-      - "443:443"
-    restart: unless-stopped
+    restart: on-failure:3
 
   certbot:
     container_name: wtb_certbot
@@ -37,4 +38,4 @@ services:
         sleep 1d &&
         exit 0
       "
-    restart: unless-stopped
+    restart: on-failure:3
