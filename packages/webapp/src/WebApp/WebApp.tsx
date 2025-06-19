@@ -6,6 +6,7 @@ import "../Assets/SDK/TelegramWebApp.min.js";
 import {store} from "../Store/Store";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {FC, PropsWithChildren} from "react";
+import {ErrorBoundary} from "../Error/Error";
 
 
 const WithAuth: FC<PropsWithChildren> = ({children}) => {
@@ -19,11 +20,13 @@ const WithAuth: FC<PropsWithChildren> = ({children}) => {
 
 
 const WebApp = () => (
-    <Provider store={store}>
-        <WithAuth>
-            <RouterProvider router={WEB_APP_ROUTER}/>
-        </WithAuth>
-    </Provider>
+    <ErrorBoundary>
+        <Provider store={store}>
+            <WithAuth>
+                <RouterProvider router={WEB_APP_ROUTER}/>
+            </WithAuth>
+        </Provider>
+    </ErrorBoundary>
 
 );
 

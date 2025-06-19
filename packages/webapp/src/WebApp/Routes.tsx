@@ -6,10 +6,12 @@ import {SingleEventPage} from "../SingleEventPage/SingleEventPage";
 import {LeaderboardPage} from "../LeaderboardPage/LeaderboardPage";
 import {ProfilePage} from "../ProfilePage/ProfilePage";
 import {SingleUserPage} from "../SingleUserPage/SingleUserPage";
+import {Error} from "../Error/Error"
 
 const WEB_APP_ROUTER = createBrowserRouter([
     {
         Component: Layout,
+        errorElement: <Error title={"Ошибка в приложении"} text={"Обратитесь к разработчикам"}/>,
         children: [
             {
                 path: WEBAPP_ROUTES.emptyRoute,
@@ -45,6 +47,10 @@ const WEB_APP_ROUTER = createBrowserRouter([
                         Component: SingleUserPage,
                     },
                 ],
+            },
+            {
+                path: "*",
+                loader: () => redirect(WEBAPP_ROUTES.emptyRoute)
             }
         ],
     },
