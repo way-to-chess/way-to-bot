@@ -39,6 +39,14 @@ const MENU_ITEMS: TMenuItem[] = [
             </Link>
         ),
     },
+    {
+        key: ROUTES.events,
+        label: (
+            <Link to={ROUTES.events}>
+                {"События"}
+            </Link>
+        ),
+    },
 ];
 
 const MAIN_STYLE: CSSProperties = {

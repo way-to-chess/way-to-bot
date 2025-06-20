@@ -7,6 +7,8 @@ import {ROUTER} from "./Router";
 import {FC, PropsWithChildren} from "react";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {Skeleton} from "antd";
+import '@ant-design/v5-patch-for-react-19';
+
 
 const WithAuth: FC<PropsWithChildren> = ({children}) => {
     const {isLoading, isError} = authApi.useAuthByTelegramQuery({
