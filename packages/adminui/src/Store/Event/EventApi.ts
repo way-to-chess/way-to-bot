@@ -1,8 +1,13 @@
 import {adminApi} from "../AdminApi";
 import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchParams";
-import {AdminDTOEventCreateResponse, AdminDTOEventGetManyResponse} from "@way-to-bot/shared/api/DTO/admin/event.DTO";
+import {
+    AdminDTOEventCreateResponse,
+    AdminDTOEventDeleteResponse,
+    AdminDTOEventGetManyResponse
+} from "@way-to-bot/shared/api/DTO/admin/event.DTO";
 import {TAdminEventCreatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
+import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
 
 
 const eventApi = adminApi.injectEndpoints({
@@ -16,6 +21,13 @@ const eventApi = adminApi.injectEndpoints({
                 url: "event",
                 method: "POST",
                 body: payload
+            }),
+            invalidatesTags: [{type: "EVENT", id: "ALL"}]
+        }),
+        deleteEvent: build.mutation<AdminDTOEventDeleteResponse, IWithId>({
+            query: ({id}) => ({
+                url: `event/${id}`,
+                method: "DELETE",
             }),
             invalidatesTags: [{type: "EVENT", id: "ALL"}]
         }),

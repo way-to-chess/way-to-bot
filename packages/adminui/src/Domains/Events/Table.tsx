@@ -10,6 +10,7 @@ import {
     Form,
     Input,
     message,
+    Popconfirm,
     Row,
     Select,
     SelectProps,
@@ -21,13 +22,15 @@ import {
 import {eventApi} from "../../Store/Event/EventApi";
 import {extractId} from "../../Utils/Extract";
 import {AdminDTOEventGetMany} from "@way-to-bot/shared/api/DTO/admin/event.DTO";
-import {EEventStatus} from "@way-to-bot/shared/api/enums/index";
+import {EEventStatus, ESortDirection} from "@way-to-bot/shared/api/enums/index";
 import {LocationSelect} from "../Locations/LocationSelect";
 import {UserSelect} from "../Users/UserSelect";
 import {TAdminEventCreatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
 import {Dayjs} from "dayjs"
 import {UploadFile} from "antd/es/upload/interface";
 import {ClientDTOFileCreateResponse} from "@way-to-bot/shared/api/DTO/client/file.DTO";
+import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
+import {PlusIcon} from "lucide-react";
 
 const requiredRule = {required: true, message: 'Обязательное поле'}
 
@@ -112,7 +115,7 @@ const CreateForm: FC<{ onClose: VoidFunction }> = ({onClose}) => {
             fileId,
             dateTime: dateTime[0].toDate(),
             duration,
-            participantsLimit: Number(participantsLimit),
+            participantsLimit: isNaN(Number(participantsLimit)) ? 0 : Number(participantsLimit),
             ...rest
         }).unwrap().then(() => {
             message.success(`Событие ${rest.name} успешно создано`)
@@ -120,7 +123,6 @@ const CreateForm: FC<{ onClose: VoidFunction }> = ({onClose}) => {
         }).catch((err) => {
             message.error(JSON.stringify(err))
         })
-
     }
 
     return <Form layout={"vertical"} requiredMark={"optional"} onFinish={onFinish}>
@@ -145,7 +147,7 @@ const CreateForm: FC<{ onClose: VoidFunction }> = ({onClose}) => {
         </Row>
         <Row gutter={16}>
             <Col span={12}>
-                <Form.Item name={"price"} label={"Цена участия"}>
+                <Form.Item name={"price"} label={"Цена участия"} rules={[requiredRule]}>
                     <Input disabled={isLoading} style={{width: '100%'}} placeholder={"Бесплатно"}/>
                 </Form.Item>
             </Col>
@@ -199,15 +201,40 @@ const CreateForm: FC<{ onClose: VoidFunction }> = ({onClose}) => {
     </Form>
 }
 
+const DeleteButton: FC<IWithId> = ({id}) => {
+    const [trigger, {isLoading}] = eventApi.useDeleteEventMutation()
+
+    const onConfirm = () => trigger({id})
+
+    return <Popconfirm
+        title={"Удалить?"}
+        okText={"Да"}
+        cancelText={"Нет"}
+        onConfirm={onConfirm}
+    >
+        <Button danger loading={isLoading} type={"text"}>{"Удалить"}</Button>
+    </Popconfirm>
+}
+
 const COLUMNS: TableProps<AdminDTOEventGetMany>["columns"] = [
     {
         title: "Название",
         dataIndex: "name"
     },
+    {
+        title: "Действия",
+        width: 100,
+        render: ({id}) => <DeleteButton id={id}/>
+    }
 ];
 
 const EventsTable = () => {
-    const {data, isFetching} = eventApi.useGetAllEventsQuery({})
+    const {data, isFetching} = eventApi.useGetAllEventsQuery({
+        sort: {
+            field: "createdAt",
+            direction: ESortDirection.DESC
+        }
+    })
     const [open, setOpen] = useState(false)
 
     const showDrawer = () => {
@@ -224,7 +251,8 @@ const EventsTable = () => {
                 <CreateForm onClose={onClose}/>
             </Drawer>
             <Flex vertical gap={8}>
-                <Button style={{width: "fit-content", alignSelf: "end",}} type={"primary"} onClick={showDrawer}>
+                <Button style={{width: "fit-content", alignSelf: "end",}} type={"primary"} onClick={showDrawer}
+                        icon={<PlusIcon size={14}/>}>
                     {"Создать"}
                 </Button>
                 <Table
