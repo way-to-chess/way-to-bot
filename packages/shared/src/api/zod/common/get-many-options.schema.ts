@@ -14,7 +14,7 @@ export const PaginationSchema = z
 
 export const BaseOperand = z
   .object({
-    field: z.string(),
+    field: z.union([z.string(), z.array(z.string())]),
     predicate: z.nativeEnum(EOperandPredicate),
     value: z.any(),
   })

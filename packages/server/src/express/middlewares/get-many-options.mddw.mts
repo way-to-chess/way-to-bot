@@ -1,20 +1,32 @@
 import { Request, Response, NextFunction } from "express";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
+import { decodeObjectFromUrlSafeBase64 } from "@way-to-bot/shared/utils/UrlEncoder.js";
 
 export function getManyOptionsMddw(
   req: Request,
   res: Response,
   next: NextFunction,
 ) {
-  try {
-    if (typeof req.query.q === "string") {
-      const decodedQuery = Buffer.from(req.query.q, "base64").toString();
-      const parsedQuery = JSON.parse(decodedQuery) as TCommonGetManyOptions;
-      req.getManyOptions = parsedQuery;
-    }
-
+  // Проверяем, есть ли query параметр
+  if (!req.query?.q || typeof req.query.q !== "string") {
     return next();
-  } catch (e) {
-    return next(e);
+  }
+
+  try {
+    req.getManyOptions = decodeObjectFromUrlSafeBase64(
+      req.query.q,
+    ) as TCommonGetManyOptions;
+    return next();
+  } catch (e: any) {
+    console.error("Base64 decode error:", e);
+    return next(
+      new BadRequestError("Failed to decode base64 string", {
+        details: {
+          error: e.message,
+          query: req.query.q,
+        },
+      }),
+    );
   }
 }

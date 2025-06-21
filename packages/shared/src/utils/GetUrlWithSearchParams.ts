@@ -1,16 +1,7 @@
 import { TCommonGetManyOptions } from "../api/zod/common/get-many-options.schema";
-
-const textEncoder = new TextEncoder();
-
-const encodeToBase64Binary = (str: string) => {
-  const utf8Bytes = textEncoder.encode(str);
-
-  const binary = String.fromCharCode(...utf8Bytes);
-
-  return window.btoa(binary);
-};
+import { encodeObjectToUrlSafeBase64 } from "./UrlEncoder";
 
 const getUrlWithSearchParams = (url: string, options: TCommonGetManyOptions) =>
-  `${url}?q=${encodeToBase64Binary(JSON.stringify(options))}`;
+  `${url}?q=${encodeObjectToUrlSafeBase64(JSON.stringify(options))}`;
 
 export { getUrlWithSearchParams };
