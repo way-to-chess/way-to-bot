@@ -39,8 +39,6 @@ FILES COUNT CORRUPTED: ${corruptedFiles}
 
     // delete files non-existing in db from fs
     const deletedFilesFromFs = await deleteFilesFromFs(
-      dbService,
-      fileService,
       filesFromFs,
       usingFiles.map((f) => f.url),
     );
@@ -82,14 +80,26 @@ main()
  * @param {string[]} usingFiles
  * @returns {Promise<number>}
  */
-async function deleteFilesFromFs(
-  dbService,
-  fileService,
-  filesFromFs,
-  usingFiles,
-) {
+async function deleteFilesFromFs(filesFromFs, usingFiles) {
   const filesDeletePromiseList = filesFromFs
-    .filter((f) => !usingFiles.includes(f))
+    .filter((f) => {
+      const dirName = path.dirname(f);
+
+      if (!dirName || dirName === "." || dirName === "/") {
+        return false;
+      }
+
+      const hasFilesInDir = usingFiles.some((usingFile) => {
+        const usingDirName = path.dirname(usingFile);
+        return usingDirName === dirName;
+      });
+
+      if (hasFilesInDir) {
+        return false;
+      }
+
+      return true;
+    })
     .map(
       (f) =>
         new Promise((resolve, reject) => {
