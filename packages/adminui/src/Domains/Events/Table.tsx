@@ -34,20 +34,21 @@ import {PlusIcon} from "lucide-react";
 
 const requiredRule = {required: true, message: 'Обязательное поле'}
 
-type TUploadProps = Omit<UploadProps, "accept" | "action" | "method" | "listType" | "onChange" | "style">
+type TUploadProps = Omit<UploadProps, "accept" | "action" | "method" | "listType" | "style">
 
-const UploadImage: FC<TUploadProps> = (props) => {
+const UploadImage: FC<TUploadProps> = ({onChange: onChangeFromProps, ...props}) => {
     const [hideInput, setHideInput] = useState(false)
 
     const onChange: UploadProps["onChange"] = (info) => {
         const {status} = info.file;
+
+        console.log(status, 123)
 
         if (status === "uploading") {
             setHideInput(true)
         }
         if (status === 'done') {
             setHideInput(true)
-            info.file.response.data.id
             message.success(`${info.file.name} успешно загружен`);
         }
         if (status === 'error') {
@@ -58,9 +59,13 @@ const UploadImage: FC<TUploadProps> = (props) => {
         if (status === 'removed') {
             setHideInput(false)
         }
+
+        onChangeFromProps?.(info)
     }
 
     const action = `${import.meta.env.VITE_API_URL}/client/file`
+
+    console.log(hideInput, 123)
 
     return <Upload accept={"image/*"} action={action} method={"POST"} listType={"picture"}
                    onChange={onChange} style={{width: "100%"}}  {...props}>

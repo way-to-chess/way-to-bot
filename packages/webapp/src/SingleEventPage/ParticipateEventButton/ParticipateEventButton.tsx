@@ -1,8 +1,12 @@
 import {Button} from "../../Button/Button";
 import classes from "./ParticipateEventButton.module.css";
-import {FC, memo, useRef, useState} from "react";
+import {FC, memo, ReactNode, useRef, useState} from "react";
 import {eventApi} from "../../Store/Event/EventApi";
-import {EEventStatus} from "@way-to-bot/shared/api/enums";
+import {
+    EEventStatus,
+    EParticipateRequestPaymentType,
+    EParticipateRequestStatus
+} from "@way-to-bot/shared/api/enums/index";
 import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {useSelector} from "react-redux";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
@@ -15,20 +19,22 @@ import {Skeleton} from "../../Skeleton/Skeleton";
 import clsx from "clsx";
 import {
     BanknoteIcon,
+    CheckIcon,
     ChevronDownIcon,
     CircleDollarSignIcon,
     CreditCardIcon,
     EditIcon,
     Hourglass,
     PaperclipIcon,
-    UploadIcon
+    UploadIcon,
+    XIcon
 } from "lucide-react";
 import {IOption, Options} from "../../Options/Options";
 import {splitAmountAndCurrency} from "./SplitAmountAndCurrency";
 import {useUploadFile} from "../../Hooks/UseUploadFile";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
-import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
+import dayjs from "dayjs";
 
 interface IWithEventId {
     eventId: string
@@ -38,7 +44,7 @@ const User: FC<IWithId> = ({id}) => {
     const {data, isLoading} = userApi.useGetUserByIdQuery(id.toString())
 
     if (isLoading) {
-        return <Skeleton style={{height: 124, width: "100%", borderRadius: 16}}/>
+        return <Skeleton style={{height: 78, width: "100%", borderRadius: 16}}/>
     }
 
     if (!data) {
@@ -55,26 +61,22 @@ const User: FC<IWithId> = ({id}) => {
     </div>
 }
 
-type TPaymentMethod = "card" | "cash" | "receipt"
-
-const PAYMENT_METHODS: IOption<TPaymentMethod>[] = [
+const PAYMENT_METHODS: IOption<EParticipateRequestPaymentType>[] = [
     {
-        value: "card",
+        value: EParticipateRequestPaymentType.ONLINE,
         title: "Карта",
         description: "Оплата онлайн через приложение",
         icon: <CreditCardIcon color={"#007AFF"}/>,
         disabled: true
-
     },
     {
-        value: "cash",
+        value: EParticipateRequestPaymentType.CASH,
         title: "Наличными на месте",
         description: "Оплата при встрече на месте",
         icon: <BanknoteIcon color={"#007AFF"}/>,
-        disabled: true
     },
     {
-        value: "receipt",
+        value: EParticipateRequestPaymentType.RECEIPT,
         title: "Прикрепить чек",
         description: "Пришлите фото чека после перевода",
         icon: <PaperclipIcon color={"#007AFF"}/>
@@ -82,8 +84,8 @@ const PAYMENT_METHODS: IOption<TPaymentMethod>[] = [
 ]
 
 interface ISelectMethodProps {
-    value: null | TPaymentMethod;
-    onChange: (method: TPaymentMethod | null) => void
+    value: null | EParticipateRequestPaymentType;
+    onChange: (method: EParticipateRequestPaymentType | null) => void
 }
 
 const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
@@ -107,7 +109,7 @@ const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
         </button>
     )
 
-    const onValueChange = (value: null | TPaymentMethod) => {
+    const onValueChange = (value: null | EParticipateRequestPaymentType) => {
         onChange(value)
         setOpen(false)
     }
@@ -120,7 +122,7 @@ const SelectMethod: FC<ISelectMethodProps> = ({value, onChange}) => {
 
 const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeModal}) => {
 
-    const [paymentMethod, setPaymentMethod] = useState<null | TPaymentMethod>(null)
+    const [paymentMethod, setPaymentMethod] = useState<null | EParticipateRequestPaymentType>(null)
     const {data: event} = eventApi.useGetEventByIdQuery(eventId)
 
     const amountAndCurrency = event?.price ? splitAmountAndCurrency(event.price) : ["0", ""]
@@ -136,8 +138,8 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
 
     const fileInputRef = useRef<HTMLInputElement>(null)
 
-    const setPaymentMethodChange = (method: TPaymentMethod | null) => {
-        if (method === "receipt") {
+    const setPaymentMethodChange = (method: EParticipateRequestPaymentType | null) => {
+        if (method === EParticipateRequestPaymentType.RECEIPT) {
             fileInputRef.current?.click()
         }
 
@@ -146,10 +148,9 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
 
     const {onChange, fileName, fileId, isLoading: fileUploadLoading, error} = useUploadFile()
 
-    const disabled = !paymentMethod || (paymentMethod === "receipt" && !fileId)
+    const disabled = !paymentMethod || (paymentMethod === EParticipateRequestPaymentType.RECEIPT && !fileId)
 
     const text = fileName ?? (error ? "Ошибка при загрузке" : "Загрузить документ")
-
 
     const [createParticipateRequest, {isLoading}] = participateRequestApi.useCreateParticipateRequestMutation()
 
@@ -160,7 +161,8 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
 
         createParticipateRequest({
             eventId: Number(eventId),
-            fileId: getNotNil(fileId, "ParticipateEventButton -> Payment -> createParticipateRequest -> fileId"),
+            fileId,
+            paymentType: paymentMethod,
             additionalUsers: []
         }).unwrap().then(closeModal)
     }
@@ -187,7 +189,7 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
             </div>
 
             {
-                paymentMethod === "receipt" ?
+                paymentMethod === EParticipateRequestPaymentType.RECEIPT ?
                     <Button variant={"secondary"} as={"label"} loading={fileUploadLoading} className={classes.upload}>
                         <input type={"file"} onChange={onChange}/>
                         {fileId ? null : <UploadIcon/>}
@@ -203,6 +205,19 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
     </>
 }
 
+const ICON_BY_STATUS: Record<EParticipateRequestStatus, ReactNode> = {
+    [EParticipateRequestStatus.WAITING]: <Hourglass color={"#fff"} width={20} height={20}/>,
+    [EParticipateRequestStatus.APPROVED]: <CheckIcon color={"#fff"} width={20} height={20}/>,
+    [EParticipateRequestStatus.REJECTED]: <XIcon color={"#fff"} width={20} height={20}/>
+}
+const TEXT_BY_STATUS: Record<EParticipateRequestStatus, ReactNode> = {
+    [EParticipateRequestStatus.WAITING]: <Typography type={"title4"} value={"Заявка на рассмотрении"}
+                                                     color={"textColor2"}/>,
+    [EParticipateRequestStatus.APPROVED]: <Typography type={"title4"} value={"Заявка подтверждена"}
+                                                      color={"greenColor"}/>,
+    [EParticipateRequestStatus.REJECTED]: <Typography type={"title4"} value={"Заявка отклонена"} color={"redColor"}/>
+}
+
 const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) => {
     const [open, setOpen] = useState(false)
     const {data, isLoading} = participateRequestApi.useGetAllParticipateRequestsQuery()
@@ -216,23 +231,23 @@ const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) =
 
     const closeModal = () => setOpen(false)
 
-
-    const titleNode = (
+    const titleNode = lastRequest ? (
         <div className={classes.statusBlock}>
-            <div className={classes.status}>
-                <Hourglass color={"#fff"} width={20} height={20}/>
+            <div className={clsx(classes.status, classes[lastRequest.status])}>
+                {ICON_BY_STATUS[lastRequest.status]}
             </div>
 
             <div className={classes.participantText}>
-                <Typography type={"title4"} value={"Заявка на рассмотрении"} color={"textColor2"}/>
-                {/*<Typography type={"text2"} value={"Сегодня, 8 марта, 12:23"} color={"textColor3"}/>*/}
+                {TEXT_BY_STATUS[lastRequest.status]}
+                <Typography type={"text2"} value={dayjs(lastRequest.createdAt).format("D MMMM, dd HH:mm")}
+                            color={"textColor3"}/>
             </div>
         </div>
-    )
+    ) : null
 
     return <BottomSheet className={classes.popup} title={lastRequest ? undefined : "Отправить заявку"}
                         onOpenChange={setOpen} open={open}
-                        titleNode={lastRequest ? titleNode : null}
+                        titleNode={titleNode}
                         trigger={<Button className={classes.button}
                                          value={lastRequest ? "Моя заявка" : "Участвовать"}/>}>
 
@@ -242,18 +257,28 @@ const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) =
             lastRequest ?
                 <div className={clsx(classes.block, classes.paymentMethod)}>
                     <Typography type={"title4"} value={"Способ оплаты"}/>
-                    <a href={getPreviewSrc(lastRequest.receipt?.url)} target={"_blank"} rel={"noreferrer noopener"}
-                       className={clsx(classes.paymentMethodSelect, classes.selected)}>
-                        <PaperclipIcon color={"#007AFF"}/>
+                    {lastRequest.paymentType === EParticipateRequestPaymentType.RECEIPT ?
+                        <a href={getPreviewSrc(lastRequest.receipt?.url)} target={"_blank"} rel={"noreferrer noopener"}
+                           className={clsx(classes.paymentMethodSelect, classes.selected)}>
+                            <PaperclipIcon color={"#007AFF"}/>
 
-                        <Typography type={"title5"} color={"mainColor"} className={"flex1"} value={"Посмотреть чек"}/>
+                            <Typography type={"title5"} color={"mainColor"} className={"flex1"}
+                                        value={"Посмотреть чек"}/>
 
-                        <ImgWithContainer className={classes.receiptContainer}
-                                          previewUrl={lastRequest.receipt?.previewUrl}/>
-                    </a>
+                            <ImgWithContainer className={classes.receiptContainer}
+                                              previewUrl={lastRequest.receipt?.previewUrl}/>
+                        </a> : null
+                    }
+                    {
+                        lastRequest.paymentType === EParticipateRequestPaymentType.CASH ?
+                            <div className={clsx(classes.paymentMethodSelect, classes.selected)}>
+                                <BanknoteIcon color={"#007AFF"}/>
+                                <Typography type={"title5"} color={"mainColor"} className={"flex1"}
+                                            value={"Наличними на месте"}/>
+                            </div> : null
+                    }
                 </div> :
                 <Payment eventId={eventId} closeModal={closeModal}/>
-
         }
     </BottomSheet>
 
@@ -264,6 +289,10 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
     const authId = useSelector(authSlice.selectors.id)
 
     if (event?.status !== EEventStatus.WAITING) {
+        return null
+    }
+
+    if (event.host.id === authId) {
         return null
     }
 
