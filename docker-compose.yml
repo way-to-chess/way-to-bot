@@ -8,8 +8,8 @@ services:
       - ./packages/server/.env
     volumes:
       - ./packages/server/.env:/app/packages/server/.env
-      - ./docker_data/uploads:/app/uploads
-      - ./docker_data/api_logs:/app/api_logs
+      - ./docker_data/uploads:/app/docker_data/uploads
+      - ./docker_data/api_logs:/app/docker_data/api_logs
     restart: on-failure:3
 
   web:

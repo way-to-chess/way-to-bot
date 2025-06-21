@@ -10,6 +10,10 @@ export class DbService {
       host: process.env.DB_HOST,
       port: process.env.DB_PORT,
       database: process.env.POSTGRES_DB,
+      ssl:
+        process.env.NODE_ENV === "production"
+          ? { rejectUnauthorized: false }
+          : false,
     });
   }
 
