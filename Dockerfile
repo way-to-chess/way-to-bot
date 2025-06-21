@@ -45,6 +45,7 @@ COPY --from=base /app/packages/shared/package.json ./packages/shared/package.jso
 COPY --from=server-build /app/packages/server/package.json ./packages/server/package.json
 COPY --from=server-build /app/packages/server/dist ./packages/server/dist
 COPY --from=server-build /app/packages/server/bin ./packages/server/bin
+COPY --from=server-build /app/packages/server/scripts ./packages/server/scripts
 
 RUN npm ci --production --workspaces --include-workspace-root
 

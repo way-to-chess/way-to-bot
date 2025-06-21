@@ -2,6 +2,7 @@ import {createBrowserRouter, redirect} from "react-router";
 import {Layout} from "./Layout/Layout";
 import {UsersTable} from "./Domains/Users/Table";
 import {ParticipateRequestsTable} from "./Domains/ParticipateRequests/Table";
+import {EventsTable} from "./Domains/Events/Table";
 
 
 const ROUTER = createBrowserRouter([
@@ -36,6 +37,15 @@ const ROUTER = createBrowserRouter([
                             {
                                 index: true,
                                 Component: ParticipateRequestsTable
+                            }
+                        ]
+                    },
+                    {
+                        path: "events",
+                        children: [
+                            {
+                                index: true,
+                                Component: EventsTable
                             }
                         ]
                     }

@@ -16,7 +16,7 @@ const adminApi = createApi({
             return headers
         }
     }),
-    tagTypes: ["USER", "LEAGUE", "PARTICIPATE_REQUEST"],
+    tagTypes: ["USER", "LEAGUE", "PARTICIPATE_REQUEST", "EVENT", "LOCATION"],
     endpoints: () => ({})
 });
 
