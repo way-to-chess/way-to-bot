@@ -1,19 +1,51 @@
-import {memo} from "react";
-import {Badge, Button, Flex, Table, TableProps, Typography} from "antd";
+import {memo, useState} from "react";
+import {
+    Badge,
+    Button,
+    Drawer,
+    Flex,
+    Form,
+    Input,
+    message,
+    Select,
+    SelectProps,
+    Table,
+    TableProps,
+    Typography
+} from "antd";
 import {TEXT} from "@way-to-bot/shared/constants/text";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import type {IWithRequestId} from "@way-to-bot/shared/interfaces/with.interface";
 import type {ExpandableConfig} from "rc-table/lib/interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import dayjs from "dayjs";
-import {entitySlice} from "../../EntitySlice";
-import {useActionCreator} from "@way-to-bot/shared/utils/UseActionCreator";
-import {PARTICIPATE_REQUESTS_DRAWER_ID} from "../../Constants/EntityIds";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
-import {AdminDTOParticipateRequestGetMany} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index";
+import {
+    AdminDTOParticipateRequestGetMany,
+    AdminDTOParticipateRequestGetOne
+} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
+import {
+    EParticipateRequestPaymentType,
+    EParticipateRequestStatus,
+    ESortDirection
+} from "@way-to-bot/shared/api/enums/index";
+import {TAdminParticipateRequestUpdatePayload} from "@way-to-bot/shared/api/zod/admin/participate-request.schema";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
+
+const options: SelectProps["options"] = [
+    {
+        value: EParticipateRequestStatus.APPROVED,
+        label: <Badge offset={[4, 0]} status={"success"} text={"Подтверждена"}/>
+    },
+    {
+        value: EParticipateRequestStatus.REJECTED,
+        label: <Badge offset={[4, 0]} status={"error"} text={"Отклонена"}/>
+    },
+    {
+        value: EParticipateRequestStatus.WAITING,
+        label: <Badge offset={[4, 0]} status={"processing"} text={"На рассмотрении"}/>
+    }
+]
 
 const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     {
@@ -30,12 +62,7 @@ const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     {title: TEXT.event, render: (_, {event}) => event.name},
     {
         title: TEXT.status,
-        render: (_, {status}) => (
-            <Badge
-                status={status === EParticipateRequestStatus.APPROVED ? "success" : "processing"}
-                text={status === EParticipateRequestStatus.APPROVED ? TEXT.approvedStatus : TEXT.waitingStatus}
-            />
-        ),
+        render: (_, {status}) => options.find((it) => it.value === status)?.label
     },
     {
         title: TEXT.createdAt,
@@ -43,39 +70,70 @@ const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     },
 ];
 
-const OpenApproveDrawer = memo(({requestId}: IWithRequestId) => {
-    const openDrawer = useActionCreator(entitySlice.actions.addEntity, {
-        id: PARTICIPATE_REQUESTS_DRAWER_ID,
-        // @ts-ignore
-        requestId,
-    });
 
-    return (
-        <Button type={"primary"} onClick={openDrawer}>
-            {TEXT.approve}
-        </Button>
-    );
+const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status" | "id">) => {
+    const [approve, {isLoading}] = participateRequestApi.useUpdateParticipateRequestMutation();
+
+    const [open, setOpen] = useState(false)
+
+    const onClose = () => setOpen(false)
+
+    const onOpen = () => setOpen(true)
+
+    const onFinish = (values: TAdminParticipateRequestUpdatePayload) => {
+        approve({id, ...values}).unwrap().then(() => {
+            message.success("Заявка обновлена")
+            setOpen(false)
+        }).catch(() => {
+            message.error("Ошибка при отпавке зароса")
+        })
+    }
+
+    return <>
+        <Button loading={isLoading} onClick={onOpen} type={"primary"}>{"Обновить статус"}</Button>
+        <Drawer open={open} onClose={onClose} title={"Обновить заявку"}>
+            <Form layout={"vertical"} onFinish={onFinish}>
+                <Form.Item name={"status"} label={"Статус"} initialValue={status}>
+                    <Select options={options}/>
+                </Form.Item>
+
+                <Form.Item name={"message"} label={"Сообщение"}>
+                    <Input.TextArea/>
+                </Form.Item>
+
+                <Form.Item style={{float: "right"}}>
+                    <Button type={"primary"} htmlType={"submit"}>
+                        {"Обновить"}
+                    </Button>
+                </Form.Item>
+            </Form>
+        </Drawer>
+    </>
 });
 
 const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
     expandRowByClick: true,
-    expandedRowRender: ({receipt, id, status,}) => {
+    expandedRowRender: ({paymentType, id, receipt, status,}) => {
         return (
             <Flex align={"center"} justify={"space-between"}>
-                {receipt ? (
+                {paymentType === EParticipateRequestPaymentType.RECEIPT ?
                     <Typography.Link
-                        href={getPreviewSrc(receipt.previewUrl)}
+                        href={getPreviewSrc(receipt?.previewUrl)}
                         target={"_blank"}
                         rel="noreferrer"
                     >
                         {TEXT.showFile}
-                    </Typography.Link>
-                ) : (
-                    <Typography.Text type={"danger"}>{TEXT.noFile}</Typography.Text>
-                )}
-                {status === EParticipateRequestStatus.APPROVED ? null : (
-                    <OpenApproveDrawer requestId={id}/>
-                )}
+                    </Typography.Link> : null
+
+                }
+
+                {paymentType === EParticipateRequestPaymentType.CASH ?
+                    <Typography.Text>
+                        {"Оплата наличными на месте"}
+                    </Typography.Text> : null
+                }
+
+                <Edit id={id} status={status}/>
             </Flex>
         );
     },
@@ -84,7 +142,12 @@ const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
 const getRowKey = (request: AdminDTOParticipateRequestGetMany) => request.id;
 
 const ParticipateRequestsTable = () => {
-    const {data, isFetching} = participateRequestApi.useGetAllParticipateRequestsQuery({});
+    const {data, isFetching} = participateRequestApi.useGetAllParticipateRequestsQuery({
+        sort: {
+            field: "createdAt",
+            direction: ESortDirection.DESC
+        }
+    });
 
     return (
         <Table

@@ -106,10 +106,18 @@ div.popup {
     width: 32px;
     height: 32px;
     flex-shrink: 0;
-    background: #707579;
+    background: var(--text-color-2);
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
     margin-left: 6px
+}
+
+.approved {
+    background: var(--green-color);
+}
+
+.rejected {
+    background: var(--red-color);
 }

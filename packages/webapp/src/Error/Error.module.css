@@ -23,9 +23,11 @@
 
 .title {
     margin-bottom: 12px;
+    text-align: center;
 }
 
 .text {
     margin-bottom: 32px;
     white-space: break-spaces;
+    text-align: center;
 }

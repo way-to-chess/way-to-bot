@@ -129,7 +129,12 @@ const LeaderboardPage = () => {
 
 
     if (isError) {
-        return <RefetchError refetch={refetch} error={error}/>
+        const onRefetch = () => {
+            setSearchValue("")
+            refetch()
+        }
+
+        return <RefetchError refetch={onRefetch} error={error}/>
     }
 
     const onValueChange = (value: unknown) => {

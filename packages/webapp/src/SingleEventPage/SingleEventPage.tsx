@@ -104,7 +104,7 @@ const Participants: FC<{ eventId: string }> = ({eventId}) => {
                 currentCount={users.length}
                 maxCount={participantsLimit}
             />
-            {sliced.length > 0 ? <AllParticipants users={users}/> : null}
+            {users.length > 5 ? <AllParticipants users={users}/> : null}
 
         </div>
         {

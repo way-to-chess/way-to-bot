@@ -46,8 +46,8 @@ const UserSelect: FC<TSelectProps> = (props) => {
         previewUrl: getPreviewSrc(photo?.previewUrl)
     }))
 
-    return <Select showSearch options={options} loading={isFetching} optionRender={optionRender}
-                   filterOption={filterOption} placeholder={"Выберите пользователя"} {...props}/>
+    return <Select {...props} showSearch options={options} loading={isFetching} optionRender={optionRender}
+                   filterOption={filterOption} placeholder={"Выберите пользователя"}/>
 }
 
 export {UserSelect}
