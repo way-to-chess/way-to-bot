@@ -90,7 +90,7 @@ const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status"
     }
 
     return <>
-        <Button loading={isLoading} onClick={onOpen} type={"primary"}>{"Обновить"}</Button>
+        <Button loading={isLoading} onClick={onOpen} type={"primary"}>{"Обновить статус"}</Button>
         <Drawer open={open} onClose={onClose} title={"Обновить заявку"}>
             <Form layout={"vertical"} onFinish={onFinish}>
                 <Form.Item name={"status"} label={"Статус"} initialValue={status}>
