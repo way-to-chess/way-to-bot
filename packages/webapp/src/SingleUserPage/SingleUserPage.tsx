@@ -45,10 +45,11 @@ const Block: FC<IBlockProps> = ({title, children}) => {
     </div>
 }
 
-const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = ({preview, name, dateTime, location, id}) => {
+const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = ({preview, name, dateTime, location, id, points}) => {
     const to = generatePath("/events/:id", {id: id.toString()})
     const date = dayjs(dateTime);
     const formattedDate = date.format("D MMMM, dd").toLowerCase();
+
 
     return <Link to={to} className={classes.historyItem}>
         <ImgWithContainer previewUrl={preview?.url} className={classes.historyItemImg}/>
@@ -62,6 +63,12 @@ const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = ({preview, name, 
             }
 
         </div>
+
+        {points ? Number(points) > 0 ?
+            <Typography className={classes.points} type={"text2"} value={`+${points}`} color={"greenColor"}/> :
+            <Typography className={classes.points} type={"text2"} color={"redColor"} value={points}/> : null}
+
+
     </Link>
 }
 
@@ -137,8 +144,11 @@ const SingleUserPage = () => {
                 <Typography type={"text2"} value={"Нет наград"}/>
             </Block>
 
+
             <Block title={"История событий"}>
-                {sortByKey(events, "dateTime").map((event) => <HistoryItem {...event} key={event.id}/>)}
+                {events.length > 0 ?
+                    sortByKey(events, "dateTime").map((event) => <HistoryItem {...event} key={event.id}/>) :
+                    <Typography type={"text2"} value={"Нет событий"}/>}
             </Block>
         </div>
     </div>

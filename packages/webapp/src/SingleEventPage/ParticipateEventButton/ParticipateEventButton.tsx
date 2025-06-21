@@ -296,6 +296,10 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
         return null
     }
 
+    if (event.users.length >= Number(event.participantsLimit)) {
+        return null
+    }
+
     if (!authId) {
         return <Button as={"link"} className={classes.button} value={"Создать профиль"} to={"/profile"}/>
     }
