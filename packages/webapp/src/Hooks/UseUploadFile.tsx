@@ -7,7 +7,7 @@ interface IFile {
     name: string
 }
 
-const useUploadFile = () => {
+const useUploadFile = ({afterUpload}: { afterUpload?: (file: IFile) => void }) => {
     const [uploadFile, {error, isLoading}] = fileApi.useUploadFileMutation();
     const [file, setFile] = useState<IFile | undefined>(undefined);
 
@@ -27,6 +27,11 @@ const useUploadFile = () => {
             .unwrap()
             .then(({url, id}) => {
                 setFile({
+                    id,
+                    url,
+                    name: fileName
+                })
+                afterUpload?.({
                     id,
                     url,
                     name: fileName

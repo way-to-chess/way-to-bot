@@ -5,7 +5,7 @@ import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import {userApi} from "../Store/User/UserApi";
 import {TTypographyProps, Typography} from "../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import {FC, PropsWithChildren, ReactNode} from "react";
+import {FC, PropsWithChildren, ReactNode, useRef, useState} from "react";
 import {ChartIcon} from "../Icons/ChartIcon";
 import {TrophyIcon} from "../Icons/TrophyIcon";
 import {GamePadIcon} from "../Icons/GamePadIcon";
@@ -16,6 +16,13 @@ import {Error, RefetchError} from "../Error/Error";
 import {Button} from "../Button/Button";
 import {sortByKey} from "../Utils/SortByKey";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
+import {authSlice} from "@way-to-bot/shared/redux/authSlice";
+import {useSelector} from "react-redux";
+import clsx from "clsx";
+import {EditIcon, EyeIcon, TrashIcon} from "lucide-react";
+import {BottomSheet} from "../BottomSheet/BottomSheet";
+import {IOption, Options} from "../Options/Options";
+import {useUploadFile} from "../Hooks/UseUploadFile";
 
 interface IStatItem {
     icon: ReactNode;
@@ -88,6 +95,69 @@ const Loading = () => {
     </div>
 }
 
+const OPTIONS: IOption<"preview" | "edit" | "delete">[] = [
+    {
+        title: "Посмотреть фото",
+        value: 'preview',
+        indicator: <EyeIcon size={16}/>,
+    },
+    {
+        title: "Изменить фото",
+        value: 'edit',
+        indicator: <EditIcon size={16}/>
+    },
+    {
+        title: "Удалить фото",
+        value: 'delete',
+        indicator: <TrashIcon size={16} color={"var(--red-color)"}/>,
+        danger: true,
+        className: classes.danger,
+    }
+]
+
+const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = ({photo, id, children}) => {
+    const [update] = userApi.useUpdateUserMutation()
+    const [open, setOpen] = useState(false)
+
+    const trigger = (
+        <button>
+            <ImgWithContainer previewUrl={photo?.previewUrl} className={clsx(classes.img, classes.owner)}/>
+            <div className={classes.edit}>
+                <EditIcon size={16} color={"#fff"}/>
+            </div>
+        </button>
+    )
+
+    const {onChange, isLoading: fileUploadLoading, error} = useUploadFile({
+        afterUpload: ({id: fileId}) => {
+            update({fileId, id})
+            setOpen(false)
+        }
+    })
+
+    const inputRef = useRef<HTMLInputElement>(null)
+
+    const onValueChange = (value: "preview" | "edit" | "delete") => {
+        if (value === "preview") {
+            window.open(getPreviewSrc(photo?.url), "_blank",)
+        }
+
+        if (value === "edit") {
+            inputRef.current?.click()
+        }
+
+        if (value === "delete") {
+            update({fileId: null, id})
+        }
+    }
+
+    return <BottomSheet open={open} onOpenChange={setOpen} trigger={trigger} title={"Выберите действие"}>
+        {fileUploadLoading ? <Skeleton style={{width: "100%", height: 40, borderRadius: 16}}/> :
+            <Options options={OPTIONS} onValueChange={onValueChange}/>}
+        <input ref={inputRef} onChange={onChange} type={"file"} style={{display: "none"}}/>
+    </BottomSheet>
+
+}
 
 const SingleUserPage = () => {
     const {id} = useParams()
@@ -95,6 +165,10 @@ const SingleUserPage = () => {
     const notNilId = getNotNil(id, "SingleUserPage -> id")
 
     const {data: user, isFetching, isError, refetch, error} = userApi.useGetUserByIdQuery(notNilId)
+
+    const authId = useSelector(authSlice.selectors.id)
+
+    const isOwner = notNilId === String(authId)
 
     if (isError) {
         return <RefetchError refetch={refetch} error={error}/>
@@ -123,11 +197,14 @@ const SingleUserPage = () => {
         events
     } = user
 
-
     return <div className={classes.page}>
         <div className={classes.top}>
-            <ImgWithContainer previewUrl={photo?.previewUrl} link={getPreviewSrc(photo?.url)} className={classes.img}/>
-          
+            {
+                isOwner ? <Edit photo={photo} id={user.id}/> :
+                    <ImgWithContainer previewUrl={photo?.previewUrl} link={getPreviewSrc(photo?.url)}
+                                      className={classes.img}/>
+            }
+
             <div className={classes.name}>
                 <Typography type={"title3"} value={getUserFullName(firstName, lastName)}/>
                 {username ? <a href={`https://t.me/${username?.replace("@", "")}`}

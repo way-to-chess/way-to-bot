@@ -1,6 +1,6 @@
 import {Button} from "../../Button/Button";
 import classes from "./ParticipateEventButton.module.css";
-import {FC, memo, ReactNode, useRef, useState} from "react";
+import {FC, memo, ReactNode, useState} from "react";
 import {eventApi} from "../../Store/Event/EventApi";
 import {
     EEventStatus,
@@ -135,17 +135,6 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
 
     const total = amount + (amountAndCurrency[1] ?? "")
 
-
-    const fileInputRef = useRef<HTMLInputElement>(null)
-
-    const setPaymentMethodChange = (method: EParticipateRequestPaymentType | null) => {
-        if (method === EParticipateRequestPaymentType.RECEIPT) {
-            fileInputRef.current?.click()
-        }
-
-        setPaymentMethod(method)
-    }
-
     const {onChange, fileName, fileId, isLoading: fileUploadLoading, error} = useUploadFile()
 
     const disabled = !paymentMethod || (paymentMethod === EParticipateRequestPaymentType.RECEIPT && !fileId)
@@ -170,7 +159,7 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
     return <>
         <div className={clsx(classes.block, classes.paymentMethod)}>
             <Typography type={"title4"} value={"Способ оплаты"}/>
-            <SelectMethod value={paymentMethod} onChange={setPaymentMethodChange}/>
+            <SelectMethod value={paymentMethod} onChange={setPaymentMethod}/>
         </div>
 
         <div className={clsx(classes.block, classes.total)}>

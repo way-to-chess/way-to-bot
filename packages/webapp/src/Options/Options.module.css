@@ -60,3 +60,7 @@ label.option.disabled {
     height: 8px;
     background-color: var(--main-color);
 }
+
+.option.danger {
+    border-color: var(--red-color);
+}
