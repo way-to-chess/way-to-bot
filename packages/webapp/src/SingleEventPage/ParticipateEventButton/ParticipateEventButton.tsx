@@ -242,6 +242,7 @@ const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) =
                 <Typography type={"text2"} value={dayjs(lastRequest.createdAt).format("D MMMM, dd HH:mm")}
                             color={"textColor3"}/>
             </div>
+
         </div>
     ) : null
 
@@ -250,8 +251,12 @@ const Participate: FC<{ authId: number } & IWithEventId> = ({authId, eventId}) =
                         titleNode={titleNode}
                         trigger={<Button className={classes.button}
                                          value={lastRequest ? "Моя заявка" : "Участвовать"}/>}>
+        {
+            lastRequest?.message ? <Typography type={"text2"} value={lastRequest.message}/> : null
+        }
 
         <User id={authId}/>
+
 
         {
             lastRequest ?

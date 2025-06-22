@@ -101,24 +101,9 @@ const LeaderboardPage = () => {
                     value: null
                 },
                 {
-                    predicate: EPredicate.OR,
-                    operands: [
-                        {
-                            field: "firstName",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        },
-                        {
-                            field: "lastName",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        },
-                        {
-                            field: "username",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        }
-                    ]
+                    field: ["firstName", "lastName", "username"],
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValueToSend
                 }
             ]
         }
