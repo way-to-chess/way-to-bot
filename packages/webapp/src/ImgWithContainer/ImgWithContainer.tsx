@@ -7,12 +7,14 @@ import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 interface IImgWithContainerProps {
     previewUrl?: string | null;
     className?: string;
+    link?: string
 }
 
 const ImgWithContainer: FC<IImgWithContainerProps> = (
     {
         previewUrl,
         className,
+        link
     }) => {
     const [loadedSrc, setLoadedSrc] = useState<string>("")
 
@@ -31,14 +33,22 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
         }
     }, [previewUrl]);
 
+    const Container = link ? "a" : "div"
+
+    const props = link ? {
+        target: "_blank",
+        rel: "noopener noreferer",
+        href: link
+    } : {}
+
     return (
-        <div className={clsx(classes.imgContainer, className)}>
+        <Container className={clsx(classes.imgContainer, className)} href={link} {...props}>
             {!loadedSrc ? (
                 <div className={classes.emptyImg}>
                     <CameraIcon width={"70%"} height={"70%"}/>
                 </div>
             ) : <img alt={"image"} src={loadedSrc} loading={"lazy"}/>}
-        </div>
+        </Container>
     );
 };
 

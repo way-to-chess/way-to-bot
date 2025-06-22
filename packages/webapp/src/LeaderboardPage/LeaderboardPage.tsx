@@ -53,7 +53,7 @@ const Loading = () => {
         <Skeleton style={{height: 60, borderRadius: 12}}/>
         <Skeleton style={{height: 60, borderRadius: 12}}/>
         <Skeleton style={{height: 60, borderRadius: 12, marginBottom: 16}}/>
-        {FAKE_USERS.map((_, i) => (<Skeleton style={{height: 60, borderRadius: 12}}/>))}
+        {FAKE_USERS.map((_, i) => (<Skeleton key={i} style={{height: 60, borderRadius: 12}}/>))}
     </div>
 }
 

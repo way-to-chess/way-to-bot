@@ -15,6 +15,7 @@ import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
 import {Button} from "../Button/Button";
 import {sortByKey} from "../Utils/SortByKey";
+import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 interface IStatItem {
     icon: ReactNode;
@@ -122,9 +123,11 @@ const SingleUserPage = () => {
         events
     } = user
 
+
     return <div className={classes.page}>
         <div className={classes.top}>
-            <ImgWithContainer previewUrl={photo?.url} className={classes.img}/>
+            <ImgWithContainer previewUrl={photo?.previewUrl} link={getPreviewSrc(photo?.url)} className={classes.img}/>
+          
             <div className={classes.name}>
                 <Typography type={"title3"} value={getUserFullName(firstName, lastName)}/>
                 {username ? <a href={`https://t.me/${username?.replace("@", "")}`}

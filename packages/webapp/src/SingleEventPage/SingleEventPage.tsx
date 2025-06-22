@@ -25,6 +25,7 @@ import {Error, RefetchError} from "../Error/Error";
 import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventButton";
 import {BottomSheet} from "../BottomSheet/BottomSheet";
 import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
+import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -165,6 +166,7 @@ const SingleEventPage = () => {
             <ImgWithContainer
                 previewUrl={preview?.url}
                 className={classes.imgContainer}
+                link={getPreviewSrc(preview?.url)}
             />
             <div className={classes.blocks}>
                 <div className={classes.block}>
