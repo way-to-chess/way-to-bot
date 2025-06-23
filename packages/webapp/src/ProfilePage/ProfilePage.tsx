@@ -85,7 +85,7 @@ const validateValue = (value: string) => {
 const CreateProfile = () => {
     const [firstName, setFirstName] = useState("");
     const [lastName, setLastName] = useState("");
-    const {onChange, fileId, fileUrl, clearFile} = useUploadFile()
+    const {onChange, fileId, fileUrl, clearFile} = useUploadFile({})
     const [firstNameError, setFirstNameError] = useState<string | undefined>(undefined);
     const [lastNameError, setLastNameError] = useState<string | undefined>(undefined);
 
