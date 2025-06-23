@@ -1,18 +1,21 @@
 import classes from "./ImgWithContainer.module.css";
 import {CameraIcon} from "../Icons/CameraIcon";
-import {FC, useEffect, useState} from "react";
+import {FC, PropsWithChildren, useEffect, useState} from "react";
 import clsx from "clsx";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 
-interface IImgWithContainerProps {
+interface IImgWithContainerProps extends PropsWithChildren {
     previewUrl?: string | null;
     className?: string;
+    link?: string
 }
 
 const ImgWithContainer: FC<IImgWithContainerProps> = (
     {
         previewUrl,
         className,
+        link,
+        children
     }) => {
     const [loadedSrc, setLoadedSrc] = useState<string>("")
 
@@ -31,14 +34,23 @@ const ImgWithContainer: FC<IImgWithContainerProps> = (
         }
     }, [previewUrl]);
 
+    const Container = link ? "a" : "div"
+
+    const props = link ? {
+        target: "_blank",
+        rel: "noopener noreferer",
+        href: link
+    } : {}
+
     return (
-        <div className={clsx(classes.imgContainer, className)}>
+        <Container className={clsx(classes.imgContainer, className)}  {...props}>
             {!loadedSrc ? (
                 <div className={classes.emptyImg}>
                     <CameraIcon width={"70%"} height={"70%"}/>
                 </div>
             ) : <img alt={"image"} src={loadedSrc} loading={"lazy"}/>}
-        </div>
+            {children}
+        </Container>
     );
 };
 

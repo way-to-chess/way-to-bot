@@ -3,12 +3,14 @@ import {
     ClientDTOUserGetMany,
     ClientDTOUserGetManyResponse,
     ClientDTOUserGetOne,
-    ClientDTOUserGetOneResponse
+    ClientDTOUserGetOneResponse,
+    ClientDTOUserUpdateResponse
 } from "@way-to-bot/shared/api/DTO/client/user.DTO";
-import {TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
+import {TClientUserCreatePayload, TClientUserUpdatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 import {clientApi} from "../ClientApi";
 import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchParams";
+import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
 
 const userApi = clientApi.injectEndpoints({
     endpoints: (build) => ({
@@ -28,6 +30,17 @@ const userApi = clientApi.injectEndpoints({
                 method: "POST",
                 body: payload,
             }),
+        }),
+        updateUser: build.mutation<ClientDTOUserUpdateResponse, TClientUserUpdatePayload & IWithId>({
+            query: ({id, ...payload}) => ({
+                url: `user/${id}`,
+                method: "PATCH",
+                body: payload,
+            }),
+            invalidatesTags: (_, __, {id}) => [{type: "USER", id}],
+            extraOptions: {
+                authorized: true
+            }
         }),
     }),
 });

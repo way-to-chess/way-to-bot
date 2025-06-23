@@ -53,7 +53,7 @@ const Loading = () => {
         <Skeleton style={{height: 60, borderRadius: 12}}/>
         <Skeleton style={{height: 60, borderRadius: 12}}/>
         <Skeleton style={{height: 60, borderRadius: 12, marginBottom: 16}}/>
-        {FAKE_USERS.map((_, i) => (<Skeleton style={{height: 60, borderRadius: 12}}/>))}
+        {FAKE_USERS.map((_, i) => (<Skeleton key={i} style={{height: 60, borderRadius: 12}}/>))}
     </div>
 }
 
@@ -101,24 +101,9 @@ const LeaderboardPage = () => {
                     value: null
                 },
                 {
-                    predicate: EPredicate.OR,
-                    operands: [
-                        {
-                            field: "firstName",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        },
-                        {
-                            field: "lastName",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        },
-                        {
-                            field: "username",
-                            predicate: EOperandPredicate.LIKE,
-                            value: searchValueToSend
-                        }
-                    ]
+                    field: ["firstName", "lastName", "username"],
+                    predicate: EOperandPredicate.LIKE,
+                    value: searchValueToSend
                 }
             ]
         }

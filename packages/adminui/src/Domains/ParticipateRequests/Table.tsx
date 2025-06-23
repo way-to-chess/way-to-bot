@@ -6,7 +6,7 @@ import {
     Flex,
     Form,
     Input,
-    message,
+    message as antMessage,
     Select,
     SelectProps,
     Table,
@@ -29,6 +29,7 @@ import {
     ESortDirection
 } from "@way-to-bot/shared/api/enums/index";
 import {TAdminParticipateRequestUpdatePayload} from "@way-to-bot/shared/api/zod/admin/participate-request.schema";
+import {CircleDollarSignIcon, CreditCardIcon, PaperclipIcon} from "lucide-react";
 
 const DATE_TIME_FORMAT = "HH:MM DD/YYYY";
 
@@ -61,6 +62,21 @@ const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
     },
     {title: TEXT.event, render: (_, {event}) => event.name},
     {
+        title: "Способ оплаты",
+        render: (_, {paymentType}) => {
+            if (paymentType === EParticipateRequestPaymentType.CASH) {
+                return <CircleDollarSignIcon width={16} height={16}/>
+            }
+
+            if (paymentType === EParticipateRequestPaymentType.RECEIPT) {
+                return <PaperclipIcon width={16} height={16}/>
+            }
+
+            return <CreditCardIcon width={16} height={16}/>
+        },
+        align: "center"
+    },
+    {
         title: TEXT.status,
         render: (_, {status}) => options.find((it) => it.value === status)?.label
     },
@@ -71,7 +87,7 @@ const COLUMNS: TableProps<AdminDTOParticipateRequestGetMany>["columns"] = [
 ];
 
 
-const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status" | "id">) => {
+const Edit = memo(({id, status, message}: Pick<AdminDTOParticipateRequestGetOne, "status" | "id" | "message">) => {
     const [approve, {isLoading}] = participateRequestApi.useUpdateParticipateRequestMutation();
 
     const [open, setOpen] = useState(false)
@@ -82,10 +98,10 @@ const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status"
 
     const onFinish = (values: TAdminParticipateRequestUpdatePayload) => {
         approve({id, ...values}).unwrap().then(() => {
-            message.success("Заявка обновлена")
+            antMessage.success("Заявка обновлена")
             setOpen(false)
         }).catch(() => {
-            message.error("Ошибка при отпавке зароса")
+            antMessage.error("Ошибка при отпавке зароса")
         })
     }
 
@@ -97,7 +113,7 @@ const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status"
                     <Select options={options}/>
                 </Form.Item>
 
-                <Form.Item name={"message"} label={"Сообщение"}>
+                <Form.Item name={"message"} label={"Сообщение"} initialValue={message}>
                     <Input.TextArea/>
                 </Form.Item>
 
@@ -113,9 +129,15 @@ const Edit = memo(({id, status}: Pick<AdminDTOParticipateRequestGetOne, "status"
 
 const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
     expandRowByClick: true,
-    expandedRowRender: ({paymentType, id, receipt, status,}) => {
+    expandedRowRender: ({paymentType, id, receipt, status, message}) => {
         return (
             <Flex align={"center"} justify={"space-between"}>
+                {
+                    message ? <Typography.Text>
+                        {message}
+                    </Typography.Text> : null
+                }
+
                 {paymentType === EParticipateRequestPaymentType.RECEIPT ?
                     <Typography.Link
                         href={getPreviewSrc(receipt?.previewUrl)}
@@ -127,13 +149,9 @@ const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
 
                 }
 
-                {paymentType === EParticipateRequestPaymentType.CASH ?
-                    <Typography.Text>
-                        {"Оплата наличными на месте"}
-                    </Typography.Text> : null
-                }
+                <Edit id={id} status={status} message={message}/>
 
-                <Edit id={id} status={status}/>
+
             </Flex>
         );
     },

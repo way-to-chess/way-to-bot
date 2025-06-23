@@ -10,6 +10,9 @@ interface IOption<Value> {
     description?: string
     icon?: ReactNode
     disabled?: boolean
+    indicator?: ReactNode
+    danger?: boolean
+    className?: string
 }
 
 interface IOptionsProps<Value> {
@@ -22,22 +25,34 @@ const Options = <Value, >({options, value, onValueChange}: IOptionsProps<Value>)
     const _onValueChange = (value: unknown, event: Event) => onValueChange?.(value as Value, event)
 
     return <RadioGroup className={classes.options} value={value} onValueChange={_onValueChange}>
-        {options.map(({title, value, icon, description, disabled}) => {
+        {options.map(({title, value, icon, description, disabled, indicator, danger, className}) => {
             const large = title && description
             const Wrapper = large ? "div" : Fragment
 
+            const enhancedClassName = clsx(
+                classes.option,
+                large && classes.large,
+                disabled && classes.disabled,
+                danger && classes.danger,
+                className
+            )
+
             return (
-                <label className={clsx(classes.option, large && classes.large, disabled && classes.disabled)}>
+                <label className={enhancedClassName}>
                     {icon}
                     <Wrapper className={"flex1"}>
-                        <Typography type={"title6"} value={title} className={"flex1"}/>
+                        <Typography type={"title6"} value={title} color={danger ? "redColor" : "textColor1"}
+                                    className={"flex1"}/>
                         {
-                            description ? <Typography type={"text2"} value={description}/> : null
+                            description ? <Typography type={"text2"} color={danger ? "redColor" : "textColor1"}
+                                                      value={description}/> : null
                         }
                     </Wrapper>
-                    <Radio.Root value={value} className={classes.radio}>
-                        <Radio.Indicator className={classes.indicator}/>
-                    </Radio.Root>
+
+                    {indicator ? <Radio.Root value={value}>{indicator}</Radio.Root> :
+                        <Radio.Root value={value} className={classes.radio}>
+                            {indicator || <Radio.Indicator className={classes.indicator}/>}
+                        </Radio.Root>}
                 </label>
             )
         })}

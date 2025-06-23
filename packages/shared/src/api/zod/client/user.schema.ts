@@ -10,7 +10,7 @@ export const ClientSchemaUserBase = {
   username: z.string().nullable().optional(),
   firstName: z.string(),
   lastName: z.string(),
-  fileId: z.number().optional(),
+  fileId: z.number().optional().nullable(),
   email: z.string().nullable().optional(),
   birthDate: z.date().optional(),
   contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
