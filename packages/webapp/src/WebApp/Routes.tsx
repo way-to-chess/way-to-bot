@@ -17,7 +17,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
             {
                 path: WEBAPP_ROUTES.emptyRoute,
                 element: null,
-                loader: () => redirect("/tutorial"),
+                loader: () => redirect("/events"),
             },
             {
                 path: "/events",
