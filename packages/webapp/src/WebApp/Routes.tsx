@@ -7,6 +7,7 @@ import {LeaderboardPage} from "../LeaderboardPage/LeaderboardPage";
 import {ProfilePage} from "../ProfilePage/ProfilePage";
 import {SingleUserPage} from "../SingleUserPage/SingleUserPage";
 import {Error} from "../Error/Error"
+import {TutorialPage} from "../Tutorial/TutorialPage";
 
 const WEB_APP_ROUTER = createBrowserRouter([
     {
@@ -16,7 +17,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
             {
                 path: WEBAPP_ROUTES.emptyRoute,
                 element: null,
-                loader: () => redirect("/events"),
+                loader: () => redirect("/tutorial"),
             },
             {
                 path: "/events",
@@ -49,9 +50,13 @@ const WEB_APP_ROUTER = createBrowserRouter([
                 ],
             },
             {
+                path: "/tutorial",
+                Component: TutorialPage,
+            },
+            {
                 path: "*",
                 loader: () => redirect(WEBAPP_ROUTES.emptyRoute)
-            }
+            },
         ],
     },
 ]);
