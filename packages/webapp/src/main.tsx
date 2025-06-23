@@ -41,18 +41,4 @@ const useTheme = () => {
     return theme;
 };
 
-const useViewport = () => {
-    document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-
-    Telegram.WebApp.onEvent("viewportChanged", ({isStateStable}) => {
-        if (!isStateStable) {
-            document.body.style.height = `${Telegram.WebApp.viewportHeight}px`;
-
-            return;
-        }
-
-        document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-    });
-};
-
 createRoot(document.getElementById("root")!).render(<WebApp/>);
