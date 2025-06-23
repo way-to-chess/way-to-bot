@@ -2,7 +2,7 @@ import {createRoot} from "react-dom/client";
 import {isDev, isHttps} from "./Utils/OneLineUtils";
 import {useEffect, useState} from "react";
 import * as Sentry from "@sentry/react";
-import {WebApp} from "./WebApp/WebApp";
+import {App} from "./WebApp/App";
 
 if (!isDev) {
     Sentry.init({
@@ -41,4 +41,4 @@ const useTheme = () => {
     return theme;
 };
 
-createRoot(document.getElementById("root")!).render(<WebApp/>);
+createRoot(document.getElementById("root")!).render(<App/>);

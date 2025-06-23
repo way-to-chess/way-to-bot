@@ -8,7 +8,6 @@ import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {FC, PropsWithChildren, useLayoutEffect} from "react";
 import {ErrorBoundary} from "../Error/Error";
 import {TelegramWebApps} from "telegram-webapps-types-new";
-import WebApp = TelegramWebApps.WebApp;
 
 
 const WithAuth: FC<PropsWithChildren> = ({children}) => {
@@ -46,7 +45,7 @@ const WithHeight: FC<PropsWithChildren> = ({children}) => {
     return children
 }
 
-const WebApp = () => (
+const App = () => (
     <ErrorBoundary>
         <WithHeight>
             <Provider store={store}>
@@ -56,7 +55,6 @@ const WebApp = () => (
             </Provider>
         </WithHeight>
     </ErrorBoundary>
-
 );
 
-export {WebApp};
+export {App};
