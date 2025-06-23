@@ -128,11 +128,9 @@ const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = 
         </button>
     )
 
-    const {onChange, isLoading: fileUploadLoading, error} = useUploadFile({
-        afterUpload: ({id: fileId}) => {
-            update({fileId, id})
-            setOpen(false)
-        }
+    const {onChange, isLoading: fileUploadLoading, error} = useUploadFile(({id: fileId}) => {
+        update({fileId, id})
+        setOpen(false)
     })
 
     const inputRef = useRef<HTMLInputElement>(null)
