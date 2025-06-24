@@ -133,6 +133,7 @@ const LeaderboardPage = () => {
 
             <div className={classes.top}>
                 <Input placeholder={"Найти участника"} before={SearchIcon} onChange={onSearchChange} type={"search"}
+                       enterKeyHint={"search"}
                        maxLength={30}/>
 
                 <BottomSheet title={"Сортировка"} trigger={renderSortButton} open={open} onOpenChange={setOpen}>

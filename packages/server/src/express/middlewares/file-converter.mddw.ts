@@ -16,7 +16,7 @@ export async function fileConverterMiddleware(
   const mime = req.file.mimetype;
 
   if (!mime.startsWith("image/")) {
-    next();
+    return next();
   }
 
   try {

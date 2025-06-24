@@ -1,0 +1,12 @@
+.page {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.block {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}

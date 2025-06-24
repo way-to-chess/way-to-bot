@@ -140,7 +140,7 @@ const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
 
                 {paymentType === EParticipateRequestPaymentType.RECEIPT ?
                     <Typography.Link
-                        href={getPreviewSrc(receipt?.previewUrl)}
+                        href={getPreviewSrc(receipt?.url)}
                         target={"_blank"}
                         rel="noreferrer"
                     >

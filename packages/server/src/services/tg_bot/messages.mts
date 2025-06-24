@@ -1,5 +1,7 @@
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
+import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { WEB_URL } from "@way-to-bot/server/utils/constants.mjs";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
 import moment from "moment";
 import "moment/locale/ru.js";
 import TelegramBot from "node-telegram-bot-api";
@@ -133,6 +135,42 @@ export const botMessageNotify = (event: EventEntity): TBotMessage => {
   return {
     message,
     options: optionsGoToEvent(event.id),
+  };
+};
+
+export const botMessageParticipateRequestStatusChanged = (
+  pr: ParticipateRequestEntity,
+) => {
+  const date = moment(pr.event.dateTime).add(3, "hours");
+  const message =
+    pr.status === EParticipateRequestStatus.APPROVED
+      ? `✅ <b>Заявка принята</b>
+
+<b>Ваша заявка на участие в турнире подтверждена!</b> 🎉
+
+🗓 <b>${pr.event.name}</b>
+${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>\n\n«${pr.message.trimEnd().trimStart()}»\n` : ""}
+📍 <b>Адрес:</b> <a href="${pr.event.location?.url}">${pr.event.location?.title}: ${pr.event.location?.address}</a>
+
+🕒 <b>Начало:</b> <i>${date.format("DD MMMM YYYY, HH:mm")} (МСК)</i>
+
+Рекомендуем прийти <b>немного заранее</b>, чтобы спокойно зарегистрироваться и подготовиться. Удачи в турнире! ♟️ `
+      : pr.status === EParticipateRequestStatus.REJECTED
+        ? `❌ <b>Заявка отклонена</b>
+
+<b>К сожалению, ваша заявка на участие в турнире отклонена.</b>
+
+🗓 <b>${pr.event.name}</b>
+${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>«${pr.message.trimEnd().trimStart()}»` : ""}`
+        : null;
+
+  if (!message) {
+    throw new Error(`No message for status ${pr.status}`);
+  }
+
+  return {
+    message,
+    options: optionsGoToEvent(pr.event.id),
   };
 };
 

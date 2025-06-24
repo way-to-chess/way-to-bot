@@ -27,7 +27,7 @@ export class ParticipateRequestRepository {
       relations: {
         receipt: true,
         user: { photo: true },
-        event: true,
+        event: { location: true },
       },
       ...options,
     });

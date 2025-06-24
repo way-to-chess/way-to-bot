@@ -30,7 +30,6 @@ import {
     XIcon
 } from "lucide-react";
 import {IOption, Options} from "../../Options/Options";
-import {splitAmountAndCurrency} from "./SplitAmountAndCurrency";
 import {useUploadFile} from "../../Hooks/UseUploadFile";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
@@ -77,7 +76,7 @@ const PAYMENT_METHODS: IOption<EParticipateRequestPaymentType>[] = [
     },
     {
         value: EParticipateRequestPaymentType.RECEIPT,
-        title: "Прикрепить чек",
+        title: "Банковский перевод",
         description: "Пришлите фото чека после перевода",
         icon: <PaperclipIcon color={"#007AFF"}/>
     }
@@ -125,16 +124,6 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
     const [paymentMethod, setPaymentMethod] = useState<null | EParticipateRequestPaymentType>(null)
     const {data: event} = eventApi.useGetEventByIdQuery(eventId)
 
-    const amountAndCurrency = event?.price ? splitAmountAndCurrency(event.price) : ["0", ""]
-
-    const amount = Number(amountAndCurrency[0])
-
-    if (Number.isNaN(amount)) {
-        throw new Error("Price num is NaN")
-    }
-
-    const total = amount + (amountAndCurrency[1] ?? "")
-
     const {onChange, fileName, fileId, isLoading: fileUploadLoading, error} = useUploadFile()
 
     const disabled = !paymentMethod || (paymentMethod === EParticipateRequestPaymentType.RECEIPT && !fileId)
@@ -162,6 +151,21 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
             <SelectMethod value={paymentMethod} onChange={setPaymentMethod}/>
         </div>
 
+
+        {
+            paymentMethod === EParticipateRequestPaymentType.RECEIPT ?
+                <div className={classes.block}>
+                    <div className={classes.total}>
+                        <Typography type={"text1"} value={"+375292399949 (Альфа)"}/>
+                        <Typography type={"text2"}
+                                    color={"textColor2"}
+                                    value={"Или в приложении банка выбрать \"система расчета ЕРИП\"->\"Банковские,финансовые услуги\"->\"Банки,НКФО\"->\"АльфаБанк\"->\"пополнение счета\"-> BY56ALFA3014301V1F0020270000"}/>
+                    </div>
+                </div>
+                : null
+        }
+
+
         <div className={clsx(classes.block, classes.total)}>
             {/*<Typography type={"title4"} value={"К оплате"}/>*/}
             {/*<div className={classes.totalItems}>*/}
@@ -174,8 +178,9 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
 
             <div className={classes.totalItem}>
                 <Typography type={"title4"} value={"К оплате"}/>
-                <Typography type={"title4"} value={total}/>
+                <Typography type={"title4"} value={event?.price}/>
             </div>
+
 
             {
                 paymentMethod === EParticipateRequestPaymentType.RECEIPT ?
@@ -187,6 +192,7 @@ const Payment: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, clos
                     </Button>
                     : null
             }
+
 
         </div>
 

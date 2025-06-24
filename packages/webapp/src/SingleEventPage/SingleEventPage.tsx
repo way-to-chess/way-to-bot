@@ -26,6 +26,7 @@ import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventB
 import {BottomSheet} from "../BottomSheet/BottomSheet";
 import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
+import {TvIcon} from "lucide-react";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -153,13 +154,17 @@ const SingleEventPage = () => {
         location,
         host,
         description,
-        users
+        users,
+        duration,
+        linkToStream
     } = event;
 
     const date = dayjs(dateTime);
 
     const formattedDate = date.format("D MMMM, dd").toLowerCase();
     const formattedTime = date.format("HH:mm").toLowerCase();
+
+    const durationTime = duration ? " - " + date.add(duration, "milliseconds").format("HH:mm").toLowerCase() : null
 
     return (
         <div className={classes.page}>
@@ -192,6 +197,7 @@ const SingleEventPage = () => {
                             <Typography type={"text2"} className={classes.infoItem}>
                                 {ClockIcon}
                                 {formattedTime}
+                                {durationTime}
                             </Typography>
                         </div>
                         <Typography type={"text2"} className={classes.infoItem}>
@@ -238,6 +244,24 @@ const SingleEventPage = () => {
                     <Typography type={"title4"} value={"Организатор"}/>
                     <Host {...host}/>
                 </div>
+
+                {
+                    linkToStream ?
+                        <a
+                            className={classes.block}
+                            href={linkToStream ?? undefined}
+                            target={"_blank"}
+                            rel={"noreferrer noopener"}
+                        >
+                            <Typography type={"text2"} className={classes.infoItem}>
+                                <TvIcon/>
+                                {"Ссылка на трансляцию"}
+                            </Typography>
+                        </a>
+                        : null
+                }
+
+
                 <ParticipateEventButton eventId={notNilId}/>
             </div>
         </div>

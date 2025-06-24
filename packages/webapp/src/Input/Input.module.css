@@ -28,6 +28,7 @@
     font-size: 16px;
     color: var(--text-color-1);
     width: 100%;
+    background: transparent;
 }
 
 .input:-webkit-autofill,
@@ -61,4 +62,26 @@
 .container.invalid:has(.input:focus) {
     border-color: var(--red-color);
     box-shadow: 0 0 0 2px rgba(255, 72, 72, 0.2);
+}
+
+/* Для WebKit-браузеров (Chrome, Safari) */
+.input[type="search"]::-webkit-search-decoration,
+.input[type="search"]::-webkit-search-cancel-button,
+.input[type="search"]::-webkit-search-results-button,
+.input[type="search"]::-webkit-search-results-decoration {
+    display: none;
+    -webkit-appearance: none;
+}
+
+/* Для Firefox */
+.input[type="search"]::-moz-search-cancel-button,
+.input[type="search"]::-moz-search-decoration {
+    display: none;
+}
+
+/* Общие стили */
+.input[type="search"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
 }
