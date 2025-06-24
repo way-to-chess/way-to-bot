@@ -4,7 +4,7 @@ import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js
 export const AdminSchemaParticipateRequestUpdate = z
   .object({
     status: z.nativeEnum(EParticipateRequestStatus),
-    message: z.string().optional(),
+    message: z.string().optional().nullable(),
   })
   .strict();
 
