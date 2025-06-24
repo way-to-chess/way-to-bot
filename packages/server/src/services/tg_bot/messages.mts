@@ -149,7 +149,7 @@ export const botMessageParticipateRequestStatusChanged = (
 <b>Ваша заявка на участие в турнире подтверждена!</b> 🎉
 
 🗓 <b>${pr.event.name}</b>
-${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>\n\n«${pr.message}»\n` : ""}
+${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>\n\n«${pr.message.trimEnd().trimStart()}»\n` : ""}
 📍 <b>Адрес:</b> <a href="${pr.event.location?.url}">${pr.event.location?.title}: ${pr.event.location?.address}</a>
 
 🕒 <b>Начало:</b> <i>${date.format("DD MMMM YYYY, HH:mm")} (МСК)</i>
@@ -161,7 +161,7 @@ ${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</
 <b>К сожалению, ваша заявка на участие в турнире отклонена.</b>
 
 🗓 <b>${pr.event.name}</b>
-${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>«${pr.message}»` : ""}`
+${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>«${pr.message.trimEnd().trimStart()}»` : ""}`
         : null;
 
   if (!message) {
