@@ -1,11 +1,6 @@
 import {FC, PropsWithChildren, useEffect, useRef} from "react";
 import {Location, useLocation, useNavigate} from "react-router";
 
-
-const ROOT_LOCATIONS = [
-    "/events", "/leaderboard", "/users/:id"
-]
-
 const useBackButton = () => {
     const location = useLocation()
     const navigate = useNavigate()
@@ -55,6 +50,9 @@ const WithTelegram: FC<PropsWithChildren> = ({children}) => {
         if (Telegram.WebApp.platform === "unknown") {
             document.body.setAttribute("data-dev", "true");
         }
+
+
+        document.body.insertAdjacentText("beforebegin", JSON.stringify(Telegram.WebApp.safeAreaInset))
     }, []);
 
 

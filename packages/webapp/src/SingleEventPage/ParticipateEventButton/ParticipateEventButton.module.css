@@ -82,6 +82,7 @@ div.popup {
 
 .upload {
     cursor: pointer;
+    flex-shrink: 0;
 }
 
 .upload input {

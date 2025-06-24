@@ -6,6 +6,8 @@ import {
 } from "@way-to-bot/shared/api/DTO/client/event.DTO";
 import {clientApi} from "../ClientApi";
 import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
+import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchParams";
+import {TCommonGetManyOptions} from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 interface Event extends Omit<ClientDTOEventGetOne, "mapEventLeagues"> {
     users: IUserEntity[]
@@ -13,8 +15,8 @@ interface Event extends Omit<ClientDTOEventGetOne, "mapEventLeagues"> {
 
 const eventApi = clientApi.injectEndpoints({
     endpoints: (build) => ({
-        getAllEvents: build.query<ClientDTOEventGetMany[], void>({
-            query: () => "event",
+        getAllEvents: build.query<ClientDTOEventGetMany[], TCommonGetManyOptions>({
+            query: (options) => options ? getUrlWithSearchParams("event", options) : "event",
             transformResponse: (response: ClientDTOEventGetManyResponse) => response.data,
             providesTags: () => [{type: 'EVENT', id: "ALL"}],
         }),

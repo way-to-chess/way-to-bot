@@ -155,7 +155,7 @@ const FakeEventGroup = () => {
 };
 
 const Events = () => {
-    const {data, isFetching, isError, refetch, error} = eventApi.useGetAllEventsQuery();
+    const {data, isFetching, isError, refetch, error} = eventApi.useGetAllEventsQuery({});
 
     if (isFetching) {
         return <FakeEventGroup/>;

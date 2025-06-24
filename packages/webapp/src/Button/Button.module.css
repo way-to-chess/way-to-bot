@@ -8,6 +8,7 @@
     vertical-align: middle;
     border-radius: 10px;
     gap: 8px;
+    flex-shrink: 0;
 }
 
 /* Variants */
