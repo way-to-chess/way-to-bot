@@ -51,8 +51,7 @@ const WithTelegram: FC<PropsWithChildren> = ({children}) => {
             document.body.setAttribute("data-dev", "true");
         }
 
-
-        document.body.insertAdjacentText("beforebegin", JSON.stringify(Telegram.WebApp.safeAreaInset))
+        document.documentElement.style.setProperty("--bottom-bar-height", 56 + Telegram.WebApp.safeAreaInset.bottom + "px")
     }, []);
 
 

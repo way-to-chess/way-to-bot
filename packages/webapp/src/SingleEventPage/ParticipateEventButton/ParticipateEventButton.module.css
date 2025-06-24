@@ -1,5 +1,6 @@
 div.popup {
     background: var(--background-color-3);
+    overflow: auto;
 }
 
 .button {
