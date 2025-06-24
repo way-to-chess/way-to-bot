@@ -1,7 +1,7 @@
 import {eventApi} from "../Store/Event/EventApi";
 import classes from "./EventsPage.module.css";
 import {Typography} from "../Typography/Typography";
-import {EEventStatus} from "@way-to-bot/shared/api/enums";
+import {EEventStatus, ESortDirection} from "@way-to-bot/shared/api/enums";
 import {FC} from "react";
 import dayjs from "dayjs";
 import "dayjs/locale/ru";
@@ -155,7 +155,12 @@ const FakeEventGroup = () => {
 };
 
 const Events = () => {
-    const {data, isFetching, isError, refetch, error} = eventApi.useGetAllEventsQuery({});
+    const {data, isFetching, isError, refetch, error} = eventApi.useGetAllEventsQuery({
+        sort: {
+            field: "dateTime",
+            direction: ESortDirection.ASC
+        }
+    });
 
     if (isFetching) {
         return <FakeEventGroup/>;
