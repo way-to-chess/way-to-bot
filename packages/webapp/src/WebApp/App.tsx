@@ -7,7 +7,6 @@ import {store} from "../Store/Store";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {FC, PropsWithChildren, useLayoutEffect} from "react";
 import {ErrorBoundary} from "../Error/Error";
-import {TelegramWebApps} from "telegram-webapps-types-new";
 
 
 const WithAuth: FC<PropsWithChildren> = ({children}) => {

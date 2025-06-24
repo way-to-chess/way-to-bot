@@ -1,23 +1,31 @@
 import {FC, PropsWithChildren, useEffect, useRef} from "react";
-import {Location, useLocation} from "react-router";
+import {Location, useLocation, useNavigate} from "react-router";
 
+
+const ROOT_LOCATIONS = [
+    "/events", "/leaderboard", "/users/:id"
+]
 
 const useBackButton = () => {
     const location = useLocation()
+    const navigate = useNavigate()
+
     const historyStack = useRef<Location[]>([])
 
-    const handler = useRef(() => {
-        history.back()
-        historyStack.current.pop()
-    })
-
     useEffect(() => {
-        Telegram.WebApp.BackButton.onClick(handler.current);
+        const handler = () => {
+            navigate(-1)
+            historyStack.current.pop()
+        }
+
+        Telegram.WebApp.BackButton.onClick(handler);
 
         return () => {
-            Telegram.WebApp.BackButton.offClick(handler.current)
+            Telegram.WebApp.BackButton.offClick(handler)
         }
-    }, []);
+
+    }, [navigate]);
+
 
     useEffect(() => {
         const stack = historyStack.current
@@ -26,7 +34,7 @@ const useBackButton = () => {
             stack.push(location)
         }
 
-        if (stack.length > 10) {
+        if (stack.length > 5) {
             stack.shift()
         }
 

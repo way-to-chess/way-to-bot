@@ -115,25 +115,28 @@ const OPTIONS: IOption<"preview" | "edit" | "delete">[] = [
     }
 ]
 
-const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = ({photo, id, children}) => {
+const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = ({photo, id}) => {
     const [update] = userApi.useUpdateUserMutation()
     const [open, setOpen] = useState(false)
 
-    const trigger = (
-        <button>
-            <ImgWithContainer previewUrl={photo?.previewUrl} className={clsx(classes.img, classes.owner)}/>
-            <div className={classes.edit}>
-                <EditIcon size={16} color={"#fff"}/>
-            </div>
-        </button>
-    )
-
-    const {onChange, isLoading: fileUploadLoading, error} = useUploadFile(({id: fileId}) => {
+    const {onChange, isLoading: fileUploadLoading} = useUploadFile(({id: fileId}) => {
         update({fileId, id})
         setOpen(false)
     })
 
     const inputRef = useRef<HTMLInputElement>(null)
+
+    const Wrapper = photo?.id ? "button" : "label"
+
+    const content = (
+        <Wrapper>
+            <ImgWithContainer previewUrl={photo?.previewUrl} className={clsx(classes.img, classes.owner)}/>
+            <div className={classes.edit}>
+                <EditIcon size={16} color={"#fff"}/>
+            </div>
+            <input ref={inputRef} onChange={onChange} type={"file"} style={{display: "none"}}/>
+        </Wrapper>
+    )
 
     const onValueChange = (value: "preview" | "edit" | "delete") => {
         if (value === "preview") {
@@ -149,10 +152,15 @@ const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = 
         }
     }
 
-    return <BottomSheet open={open} onOpenChange={setOpen} trigger={trigger} title={"Выберите действие"}>
+
+    if (!photo?.id) {
+        return content
+    }
+
+    return <BottomSheet open={open} onOpenChange={setOpen} trigger={content}
+                        title={"Выберите действие"}>
         {fileUploadLoading ? <Skeleton style={{width: "100%", height: 40, borderRadius: 16}}/> :
             <Options options={OPTIONS} onValueChange={onValueChange}/>}
-        <input ref={inputRef} onChange={onChange} type={"file"} style={{display: "none"}}/>
     </BottomSheet>
 
 }
