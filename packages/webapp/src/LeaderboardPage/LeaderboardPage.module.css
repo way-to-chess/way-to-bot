@@ -36,14 +36,14 @@
 }
 
 .user.colored:nth-child(1) {
-    background: #FFCC0033;
+    background: rgba(255, 204, 0, 0.1);
 }
 
 .user.colored:nth-child(2) {
-    background: #94949433;
+    background: rgba(148, 148, 148, 0.1);
 }
 
 .user.colored:nth-child(3) {
-    background: #8B420133;
+    background: rgba(139, 66, 1, 0.1);
     margin-bottom: 16px;
 }
