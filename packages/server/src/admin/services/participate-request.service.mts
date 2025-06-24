@@ -12,6 +12,8 @@ import { In } from "typeorm";
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
 import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
+import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/services/tg_bot/messages.mjs";
+import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -26,6 +28,8 @@ export class AdminParticipateRequestService {
     private readonly _eventLeagueRepository: EventLeagueRepository,
     @inject(UserRepository)
     private readonly _userRepository: UserRepository,
+    @inject(TgBotService)
+    private readonly _tgBotService: TgBotService,
   ) {}
 
   async updateParticipateRequest(
@@ -112,6 +116,20 @@ export class AdminParticipateRequestService {
       await this._eventLeagueUserRepository.addRows(eluList, queryRunner);
 
       await queryRunner.commitTransaction();
+
+      try {
+        const { message, options } = botMessageParticipateRequestStatusChanged(
+          updatedParticipateRequest,
+        );
+        await this._tgBotService.sendMessagesToUsers(
+          [updatedParticipateRequest.user],
+          message,
+          options,
+        );
+      } catch (e: any) {
+        logger.error(e);
+      }
+
       return updatedParticipateRequest;
     } catch (e: any) {
       logger.error(
