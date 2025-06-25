@@ -47,6 +47,14 @@ const MENU_ITEMS: TMenuItem[] = [
             </Link>
         ),
     },
+    {
+        key: ROUTES.messages,
+        label: (
+            <Link to={ROUTES.messages}>
+                {"Сообщения"}
+            </Link>
+        ),
+    },
 ];
 
 const MAIN_STYLE: CSSProperties = {

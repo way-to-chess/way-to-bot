@@ -3,6 +3,7 @@ import {Layout} from "./Layout/Layout";
 import {UsersTable} from "./Domains/Users/Table";
 import {ParticipateRequestsTable} from "./Domains/ParticipateRequests/Table";
 import {EventsTable} from "./Domains/Events/Table";
+import {MessagesTable} from "./Domains/Messages/Table";
 
 
 const ROUTER = createBrowserRouter([
@@ -46,6 +47,15 @@ const ROUTER = createBrowserRouter([
                             {
                                 index: true,
                                 Component: EventsTable
+                            }
+                        ]
+                    },
+                    {
+                        path: "messages",
+                        children: [
+                            {
+                                index: true,
+                                Component: MessagesTable
                             }
                         ]
                     }

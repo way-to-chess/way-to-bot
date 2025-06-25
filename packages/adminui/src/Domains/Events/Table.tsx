@@ -181,7 +181,7 @@ const BaseForm: FC<IFormProps> = ({isLoading, initialValues, onFinish, submitTit
 
             <Col span={12}>
                 <Form.Item name={"hostId"} label={"Ораганизатор"} rules={[requiredRule]}>
-                    <UserSelect disabled={isLoading}/>
+                    <UserSelect disabled={isLoading} placeholder={"Выберите пользователя"}/>
                 </Form.Item>
             </Col>
         </Row>

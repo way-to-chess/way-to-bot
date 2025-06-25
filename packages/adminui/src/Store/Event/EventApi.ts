@@ -5,6 +5,8 @@ import {
     AdminDTOEventCreateResponse,
     AdminDTOEventDeleteResponse,
     AdminDTOEventGetManyResponse,
+    AdminDTOEventGetOne,
+    AdminDTOEventGetOneResponse,
     AdminDTOEventUpdateResponse
 } from "@way-to-bot/shared/api/DTO/admin/event.DTO";
 import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
@@ -16,6 +18,11 @@ const eventApi = adminApi.injectEndpoints({
         getAllEvents: build.query<AdminDTOEventGetManyResponse, TCommonGetManyOptions>({
             query: (options) => options ? getUrlWithSearchParams("event", options) : "event",
             providesTags: () => [{type: "EVENT", id: "ALL"}]
+        }),
+        getEventById: build.query<AdminDTOEventGetOne, IWithId>({
+            query: ({id}) => `event/${id}`,
+            transformResponse: (res: AdminDTOEventGetOneResponse) => res.data,
+            providesTags: (result, error, arg) => [{type: "EVENT", id: arg.id}]
         }),
         createEvent: build.mutation<AdminDTOEventCreateResponse, TAdminEventCreatePayload>({
             query: (payload) => ({
