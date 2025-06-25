@@ -4,9 +4,10 @@ import {getUrlWithSearchParams} from "@way-to-bot/shared/utils/GetUrlWithSearchP
 import {
     AdminDTOEventCreateResponse,
     AdminDTOEventDeleteResponse,
-    AdminDTOEventGetManyResponse
+    AdminDTOEventGetManyResponse,
+    AdminDTOEventUpdateResponse
 } from "@way-to-bot/shared/api/DTO/admin/event.DTO";
-import {TAdminEventCreatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
+import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
 import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
 
 
@@ -28,6 +29,14 @@ const eventApi = adminApi.injectEndpoints({
             query: ({id}) => ({
                 url: `event/${id}`,
                 method: "DELETE",
+            }),
+            invalidatesTags: [{type: "EVENT", id: "ALL"}]
+        }),
+        updateEvent: build.mutation<AdminDTOEventUpdateResponse, TAdminEventUpdatePayload & IWithId>({
+            query: ({id, ...rest}) => ({
+                url: `event/${id}`,
+                method: "PATCH",
+                body: rest
             }),
             invalidatesTags: [{type: "EVENT", id: "ALL"}]
         }),
