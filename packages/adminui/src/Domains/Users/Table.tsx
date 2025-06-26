@@ -145,8 +145,6 @@ const UsersTable = () => {
                 setSortField(Array.isArray(sort.field) ? sort.field[0] : sort.field)
                 setSortDirection(sort.order === "ascend" ? ESortDirection.ASC : ESortDirection.DESC)
             }
-
-            console.log('params', pagination, filters, sorter, extra);
         }
 
     return <Flex vertical gap={8}>
