@@ -6,7 +6,7 @@ import {
   botMessageNotify,
 } from "@way-to-bot/server/services/tg_bot/messages.mjs";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository.mjs";
-import { IsNull, Not } from "typeorm";
+import { In, IsNull, Not } from "typeorm";
 import { AdminDTOTgMessageResponse } from "@way-to-bot/shared/api/DTO/admin/tg-message.DTO.js";
 import { AdminDTOTgMessage } from "@way-to-bot/shared/api/DTO/admin/tg-message.DTO.js";
 import { TAdminTgSendCustomMessagePayload } from "@way-to-bot/shared/api/zod/admin/tg.schema.js";
@@ -23,9 +23,11 @@ export class AdminTgController {
 
   async sendCustomMessage(req: Request, res: Response) {
     const payload: TAdminTgSendCustomMessagePayload = req.body;
+    const userIds = payload.userIds;
     const userRepo = this._userRepository.getRepository();
     const users = await userRepo.find({
       where: {
+        ...(userIds?.length && { id: In(userIds) }),
         tgId: Not(IsNull()),
       },
     });

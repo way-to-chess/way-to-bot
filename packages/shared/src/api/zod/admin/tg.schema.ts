@@ -2,6 +2,7 @@ import { z } from "zod";
 
 export const AdminSchemaTgSendCustomMessage = z.object({
   message: z.string(),
+  userIds: z.array(z.number()).optional(),
   options: z
     .object({
       reply_markup: z.object({
