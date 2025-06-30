@@ -6,16 +6,16 @@ import {
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
-  UpdateDateColumn,
   type Relation,
+  UpdateDateColumn,
 } from "typeorm";
 import { LocationEntity } from "./location.entity.mjs";
 import { FileEntity } from "./file.entity.mjs";
 import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-league.entity.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
-import { EEventStatus } from "@way-to-bot/shared/api/enums/index.js";
 import type { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
+import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus";
 
 @Entity("events")
 export class EventEntity implements IEventEntity {

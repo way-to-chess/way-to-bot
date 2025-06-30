@@ -2,7 +2,8 @@ import { PATH_TO_UPLOADS } from "@way-to-bot/server/utils/constants.mjs";
 import multer from "multer";
 import { access, mkdir } from "fs/promises";
 import path from "path";
-import { EFileAssigment } from "@way-to-bot/shared/api/enums/index.js";
+
+import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment";
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {

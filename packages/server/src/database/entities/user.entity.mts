@@ -1,24 +1,24 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  JoinColumn,
   BeforeInsert,
   BeforeUpdate,
+  Column,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinColumn,
   ManyToOne,
   OneToMany,
+  PrimaryGeneratedColumn,
   type Relation,
+  UpdateDateColumn,
   VirtualColumn,
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
-import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity.mjs";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
+import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
 
 @Entity("users")
 export class UserEntity implements IUserEntity {

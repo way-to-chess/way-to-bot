@@ -3,10 +3,8 @@ import { ParticipateRequestRepository } from "@way-to-bot/server/database/reposi
 import { TClientParticipateRequestCreatePayload } from "@way-to-bot/shared/api/zod/client/participate-request.schema.js";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import {
-  EOperandPredicate,
-  EPredicate,
-} from "@way-to-bot/shared/api/enums/index.js";
+import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicate";
+import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate";
 
 @injectable()
 export class ClientParticipateRequestService {

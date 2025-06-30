@@ -1,10 +1,10 @@
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import { WEB_URL } from "@way-to-bot/server/utils/constants.mjs";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
 import moment from "moment";
 import "moment/locale/ru.js";
 import TelegramBot from "node-telegram-bot-api";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
 
 type TBotMessage = {
   message: string;

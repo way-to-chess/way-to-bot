@@ -11,10 +11,10 @@ import { UserRepository } from "@way-to-bot/server/database/repositories/user.re
 import { In } from "typeorm";
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
 import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/services/tg_bot/messages.mjs";
 import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -137,6 +137,10 @@ export class AdminParticipateRequestService {
     }
   }
 
+  async getMany(options?: TCommonGetManyOptions) {
+    return this._participateRequestRepository.getMany(options);
+  }
+
   private sendMessageToUser(pr: ParticipateRequestEntity) {
     setImmediate(async () => {
       try {
@@ -151,9 +155,5 @@ export class AdminParticipateRequestService {
         logger.error(e);
       }
     });
-  }
-
-  async getMany(options?: TCommonGetManyOptions) {
-    return this._participateRequestRepository.getMany(options);
   }
 }

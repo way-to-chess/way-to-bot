@@ -1,22 +1,20 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  JoinColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinColumn,
   ManyToOne,
+  PrimaryGeneratedColumn,
   type Relation,
+  UpdateDateColumn,
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
-import {
-  EParticipateRequestPaymentType,
-  EParticipateRequestStatus,
-} from "@way-to-bot/shared/api/enums/index.js";
+import { EParticipateRequestPaymentType } from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
 
 @Entity("participate_requests")
 export class ParticipateRequestEntity implements IParticipateRequestEntity {

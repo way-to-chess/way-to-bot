@@ -4,7 +4,8 @@ import { logger } from "@way-to-bot/server/services/logger.service.mjs";
 import { ZodError } from "zod";
 import { EntityNotFoundError, QueryFailedError } from "typeorm";
 import { ErrorDTO } from "@way-to-bot/shared/api/DTO/common/error.DTO.js";
-import { EErrorCode } from "@way-to-bot/shared/api/enums/index.js";
+
+import { EErrorCode } from "@way-to-bot/shared/api/enums/EErrorCode";
 
 export function errorHandlerMddw(
   err: Error,

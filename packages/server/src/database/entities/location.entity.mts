@@ -1,16 +1,17 @@
 import {
-  Entity,
-  PrimaryGeneratedColumn,
   Column,
-  JoinColumn,
   CreateDateColumn,
-  UpdateDateColumn,
+  Entity,
+  JoinColumn,
   ManyToOne,
+  PrimaryGeneratedColumn,
   type Relation,
+  UpdateDateColumn,
 } from "typeorm";
 import { FileEntity } from "@way-to-bot/server/database/entities/file.entity.mjs";
 import { ILocationEntity } from "@way-to-bot/shared/api/interfaces/entities/location-entity.interface.js";
-import { ELocationBenefits } from "@way-to-bot/shared/api/enums/index.js";
+
+import { ELocationBenefits } from "@way-to-bot/shared/api/enums/ELocationBenefits";
 
 @Entity("locations")
 export class LocationEntity implements ILocationEntity {

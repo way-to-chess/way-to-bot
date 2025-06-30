@@ -1,6 +1,6 @@
 import "express";
-import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
 
 declare module "express-serve-static-core" {
   interface Request {

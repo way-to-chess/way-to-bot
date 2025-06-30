@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { ELocationBenefits } from "@way-to-bot/shared/api/enums/index.js";
+
+import { ELocationBenefits } from "../../enums/ELocationBenefits";
 
 export const AdminSchemaLocationBase = {
   title: z.string(),

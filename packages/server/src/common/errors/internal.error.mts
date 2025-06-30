@@ -1,5 +1,6 @@
-import { ApiError } from '@way-to-bot/server/common/errors/api.error.mjs';
-import {EErrorCode, EHttpStatus} from "@way-to-bot/shared/api/enums/index.js";
+import { ApiError } from "@way-to-bot/server/common/errors/api.error.mjs";
+import { EHttpStatus } from "@way-to-bot/shared/api/enums/EHttpStatus";
+import { EErrorCode } from "@way-to-bot/shared/api/enums/EErrorCode";
 
 export class InternalError extends ApiError {
   constructor(

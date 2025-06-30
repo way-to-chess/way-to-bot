@@ -1,5 +1,6 @@
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
-import { ELocationBenefits } from "@way-to-bot/shared/api/enums/index.js";
+
+import { ELocationBenefits } from "../../enums/ELocationBenefits";
 
 export interface ILocationEntity {
   id: number;

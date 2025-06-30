@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/index.js";
+
+import { EParticipateRequestStatus } from "../../enums/EParticipateRequestStatus";
 
 export const AdminSchemaParticipateRequestUpdate = z
   .object({

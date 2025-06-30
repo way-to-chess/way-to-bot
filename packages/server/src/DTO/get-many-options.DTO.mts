@@ -4,10 +4,8 @@ import {
   TCommonGetManyOptions,
   TCommonWhere,
 } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import {
-  EOperandPredicate,
-  EPredicate,
-} from "@way-to-bot/shared/api/enums/index.js";
+import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicate";
+import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate";
 
 export class GetManyOptionsDTO<Entity extends ObjectLiteral> {
   private parameterCounter: number = 0;

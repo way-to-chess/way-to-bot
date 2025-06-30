@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { EEventStatus } from "../../enums/index.js";
+
+import { EEventStatus } from "../../enums/EEventStatus";
 
 const eventStatusSchema = z.nativeEnum(EEventStatus);
 

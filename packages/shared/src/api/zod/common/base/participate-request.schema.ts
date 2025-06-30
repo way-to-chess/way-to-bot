@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ClientSchemaUserBase } from "@way-to-bot/shared/api/zod/client/user.schema.js";
-import { EParticipateRequestPaymentType } from "@way-to-bot/shared/api/enums/index.js";
+
+import { EParticipateRequestPaymentType } from "../../../enums/EParticipateRequestPaymentType";
 
 const ClientSchemaParticipateRequestAdditionalUserSchema = z
   .object({
