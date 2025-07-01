@@ -13,8 +13,8 @@ import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/ent
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity.mjs";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
-import { EParticipateRequestPaymentType } from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { EParticipateRequestPaymentType } from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType.js";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus.js";
 
 @Entity("participate_requests")
 export class ParticipateRequestEntity implements IParticipateRequestEntity {

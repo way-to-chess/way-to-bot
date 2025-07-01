@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { EContactType } from "../../enums/EContactType";
+import { EContactType } from "../../enums/EContactType.js";
 
 export const ClientSchemaUserContactInfo = z.object({
   type: z.nativeEnum(EContactType),

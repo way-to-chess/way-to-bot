@@ -14,7 +14,7 @@ import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-man
 import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/services/tg_bot/messages.mjs";
 import { TgBotService } from "@way-to-bot/server/services/tg_bot/index.mjs";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus.js";
 
 @injectable()
 export class AdminParticipateRequestService {

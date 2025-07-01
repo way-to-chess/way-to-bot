@@ -18,7 +18,7 @@ import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/even
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
-import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
+import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole.js";
 
 @Entity("users")
 export class UserEntity implements IUserEntity {

@@ -4,7 +4,7 @@ import { WEB_URL } from "@way-to-bot/server/utils/constants.mjs";
 import moment from "moment";
 import "moment/locale/ru.js";
 import TelegramBot from "node-telegram-bot-api";
-import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus.js";
 
 type TBotMessage = {
   message: string;

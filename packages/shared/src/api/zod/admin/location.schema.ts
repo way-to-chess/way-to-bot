@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { ELocationBenefits } from "../../enums/ELocationBenefits";
+import { ELocationBenefits } from "../../enums/ELocationBenefits.js";
 
 export const AdminSchemaLocationBase = {
   title: z.string(),

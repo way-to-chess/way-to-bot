@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-import { EParticipateRequestStatus } from "../../enums/EParticipateRequestStatus";
+import { EParticipateRequestStatus } from "../../enums/EParticipateRequestStatus.js";
 
 export const AdminSchemaParticipateRequestUpdate = z
   .object({

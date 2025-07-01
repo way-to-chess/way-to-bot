@@ -15,7 +15,7 @@ import { EventLeagueEntity } from "@way-to-bot/server/database/entities/event-le
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity.mjs";
 import type { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
-import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus";
+import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus.js";
 
 @Entity("events")
 export class EventEntity implements IEventEntity {
