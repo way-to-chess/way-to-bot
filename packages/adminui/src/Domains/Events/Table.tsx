@@ -34,6 +34,8 @@ import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-ent
 import { getPreviewSrc } from "@way-to-bot/shared/utils/GetPreviewSrc";
 import { ESortDirection } from "@way-to-bot/shared/api/enums/ESortDirection";
 import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus";
+import { useBoolean } from "../../Utils/UseBoolean";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 
 const requiredRule = { required: true, message: "Обязательное поле" };
 
@@ -460,38 +462,32 @@ const COLUMNS: TableProps<AdminDTOEventGetMany>["columns"] = [
   },
 ];
 
+const options: TCommonGetManyOptions = {
+  sort: {
+    field: "createdAt",
+    direction: ESortDirection.DESC,
+  },
+};
+
 const EventsTable = () => {
-  const { data, isFetching } = eventApi.useGetAllEventsQuery({
-    sort: {
-      field: "createdAt",
-      direction: ESortDirection.DESC,
-    },
-  });
-  const [open, setOpen] = useState(false);
-
-  const showDrawer = () => {
-    setOpen(true);
-  };
-
-  const onClose = () => {
-    setOpen(false);
-  };
+  const { data, isFetching } = eventApi.useGetAllEventsQuery(options);
+  const [open, { setTrue, setFalse }] = useBoolean(false);
 
   return (
     <>
       <Drawer
         title={"Создать новое событие"}
         open={open}
-        onClose={onClose}
+        onClose={setFalse}
         width={720}
       >
-        <CreateForm onClose={onClose} />
+        <CreateForm onClose={setFalse} />
       </Drawer>
       <Flex vertical gap={8}>
         <Button
           style={{ width: "fit-content", alignSelf: "end" }}
           type={"primary"}
-          onClick={showDrawer}
+          onClick={setTrue}
           icon={<PlusIcon size={14} />}
         >
           {"Создать"}
