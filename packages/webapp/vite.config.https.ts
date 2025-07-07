@@ -7,10 +7,10 @@ import { resolve } from "node:path";
 export default defineConfig({
   plugins: [react()],
   server: {
-    host: "way-to-bot.local",
+    host: "secure.localhost",
     https: {
-      key: fs.readFileSync(".cert/localhost.key").toString(),
-      cert: fs.readFileSync(".cert/localhost.pem").toString(),
+      key: fs.readFileSync(".cert/key.pem").toString(),
+      cert: fs.readFileSync(".cert/cert.pem").toString(),
     },
   },
   resolve: {
