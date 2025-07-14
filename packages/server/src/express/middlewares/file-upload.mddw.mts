@@ -3,7 +3,7 @@ import multer from "multer";
 import { access, mkdir } from "fs/promises";
 import path from "path";
 
-import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment";
+import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment.js";
 
 const storage = multer.diskStorage({
   destination: async function (req, file, cb) {

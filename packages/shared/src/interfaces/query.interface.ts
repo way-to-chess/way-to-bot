@@ -1,5 +1,5 @@
-import { ESortDirection } from "../api/enums/ESortDirection";
-import { EPredicate } from "../api/enums/EPredicate";
+import { ESortDirection } from "../api/enums/ESortDirection.js";
+import { EPredicate } from "../api/enums/EPredicate.js";
 
 interface IWhereInput {
   field: string;

@@ -1,4 +1,4 @@
-import { EErrorCode } from "../../enums/EErrorCode";
+import { EErrorCode } from "../../enums/EErrorCode.js";
 
 export class ErrorDTO {
   constructor(

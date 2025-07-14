@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import { JWT_SECRET } from "@way-to-bot/server/utils/constants.mjs";
 
-import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
+import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole.js";
 
 export function createJwt(user: {
   id: number;

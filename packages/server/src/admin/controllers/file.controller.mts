@@ -3,7 +3,7 @@ import { AdminFileService } from "@way-to-bot/server/admin/services/file.service
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error.mjs";
 import { AdminDTOFileImportCsvResponse } from "@way-to-bot/shared/api/DTO/admin/file.DTO.js";
 import { Request, Response } from "express";
-import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment";
+import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment.js";
 
 @injectable()
 export class AdminFileController {

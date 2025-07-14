@@ -2,7 +2,7 @@ import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-ent
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { IEventLeagueUserEntity } from "@way-to-bot/shared/api/interfaces/entities/event-league-user-entity.interface.js";
 import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
-import { EUserRole } from "../../enums/EUserRole";
+import { EUserRole } from "../../enums/EUserRole.js";
 
 export interface IUserEntity {
   id: number;

@@ -5,7 +5,7 @@ import { ZodError } from "zod";
 import { EntityNotFoundError, QueryFailedError } from "typeorm";
 import { ErrorDTO } from "@way-to-bot/shared/api/DTO/common/error.DTO.js";
 
-import { EErrorCode } from "@way-to-bot/shared/api/enums/EErrorCode";
+import { EErrorCode } from "@way-to-bot/shared/api/enums/EErrorCode.js";
 
 export function errorHandlerMddw(
   err: Error,

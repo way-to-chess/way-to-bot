@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 import { UnauthorizedError } from "@way-to-bot/server/common/errors/unauthorized.error.mjs";
 import { JWT_SECRET } from "@way-to-bot/server/utils/constants.mjs";
-import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
+import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole.js";
 
 export function authMddw(req: Request, res: Response, next: NextFunction) {
   const auth = req.headers["Authorization".toLowerCase()] as string | undefined;
