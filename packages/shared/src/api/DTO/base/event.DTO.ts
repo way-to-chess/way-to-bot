@@ -17,6 +17,7 @@ export abstract class BaseDTOEvent {
   readonly description?: string | null;
   readonly duration?: number | null;
   readonly host: IUserEntity;
+  readonly additionalInfo?: Record<string, unknown> | null;
 
   protected constructor(event: IEventEntity) {
     this.id = event.id;
@@ -31,5 +32,6 @@ export abstract class BaseDTOEvent {
     this.description = event.description;
     this.duration = event.duration;
     this.host = event.host;
+    this.additionalInfo = event.additionalInfo;
   }
 }

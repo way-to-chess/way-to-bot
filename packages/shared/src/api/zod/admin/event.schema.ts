@@ -16,6 +16,7 @@ const AdminSchemaEventBase = {
   description: z.string().nullable().optional(),
   duration: z.number().nullable().optional(),
   hostId: z.number(),
+  additionalInfo: z.record(z.string(), z.unknown()).nullable().optional(),
 };
 
 export const AdminSchemaEventCreate = z

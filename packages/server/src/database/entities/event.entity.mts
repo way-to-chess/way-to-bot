@@ -80,6 +80,9 @@ export class EventEntity implements IEventEntity {
   @JoinColumn({ name: "host_id" })
   host!: Relation<UserEntity>;
 
+  @Column({ name: "additional_info", type: "jsonb", nullable: true })
+  additionalInfo?: Record<string, unknown> | null;
+
   @CreateDateColumn({ name: "created_at" })
   createdAt!: Date;
 

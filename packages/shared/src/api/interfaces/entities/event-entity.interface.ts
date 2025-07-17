@@ -23,6 +23,7 @@ export interface IEventEntity {
   host: IUserEntity;
   eventLeagues?: IEventLeagueEntity[];
   participateRequests?: IParticipateRequestEntity[];
+  additionalInfo?: Record<string, unknown> | null;
   createdAt: Date;
   updatedAt: Date;
 }
