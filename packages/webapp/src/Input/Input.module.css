@@ -1,7 +1,7 @@
 .container {
     display: flex;
     align-items: center;
-    gap: 4px;
+    gap: 8px;
     background: var(--background-color-1);
     padding: 0 16px;
     border-radius: 12px;
@@ -13,6 +13,10 @@
 
 .container:hover {
     border-color: var(--main-color);
+}
+
+.container :last-child {
+    flex-shrink: 0;
 }
 
 .input::placeholder {
@@ -29,6 +33,7 @@
     color: var(--text-color-1);
     width: 100%;
     background: transparent;
+    text-align: left;
 }
 
 .input:-webkit-autofill,

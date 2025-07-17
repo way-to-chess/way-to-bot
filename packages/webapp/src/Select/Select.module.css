@@ -1,0 +1,7 @@
+.placeholder input {
+    color: var(--text-color-3);
+    font-weight: 400;
+    font-size: 17px;
+    line-height: 100%;
+    letter-spacing: -0.4px;
+}

@@ -3,10 +3,10 @@ import {ImageIcon, PlusIcon} from "lucide-react";
 import {locationApi} from "../../Store/Location/LocationApi";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 import {extractId} from "../../Utils/Extract";
-import {useBoolean} from "../../Utils/UseBoolean";
 import {AdminDTOLocationGetMany} from "@way-to-bot/shared/api/DTO/admin/location.DTO";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {FC} from "react";
+import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
 
 
 // id: number;
