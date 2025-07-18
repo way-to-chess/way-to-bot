@@ -8,8 +8,8 @@ export interface IUserEntity {
   id: number;
   username?: string | null;
   tgId?: string | null;
-  firstName: string;
-  lastName: string;
+  firstName?: string | null;
+  lastName?: string | null;
   email?: string | null;
   birthDate?: Date;
   age?: number;

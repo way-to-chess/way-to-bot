@@ -42,8 +42,6 @@ export class DevideThreeFieldsAssociation1745956548107
     ALTER COLUMN "name" SET NOT NULL
 `);
 
-
-
     // Events
     await queryRunner.query(
       `ALTER TABLE "events" DROP CONSTRAINT "FK_fccf31c64ec14a66276e9999730"`,

@@ -7,6 +7,10 @@ import {
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
+import { FindOptionsWhere, IsNull, Not } from "typeorm";
+import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
+import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicate.js";
+import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate.js";
 
 @injectable()
 export class ClientUserService {
@@ -15,7 +19,26 @@ export class ClientUserService {
   ) {}
 
   async getMany(options?: TCommonGetManyOptions) {
-    return this._userRepository.getMany(options);
+    const notNullOperands = [
+      { field: "firstName", predicate: EOperandPredicate.NOT_EQ, value: null },
+      { field: "lastName", predicate: EOperandPredicate.NOT_EQ, value: null },
+    ];
+    const finalOptions = !options?.where
+      ? {
+          ...options,
+          where: {
+            predicate: EPredicate.AND,
+            operands: notNullOperands,
+          },
+        }
+      : {
+          ...options,
+          where: {
+            predicate: EPredicate.AND,
+            operands: [options.where, ...notNullOperands],
+          },
+        };
+    return this._userRepository.getMany(finalOptions);
   }
 
   async getById(id: number) {
@@ -27,10 +50,15 @@ export class ClientUserService {
   }
 
   async getByTgIdOrUsername(tgId: string, username: string) {
+    const whereConditions: FindOptionsWhere<UserEntity> = {
+      firstName: Not(IsNull()),
+      lastName: Not(IsNull()),
+    };
+
     const userByTgId =
       tgId &&
       (await this._userRepository.getOne({
-        where: { tgId: String(tgId) },
+        where: { ...whereConditions, tgId: String(tgId) },
       }));
 
     if (userByTgId) {
@@ -40,7 +68,7 @@ export class ClientUserService {
     const userByUsername =
       username &&
       (await this._userRepository.getOne({
-        where: { username: `@${username}` },
+        where: { ...whereConditions, username: `@${username}` },
       }));
 
     if (!userByUsername) {

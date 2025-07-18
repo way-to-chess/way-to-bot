@@ -16,6 +16,7 @@ const AdminSchemaUserBase = {
   draws: z.number().optional(),
   rating: z.number().optional(),
   contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
+  tgId: z.string().nullable().optional(),
 };
 
 export const AdminSchemaUserCreate = z

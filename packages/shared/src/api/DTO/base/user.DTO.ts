@@ -6,8 +6,8 @@ import { EUserRole } from "../../enums/EUserRole.js";
 export abstract class BaseDTOUser {
   readonly id: number;
   readonly username?: string | null;
-  readonly firstName: string;
-  readonly lastName: string;
+  readonly firstName?: string | null;
+  readonly lastName?: string | null;
   readonly email?: string | null;
   readonly birthDate?: Date;
   readonly age?: number;

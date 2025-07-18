@@ -7,6 +7,7 @@ import { botMessageDefault, botMessageStart } from "./messages.mjs";
 import TelegramBot from "node-telegram-bot-api";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { FeedbackRepository } from "@way-to-bot/server/database/repositories/feedback.repository.mjs";
+import { DbService } from "../db.service.mjs";
 
 @injectable()
 export class TgBotService {
@@ -16,6 +17,7 @@ export class TgBotService {
     @inject(UserRepository) private readonly _userRepository: UserRepository,
     @inject(FeedbackRepository)
     private readonly _feedbackRepository: FeedbackRepository,
+    @inject(DbService) private readonly _db: DbService,
   ) {
     this._bot = new TelegramApi(TG_BOT_TOKEN, { polling: true });
     this.handleEvents();
@@ -93,21 +95,22 @@ export class TgBotService {
           if (!user) {
             return this._bot.sendMessage(
               chatId,
-              "Не получилось получить информацию о пользователе, пожалуйста свяжитесь с разработчиком @privetenn",
+              "Не получилось получить информацию о пользователе, пожалуйста свяжитесь с разработчиками @pavelazyk",
             );
           }
 
           setImmediate(async () => {
             try {
+              if (!user.id) {
+                throw new Error(`Cannot get user tg info for user ${user}`);
+              }
               const userFromDb = await this._userRepository.getOne({
-                where: { username: `@${user.username}` },
+                where: { tgId: String(user.id) },
               });
 
-              if (userFromDb && !userFromDb.tgId) {
-                userFromDb.tgId = String(user.id);
-                await this._userRepository.update(userFromDb.id, {
-                  tgId: String(user.id),
-                });
+              if (!userFromDb) {
+                const userRepo = this._db.dataSource.getRepository(UserEntity);
+                await userRepo.insert({ tgId: String(user.id) });
               }
             } catch (e: any) {
               logger.error("Error while saving user tg ID to db", {

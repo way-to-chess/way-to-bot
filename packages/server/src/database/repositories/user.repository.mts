@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service.mjs";
-import { FindOneOptions, QueryRunner } from "typeorm";
+import { FindOneOptions, QueryRunner, ReturnDocument } from "typeorm";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity.mjs";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error.mjs";
 import {
@@ -13,6 +13,7 @@ import {
 } from "@way-to-bot/shared/api/zod/client/user.schema.js";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
+import { InternalError } from "@way-to-bot/server/common/errors/internal.error.mjs";
 
 @injectable()
 export class UserRepository {
@@ -68,9 +69,14 @@ export class UserRepository {
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-    const newUser = repo.create(payload);
-    const savedUser = await repo.save(newUser);
-    return this.getOne({ where: { id: savedUser.id } }, queryRunner);
+    if (payload.tgId) {
+      await repo.upsert(payload, ["tgId"]);
+      return this.getOne({ where: { tgId: payload.tgId } }, queryRunner);
+    } else {
+      const newUser = repo.create(payload);
+      const savedUser = await repo.save(newUser);
+      return this.getOne({ where: { id: savedUser.id } }, queryRunner);
+    }
   }
 
   async findOrCreateByEmail(

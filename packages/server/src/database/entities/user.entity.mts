@@ -34,18 +34,18 @@ export class UserEntity implements IUserEntity {
   @Column({ type: "varchar", length: 255, unique: true, nullable: true })
   email?: string | null;
 
-  @Column({ type: "varchar", length: 50, name: "first_name" })
-  firstName!: string;
+  @Column({ type: "varchar", length: 50, name: "first_name", nullable: true })
+  firstName?: string | null;
 
-  @Column({ type: "varchar", length: 50, name: "last_name" })
-  lastName!: string;
+  @Column({ type: "varchar", length: 50, name: "last_name", nullable: true })
+  lastName?: string | null;
 
   @Column({ type: "date", nullable: true, name: "birth_date" })
   birthDate?: Date;
 
   @VirtualColumn({
     type: "integer",
-    query: (alias: any) => `
+    query: (alias: string) => `
       EXTRACT(YEAR FROM AGE(${alias}.birth_date))::integer
     `,
   })
