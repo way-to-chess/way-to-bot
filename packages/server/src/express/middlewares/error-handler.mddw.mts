@@ -20,7 +20,7 @@ export function errorHandlerMddw(
       new ErrorDTO(
         "Validation Error",
         EErrorCode.BAD_REQUEST,
-        err.errors.map((e) => ({
+        err.issues.map((e) => ({
           path: e.path.join("."),
           message: e.message,
         })),
