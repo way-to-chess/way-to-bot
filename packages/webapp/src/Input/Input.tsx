@@ -1,5 +1,5 @@
 import {Input as BaseInput} from "@base-ui-components/react"
-import {FC, ReactNode} from "react";
+import {FC, ReactNode, Ref} from "react";
 import clsx from "clsx";
 import classes from "./Input.module.css";
 
@@ -7,6 +7,7 @@ interface IInputProps extends BaseInput.Props {
     before?: ReactNode
     after?: ReactNode
     invalid?: boolean
+    ref?: Ref<HTMLInputElement>
 }
 
 const Input: FC<IInputProps> = ({children, className, before, after, invalid, onClick, ...rest}) => {
@@ -18,3 +19,4 @@ const Input: FC<IInputProps> = ({children, className, before, after, invalid, on
 }
 
 export {Input}
+export type {IInputProps}

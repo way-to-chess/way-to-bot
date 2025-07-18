@@ -3,6 +3,12 @@ div.popup {
     overflow: auto;
 }
 
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
 .button {
     position: fixed;
     bottom: calc(var(--bottom-bar-height) + 16px);

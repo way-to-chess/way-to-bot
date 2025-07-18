@@ -1,8 +1,8 @@
 import classes from "./ProfilePage.module.css";
 import {Button} from "../Button/Button";
-import {ChangeEventHandler, FC, FormEventHandler, useState} from "react";
+import {ChangeEventHandler, FC} from "react";
 import {userApi} from "../Store/User/UserApi";
-import {Field} from "../Field/Field";
+import {TextField} from "../Field/Field";
 import {useSelector} from "react-redux";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {Navigate} from "react-router";
@@ -10,6 +10,9 @@ import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {Typography} from "../Typography/Typography";
 import {useUploadFile} from "../Hooks/UseUploadFile";
+import {FormProvider, useForm} from "react-hook-form";
+import {zodResolver} from "@hookform/resolvers/zod";
+import {ClientSchemaUserCreate, TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
 
 interface IFileInput {
     onChange: ChangeEventHandler<HTMLInputElement>
@@ -59,59 +62,27 @@ const FileInput: FC<IFileInput> = ({onChange, previewUrl, clearPreviewUrl}) => {
     );
 };
 
-const validateValue = (value: string) => {
-    let error: undefined | string = undefined;
-
-    // Проверка на пустоту
-    if (!value.trim()) {
-        error = 'Обязательное поле';
-    }
-    // Проверка на минимальную длину
-    else if (value.trim().length < 2) {
-        error = 'Минимум 2 символа';
-    }
-    // Проверка на разрешенные символы
-    else if (!/^[\p{L}\s\-']+$/u.test(value)) {
-        error = 'Допустимы только буквы, дефисы и апострофы';
-    }
-    // Проверка на максимальную длину
-    else if (value.length > 30) {
-        error = 'Максимум 30 символов';
-    }
-
-    return error;
-}
-
 const CreateProfile = () => {
-    const [firstName, setFirstName] = useState("");
-    const [lastName, setLastName] = useState("");
-    const {onChange, fileId, fileUrl, clearFile} = useUploadFile()
-    const [firstNameError, setFirstNameError] = useState<string | undefined>(undefined);
-    const [lastNameError, setLastNameError] = useState<string | undefined>(undefined);
+    const form = useForm({
+        resolver: zodResolver(ClientSchemaUserCreate),
+        defaultValues: {
+            fileId: null,
+            tgId: String(Telegram.WebApp.initDataUnsafe.user?.id),
+            username: Telegram.WebApp.initDataUnsafe.user?.username
+        }
+    })
+
+    const {onChange, fileUrl, clearFile} = useUploadFile(({id}) => {
+        form.setValue("fileId", id)
+    })
 
     const [createUser] = userApi.useCreateUserMutation();
 
     const [auth, {isFetching}] = authApi.useLazyAuthByTelegramQuery()
 
-    const onSubmit: FormEventHandler<HTMLFormElement> = (e) => {
-        e.preventDefault();
+    const onSubmit = (values: TClientUserCreatePayload) => {
 
-        const _firstNameError = validateValue(firstName)
-        const _lastNameError = validateValue(lastName)
-
-        if (_firstNameError || _lastNameError) {
-            setFirstNameError(_firstNameError)
-            setLastNameError(_lastNameError)
-            return
-        }
-
-        createUser({
-            firstName,
-            lastName,
-            fileId,
-            tgId: String(Telegram.WebApp.initDataUnsafe.user?.id),
-            username: Telegram.WebApp.initDataUnsafe.user?.username
-        }).unwrap().then(() => {
+        createUser(values).unwrap().then(() => {
             auth({
                 tgId: Telegram.WebApp.initDataUnsafe.user?.id,
                 username: Telegram.WebApp.initDataUnsafe.user?.username,
@@ -119,60 +90,41 @@ const CreateProfile = () => {
         })
     };
 
-    const isButtonDisabled = !lastName || !firstName;
 
-    const onFirstNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        setFirstName(e.target.value ?? "");
-        setFirstNameError(undefined)
-    };
-
-    const onLastNameChange: ChangeEventHandler<HTMLInputElement> = (e) => {
-        setLastName(e.target.value ?? "");
-        setLastNameError(undefined)
-
-    };
-
-    const onFirstNameBlur = () => {
-        setFirstNameError(validateValue(firstName))
-    }
-    const onLastNameBlur = () => {
-        setLastNameError(validateValue(firstName))
+    const clearPreviewUrl = () => {
+        clearFile()
+        form.setValue("fileId", null)
     }
 
     return (
-        <form className={classes.page} onSubmit={onSubmit}>
-            <FileInput onChange={onChange} previewUrl={fileUrl} clearPreviewUrl={clearFile}/>
+        <FormProvider {...form}>
+            <form className={classes.page} onSubmit={form.handleSubmit(onSubmit)}>
+                <FileInput onChange={onChange} previewUrl={fileUrl} clearPreviewUrl={clearPreviewUrl}/>
 
-            <Field
-                error={firstNameError}
-                inputProps={{
-                    onBlur: onFirstNameBlur,
-                    placeholder: "Имя",
-                    value: firstName,
-                    onChange: onFirstNameChange
-                }}
-            />
+                <TextField
+                    controllerProps={{name: "firstName"}}
+                    inputProps={{
+                        placeholder: "Имя",
+                    }}
+                />
 
-            <Field
-                error={lastNameError}
-                inputProps={{
-                    onBlur: onLastNameBlur,
-                    placeholder: "Фамилия",
-                    value: lastName,
-                    onChange: onLastNameChange
-                }}
-            />
+                <TextField
+                    controllerProps={{name: "lastName"}}
+                    inputProps={{
+                        placeholder: "Фамилия",
+                    }}
+                />
 
-            <Button
-                type={"submit"}
-                disabled={isButtonDisabled}
-                className={classes.button}
-                loading={isFetching}
-            >
-                {"Создать профиль"}
-            </Button>
+                <Button
+                    type={"submit"}
+                    className={classes.button}
+                    loading={isFetching}
+                >
+                    {"Создать профиль"}
+                </Button>
+            </form>
+        </FormProvider>
 
-        </form>
     );
 }
 

@@ -1,17 +1,18 @@
 import {memo, useState} from "react";
 import {
-  Badge,
-  Button,
-  Drawer,
-  Flex,
-  Form,
-  Input,
-  message as antMessage,
-  Select,
-  SelectProps,
-  Table,
-  TableProps,
-  Typography,
+    Badge,
+    Button,
+    Descriptions,
+    Drawer,
+    Flex,
+    Form,
+    Input,
+    message as antMessage,
+    Select,
+    SelectProps,
+    Table,
+    TableProps,
+    Typography,
 } from "antd";
 import {TEXT} from "@way-to-bot/shared/constants/text";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
@@ -20,8 +21,8 @@ import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import dayjs from "dayjs";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {
-  AdminDTOParticipateRequestGetMany,
-  AdminDTOParticipateRequestGetOne,
+    AdminDTOParticipateRequestGetMany,
+    AdminDTOParticipateRequestGetOne,
 } from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
 import {TAdminParticipateRequestUpdatePayload} from "@way-to-bot/shared/api/zod/admin/participate-request.schema";
 import {CircleDollarSignIcon, CreditCardIcon, PaperclipIcon,} from "lucide-react";
@@ -144,24 +145,67 @@ const Edit = memo(
     },
 );
 
+const PAYMENT_TYPE_NAME_MAP: Record<EParticipateRequestPaymentType, string> = {
+    [EParticipateRequestPaymentType.CASH]: "Наличными",
+    [EParticipateRequestPaymentType.RECEIPT]: "Банковский перевод",
+    [EParticipateRequestPaymentType.ONLINE]: "Онлайн"
+}
+
 const EXPANDABLE_CONFIG: ExpandableConfig<AdminDTOParticipateRequestGetMany> = {
     expandRowByClick: true,
-    expandedRowRender: ({paymentType, id, receipt, status, message}) => {
+    expandedRowRender: ({paymentType, id, receipt, status, message, additionalUsers}) => {
         return (
-            <Flex align={"center"} justify={"space-between"}>
-                {message ? <Typography.Text>{message}</Typography.Text> : null}
+            <Flex vertical gap={20}>
+                {
+                    additionalUsers.map((user, index) => <Descriptions layout={"vertical"} key={index}
+                                                                       title={`Участник ${index + 1}`}>
+                            <Descriptions.Item label={"Имя"}>{user.firstName}</Descriptions.Item>
+                            <Descriptions.Item label={"Фамилия"}>{user.lastName}</Descriptions.Item>
+                            {
+                                user.birthDate ?
+                                    <Descriptions.Item
+                                        label={"Дата рождения"}>{dayjs(user.birthDate).format("DD/MM/YYYY")}</Descriptions.Item> :
+                                    null
+                            }
+                            {
+                                user.email ?
+                                    <Descriptions.Item
+                                        label={"Эл. Почта"}>{user.email}</Descriptions.Item> :
+                                    null
+                            }
+                            {
+                                user.phoneNumber ?
+                                    <Descriptions.Item
+                                        label={"Номер телефона"}>{`+375${user.phoneNumber}`}</Descriptions.Item> :
+                                    null
+                            }
+                            {
+                                user.level ?
+                                    <Descriptions.Item
+                                        label={"Уровень игры"}>{user.level}</Descriptions.Item> :
+                                    null
+                            }
+                            <Descriptions.Item
+                                label={"Способ оплаты"}>{PAYMENT_TYPE_NAME_MAP[paymentType]}</Descriptions.Item> :
+                        </Descriptions>
+                    )
+                }
 
-                {paymentType === EParticipateRequestPaymentType.RECEIPT ? (
-                    <Typography.Link
-                        href={getPreviewSrc(receipt?.url)}
-                        target={"_blank"}
-                        rel="noreferrer"
-                    >
-                        {TEXT.showFile}
-                    </Typography.Link>
-                ) : null}
+                <Flex align={"center"} justify={"space-between"}>
+                    {message ? <Typography.Text>{message}</Typography.Text> : null}
 
-                <Edit id={id} status={status} message={message}/>
+                    {paymentType === EParticipateRequestPaymentType.RECEIPT ? (
+                        <Typography.Link
+                            href={getPreviewSrc(receipt?.url)}
+                            target={"_blank"}
+                            rel="noreferrer"
+                        >
+                            {TEXT.showFile}
+                        </Typography.Link>
+                    ) : null}
+
+                    <Edit id={id} status={status} message={message}/>
+                </Flex>
             </Flex>
         );
     },

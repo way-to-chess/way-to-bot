@@ -21,6 +21,8 @@
   },
   "dependencies": {
     "@base-ui-components/react": "^1.0.0-alpha.8",
+    "@hookform/error-message": "^2.0.1",
+    "@hookform/resolvers": "^5.1.1",
     "@reduxjs/toolkit": "^2.7.0",
     "@sentry/react": "^8.42.0",
     "@way-to-bot/shared": "*",
@@ -30,8 +32,10 @@
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
     "react-hook-form": "^7.48.2",
+    "react-merge-refs": "^3.0.2",
     "react-redux": "^9.2.0",
     "react-router": "^7.5.3",
-    "telegram-webapps-types-new": "^1.0.5"
+    "telegram-webapps-types-new": "^1.0.5",
+    "zod": "^4.0.5"
   }
 }
