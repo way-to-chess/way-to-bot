@@ -10,7 +10,10 @@
     "paths": {
       "@way-to-bot/shared/*": ["../shared/src/*"],
       "@way-to-bot/server/*": ["./src/*"]
-    }
+    },
+    "moduleResolution": "bundler",
+    "allowImportingTsExtensions": true,
+    "noEmit": true
   },
   "include": ["src/**/*"]
 }

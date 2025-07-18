@@ -1,9 +1,9 @@
 import { inject, injectable } from "inversify";
-import { DbService } from "@way-to-bot/server/services/db.service.mjs";
+import { DbService } from "@way-to-bot/server/services/db.service";
 import { FindOneOptions, QueryRunner } from "typeorm";
-import { EventLeagueResultEntity } from "@way-to-bot/server/database/entities/event-league-result.entity.mjs";
-import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema.js";
-import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO.mjs";
+import { EventLeagueResultEntity } from "@way-to-bot/server/database/entities/event-league-result.entity";
+import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
+import { GetManyOptionsDTO } from "@way-to-bot/server/DTO/get-many-options.DTO";
 
 @injectable()
 export class EventLeagueResultRepository {
