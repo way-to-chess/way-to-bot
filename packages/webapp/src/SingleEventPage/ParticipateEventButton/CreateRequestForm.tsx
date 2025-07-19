@@ -94,6 +94,7 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
             </div>
 
             <Button
+                className={classes.send}
                 type={"submit"}
                 value={"Отправить заявку"}
                 loading={isLoading}

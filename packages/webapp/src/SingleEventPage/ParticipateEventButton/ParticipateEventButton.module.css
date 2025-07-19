@@ -10,14 +10,17 @@ div.popup {
 }
 
 .button {
-    position: fixed;
-    bottom: calc(var(--bottom-bar-height) + 16px);
+    position: sticky;
+    bottom: 16px;
     left: 32px;
-    max-width: calc(100% - 64px);
+    max-width: calc(100% - 32px);
 }
 
-.open {
-    bottom: calc(env(safe-area-inset-bottom) + 32px);
+.send {
+    position: sticky;
+    left: 20px;
+    bottom: 0;
+    max-width: calc(100% - 32px);
 }
 
 .block {

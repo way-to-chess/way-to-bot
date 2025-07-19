@@ -47,11 +47,10 @@ const WithTelegram: FC<PropsWithChildren> = ({children}) => {
     useBackButton()
 
     useEffect(() => {
-        if (Telegram.WebApp.platform === "unknown") {
-            document.body.setAttribute("data-dev", "true");
-        }
-
-        document.documentElement.style.setProperty("--bottom-bar-height", 56 + Telegram.WebApp.safeAreaInset.bottom + "px")
+        // if (Telegram.WebApp.platform === "unknown") {
+        //     document.body.setAttribute("data-dev", "true");
+        // }
+        document.documentElement.style.setProperty("--safe-area-inset-bottom", Telegram.WebApp.safeAreaInset.bottom + "px")
     }, []);
 
 

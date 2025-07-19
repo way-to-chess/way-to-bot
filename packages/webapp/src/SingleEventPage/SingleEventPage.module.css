@@ -11,7 +11,7 @@
 .blocks {
     display: flex;
     flex-direction: column;
-    padding: 20px 16px 96px;
+    padding: 20px 16px;
     gap: 12px;
     position: relative;
 }

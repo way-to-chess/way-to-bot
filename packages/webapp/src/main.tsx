@@ -1,5 +1,5 @@
 import {createRoot} from "react-dom/client";
-import {isDev, isHttps} from "./Utils/OneLineUtils";
+import {isDev} from "./Utils/OneLineUtils";
 import {useEffect, useState} from "react";
 import * as Sentry from "@sentry/react";
 import {App} from "./WebApp/App";
@@ -17,10 +17,6 @@ if (!isDev) {
         replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
         replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
     });
-}
-
-if (isDev && !isHttps) {
-    document.body.setAttribute("data-dev", "true");
 }
 
 const useTheme = () => {
