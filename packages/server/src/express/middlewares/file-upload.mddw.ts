@@ -44,8 +44,8 @@ function getDirectoryByFileAssigment(fileAssigment?: EFileAssigment) {
       return "locations";
     case EFileAssigment.EVENT:
       return "events";
-    case EFileAssigment.RATING_CSV:
-    case EFileAssigment.ROUNDS_CSV:
+    case EFileAssigment.SS_SCV:
+    case EFileAssigment.CR_SCV:
       return "results";
     default:
       return "others";
