@@ -63,7 +63,7 @@ const Select = <Value extends string, >(
             className={clsx(!selected && classes.placeholder)}
             value={selected ? selected.title : placeholder}
             placeholder={placeholder}
-            after={<ChevronDownIcon color={"var(--main-color)"}/>}
+            after={<ChevronDownIcon/>}
             invalid={invalid}
         />
     )

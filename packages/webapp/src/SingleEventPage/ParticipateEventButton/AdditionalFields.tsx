@@ -2,7 +2,7 @@ import {IOption} from "../../Options/Options";
 import {SelectField, TextField} from "../../Field/Field";
 import {z} from "zod";
 
-const LEVELS = ["без разряда", "4 разряд", "3 разряд", "2 разряд", "1 разряд", "КМС", "FM", "IM", "GM"] as const
+const LEVELS = ["Без разряда", "4 разряд", "3 разряд", "2 разряд", "1 разряд", "КМС", "FM", "IM", "GM"] as const
 
 const LEVEL_OPTIONS: IOption<string>[] = LEVELS.map((level) => ({title: level, value: level}))
 
