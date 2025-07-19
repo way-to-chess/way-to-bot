@@ -3,6 +3,6 @@ export enum EFileAssigment {
   RECEIPT = "receipt",
   LOCATION = "location",
   EVENT = "event",
-  ROUNDS_CSV = "rounds_csv",
-  RATING_CSV = "rating_csv",
+  SS_SCV = "ss_scv",
+  CR_SCV = "cr_scv",
 }

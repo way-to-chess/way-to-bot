@@ -17,11 +17,11 @@ export class AdminFileController {
     const file = req.file;
 
     switch (assigment) {
-      case EFileAssigment.ROUNDS_CSV:
-        await this._fileService.importRoundsCsv(elId, file);
+      case EFileAssigment.SS_SCV:
+        await this._fileService.importSS(elId, file);
         break;
-      case EFileAssigment.RATING_CSV:
-        await this._fileService.importRatingCsv(elId, file);
+      case EFileAssigment.CR_SCV:
+        await this._fileService.importCR(elId, file);
         break;
       default:
         throw new BadRequestError(
