@@ -4,7 +4,8 @@
     "noEmit": false,
     "allowImportingTsExtensions": false,
     "outDir": "./dist",
-    "moduleResolution": "node"
+    "moduleResolution": "node",
+    "skipLibCheck": true
   },
   "exclude": ["**/*.test.ts", "**/*.spec.ts"]
 } 

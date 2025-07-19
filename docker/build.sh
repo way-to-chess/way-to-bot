@@ -77,8 +77,6 @@ build_and_push() {
         --platform ${PLATFORM} \
         --target server \
         --build-arg ENV=${ENVIRONMENT} \
-        --cache-from=type=registry,ref=traktirwik/way_to_bot:server_cache \
-        --cache-to=type=registry,ref=traktirwik/way_to_bot:server_cache,mode=max \
         -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
         log_error "Server image build failed"
         exit 1
@@ -91,8 +89,6 @@ build_and_push() {
         --platform ${PLATFORM} \
         --target web \
         --build-arg ENV=${ENVIRONMENT} \
-        --cache-from=type=registry,ref=traktirwik/way_to_bot:web_cache \
-        --cache-to=type=registry,ref=traktirwik/way_to_bot:web_cache,mode=max \
         -t "${IMAGE_NAME}:${WEB_TAG}" .; then
         log_error "Web image build failed"
         exit 1

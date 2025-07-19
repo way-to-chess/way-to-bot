@@ -10,10 +10,13 @@
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.0",
+    "react": "^19.1.0",
     "react-redux": "^9.2.0",
     "zod": "^3.24.3"
   },
   "devDependencies": {
+    "@types/node": "^22.16.5",
+    "@types/react": "^19.1.8",
     "globals": "^15.11.0"
   }
 }

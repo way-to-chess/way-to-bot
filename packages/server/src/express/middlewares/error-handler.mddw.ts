@@ -34,8 +34,8 @@ export function errorHandlerMddw(
   // Обработка ZodError (валидация)
   if (err instanceof ZodError) {
     const errorResponse = new ErrorDTO(
-      "Validation Error",
-      EErrorCode.BAD_REQUEST,
+        "Validation Error",
+        EErrorCode.BAD_REQUEST,
       {
         requestId: req.requestId || "unknown",
         timestamp: new Date().toISOString(),
