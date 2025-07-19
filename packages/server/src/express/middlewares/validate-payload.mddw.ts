@@ -1,10 +1,9 @@
-import { ZodSchema } from "zod";
 import { NextFunction, Request, Response } from "express";
 
 type PayloadSource = "body" | "query" | "params";
 
 export function validatePayloadMddw(
-  schema: ZodSchema,
+  schema: any,
   source: PayloadSource = "body",
 ) {
   return (req: Request, res: Response, next: NextFunction) => {
