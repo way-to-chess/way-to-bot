@@ -11,7 +11,7 @@
     "check": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
     "dev": "tsx watch src/index.ts",
-    "production": "node dist/index.js",
+    "production": "node dist/index.mjs",
     "lint": "eslint src --fix"
   },
   "keywords": [],
