@@ -13,6 +13,8 @@ import {useUploadFile} from "../Hooks/UseUploadFile";
 import {FormProvider, useForm} from "react-hook-form";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {ClientSchemaUserCreate, TClientUserCreatePayload} from "@way-to-bot/shared/api/zod/client/user.schema";
+import {z} from "zod";
+import {ErrorMessage} from "@hookform/error-message";
 
 interface IFileInput {
     onChange: ChangeEventHandler<HTMLInputElement>
@@ -62,13 +64,31 @@ const FileInput: FC<IFileInput> = ({onChange, previewUrl, clearPreviewUrl}) => {
     );
 };
 
+const schema = ClientSchemaUserCreate.extend({
+    tgId: z.string()
+})
+
+const renderWithoutTgWarning = () => {
+    return <div>
+        <Typography type={"text2"}>
+            {"Вы пытаетесь зарегистрироваться без Telegram ID."}
+        </Typography>
+        <Typography type={"text2"}>
+            {"Если приложение запущено через Telegram, попробуйте перезагрузить его."}
+        </Typography>
+        <Typography type={"title5"}>
+            {"Вне Telegram регистрация пока невозможна."}
+        </Typography>
+    </div>
+}
+
 const CreateProfile = () => {
     const form = useForm({
-        resolver: zodResolver(ClientSchemaUserCreate),
+        resolver: zodResolver(schema),
         defaultValues: {
             fileId: null,
-            tgId: String(Telegram.WebApp.initDataUnsafe.user?.id),
-            username: Telegram.WebApp.initDataUnsafe.user?.username
+            tgId: Telegram.WebApp.initDataUnsafe.user?.id ? String(Telegram.WebApp.initDataUnsafe.user?.id) : undefined,
+            username: Telegram.WebApp.initDataUnsafe.user?.username,
         }
     })
 
@@ -114,6 +134,10 @@ const CreateProfile = () => {
                         placeholder: "Фамилия",
                     }}
                 />
+
+                <ErrorMessage name={"tgId"}
+                              errors={form.formState.errors}
+                              render={renderWithoutTgWarning}/>
 
                 <Button
                     type={"submit"}
