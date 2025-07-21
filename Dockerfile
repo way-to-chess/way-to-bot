@@ -16,6 +16,9 @@ COPY typescript ./typescript
 RUN --mount=type=cache,target=/root/.pnpm-store \
     pnpm install --frozen-lockfile
 
+COPY packages/adminui/.env.${BUILD_ENV} ./packages/adminui/.env
+COPY packages/webapp/.env.${BUILD_ENV} ./packages/webapp/.env
+
 RUN pnpm --filter @way-to-bot/shared build
 RUN pnpm --filter @way-to-bot/server build
 RUN pnpm --filter @way-to-bot/adminui build
