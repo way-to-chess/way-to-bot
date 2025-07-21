@@ -10,8 +10,9 @@
   "scripts": {
     "check": "tsc --noEmit",
     "build": "tsc -p tsconfig.build.json",
+    "postbuild": "node scripts/add-js-extension-to-imports.js",
     "dev": "tsx watch src/index.ts",
-    "production": "node dist/index.mjs",
+    "production": "node dist/index.js",
     "lint": "eslint src --fix"
   },
   "keywords": [],

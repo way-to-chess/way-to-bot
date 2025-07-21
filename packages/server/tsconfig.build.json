@@ -5,7 +5,11 @@
     "allowImportingTsExtensions": false,
     "outDir": "./dist",
     "moduleResolution": "node",
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "paths": {
+      "@way-to-bot/server/*": ["./src/*"],
+      "@way-to-bot/shared/*": ["../shared/dist/*"]
+    } 
   },
   "exclude": ["**/*.test.ts", "**/*.spec.ts"]
 } 
