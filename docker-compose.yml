@@ -11,6 +11,12 @@ services:
       - ./docker_data/uploads:/app/docker_data/uploads
       - ./docker_data/api_logs:/app/docker_data/api_logs
     restart: on-failure:3
+    command: >
+      sh -c "
+        cd packages/server &&
+        sh bin/typeorm/run-migration.sh && 
+        pnpm run production
+      "
 
   web:
     container_name: wtb_web

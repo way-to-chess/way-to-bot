@@ -27,7 +27,9 @@ export class EventRepository {
   ) {
     return this.getRepository(queryRunner).findOne({
       relations: {
-        location: true,
+        location: {
+          preview: true,
+        },
         preview: true,
         eventLeagues: {
           league: true,
