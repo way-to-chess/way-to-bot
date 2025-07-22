@@ -15,7 +15,7 @@ services:
       sh -c "
         cd packages/server &&
         sh bin/typeorm/run-migration.sh && 
-        npm run production
+        pnpm run production
       "
 
   web:
