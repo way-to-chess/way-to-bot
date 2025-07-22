@@ -1,8 +1,8 @@
 import { NextFunction, Request, Response } from "express";
-import { EFileAssigment } from "@way-to-bot/shared/api/enums/index.js";
 import sharp from "sharp";
 import path from "path";
 import fsAsync from "fs/promises";
+import { EFileAssigment } from "@way-to-bot/shared/api/enums/EFileAssigment";
 
 export async function fileConverterMiddleware(
   req: Request,

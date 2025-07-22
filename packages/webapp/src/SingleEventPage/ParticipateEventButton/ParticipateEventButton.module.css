@@ -3,15 +3,24 @@ div.popup {
     overflow: auto;
 }
 
-.button {
-    position: fixed;
-    bottom: calc(var(--bottom-bar-height) + 16px);
-    left: 32px;
-    max-width: calc(100% - 64px);
+.form {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.open {
-    bottom: calc(env(safe-area-inset-bottom) + 32px);
+.button {
+    position: sticky;
+    bottom: 16px;
+    left: 32px;
+    max-width: calc(100% - 32px);
+}
+
+.send {
+    position: sticky;
+    left: 20px;
+    bottom: 0;
+    max-width: calc(100% - 32px);
 }
 
 .block {

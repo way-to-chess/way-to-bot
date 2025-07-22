@@ -16,16 +16,17 @@ interface IBottomSheetProps extends PropsWithChildren, Pick<Dialog.Root.Props, "
     titleNode?: ReactNode
 }
 
-const BottomSheet: FC<IBottomSheetProps> = ({
-                                                trigger,
-                                                title,
-                                                description,
-                                                children,
-                                                className,
-                                                open,
-                                                onOpenChange,
-                                                titleNode
-                                            }) => {
+const BottomSheet: FC<IBottomSheetProps> = (
+    {
+        trigger,
+        title,
+        description,
+        children,
+        className,
+        open,
+        onOpenChange,
+        titleNode
+    }) => {
     const Wrapper = title && description ? "div" : Fragment
 
     return (
@@ -58,4 +59,4 @@ const BottomSheet: FC<IBottomSheetProps> = ({
 };
 
 export {BottomSheet};
-export type {TBottomSheetTrigger}
+export type {TBottomSheetTrigger, IBottomSheetProps}

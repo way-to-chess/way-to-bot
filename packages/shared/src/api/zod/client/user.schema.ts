@@ -1,5 +1,5 @@
 import { z } from "zod";
-import { EContactType } from "@way-to-bot/shared/api/enums/index.js";
+import { EContactType } from "../../enums/EContactType.js";
 
 export const ClientSchemaUserContactInfo = z.object({
   type: z.nativeEnum(EContactType),
@@ -8,12 +8,21 @@ export const ClientSchemaUserContactInfo = z.object({
 
 export const ClientSchemaUserBase = {
   username: z.string().nullable().optional(),
-  firstName: z.string(),
-  lastName: z.string(),
+  firstName: z
+    .string()
+    .min(2)
+    .max(30)
+    .regex(/^[\p{L}\s\-']+$/u),
+  lastName: z
+    .string()
+    .min(2)
+    .max(30)
+    .regex(/^[\p{L}\s\-']+$/u),
   fileId: z.number().optional().nullable(),
   email: z.string().nullable().optional(),
   birthDate: z.date().optional(),
   contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
+  tgId: z.string().optional().nullable(),
 };
 
 export const ClientSchemaUserCreate = z

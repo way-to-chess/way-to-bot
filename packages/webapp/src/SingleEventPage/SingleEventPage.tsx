@@ -9,7 +9,6 @@ import {CalendarIcon} from "../Icons/CalendarIcon";
 import {ClockIcon} from "../Icons/ClockIcon";
 import {PriceIcon} from "../Icons/PriceIcon";
 import dayjs from "dayjs";
-import {LocationIcon} from "../Icons/LocationIcon";
 import {FoodIcon} from "../Icons/FoodIcon";
 import {AlcoholIcon} from "../Icons/AlcoholIcon";
 import {CoffeeIcon} from "../Icons/CoffeeIcon";
@@ -26,7 +25,7 @@ import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventB
 import {BottomSheet} from "../BottomSheet/BottomSheet";
 import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
-import {TvIcon} from "lucide-react";
+import {MapPinIcon, TvIcon} from "lucide-react";
 
 const LOCATION_BENEFITS = [
     {icon: FoodIcon, title: "Еда"},
@@ -213,10 +212,15 @@ const SingleEventPage = () => {
                         target={"_blank"}
                         rel={"noreferrer noopener"}
                     >
-                        <Typography type={"text2"} className={classes.infoItem}>
-                            {LocationIcon}
-                            {location.title}
-                        </Typography>
+
+                        <div className={classes.host}>
+                            <MapPinIcon color={"var(--main-color)"}/>
+
+                            <div className={classes.hostInfo}>
+                                <Typography type={"title5"} value={location.title}/>
+                                <Typography type={"text2"} value={location.address} color={"textColor2"}/>
+                            </div>
+                        </div>
                     </a>
                 ) : null}
 

@@ -4,13 +4,15 @@
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
     "resolveJsonModule": true,
-    "types": ["node", "express"],
-    "typeRoots": ["./src/@types", "../../node_modules/@types"],
     "baseUrl": ".",
     "paths": {
       "@way-to-bot/shared/*": ["../shared/src/*"],
       "@way-to-bot/server/*": ["./src/*"]
-    }
+    },
+    "moduleResolution": "node",
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
+    "typeRoots": ["./src/@types", "../../node_modules/@types"]
   },
   "include": ["src/**/*"]
 }

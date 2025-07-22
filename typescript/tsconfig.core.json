@@ -19,5 +19,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "preserveConstEnums": true,
+    "types": ["node"]
   }
 }

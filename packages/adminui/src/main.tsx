@@ -1,55 +1,60 @@
-import {createRoot} from "react-dom/client";
-import "./main.css";
-import {Provider} from "react-redux";
-import {store} from "./Store/Store";
-import {RouterProvider} from "react-router";
-import {ROUTER} from "./Router";
-import {FC, PropsWithChildren, useLayoutEffect, useState} from "react";
-import {authApi} from "@way-to-bot/shared/redux/authApi";
-import {Skeleton} from "antd";
-import '@ant-design/v5-patch-for-react-19';
+const main = () => {
+    const getTgIdPromise = new Promise<string | number | null>((resolve) => {
+        const tgIdFromStorage = localStorage.getItem("tgId")
 
+        if (tgIdFromStorage) {
+            return resolve(tgIdFromStorage)
+        }
 
-const WithAuth: FC<PropsWithChildren> = ({children}) => {
-    const [tgId, setTgId] = useState(() => localStorage.getItem("tgId") ? Number(localStorage.getItem("tgId")) : 0)
+        const tgId = window.prompt("Пароль");
 
-    const {isLoading, isError} = authApi.useAuthByTelegramQuery({tgId})
+        resolve(tgId);
+    })
 
-    useLayoutEffect(() => {
-        new Promise<string | number | null>((resolve) => {
-            const value = tgId || window.prompt("Пароль")
+    getTgIdPromise.then((value) => {
+        console.log(value, 123)
 
-            resolve(value)
-        }).then((value) => {
-            if (!value) {
-                return
+        const root = document.getElementById("root")
+
+        if (!value) {
+            if (root) {
+                root.innerText = "Не удалось получить пароль"
             }
-            
-            setTgId(Number(value))
-            localStorage.setItem("tgId", String(value))
+
+            return
+        }
+
+
+        if (root) {
+            root.innerText = "Загрузка..."
+        }
+
+        fetch(import.meta.env.VITE_API_URL + "/auth/tg", {
+            method: "POST",
+            body: JSON.stringify({tgId: Number(value)}),
+            headers: {
+                "content-type": "application/json"
+            }
+        }).then((response) => {
+            if (response.ok) {
+                localStorage.setItem("tgId", String(value));
+
+                response.json().then((json) => {
+                    localStorage.setItem("token", String(json.data.token));
+
+                    import("./App")
+                })
+
+            } else {
+                document.body.innerText = "Ошибка запроса или неверный пароль"
+                localStorage.removeItem("tgId");
+            }
+        }).catch((err) => {
+            localStorage.removeItem("tgId");
+            document.body.innerText = err
         })
-    }, []);
-
-
-    if (isLoading) {
-        return <Skeleton/>
-    }
-
-    if (isError) {
-        return "Errror"
-    }
-
-    return children
+    })
 }
 
-const App = () => {
-    return (
-        <Provider store={store}>
-            <WithAuth>
-                <RouterProvider router={ROUTER}/>
-            </WithAuth>
-        </Provider>
-    );
-};
+main()
 
-createRoot(document.getElementById("root")!).render(<App/>);

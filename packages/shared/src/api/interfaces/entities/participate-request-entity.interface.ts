@@ -2,10 +2,8 @@ import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-e
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
-import {
-  EParticipateRequestPaymentType,
-  EParticipateRequestStatus,
-} from "@way-to-bot/shared/api/enums/index.js";
+import { EParticipateRequestPaymentType } from "../../enums/EParticipateRequestPaymentType.js";
+import { EParticipateRequestStatus } from "../../enums/EParticipateRequestStatus.js";
 
 export interface IParticipateRequestEntity {
   id: number;

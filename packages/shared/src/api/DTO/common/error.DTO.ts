@@ -1,4 +1,4 @@
-import { EErrorCode } from "@way-to-bot/shared/api/enums/index.js";
+import { EErrorCode } from "../../enums/EErrorCode.js";
 
 export class ErrorDTO {
   constructor(

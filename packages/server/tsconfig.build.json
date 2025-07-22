@@ -1,0 +1,15 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": false,
+    "allowImportingTsExtensions": false,
+    "outDir": "./dist",
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "paths": {
+      "@way-to-bot/server/*": ["./src/*"],
+      "@way-to-bot/shared/*": ["../shared/dist/*"]
+    } 
+  },
+  "exclude": ["**/*.test.ts", "**/*.spec.ts"]
+} 

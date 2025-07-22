@@ -1,6 +1,7 @@
 import { z } from "zod";
 import { ClientSchemaUserContactInfo } from "@way-to-bot/shared/api/zod/client/user.schema.js";
-import { EUserRole } from "@way-to-bot/shared/api/enums/index.js";
+
+import { EUserRole } from "../../enums/EUserRole.js";
 
 const AdminSchemaUserBase = {
   username: z.string().nullable().optional(),
@@ -15,6 +16,7 @@ const AdminSchemaUserBase = {
   draws: z.number().optional(),
   rating: z.number().optional(),
   contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
+  tgId: z.string().nullable().optional(),
 };
 
 export const AdminSchemaUserCreate = z

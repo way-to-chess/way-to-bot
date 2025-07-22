@@ -1,4 +1,4 @@
-import { EContactType } from "@way-to-bot/shared/api/enums/index.js";
+import { EContactType } from "../enums/EContactType";
 
 export type TCommonContactInfo = {
   type: EContactType;

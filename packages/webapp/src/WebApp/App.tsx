@@ -7,6 +7,11 @@ import {store} from "../Store/Store";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {FC, PropsWithChildren} from "react";
 import {ErrorBoundary} from "../Error/Error";
+import {z} from "zod";
+
+z.config({
+    customError: () => "Неверное значение"
+});
 
 
 const WithAuth: FC<PropsWithChildren> = ({children}) => {

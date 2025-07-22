@@ -1,8 +1,8 @@
-import { EEventStatus } from "@way-to-bot/shared/api/enums/index.js";
 import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { ILocationEntity } from "@way-to-bot/shared/api/interfaces/entities/location-entity.interface.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
+import { EEventStatus } from "../../enums/EEventStatus";
 
 export abstract class BaseDTOEvent {
   readonly id: number;
@@ -17,6 +17,7 @@ export abstract class BaseDTOEvent {
   readonly description?: string | null;
   readonly duration?: number | null;
   readonly host: IUserEntity;
+  readonly additionalInfo?: Record<string, unknown> | null;
 
   protected constructor(event: IEventEntity) {
     this.id = event.id;
@@ -31,5 +32,6 @@ export abstract class BaseDTOEvent {
     this.description = event.description;
     this.duration = event.duration;
     this.host = event.host;
+    this.additionalInfo = event.additionalInfo;
   }
 }

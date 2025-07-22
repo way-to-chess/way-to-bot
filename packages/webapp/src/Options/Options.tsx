@@ -25,9 +25,10 @@ const Options = <Value, >({options, value, onValueChange}: IOptionsProps<Value>)
     const _onValueChange = (value: unknown, event: Event) => onValueChange?.(value as Value, event)
 
     return <RadioGroup className={classes.options} value={value} onValueChange={_onValueChange}>
-        {options.map(({title, value, icon, description, disabled, indicator, danger, className}) => {
+        {options.map(({title, value, icon, description, disabled, indicator, danger, className}, index) => {
             const large = title && description
             const Wrapper = large ? "div" : Fragment
+            const props = large ? {className: "flex1"} : {}
 
             const enhancedClassName = clsx(
                 classes.option,
@@ -38,9 +39,9 @@ const Options = <Value, >({options, value, onValueChange}: IOptionsProps<Value>)
             )
 
             return (
-                <label className={enhancedClassName}>
+                <label className={enhancedClassName} key={index}>
                     {icon}
-                    <Wrapper className={"flex1"}>
+                    <Wrapper {...props}>
                         <Typography type={"title6"} value={title} color={danger ? "redColor" : "textColor1"}
                                     className={"flex1"}/>
                         {
@@ -59,4 +60,4 @@ const Options = <Value, >({options, value, onValueChange}: IOptionsProps<Value>)
     </RadioGroup>
 }
 
-export {Options, type IOption}
+export {Options, type IOption, type IOptionsProps}

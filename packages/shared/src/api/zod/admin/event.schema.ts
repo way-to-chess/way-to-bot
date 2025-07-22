@@ -1,5 +1,6 @@
 import { z } from "zod";
-import { EEventStatus } from "../../enums/index.js";
+
+import { EEventStatus } from "../../enums/EEventStatus.js";
 
 const eventStatusSchema = z.nativeEnum(EEventStatus);
 
@@ -15,6 +16,7 @@ const AdminSchemaEventBase = {
   description: z.string().nullable().optional(),
   duration: z.number().nullable().optional(),
   hostId: z.number(),
+  additionalInfo: z.record(z.string(), z.unknown()).nullable().optional(),
 };
 
 export const AdminSchemaEventCreate = z
