@@ -22,6 +22,7 @@ const PAYMENT_TYPES: IOption<EParticipateRequestPaymentType>[] = [
         title: "Банковский перевод",
         description: "Пришлите фото чека после перевода",
         icon: <PaperclipIcon color={"#007AFF"}/>,
+        disabled: true,
     },
 ];
 
