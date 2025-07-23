@@ -9,10 +9,6 @@ import {CalendarIcon} from "../Icons/CalendarIcon";
 import {ClockIcon} from "../Icons/ClockIcon";
 import {PriceIcon} from "../Icons/PriceIcon";
 import dayjs from "dayjs";
-import {FoodIcon} from "../Icons/FoodIcon";
-import {AlcoholIcon} from "../Icons/AlcoholIcon";
-import {CoffeeIcon} from "../Icons/CoffeeIcon";
-import {CameraIcon} from "../Icons/CameraIcon";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {MessageIcon} from "../Icons/MessageIcon";
 import {Button} from "../Button/Button";
@@ -25,14 +21,27 @@ import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventB
 import {BottomSheet} from "../BottomSheet/BottomSheet";
 import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
-import {MapPinIcon, TvIcon} from "lucide-react";
+import {CameraIcon, CoffeeIcon, MapPinIcon, MartiniIcon, ToiletIcon, TvIcon, UtensilsIcon} from "lucide-react";
+import {ELocationBenefits} from "@way-to-bot/shared/api/enums/ELocationBenefits";
 
-const LOCATION_BENEFITS = [
-    {icon: FoodIcon, title: "Еда"},
-    {icon: <CameraIcon width={20} height={20}/>, title: "Съёмка"},
-    {icon: AlcoholIcon, title: "Алкоголь"},
-    {icon: CoffeeIcon, title: "Напитки"},
-];
+
+const BENEFIT_ICONS_MAP = {
+    [ELocationBenefits.FOOD]: <UtensilsIcon size={20}/>,
+    [ELocationBenefits.DRINKS]: <CoffeeIcon size={20}/>,
+    [ELocationBenefits.ALCOHOL]: <MartiniIcon size={20}/>,
+    [ELocationBenefits.PHOTO]: <CameraIcon size={20}/>,
+    [ELocationBenefits.VIDEO]: <TvIcon size={20}/>,
+    [ELocationBenefits.WC]: <ToiletIcon size={20}/>
+}
+
+const BENEFITS_NAMES_MAP = {
+    [ELocationBenefits.FOOD]: "Еда",
+    [ELocationBenefits.DRINKS]: "Напитки",
+    [ELocationBenefits.ALCOHOL]: "Алкоголь",
+    [ELocationBenefits.PHOTO]: "Съёмка",
+    [ELocationBenefits.VIDEO]: "Видео",
+    [ELocationBenefits.WC]: "Туалет",
+}
 
 const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username, photo}) => {
     return (
@@ -123,6 +132,24 @@ const Participants: FC<{ eventId: string }> = ({eventId}) => {
     </div>
 }
 
+const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
+    return <div className={classes.block}>
+        <Typography type={"title4"} value={"Что на локации"}/>
+        <div className={classes.benefits}>
+            {benefits.map((benefit, index) => (
+                <Typography
+                    type={"text2"}
+                    key={index}
+                    className={classes.benefit}
+                >
+                    {BENEFIT_ICONS_MAP[benefit]}
+                    {BENEFITS_NAMES_MAP[benefit]}
+                </Typography>
+            ))}
+        </div>
+    </div>
+}
+
 const SingleEventPage = () => {
     const {id} = useParams();
 
@@ -155,7 +182,7 @@ const SingleEventPage = () => {
         description,
         users,
         duration,
-        linkToStream
+        linkToStream,
     } = event;
 
     const date = dayjs(dateTime);
@@ -224,21 +251,8 @@ const SingleEventPage = () => {
                     </a>
                 ) : null}
 
-                <div className={classes.block}>
-                    <Typography type={"title4"} value={"Что на локации"}/>
-                    <div className={classes.benefits}>
-                        {LOCATION_BENEFITS.map(({icon, title}, index) => (
-                            <Typography
-                                type={"text2"}
-                                key={index}
-                                className={classes.benefit}
-                            >
-                                {icon}
-                                {title}
-                            </Typography>
-                        ))}
-                    </div>
-                </div>
+                {location && location.benefits.length > 0 ? <BenefitsBlock benefits={location.benefits}/> : null}
+
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Как всё будет"}/>
                     <Typography type={"text2"}>{description ?? "Описание не добавлено"}</Typography>
