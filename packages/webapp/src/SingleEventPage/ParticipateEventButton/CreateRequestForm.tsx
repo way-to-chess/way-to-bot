@@ -7,7 +7,7 @@ import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {FormProvider, useForm} from "react-hook-form";
 import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {ReceiptInput} from "./ReceiptInput";
 import {eventApi} from "../../Store/Event/EventApi";
 import {ReceiptInfo} from "./ReceiptInfo";
@@ -38,9 +38,9 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
     const [createParticipateRequest, {isLoading}] = participateRequestApi.useCreateParticipateRequestMutation();
     const authId = useSelector(authSlice.selectors.id)
 
-    const {data: user, isFetching: userIsFetching} = userApi.useGetUserByIdQuery(String(authId))
+    const {data: user} = userApi.useGetUserByIdQuery(String(authId))
 
-    const {data: event, isFetching: eventIsFetching} = eventApi.useGetEventByIdQuery(eventId);
+    const {data: event} = eventApi.useGetEventByIdQuery(eventId);
 
     const form = useForm({
         resolver: zodResolver(shema),
@@ -48,6 +48,7 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
             eventId: Number(eventId),
             additionalUsers: [
                 {
+                    id: user?.id,
                     firstName: user?.firstName,
                     lastName: user?.lastName
                 }
@@ -56,10 +57,16 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
         }
     })
 
+    useEffect(() => {
+        form.setValue("additionalUsers", [
+            {
+                id: user?.id,
+                firstName: user?.firstName,
+                lastName: user?.lastName
+            }
+        ])
+    }, [form, user])
 
-    if (eventIsFetching || userIsFetching) {
-        return <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/>
-    }
 
     const send = (values: TClientParticipateRequestCreatePayload) => {
         createParticipateRequest(values)
@@ -105,6 +112,11 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
 
 const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
     const [open, {toggle, setFalse}] = useBoolean(false)
+    const authId = useSelector(authSlice.selectors.id)
+
+    const {isFetching: userIsFetching} = userApi.useGetUserByIdQuery(String(authId))
+
+    const {isFetching: eventIsFetching} = eventApi.useGetEventByIdQuery(eventId);
 
     return <BottomSheet
         title={"Отправить заявку"}
@@ -113,7 +125,8 @@ const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
         trigger={<Button className={classes.button} value={"Участвовать"}/>}
         className={classes.popup}
     >
-        <Form eventId={eventId} closeModal={setFalse}/>
+        {userIsFetching || eventIsFetching ? <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/> :
+            <Form eventId={eventId} closeModal={setFalse}/>}
     </BottomSheet>
 }
 
