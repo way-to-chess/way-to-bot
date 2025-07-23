@@ -7,7 +7,7 @@ import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {FormProvider, useForm} from "react-hook-form";
 import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
-import {FC, useEffect} from "react";
+import {FC} from "react";
 import {ReceiptInput} from "./ReceiptInput";
 import {eventApi} from "../../Store/Event/EventApi";
 import {ReceiptInfo} from "./ReceiptInfo";
@@ -50,23 +50,12 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
                 {
                     id: user?.id,
                     firstName: user?.firstName,
-                    lastName: user?.lastName
+                    lastName: user?.lastName,
                 }
             ]
 
         }
     })
-
-    useEffect(() => {
-        form.setValue("additionalUsers", [
-            {
-                id: user?.id,
-                firstName: user?.firstName,
-                lastName: user?.lastName
-            }
-        ])
-    }, [form, user])
-
 
     const send = (values: TClientParticipateRequestCreatePayload) => {
         createParticipateRequest(values)
