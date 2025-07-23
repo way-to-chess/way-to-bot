@@ -1,6 +1,6 @@
 import { inject, injectable } from "inversify";
 import { DbService } from "@way-to-bot/server/services/db.service";
-import { FindOneOptions, QueryRunner, ReturnDocument } from "typeorm";
+import { FindOneOptions, FindOptionsWhere, QueryRunner, ReturnDocument } from "typeorm";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error";
 import {
@@ -79,18 +79,19 @@ export class UserRepository {
     }
   }
 
-  async findOrCreateByEmail(
-    payload: TClientUserCreatePayload,
+  async findOrCreateByIdOrEmail(
+    payload: TClientUserCreatePayload & { id?: number },
     queryRunner?: QueryRunner,
   ) {
     const repo = this.getRepository(queryRunner);
-
+    const orConditions: FindOptionsWhere<UserEntity>[] = [{ id: payload.id }];
     if (payload.email) {
-      const existingUser = await repo.findOneBy({ email: payload.email });
+      orConditions.push({ email: payload.email });
+    }
+    const existingUser = await repo.findOneBy(orConditions);
 
-      if (existingUser) {
-        return existingUser.id;
-      }
+    if (existingUser) {
+      return existingUser.id;
     }
 
     const newUser = repo.create(payload);
