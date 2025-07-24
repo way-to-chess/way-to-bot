@@ -6,6 +6,7 @@ export type TCommonContactInfo = {
 };
 
 export type TCommonParticipateRequestAdditionalUser = {
+  id?: number;
   firstName: string;
   lastName: string;
   birthDate: Date;

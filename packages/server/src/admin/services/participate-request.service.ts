@@ -80,12 +80,10 @@ export class AdminParticipateRequestService {
       }
 
       const additionalUsers = updatedParticipateRequest.additionalUsers;
-      const allParticipantsIds: Set<number> = new Set([
-        updatedParticipateRequest.userId,
-      ]);
+      const allParticipantsIds: Set<number> = new Set();
       if (additionalUsers.length) {
         for (const user of additionalUsers) {
-          const userId = await this._userRepository.findOrCreateByEmail(
+          const userId = await this._userRepository.findOrCreateByIdOrEmail( 
             user,
             queryRunner,
           );

@@ -18,8 +18,9 @@ const AdditionalFields = () => {
                    controllerProps={{name: "additionalUsers[0].firstName"}}/>
         <TextField label={"Фамилия"} inputProps={{placeholder: "Введите вашу фамилию", type: "text"}}
                    controllerProps={{name: "additionalUsers[0].lastName"}}/>
-        <TextField label={"Дата рождения"} inputProps={{placeholder: "Введите дату рождения", type: "date"}}
-                   controllerProps={{name: "additionalUsers[0].birthDate"}}/>
+        <TextField label={"Дата рождения"}
+                   inputProps={{placeholder: "Введите дату рождения", type: "date",}}
+                   controllerProps={{name: "additionalUsers[0].birthDate", defaultValue: "2000-07-17"}}/>
         <SelectField inputProps={{
             options: LEVEL_OPTIONS,
             placeholder: "Выберите из списка",
