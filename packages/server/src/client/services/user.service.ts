@@ -62,6 +62,12 @@ export class ClientUserService {
       }));
 
     if (userByTgId) {
+      if (username && userByTgId.username !== `@${username}`) {
+        userByTgId.username = `@${username}`;
+        await this._userRepository.update(userByTgId.id, {
+          username: `@${username}`,
+        });
+      }
       return userByTgId;
     }
 
