@@ -101,7 +101,7 @@ export class ClientUserService {
 
   async update(id: number, payload: TClientUserUpdatePayload) {
     const data = await this._userRepository.update(id, payload);
-    if (!data) throw new InternalError(`User was not created`);
+    if (!data) throw new InternalError(`User was not updated`);
     return data;
   }
 }

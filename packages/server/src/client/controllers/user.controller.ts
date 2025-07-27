@@ -49,7 +49,7 @@ export class ClientUserController {
   }
 
   async update(req: Request, res: Response) {
-    const result = await this._userService.update(+req.params.id!, req.body);
+    const result = await this._userService.update(+req.user!.id, req.body);
     const data = new ClientDTOUserUpdateResponse(
       new ClientDTOUserGetOne(result),
     );
