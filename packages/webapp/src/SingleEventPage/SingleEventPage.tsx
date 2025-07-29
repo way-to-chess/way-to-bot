@@ -12,18 +12,16 @@ import dayjs from "dayjs";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {MessageIcon} from "../Icons/MessageIcon";
 import {Button} from "../Button/Button";
-import {UserListItem} from "../UserListItem/UserListItem";
 import {FC} from "react";
 import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
 import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventButton";
-import {BottomSheet} from "../BottomSheet/BottomSheet";
-import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {CameraIcon, CoffeeIcon, MapPinIcon, MartiniIcon, ToiletIcon, TvIcon, UtensilsIcon} from "lucide-react";
 import {ELocationBenefits} from "@way-to-bot/shared/api/enums/ELocationBenefits";
 import clsx from "clsx";
+import {EventParticipants} from "./EventParticipants/EventParticipants";
 
 
 const BENEFIT_ICONS_MAP = {
@@ -74,92 +72,6 @@ const Loading = () => {
     </div>
 }
 
-const AllParticipants: FC<{ users: IUserEntity[] }> = ({users}) => {
-    const trigger = (
-        <button className={classes.all}>
-            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
-        </button>
-    )
-
-    return <BottomSheet trigger={trigger} title={"Все участники"}>
-        <div className={classes.participants}>
-            {users.map((user) => (
-                <UserListItem
-                    {...user}
-                    className={classes.participant}
-                    key={user.id}
-                />
-            ))}
-        </div>
-    </BottomSheet>
-}
-
-
-const Participants: FC<{ eventId: string }> = ({eventId}) => {
-    const {data} = eventApi.useGetEventByIdQuery(eventId);
-
-    const event = getNotNil(data, "SingleEventPage -> Participants -> event can't be null")
-
-    const {
-        participantsLimit,
-        users,
-        eventLeagues
-    } = event
-
-    const sliced = users.slice(0, 5)
-
-    if (eventLeagues.length <= 1) {
-        return <div className={classes.block}>
-            <div className={classes.participantBlock}>
-                <Typography type={"title4"} value={"Участники"}/>
-                <EventParticipantCount
-                    currentCount={users.length}
-                    maxCount={participantsLimit}
-                />
-                {users.length > 5 ? <AllParticipants users={users}/> : null}
-
-            </div>
-            {
-                sliced.length > 0 ?
-                    <div className={classes.participants}>
-                        {sliced.map((user) => (
-                            <UserListItem
-                                {...user}
-                                className={classes.participant}
-                                key={user.id}
-                            />
-                        ))}
-                    </div> : null
-            }
-        </div>
-    }
-
-    return eventLeagues.map(({participants, name}) => {
-        const sliced = participants.slice(0, 5)
-
-        return (
-            <div className={classes.block}>
-                <div className={classes.participantBlock}>
-                    <Typography type={"title4"} value={name}/>
-                    <EventParticipantCount currentCount={participants.length}/>
-                    {participants.length > 5 ? <AllParticipants users={participants}/> : null}
-                </div>
-                {
-                    sliced.length > 0 ?
-                        <div className={classes.participants}>
-                            {sliced.map((user) => (
-                                <UserListItem
-                                    {...user}
-                                    className={classes.participant}
-                                    key={user.id}
-                                />
-                            ))}
-                        </div> : null
-                }
-            </div>
-        )
-    })
-}
 
 const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
     return <div className={classes.block}>
@@ -309,7 +221,9 @@ const SingleEventPage = () => {
                     <Typography type={"title4"} value={"Как всё будет"}/>
                     <Typography type={"text2"}>{description ?? "Описание не добавлено"}</Typography>
                 </div>
-                <Participants eventId={notNilId}/>
+
+                <EventParticipants eventId={notNilId}/>
+
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Организатор"}/>
                     <Host {...host}/>
