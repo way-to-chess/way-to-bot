@@ -75,6 +75,10 @@
     gap: 8px;
 }
 
+.stream {
+    text-decoration: underline;
+}
+
 .benefits {
     display: grid;
     grid-template-columns: repeat(2, 1fr);

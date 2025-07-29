@@ -3,7 +3,7 @@ import {eventApi} from "../Store/Event/EventApi";
 import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import classes from "./SingleEventPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
-import {Typography} from "../Typography/Typography";
+import {getTypographyClassName, Typography} from "../Typography/Typography";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {CalendarIcon} from "../Icons/CalendarIcon";
 import {ClockIcon} from "../Icons/ClockIcon";
@@ -23,6 +23,7 @@ import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entit
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {CameraIcon, CoffeeIcon, MapPinIcon, MartiniIcon, ToiletIcon, TvIcon, UtensilsIcon} from "lucide-react";
 import {ELocationBenefits} from "@way-to-bot/shared/api/enums/ELocationBenefits";
+import clsx from "clsx";
 
 
 const BENEFIT_ICONS_MAP = {
@@ -101,35 +102,63 @@ const Participants: FC<{ eventId: string }> = ({eventId}) => {
 
     const {
         participantsLimit,
-        users
+        users,
+        eventLeagues
     } = event
-
 
     const sliced = users.slice(0, 5)
 
-    return <div className={classes.block}>
-        <div className={classes.participantBlock}>
-            <Typography type={"title4"} value={"Участники"}/>
-            <EventParticipantCount
-                currentCount={users.length}
-                maxCount={participantsLimit}
-            />
-            {users.length > 5 ? <AllParticipants users={users}/> : null}
+    if (eventLeagues.length <= 1) {
+        return <div className={classes.block}>
+            <div className={classes.participantBlock}>
+                <Typography type={"title4"} value={"Участники"}/>
+                <EventParticipantCount
+                    currentCount={users.length}
+                    maxCount={participantsLimit}
+                />
+                {users.length > 5 ? <AllParticipants users={users}/> : null}
 
+            </div>
+            {
+                sliced.length > 0 ?
+                    <div className={classes.participants}>
+                        {sliced.map((user) => (
+                            <UserListItem
+                                {...user}
+                                className={classes.participant}
+                                key={user.id}
+                            />
+                        ))}
+                    </div> : null
+            }
         </div>
-        {
-            sliced.length > 0 ?
-                <div className={classes.participants}>
-                    {sliced.map((user) => (
-                        <UserListItem
-                            {...user}
-                            className={classes.participant}
-                            key={user.id}
-                        />
-                    ))}
-                </div> : null
-        }
-    </div>
+    }
+
+    return eventLeagues.map(({participants, name}) => {
+        const sliced = participants.slice(0, 5)
+
+        return (
+            <div className={classes.block}>
+                <div className={classes.participantBlock}>
+                    <Typography type={"title4"} value={name}/>
+                    <EventParticipantCount currentCount={participants.length}/>
+                    {participants.length > 5 ? <AllParticipants users={participants}/> : null}
+                </div>
+                {
+                    sliced.length > 0 ?
+                        <div className={classes.participants}>
+                            {sliced.map((user) => (
+                                <UserListItem
+                                    {...user}
+                                    className={classes.participant}
+                                    key={user.id}
+                                />
+                            ))}
+                        </div> : null
+                }
+            </div>
+        )
+    })
 }
 
 const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
@@ -149,6 +178,8 @@ const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
         </div>
     </div>
 }
+
+const text2ClassName = getTypographyClassName({type: "text2"})
 
 const SingleEventPage = () => {
     const {id} = useParams();
@@ -207,12 +238,16 @@ const SingleEventPage = () => {
                                 type={"title3"}
                                 value={name ?? "Турнир без названия"}
                             />
+
                             {/*<button className={classes.shareLink}>{ShareIcon}</button>*/}
                         </div>
-                        <EventParticipantCount
-                            currentCount={users.length}
-                            maxCount={participantsLimit}
-                        />
+                        <div className={classes.infoGroup}>
+                            <EventParticipantCount
+                                currentCount={users.length}
+                                maxCount={participantsLimit}
+                            />
+
+                        </div>
                     </div>
                     <div className={classes.infoBlock}>
                         <div className={classes.infoGroup}>
@@ -226,10 +261,27 @@ const SingleEventPage = () => {
                                 {durationTime}
                             </Typography>
                         </div>
-                        <Typography type={"text2"} className={classes.infoItem}>
-                            {PriceIcon}
-                            {price}
-                        </Typography>
+                        <div className={classes.infoGroup}>
+                            <Typography type={"text2"} className={classes.infoItem}>
+                                {PriceIcon}
+                                {price}
+                            </Typography>
+                            {
+                                linkToStream ?
+                                    <a
+                                        className={clsx(classes.infoItem, text2ClassName, classes.stream)}
+                                        href={linkToStream ?? undefined}
+                                        target={"_blank"}
+                                        rel={"noreferrer noopener"}
+                                    >
+                                        <TvIcon color={"var(--main-color)"} size={20}/>
+
+                                        {"Трансляция"}
+                                    </a>
+                                    : null
+                            }
+                        </div>
+
                     </div>
                 </div>
                 {location ? (
@@ -262,23 +314,6 @@ const SingleEventPage = () => {
                     <Typography type={"title4"} value={"Организатор"}/>
                     <Host {...host}/>
                 </div>
-
-                {
-                    linkToStream ?
-                        <a
-                            className={classes.block}
-                            href={linkToStream ?? undefined}
-                            target={"_blank"}
-                            rel={"noreferrer noopener"}
-                        >
-                            <Typography type={"text2"} className={classes.infoItem}>
-                                <TvIcon/>
-                                {"Ссылка на трансляцию"}
-                            </Typography>
-                        </a>
-                        : null
-                }
-
 
                 <ParticipateEventButton eventId={notNilId}/>
             </div>
