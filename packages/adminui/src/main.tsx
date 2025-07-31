@@ -12,8 +12,6 @@ const main = () => {
     })
 
     getTgIdPromise.then((value) => {
-        console.log(value, 123)
-
         const root = document.getElementById("root")
 
         if (!value) {
