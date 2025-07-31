@@ -41,4 +41,10 @@ export class AdminParticipateRequestController {
     );
     res.status(200).send(data);
   }
+
+  async getById(req: Request, res: Response) {
+    const result = await this._participateRequestService.getById(+req.params.id!);
+    const data = new AdminDTOParticipateRequestGetOne(result);
+    res.status(200).send(data);
+  }
 }

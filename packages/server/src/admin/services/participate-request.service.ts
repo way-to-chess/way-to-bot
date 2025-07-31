@@ -15,6 +15,7 @@ import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/se
 import { TgBotService } from "@way-to-bot/server/services/tg_bot/index";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity";
 import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -137,6 +138,18 @@ export class AdminParticipateRequestService {
 
   async getMany(options?: TCommonGetManyOptions) {
     return this._participateRequestRepository.getMany(options);
+  }
+
+  async getById(id: number) {
+    const data = await this._participateRequestRepository.getOne({
+      where: { id },
+    });
+
+    if (!data) {
+      throw new NotFoundError(`Participate request with id ${id} not found`);
+    }
+
+    return data;
   }
 
   private sendMessageToUser(pr: ParticipateRequestEntity) {
