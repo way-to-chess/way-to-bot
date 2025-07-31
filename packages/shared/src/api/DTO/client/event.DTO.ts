@@ -39,31 +39,7 @@ export class ClientDTOEventGetMany extends BaseDTOEvent {
 }
 
 export class ClientDTOEventGetOne extends BaseDTOEvent {
-  readonly eventLeagues: {
-    name: string;
-    link?: string | null;
-    participants: IUserEntity[] & { points?: number; place?: number };
-  }[];
-
   constructor(data: IEventEntity) {
     super(data);
-    this.eventLeagues = this.mapEventLeagues(data.eventLeagues ?? []);
-  }
-
-  private mapEventLeagues(eventLeagues: IEventLeagueEntity[]) {
-    return eventLeagues.map((el) => {
-      return {
-        name: el.league.name,
-        link: el.link,
-        participants:
-          el.participants?.map((elu) => {
-            return {
-              ...elu.user,
-              points: elu.points,
-              place: elu.place,
-            };
-          }) || [],
-      };
-    });
   }
 }
