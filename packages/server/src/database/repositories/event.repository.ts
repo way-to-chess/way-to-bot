@@ -54,6 +54,7 @@ export class EventRepository {
       .leftJoinAndSelect("event.location", "location")
       .leftJoinAndSelect("event.preview", "preview")
       .leftJoinAndSelect("event.eventLeagues", "eventLeagues")
+      .leftJoinAndSelect("eventLeagues.league", "league")
       .leftJoinAndSelect("eventLeagues.participants", "participants")
       .leftJoinAndSelect("participants.user", "user")
       .leftJoinAndSelect("event.host", "host")
