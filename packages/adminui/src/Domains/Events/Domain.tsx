@@ -3,7 +3,6 @@ import {UploadFile} from "antd";
 import {BaseForm, IFormValues} from "./BaseForm";
 import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
 import {AdminDTOEventGetMany, AdminDTOEventGetOne} from "@way-to-bot/shared/api/DTO/admin/event.DTO";
-import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 import dayjs from "dayjs";
 import {IFileEntity} from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
@@ -36,12 +35,7 @@ const EventsDomain: IDomain<
             dataIndex: "name",
         },
     ],
-    options: {
-        sort: {
-            field: "createdAt",
-            direction: ESortDirection.DESC,
-        },
-    },
+    options: {},
     create: {
         title: "Создать событие",
         definition: <BaseForm/>,
