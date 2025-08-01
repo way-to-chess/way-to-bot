@@ -16,7 +16,6 @@ import { FileEntity } from "@way-to-bot/server/database/entities/file.entity";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity";
 import { EventLeagueUserEntity } from "@way-to-bot/server/database/entities/event-league-user.entity";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
-import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error";
 import { EUserRole } from "@way-to-bot/shared/api/enums/EUserRole";
 
@@ -33,6 +32,9 @@ export class UserEntity implements IUserEntity {
 
   @Column({ type: "varchar", length: 255, unique: true, nullable: true })
   email?: string | null;
+
+  @Column({ type: "varchar", length: 32, nullable: true, name: "phone_number" })
+  phoneNumber?: string | null;
 
   @Column({ type: "varchar", length: 50, name: "first_name", nullable: true })
   firstName?: string | null;
@@ -58,9 +60,6 @@ export class UserEntity implements IUserEntity {
     default: [EUserRole.USER],
   })
   roles!: EUserRole[];
-
-  @Column({ type: "jsonb", name: "contact_info", nullable: false, default: [] })
-  contactInfo!: TCommonContactInfo[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
   fileId?: number | null;

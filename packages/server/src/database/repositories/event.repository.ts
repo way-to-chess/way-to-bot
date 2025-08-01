@@ -58,34 +58,33 @@ export class EventRepository {
       .leftJoinAndSelect("eventLeagues.participants", "participants")
       .leftJoinAndSelect("participants.user", "user")
       .leftJoinAndSelect("event.host", "host")
-      .leftJoinAndSelect("host.photo", "hostPhoto");
-
+      .leftJoinAndSelect("host.photo", "hostPhoto")
+      .addSelect(`
+        CASE 
+          WHEN event.status = 'started' THEN 1
+          WHEN event.status = 'waiting' THEN 2
+          WHEN event.status = 'finished' THEN 3
+          ELSE 4
+        END`, "sort_order")
+      .addSelect(`
+        CASE 
+          WHEN event.status = 'finished' THEN event.date_time
+          ELSE NULL
+        END`, "finished_date")
+      .addSelect(`
+        CASE 
+          WHEN event.status = 'finished' THEN NULL
+          ELSE event.date_time
+        END`, "active_date")
     if (options) {
       const manyOptionsDTO = new GetManyOptionsDTO<EventEntity>(options);
       manyOptionsDTO.applyToQueryBuilder(queryBuilder, "event");
     }
 
     if (!options?.sort) {
-      queryBuilder.orderBy(`
-        CASE 
-          WHEN event.status = 'started' THEN 1
-          WHEN event.status = 'waiting' THEN 2
-          WHEN event.status = 'finished' THEN 3
-          ELSE 4
-        END
-      `, "ASC")
-      .addOrderBy(`
-        CASE 
-          WHEN event.status = 'finished' THEN event.date_time
-          ELSE NULL
-        END
-      `, "DESC")
-      .addOrderBy(`
-        CASE 
-          WHEN event.status = 'finished' THEN NULL
-          ELSE event.date_time
-        END
-      `, "ASC");
+      queryBuilder.orderBy("sort_order", "ASC")
+        .addOrderBy("finished_date", "DESC")
+        .addOrderBy("active_date", "ASC");
     }
 
     const [data, count] = await queryBuilder.getManyAndCount();

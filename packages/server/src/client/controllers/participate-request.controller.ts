@@ -49,14 +49,13 @@ export class ClientParticipateRequestController {
   async create(req: Request, res: Response) {
     const result = await this._participateRequestService.create({
       ...req.body,
-      userId: req.user!.id,
     });
     const data = new ClientDTOParticipateRequestCreateResponse(
       new ClientDTOParticipateRequestGetOne(result),
     );
     res.status(201).send(data);
   }
-  
+
   async delete(req: Request, res: Response) {
     const result = await this._participateRequestService.delete(
       +req.params.id!,

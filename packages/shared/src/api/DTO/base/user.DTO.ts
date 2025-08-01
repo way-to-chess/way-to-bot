@@ -1,6 +1,5 @@
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
-import { TCommonContactInfo } from "@way-to-bot/shared/api/types/index.js";
 import { EUserRole } from "../../enums/EUserRole.js";
 
 export abstract class BaseDTOUser {
@@ -19,7 +18,6 @@ export abstract class BaseDTOUser {
   readonly total: number;
   readonly winRate: number;
   readonly rating: number;
-  readonly contactInfo: TCommonContactInfo[];
 
   protected constructor(user: IUserEntity) {
     this.id = user.id;
@@ -37,6 +35,5 @@ export abstract class BaseDTOUser {
     this.total = user.total;
     this.winRate = user.winRate;
     this.rating = user.rating;
-    this.contactInfo = user.contactInfo;
   }
 }

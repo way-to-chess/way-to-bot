@@ -30,7 +30,7 @@ export const dbConnectionOptions: DataSourceOptions = {
   password: POSTGRES_PASSWORD,
   database: POSTGRES_DB,
   synchronize: false,
-  logging: true,
+  logging: NODE_ENV === "production" ? false : ["query", "error", "schema", "warn", "info", "log"],
   entities: [
     LocationEntity,
     LeagueEntity,

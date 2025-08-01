@@ -49,16 +49,11 @@ export class ClientUserService {
     return data;
   }
 
-  async getByTgIdOrUsername(tgId: string, username: string) {
-    const whereConditions: FindOptionsWhere<UserEntity> = {
-      firstName: Not(IsNull()),
-      lastName: Not(IsNull()),
-    };
-
+  async getByTgIdOrUsername(tgId?: string, username?: string | null) {
     const userByTgId =
       tgId &&
       (await this._userRepository.getOne({
-        where: { ...whereConditions, tgId: String(tgId) },
+        where: { tgId: String(tgId) },
       }));
 
     if (userByTgId) {
@@ -74,7 +69,7 @@ export class ClientUserService {
     const userByUsername =
       username &&
       (await this._userRepository.getOne({
-        where: { ...whereConditions, username: `@${username}` },
+        where: { username: `@${username}` },
       }));
 
     if (!userByUsername) {

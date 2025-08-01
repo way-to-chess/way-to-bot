@@ -81,25 +81,14 @@ export class AdminParticipateRequestService {
       }
 
       const additionalUsers = updatedParticipateRequest.additionalUsers;
-      const allParticipantsIds: Set<number> = new Set();
-      if (additionalUsers.length) {
-        for (const user of additionalUsers) {
-          const userId = await this._userRepository.findOrCreateByIdOrEmail( 
-            user,
-            queryRunner,
-          );
-          allParticipantsIds.add(userId);
-        }
-      }
-
       const eluList: EventLeagueUserEntity[] = [];
       const eventLeagueIds = allEventLeaguesForEvent.map((el) => el.id);
 
-      for (const pid of allParticipantsIds) {
+      for (const u of additionalUsers) {
         const existingElu = await this._eventLeagueUserRepository.getOne(
           {
             where: {
-              userId: pid,
+              userId: u.id,
               eventLeagueId: In(eventLeagueIds),
             },
           },
@@ -110,7 +99,7 @@ export class AdminParticipateRequestService {
 
         const elu = new EventLeagueUserEntity();
         elu.eventLeagueId = defaultEventLeague.id;
-        elu.userId = pid;
+        elu.userId = u.id;
         eluList.push(elu);
       }
 
