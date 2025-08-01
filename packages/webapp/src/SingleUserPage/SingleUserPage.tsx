@@ -165,6 +165,36 @@ const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = 
 
 }
 
+const AllEvents: FC<{ events: ClientDTOUserGetOne["events"] }> = ({events}) => {
+
+    const trigger = (
+        <button>
+            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
+        </button>
+    )
+
+    return <BottomSheet trigger={trigger} title={"Все события"}>
+        <div className={classes.history}>
+            {events.map((event) => <HistoryItem {...event} key={event.id}/>)}
+        </div>
+    </BottomSheet>
+}
+
+const History: FC<{ id: string }> = ({id}) => {
+    const {data: user} = userApi.useGetUserByIdQuery(id)
+
+    const sorted = sortByKey(user?.events || [], "dateTime")
+
+    const sliced = sorted.slice(0, 5)
+
+    return <Block title={"История событий"}>
+        {sliced.length > 0 ?
+            sliced.map((event) => <HistoryItem {...event} key={event.id}/>) :
+            <Typography type={"text2"} value={"Нет событий"}/>}
+        {sorted.length > 5 ? <AllEvents events={sorted}/> : null}
+    </Block>
+}
+
 const SingleUserPage = () => {
     const {id} = useParams()
 
@@ -231,11 +261,7 @@ const SingleUserPage = () => {
             </Block>
 
 
-            <Block title={"История событий"}>
-                {events.length > 0 ?
-                    sortByKey(events, "dateTime").map((event) => <HistoryItem {...event} key={event.id}/>) :
-                    <Typography type={"text2"} value={"Нет событий"}/>}
-            </Block>
+            <History id={notNilId}/>
         </div>
     </div>
 }
