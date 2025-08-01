@@ -15,22 +15,29 @@ const AdditionalFields = () => {
 
     return <>
         <TextField label={"Имя"} inputProps={{placeholder: "Введите ваше имя", type: "text"}}
-                   controllerProps={{name: "additionalUsers[0].firstName"}}/>
+                   controllerProps={{name: "additionalUsers[0].firstName"}} required/>
         <TextField label={"Фамилия"} inputProps={{placeholder: "Введите вашу фамилию", type: "text"}}
-                   controllerProps={{name: "additionalUsers[0].lastName"}}/>
+                   controllerProps={{name: "additionalUsers[0].lastName"}} required/>
         <TextField label={"Дата рождения"}
                    inputProps={{placeholder: "Введите дату рождения", type: "date",}}
-                   controllerProps={{name: "additionalUsers[0].birthDate", defaultValue: "2000-07-17"}}/>
+                   controllerProps={{name: "additionalUsers[0].birthDate"}} required/>
+        <TextField label={"Город"}
+                   inputProps={{placeholder: "Введите ваш город",}}
+                   controllerProps={{name: "additionalUsers[0].city"}}/>
+        <TextField label={"Клуб"}
+                   inputProps={{placeholder: "Ваш шахматный клуб",}}
+                   controllerProps={{name: "additionalUsers[0].club"}}/>
         <SelectField inputProps={{
             options: LEVEL_OPTIONS,
             placeholder: "Выберите из списка",
             bottomSheetProps: {title: "Спортивный разряд"}
         }}
                      label={"Спортивный разряд"}
-                     controllerProps={{name: "additionalUsers[0].level"}}/>
+                     controllerProps={{name: "additionalUsers[0].level"}} required/>
         <TextField label={"Номер телефона"} inputProps={{placeholder: "Введите номер телефона", type: "tel"}}
                    controllerProps={{name: "additionalUsers[0].phoneNumber"}}
-                   description={"9 цифр номера телефона в формате: 29XXXXXXX, 33XXXXXXX, 25XXXXXXX, 44XXXXXXX"}/>
+                   description={"9 цифр номера телефона в формате: 29XXXXXXX, 33XXXXXXX, 25XXXXXXX, 44XXXXXXX"}
+                   required/>
     </>
 }
 

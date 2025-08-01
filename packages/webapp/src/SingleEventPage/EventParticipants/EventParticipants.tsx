@@ -12,9 +12,9 @@ import {sortByKey} from "../../Utils/SortByKey";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 
 const POSTFIX_BY_PLACE: Record<number, ReactNode> = {
-    1: <TrophyIcon color={"rgb(255, 204, 0)"}/>,
-    2: <TrophyIcon color={"rgb(148, 148, 148)"}/>,
-    3: <TrophyIcon color={"rgb(139, 66, 1)"}/>
+    1: <TrophyIcon size={14} color={"rgb(255, 204, 0)"}/>,
+    2: <TrophyIcon size={14} color={"rgb(148, 148, 148)"}/>,
+    3: <TrophyIcon size={14} color={"rgb(139, 66, 1)"}/>
 }
 
 const AllParticipants: FC<{ users: IUserEntity[], title: string }> = ({users, title}) => {

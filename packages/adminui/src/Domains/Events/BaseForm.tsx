@@ -99,7 +99,7 @@ const BaseForm = () => {
                 </Col>
 
                 <Col span={12}>
-                    <Form.Item name={"hostId"} label={"Ораганизатор"} rules={REQUIRED_RULE}>
+                    <Form.Item name={"hostId"} label={"Организатор"} rules={REQUIRED_RULE}>
                         <UserSelect placeholder={"Выберите пользователя"}/>
                     </Form.Item>
                 </Col>

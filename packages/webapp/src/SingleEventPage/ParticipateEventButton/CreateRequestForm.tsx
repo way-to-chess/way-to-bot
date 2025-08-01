@@ -25,6 +25,7 @@ import {
     ClientSchemaParticipateRequestCreate,
     TClientParticipateRequestCreatePayload
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema";
+import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 
 interface IWithEventId {
     eventId: string;
@@ -45,6 +46,7 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
     const form = useForm({
         resolver: zodResolver(shema),
         defaultValues: {
+            paymentType: EParticipateRequestPaymentType.RECEIPT,
             eventId: Number(eventId),
             additionalUsers: [
                 {
