@@ -1,5 +1,6 @@
 import {FC, PropsWithChildren, useEffect, useRef} from "react";
 import {Location, useLocation, useNavigate} from "react-router";
+import YM from 'react-yandex-metrika';
 
 const useBackButton = () => {
     const location = useLocation()
@@ -38,6 +39,10 @@ const useBackButton = () => {
         } else {
             Telegram.WebApp.BackButton.hide();
         }
+
+
+        YM('hit', location.pathname);
+
 
     }, [location])
 

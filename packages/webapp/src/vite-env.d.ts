@@ -1,5 +1,6 @@
 /// <reference types="vite/client" />
 
-import { TelegramWebApps } from "telegram-webapps-types-new";
+import {TelegramWebApps} from "telegram-webapps-types-new";
 
-declare interface Telegram extends TelegramWebApps {}
+declare interface Telegram extends TelegramWebApps {
+}
