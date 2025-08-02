@@ -8,6 +8,7 @@ export const ClientSchemaParticipateRequestAdditionalUserSchema = z
         ...ClientSchemaUserBase,
         birthDate: z.coerce.date(),
         email: z.string().optional(),
+        elIds: z.array(z.number()),
     })
     .catchall(z.any());
 

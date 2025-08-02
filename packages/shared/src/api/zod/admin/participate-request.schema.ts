@@ -6,7 +6,6 @@ export const AdminSchemaParticipateRequestUpdate = z
   .object({
     status: z.enum(EParticipateRequestStatus),
     message: z.string().optional().nullable(),
-    leagueId: z.number().optional(),
   })
   .strict();
 

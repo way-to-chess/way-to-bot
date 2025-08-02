@@ -66,7 +66,7 @@ export class AdminParticipateRequestService {
 
       const elRepo = this._eventLeagueRepository.getRepository(queryRunner);
       const allEventLeaguesForEvent = await elRepo.find({
-        relations: { league: true },
+        relations: { league: true, participants: true },
         where: { eventId: updatedParticipateRequest.eventId },
       });
 
@@ -82,25 +82,19 @@ export class AdminParticipateRequestService {
 
       const additionalUsers = updatedParticipateRequest.additionalUsers;
       const eluList: EventLeagueUserEntity[] = [];
-      const eventLeagueIds = allEventLeaguesForEvent.map((el) => el.id);
 
       for (const u of additionalUsers) {
-        const existingElu = await this._eventLeagueUserRepository.getOne(
-          {
-            where: {
-              userId: u.id,
-              eventLeagueId: In(eventLeagueIds),
-            },
-          },
-          queryRunner,
-        );
+        const userJoiningLeagues = u.elIds?.length ? u.elIds : [defaultEventLeague.id];
 
-        if (existingElu) continue;
-
-        const elu = new EventLeagueUserEntity();
-        elu.eventLeagueId = defaultEventLeague.id;
-        elu.userId = u.id;
-        eluList.push(elu);
+        userJoiningLeagues.forEach(elId => {
+          const existingElu = allEventLeaguesForEvent.find(el => el.id === elId && el.participants.includes(u.id));
+          if (!existingElu) {
+            const elu = new EventLeagueUserEntity();
+            elu.eventLeagueId = elId;
+            elu.userId = u.id;
+            eluList.push(elu);
+          }
+        })
       }
 
       await this._eventLeagueUserRepository.addRows(eluList, queryRunner);
