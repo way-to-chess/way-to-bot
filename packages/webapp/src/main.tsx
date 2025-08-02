@@ -3,6 +3,7 @@ import {isDev} from "./Utils/OneLineUtils";
 import {useEffect, useState} from "react";
 import * as Sentry from "@sentry/react";
 import {App} from "./WebApp/App";
+import {YMInitializer} from "react-yandex-metrika";
 
 if (!isDev) {
     Sentry.init({
@@ -37,4 +38,16 @@ const useTheme = () => {
     return theme;
 };
 
-createRoot(document.getElementById("root")!).render(<App/>);
+const YMInitializerProps = {
+    accounts: [103541945],
+    options: {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true
+    }
+}
+
+createRoot(document.getElementById("root")!).render(<>
+    <YMInitializer {...YMInitializerProps}  />
+    <App/>
+</>);
