@@ -4,13 +4,14 @@ import { ClientParticipateRequestController } from "@way-to-bot/server/client/co
 import { validatePayloadMddw } from "@way-to-bot/server/express/middlewares/validate-payload.mddw";
 import { ClientSchemaParticipateRequestCreate } from "@way-to-bot/shared/api/zod/client/participate-request.schema";
 import { getManyOptionsMddw } from "@way-to-bot/server/express/middlewares/get-many-options.mddw";
+import { authMddw } from "@way-to-bot/server/express/middlewares/auth.mddw";
 
 export const ClientParticipateRequestRouter = Router();
 const clientParticipateRequestController = DiContainer.get(
   ClientParticipateRequestController,
 );
 
-ClientParticipateRequestRouter.get("/", getManyOptionsMddw, (req, res) =>
+ClientParticipateRequestRouter.get("/", authMddw, getManyOptionsMddw, (req, res) =>
   clientParticipateRequestController.getMany(req, res),
 );
 
