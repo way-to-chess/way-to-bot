@@ -1,4 +1,4 @@
-import {createContext, FC, PropsWithChildren, useContext} from "react";
+import {createContext, FC, PropsWithChildren, ReactNode, useContext} from "react";
 import {IDomain} from "../Domains/Domains";
 import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
 import {Space} from "antd";
@@ -17,11 +17,12 @@ const useDomainContext = () => {
     return context;
 }
 
-const getBaseColumn = (isEditAvailable?: boolean) => ({
+const getActionsColumn = (actions: ((it: IWithId) => ReactNode)[] = [], isEditAvailable?: boolean) => ({
     title: "Действия",
     width: 100,
     render: (props: IWithId) => (
         <Space.Compact>
+            {...actions.map(action => action(props))}
             {isEditAvailable ? <EditButton id={props.id}/> : null}
             <DeleteButton id={props.id}/>
         </Space.Compact>
@@ -34,7 +35,7 @@ const DomainContextProvider: FC<PropsWithChildren & IDomain> = (
         ...props
     }) => {
 
-    const baseColumn = getBaseColumn(props.edit.definition !== null)
+    const baseColumn = getActionsColumn(props.actions, props.edit.definition !== null)
 
 
     const value: IDomain = {

@@ -18,6 +18,7 @@ interface IDomain<GetMany = IWithId, GetOne = IWithId, CreatePayload = unknown, 
     Component?: ComponentType;
     searchFields: string[];
     expandable?: TableProps<GetMany>["expandable"];
+    actions?: ((it: GetMany) => ReactNode)[];
     create: {
         title: string
         url?: string

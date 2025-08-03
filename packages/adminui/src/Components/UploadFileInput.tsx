@@ -1,16 +1,18 @@
-import {FC, useState} from "react";
+import {FC, useCallback, useState} from "react";
 import {Button, message, Upload, UploadFile, UploadProps} from "antd";
+import {EFileAssigment} from "@way-to-bot/shared/api/enums/EFileAssigment";
 
 type TUploadProps = Omit<
-    UploadProps,
-    "accept" | "action" | "method" | "listType" | "style" | "onChange"
+    UploadProps, "action" | "method" | "listType" | "style" | "onChange"
 > & {
     onChange?: (fileList: UploadFile[]) => void;
+    assigment: EFileAssigment;
 };
 
-const UploadImage: FC<TUploadProps> = (
+const UploadFileInput: FC<TUploadProps> = (
     {
         onChange: onChangeFromProps,
+        assigment,
         ...props
     }) => {
     const [hideInput, setHideInput] = useState(
@@ -39,25 +41,34 @@ const UploadImage: FC<TUploadProps> = (
         onChangeFromProps?.(info.fileList);
     };
 
-    const action = `${import.meta.env.VITE_API_URL}/client/file`;
+    const customRequest = useCallback((options: Parameters<NonNullable<UploadProps["customRequest"]>>[0]) => {
+        const formData = new FormData()
+
+        formData.append("file", options.file)
+        formData.append("assigment", assigment)
+
+        return fetch(`${import.meta.env.VITE_API_URL}/client/file`, {
+            method: "POST",
+            body: formData
+        }).then(options.onSuccess).catch(options.onError)
+    }, [assigment])
 
     return (
         <Upload
             accept={"image/*"}
-            action={action}
-            method={"POST"}
             listType={"picture"}
             onChange={onChange}
             style={{width: "100%"}}
+            customRequest={customRequest}
             {...props}
         >
             {hideInput ? null : (
                 <Button style={{width: "100%"}} type={"dashed"} size={"large"}>
-                    {"Загрузить изображение"}
+                    {"Загрузить файл"}
                 </Button>
             )}
         </Upload>
     );
 };
 
-export {UploadImage}
+export {UploadFileInput}

@@ -7,6 +7,7 @@ import dayjs from "dayjs";
 import {IFileEntity} from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
+import {SubmitResults} from "./SubmitResults";
 
 const convertFileToFileList = (file: IFileEntity) => {
     return [
@@ -29,6 +30,9 @@ const EventsDomain: IDomain<
     title: "События",
     path: "events",
     url: "event",
+    actions: [
+        ({id}) => <SubmitResults id={id}/>
+    ],
     columns: [
         {
             title: "Название",

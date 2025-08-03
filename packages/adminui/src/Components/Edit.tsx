@@ -53,12 +53,10 @@ const EditButton = memo<IWithId>(({id}) => {
 });
 
 const EditForm: FC<IWithId> = ({id}) => {
-    const {url, options, edit: {definition, normalize, getInitialValues}} = useDomainContext()
+    const {url, edit: {definition, normalize, getInitialValues}} = useDomainContext()
     const {clearId} = useEditContext()
 
-    const {data} = adminApi.useGetManyQuery({url, options}, {
-        selectFromResult: ({data}) => ({data: data?.data.find((it) => it.id === id)}),
-    })
+    const {data} = adminApi.useGetOneQuery({url, id})
 
     const [update, {isLoading}] = adminApi.useUpdateMutation()
 

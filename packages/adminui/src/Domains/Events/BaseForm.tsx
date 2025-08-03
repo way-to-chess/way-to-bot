@@ -3,9 +3,10 @@ import {LocationSelect} from "../Locations/LocationSelect";
 import {UserSelect} from "../Users/UserSelect";
 import {TAdminEventCreatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
 import {Dayjs} from "dayjs";
-import {UploadImage} from "./UploadImage";
 import {REQUIRED_RULE} from "../../Utils/WithRequiredRule";
 import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
+import {UploadFileInput} from "../../Components/UploadFileInput";
+import {EFileAssigment} from "@way-to-bot/shared/api/enums/EFileAssigment";
 
 interface IFormValues
     extends Omit<TAdminEventCreatePayload, "dateTime" | "fileId" | "duration"> {
@@ -47,7 +48,7 @@ const BaseForm = () => {
     return (
         <>
             <Form.Item name={"file"} valuePropName={"fileList"}>
-                <UploadImage/>
+                <UploadFileInput assigment={EFileAssigment.EVENT} accept={"image/*"}/>
             </Form.Item>
             <Row gutter={16}>
                 <Col span={12}>

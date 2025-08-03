@@ -45,7 +45,7 @@ const CreateForm = () => {
                 message.error(JSON.stringify(err));
             });
     }
-    return <Drawer title={title} open={open} onClose={setFalse} width={720}>
+    return <Drawer title={title} open={open} onClose={setFalse} width={720} destroyOnHidden>
         <Form
             form={form}
             onFinish={onFinish}
