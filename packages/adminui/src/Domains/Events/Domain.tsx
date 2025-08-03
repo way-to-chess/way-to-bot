@@ -8,6 +8,7 @@ import {IFileEntity} from "@way-to-bot/shared/api/interfaces/entities/file-entit
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
 import {SubmitResults} from "./SubmitResults";
+import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 
 const convertFileToFileList = (file: IFileEntity) => {
     return [
@@ -39,7 +40,12 @@ const EventsDomain: IDomain<
             dataIndex: "name",
         },
     ],
-    options: {},
+    options: {
+        sort: {
+            field: "createdAt",
+            direction: ESortDirection.DESC,
+        },
+    },
     create: {
         title: "Создать событие",
         definition: <BaseForm/>,
