@@ -91,6 +91,10 @@ const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
     </div>
 }
 
+
+const Description: FC<{ description: string }> = ({description}) => description.split("\n").map((item, index) => (
+    <span key={index}>{item}<br/></span>))
+
 const text2ClassName = getTypographyClassName({type: "text2"})
 
 const SingleEventPage = () => {
@@ -219,7 +223,8 @@ const SingleEventPage = () => {
 
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Как всё будет"}/>
-                    <Typography type={"text2"}>{description ?? "Описание не добавлено"}</Typography>
+                    <Typography type={"text2"}>{description ?
+                        <Description description={description}/> : "Описание не добавлено"}</Typography>
                 </div>
 
                 <EventParticipants eventId={notNilId}/>
