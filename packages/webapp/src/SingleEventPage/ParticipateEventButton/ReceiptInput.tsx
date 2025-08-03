@@ -26,17 +26,19 @@ const ReceiptInput = () => {
 
     const text = fileName ?? (error ? "Ошибка при загрузке" : "Загрузить документ");
 
-    return <Button
-        variant={"secondary"}
-        as={"label"}
-        loading={fileUploadLoading}
-        className={classes.upload}
-    >
-        <input type={"file"} onChange={onChange}/>
-        {fileId ? null : <UploadIcon/>}
-        {text}
-        {fileId ? <EditIcon width={14} height={14}/> : null}
-    </Button>
+    return <>
+        <Button
+            variant={"secondary"}
+            as={"label"}
+            loading={fileUploadLoading}
+            className={classes.upload}
+        >
+            <input type={"file"} onChange={onChange}/>
+            {fileId ? null : <UploadIcon/>}
+            {text}
+            {fileId ? <EditIcon width={14} height={14}/> : null}
+        </Button>
+    </>
 }
 
 export {ReceiptInput}

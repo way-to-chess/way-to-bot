@@ -7,16 +7,12 @@ import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateRequestApi";
 import {FormProvider, useForm} from "react-hook-form";
 import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
-import {FC} from "react";
+import {FC, useEffect} from "react";
 import {ReceiptInput} from "./ReceiptInput";
 import {eventApi} from "../../Store/Event/EventApi";
 import {ReceiptInfo} from "./ReceiptInfo";
 import {PaymentTypeSelect} from "./PaymentTypeSelect";
-import {userApi} from "../../Store/User/UserApi";
-import {authSlice} from "@way-to-bot/shared/redux/authSlice";
-import {useSelector} from "react-redux";
 import {Skeleton} from "../../Skeleton/Skeleton";
-import {zodResolver} from "@hookform/resolvers/zod"
 import {z} from "zod";
 import {
     ClientSchemaParticipateRequestAdditionalUserSchema
@@ -26,50 +22,87 @@ import {
     TClientParticipateRequestCreatePayload
 } from "@way-to-bot/shared/api/zod/client/participate-request.schema";
 import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
+import {EventLeaguesSelect} from "./EventLeaguesSelect";
+import {useDispatch, useSelector} from "react-redux";
+import {authSlice} from "@way-to-bot/shared/redux/authSlice";
+import {userApi} from "../../Store/User/UserApi";
+import {ClientDTOUserGetOne} from "@way-to-bot/shared/api/DTO/client/user.DTO";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
+import {zodResolver} from "@hookform/resolvers/zod";
 
 interface IWithEventId {
     eventId: string;
 }
 
 const shema = ClientSchemaParticipateRequestCreate.extend({
-    additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend(VALIDATION_EXTENSION))
+    additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend(VALIDATION_EXTENSION)),
+    fileId: z.number()
 })
 
-const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeModal}) => {
-    const [createParticipateRequest, {isLoading}] = participateRequestApi.useCreateParticipateRequestMutation();
-    const authId = useSelector(authSlice.selectors.id)
+interface ICreateFormProps extends IWithEventId {
+    closeModal: VoidFunction;
+    user?: ClientDTOUserGetOne
+}
 
-    const {data: user} = userApi.useGetUserByIdQuery(String(authId))
+const CreateForm: FC<ICreateFormProps> = (
+    {
+        eventId,
+        closeModal,
+        user
+    }) => {
+    const [createParticipateRequest, {isLoading}] = participateRequestApi.useCreateParticipateRequestMutation();
 
     const {data: event} = eventApi.useGetEventByIdQuery(eventId);
+
+    const [authByTelegram] = authApi.useLazyAuthByTelegramQuery()
+
+    const tgId = Telegram.WebApp.initDataUnsafe.user?.id ? String(Telegram.WebApp.initDataUnsafe.user?.id) : undefined
 
     const form = useForm({
         resolver: zodResolver(shema),
         defaultValues: {
             paymentType: EParticipateRequestPaymentType.RECEIPT,
             eventId: Number(eventId),
+            tgId,
             additionalUsers: [
                 {
-                    id: user?.id,
-                    firstName: user?.firstName,
-                    lastName: user?.lastName,
+                    firstName: user?.firstName ?? undefined,
+                    lastName: user?.lastName ?? undefined,
+                    birthDate: user?.birthDate,
+                    tgId,
+                    elIds: []
                 }
             ]
 
         }
     })
 
+    const dispatch = useDispatch()
+
+
     const send = (values: TClientParticipateRequestCreatePayload) => {
         createParticipateRequest(values)
             .unwrap()
-            .then(closeModal);
+            .then(() => {
+                closeModal()
+                if (user) {
+                    dispatch(participateRequestApi.util.invalidateTags([{type: "PARTICIPATE_REQUEST"}]))
+                } else {
+                    authByTelegram({
+                        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+                        username: Telegram.WebApp.initDataUnsafe.user?.username,
+                    }).then(() => {
+                        dispatch(participateRequestApi.util.invalidateTags([{type: "PARTICIPATE_REQUEST"}]))
+                    })
+                }
+            });
     };
 
     return <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(send)} className={classes.form}>
-            <Typography type={"text2"}>
-                {"Организатор просить предоставить дополнительную информацию для регистрации"}
-            </Typography>
+            <div className={classes.block}>
+                <EventLeaguesSelect eventId={eventId}/>
+            </div>
 
             <div className={clsx(classes.block, classes.paymentMethod)}>
                 <AdditionalFields/>
@@ -103,9 +136,16 @@ const Form: FC<IWithEventId & { closeModal: VoidFunction }> = ({eventId, closeMo
 
 const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
     const [open, {toggle, setFalse}] = useBoolean(false)
+
     const authId = useSelector(authSlice.selectors.id)
 
-    const {isFetching: userIsFetching} = userApi.useGetUserByIdQuery(String(authId))
+    const [trigger, {isFetching: userIsFetching, data: user}] = userApi.useLazyGetUserByIdQuery()
+
+    useEffect(() => {
+        if (authId) {
+            trigger(String(authId))
+        }
+    }, [authId])
 
     const {isFetching: eventIsFetching} = eventApi.useGetEventByIdQuery(eventId);
 
@@ -116,8 +156,8 @@ const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
         trigger={<Button className={classes.button} value={"Участвовать"}/>}
         className={classes.popup}
     >
-        {userIsFetching || eventIsFetching ? <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/> :
-            <Form eventId={eventId} closeModal={setFalse}/>}
+        {eventIsFetching || userIsFetching ? <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/> :
+            <CreateForm eventId={eventId} closeModal={setFalse} user={user}/>}
     </BottomSheet>
 }
 

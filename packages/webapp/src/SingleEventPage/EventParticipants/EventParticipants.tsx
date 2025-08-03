@@ -55,14 +55,18 @@ const EventParticipants: FC<{ eventId: string }> = ({eventId}) => {
         eventLeagues
     } = event
 
+
+    const leagues = eventLeagues.length === 1 ? eventLeagues : eventLeagues.filter(({name}) => name !== "DEFAULT")
+
     const maxCount = eventLeagues.length === 1 ? participantsLimit : null
 
-    return eventLeagues.map(({participants, name}) => {
+
+    return leagues.map(({participants, name}) => {
         const sorted = sortByKey(participants, "place", ESortDirection.DESC)
 
         const sliced = sorted.slice(0, 5)
 
-        const leagueName = eventLeagues.length === 1 ? "Участники" : (name === "DEFAULT" ? "Стандартная лига" : name)
+        const leagueName = eventLeagues.length === 1 ? "Участники" : name
 
         return (
             <div className={classes.block}>

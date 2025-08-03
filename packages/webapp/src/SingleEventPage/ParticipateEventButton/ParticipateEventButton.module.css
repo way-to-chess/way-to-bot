@@ -99,6 +99,11 @@ div.popup {
     display: none;
 }
 
+.invalid {
+    border-color: var(--red-color);
+    color: var(--red-color);
+}
+
 .receiptContainer {
     width: 44px;
     height: 44px;

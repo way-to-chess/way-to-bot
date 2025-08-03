@@ -5,7 +5,7 @@ import {IInputProps, Input} from "../Input/Input";
 import clsx from "clsx";
 import classes from "./Select.module.css";
 import {ChevronDownIcon} from "lucide-react";
-import {Ref, useRef} from "react";
+import {ReactNode, Ref, useRef} from "react";
 import {mergeRefs} from "react-merge-refs";
 
 
@@ -18,6 +18,7 @@ interface ISelectProps<V> extends Omit<IOptionsProps<V>, "onValueChange">, TInpu
     disabled?: boolean
     ref?: Ref<HTMLSelectElement>;
     name?: string
+    icon?: ReactNode
 }
 
 const Select = <Value extends string, >(
@@ -33,7 +34,8 @@ const Select = <Value extends string, >(
         onFocus,
         disabled,
         invalid,
-        name
+        name,
+        icon
     }: ISelectProps<Value>) => {
     const [open, {toggle, setFalse}] = useBoolean()
 
@@ -63,7 +65,7 @@ const Select = <Value extends string, >(
             className={clsx(!selected && classes.placeholder)}
             value={selected ? selected.title : placeholder}
             placeholder={placeholder}
-            after={<ChevronDownIcon/>}
+            after={icon ? icon : <ChevronDownIcon/>}
             invalid={invalid}
         />
     )

@@ -8,7 +8,8 @@ const LEVEL_OPTIONS: IOption<string>[] = LEVELS.map((level) => ({title: level, v
 
 const VALIDATION_EXTENSION = {
     phoneNumber: z.templateLiteral([z.enum(["25", "29", "33", "44"]), z.string().length(7)]),
-    level: z.enum(LEVELS)
+    level: z.enum(LEVELS),
+    elIds: z.array(z.number()).min(1),
 }
 
 const AdditionalFields = () => {

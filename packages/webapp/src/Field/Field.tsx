@@ -20,7 +20,7 @@ interface IFieldProps<InputProps> extends Pick<IBaseFieldProps, "label" | "class
     controllerProps: Omit<ControllerProps, "render">
 }
 
-const Error: FC<Pick<ControllerProps, "name">> = ({name}) => {
+const FieldError: FC<Pick<ControllerProps, "name">> = ({name}) => {
     const form = useFormContext()
 
     return <ErrorMessage name={name} errors={form.formState.errors}
@@ -35,7 +35,7 @@ const Field: FC<IBaseFieldProps> = ({label, description, className, required, ..
             {label ? <label htmlFor={controllerProps.name}
                             className={classes.label}>{label + (required ? " *" : "")}</label> : null}
             <Controller {...controllerProps} />
-            <Error name={controllerProps.name}/>
+            <FieldError name={controllerProps.name}/>
             {description ? <Typography type={"text2"} color={"textColor2"} value={description}/> : null}
         </div>
     );
@@ -78,4 +78,4 @@ const SelectField = <V, >(
                   render={render}/>
 }
 
-export {TextField, SelectField};
+export {TextField, SelectField, Field};

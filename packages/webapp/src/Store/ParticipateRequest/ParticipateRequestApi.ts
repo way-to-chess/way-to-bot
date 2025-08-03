@@ -24,7 +24,6 @@ const participateRequestApi = clientApi.injectEndpoints({
                 body: payload,
                 method: "POST"
             }),
-            invalidatesTags: [{type: "PARTICIPATE_REQUEST", id: "ALL"}],
             extraOptions: {
                 authorized: true
             }
