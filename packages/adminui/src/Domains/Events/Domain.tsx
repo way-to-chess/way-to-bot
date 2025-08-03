@@ -22,8 +22,9 @@ const convertFileToFileList = (file: IFileEntity) => {
     ];
 };
 
-const getFileId = (file?: UploadFile) =>
-    file ? (file?.response?.data.id ?? Number(file.uid)) : null;
+const getFileId = (file?: UploadFile) => {
+    return file ? (file?.response?.data.id ?? Number(file.uid)) : null;
+}
 
 const EventsDomain: IDomain<
     AdminDTOEventGetMany, AdminDTOEventGetOne, TAdminEventCreatePayload, TAdminEventUpdatePayload

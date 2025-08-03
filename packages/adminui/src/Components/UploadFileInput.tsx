@@ -50,7 +50,7 @@ const UploadFileInput: FC<TUploadProps> = (
         return fetch(`${import.meta.env.VITE_API_URL}/client/file`, {
             method: "POST",
             body: formData
-        }).then(options.onSuccess).catch(options.onError)
+        }).then((response) => response.json()).then(options.onSuccess).catch(options.onError)
     }, [assigment])
 
     return (
