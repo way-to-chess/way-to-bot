@@ -4,6 +4,7 @@ import {
   AdminDTOParticipateRequestGetMany,
   AdminDTOParticipateRequestGetManyResponse,
   AdminDTOParticipateRequestGetOne,
+  AdminDTOParticipateRequestGetOneResponse,
   AdminDTOParticipateRequestUpdateResponse,
 } from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
 import { Request, Response } from "express";
@@ -44,7 +45,9 @@ export class AdminParticipateRequestController {
 
   async getById(req: Request, res: Response) {
     const result = await this._participateRequestService.getById(+req.params.id!);
-    const data = new AdminDTOParticipateRequestGetOne(result);
+    const data = new AdminDTOParticipateRequestGetOneResponse(
+      new AdminDTOParticipateRequestGetOne(result),
+    );
     res.status(200).send(data);
   }
 }
