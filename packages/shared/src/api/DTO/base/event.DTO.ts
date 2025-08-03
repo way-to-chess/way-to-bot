@@ -20,6 +20,7 @@ export abstract class BaseDTOEvent {
   readonly host: IUserEntity;
   readonly additionalInfo?: Record<string, unknown> | null;
   readonly eventLeagues: {
+    id: number
     name: string;
     link?: string | null;
     participants: IUserEntity[] & { points?: number; place?: number };
@@ -45,6 +46,7 @@ export abstract class BaseDTOEvent {
   private mapEventLeagues(eventLeagues: IEventLeagueEntity[]) {
     return eventLeagues.map((el) => {
       return {
+        id: el.id,
         name: el.league.name,
         link: el.link,
         participants:
