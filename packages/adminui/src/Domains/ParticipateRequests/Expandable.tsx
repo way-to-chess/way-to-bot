@@ -1,5 +1,5 @@
 import {AdminDTOParticipateRequestGetMany} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
-import {Descriptions, Flex, Skeleton, TableProps, Typography} from "antd";
+import {Descriptions, Flex, TableProps, Typography} from "antd";
 import dayjs from "dayjs";
 import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
@@ -18,7 +18,7 @@ const EventLeague: FC<{ eventId: number, elIds: number[] }> = ({eventId, elIds =
     const {data: event, isFetching} = adminApi.useGetOneQuery({url: "event", id: eventId})
 
     if (isFetching) {
-        return <Skeleton/>
+        return "..."
     }
 
 
@@ -80,24 +80,27 @@ const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandab
 
 
                             <Descriptions.Item
-                                label={"Способ оплаты"}>{PAYMENT_TYPE_NAME_MAP[paymentType]}</Descriptions.Item> :
+                                label={"Способ оплаты"}>{PAYMENT_TYPE_NAME_MAP[paymentType]}</Descriptions.Item>
+
+                            {paymentType === EParticipateRequestPaymentType.RECEIPT ? (
+                                <Descriptions.Item
+                                    label={"Подтверждение оплаты"}><Typography.Link
+                                    href={getPreviewSrc(receipt?.url)}
+                                    target={"_blank"}
+                                    rel="noreferrer"
+                                >
+                                    {"Показать файл"}
+                                </Typography.Link></Descriptions.Item>
+
+                            ) : null}
+
+                            {message ?
+                                < Descriptions.Item label={"Сообщене организатора"}>{message}</Descriptions.Item> : null}
+
                         </Descriptions>
                     )
                 }
 
-                <Flex align={"center"} justify={"space-between"}>
-                    {message ? <Typography.Text>{message}</Typography.Text> : null}
-
-                    {paymentType === EParticipateRequestPaymentType.RECEIPT ? (
-                        <Typography.Link
-                            href={getPreviewSrc(receipt?.url)}
-                            target={"_blank"}
-                            rel="noreferrer"
-                        >
-                            {"Показать файл"}
-                        </Typography.Link>
-                    ) : null}
-                </Flex>
             </Flex>
         );
     },
