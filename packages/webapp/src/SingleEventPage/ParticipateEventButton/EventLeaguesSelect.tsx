@@ -16,8 +16,7 @@ const EventLeaguesSelect: FC<{ eventId: string }> = ({eventId}) => {
     const elIds: number[] = form.watch(NAME) || []
 
     const getOptions = (id?: number) => {
-        //todo
-        const eventLeagues = event?.eventLeagues.map((league, index) => ({...league, id: index})) || []
+        const eventLeagues = event?.eventLeagues || []
         const elIdsExceptValue = elIds.filter((elId) => elId !== id)
 
         const filtered = eventLeagues.filter(({name, id}) => !elIdsExceptValue.includes(id) && name !== "DEFAULT")

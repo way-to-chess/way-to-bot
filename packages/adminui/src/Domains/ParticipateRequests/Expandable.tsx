@@ -1,8 +1,11 @@
 import {AdminDTOParticipateRequestGetMany} from "@way-to-bot/shared/api/DTO/admin/participate-request.DTO";
-import {Descriptions, Flex, TableProps, Typography} from "antd";
+import {Descriptions, Flex, Skeleton, TableProps, Typography} from "antd";
 import dayjs from "dayjs";
 import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
+import {FC} from "react";
+import {adminApi} from "../../Store/AdminApi";
+import {AdminDTOEventGetOne} from "@way-to-bot/shared/api/DTO/admin/event.DTO";
 
 const PAYMENT_TYPE_NAME_MAP: Record<EParticipateRequestPaymentType, string> = {
     [EParticipateRequestPaymentType.CASH]: "Наличными",
@@ -10,9 +13,22 @@ const PAYMENT_TYPE_NAME_MAP: Record<EParticipateRequestPaymentType, string> = {
     [EParticipateRequestPaymentType.ONLINE]: "Онлайн"
 }
 
+const EventLeague: FC<{ eventId: number, elIds: number[] }> = ({eventId, elIds = []}) => {
+
+    const {data: event, isFetching} = adminApi.useGetOneQuery({url: "event", id: eventId})
+
+    if (isFetching) {
+        return <Skeleton/>
+    }
+
+
+    return (event as AdminDTOEventGetOne)?.eventLeagues.filter(({id}) => elIds.includes(id)).map(({name}) => name).join(", ")
+
+}
+
 const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandable"] = {
     expandRowByClick: true,
-    expandedRowRender: ({paymentType, receipt, message, additionalUsers}) => {
+    expandedRowRender: ({paymentType, receipt, message, additionalUsers, eventId}) => {
 
         return (
             <Flex vertical gap={20}>
@@ -45,6 +61,24 @@ const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandab
                                         label={"Уровень игры"}>{user.level}</Descriptions.Item> :
                                     null
                             }
+                            {
+                                user.city ?
+                                    <Descriptions.Item
+                                        label={"Город"}>{user.city}</Descriptions.Item> :
+                                    null
+                            }
+                            {
+                                user.club ?
+                                    <Descriptions.Item
+                                        label={"Клуб"}>{user.club}</Descriptions.Item> :
+                                    null
+                            }
+
+                            <Descriptions.Item label={"Турнир/Турниры"}>
+                                <EventLeague eventId={eventId} elIds={user.elIds}/>
+                            </Descriptions.Item>
+
+
                             <Descriptions.Item
                                 label={"Способ оплаты"}>{PAYMENT_TYPE_NAME_MAP[paymentType]}</Descriptions.Item> :
                         </Descriptions>

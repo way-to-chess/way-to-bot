@@ -74,6 +74,8 @@ const EditForm: FC<IWithId> = ({id}) => {
 
     const initialValues = data ? getInitialValues(data) : undefined
 
+    console.log(initialValues, data, 123)
+
     if (!initialValues) {
         return <Skeleton/>
     }

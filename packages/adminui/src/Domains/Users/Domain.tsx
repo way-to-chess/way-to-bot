@@ -5,6 +5,7 @@ import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {Avatar, Flex, Tag, Typography} from "antd";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {EUserRole} from "@way-to-bot/shared/api/enums/EUserRole";
+import {EXPANDABLE_CONFIG} from "./Expandble";
 
 const UsersDomain: IDomain<AdminDTOUserGetMany, AdminDTOUserGetOne, TAdminUserCreatePayload, TAdminUserUpdatePayload> = {
     title: "Пользователи",
@@ -80,7 +81,8 @@ const UsersDomain: IDomain<AdminDTOUserGetMany, AdminDTOUserGetOne, TAdminUserCr
             lastName,
             username,
         }),
-    }
+    },
+    expandable: EXPANDABLE_CONFIG
 }
 
 export {UsersDomain}

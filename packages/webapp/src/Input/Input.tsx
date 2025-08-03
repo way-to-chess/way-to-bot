@@ -13,7 +13,9 @@ interface IInputProps extends BaseInput.Props {
 const Input: FC<IInputProps> = ({children, className, before, after, invalid, onClick, ...rest}) => {
     return <div className={clsx(classes.container, className, invalid && classes.invalid)} onClick={onClick}>
         {before}
-        <BaseInput className={classes.input} {...rest}/>
+        <div className={classes.inputContainer}>
+            <BaseInput className={classes.input} {...rest}/>
+        </div>
         {after}
     </div>
 }

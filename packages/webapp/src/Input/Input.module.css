@@ -9,6 +9,13 @@
     height: 48px;
     width: 100%;
     transition: border-color 0.3s, box-shadow 0.3s;
+    overflow: hidden;
+}
+
+.inputContainer {
+    flex: 1;
+    max-width: 100%;
+    overflow: hidden;
 }
 
 .container:hover {
@@ -34,6 +41,8 @@
     width: 100%;
     background: transparent;
     text-align: left;
+    max-width: 100%;
+    text-overflow: ellipsis;
 }
 
 .input:-webkit-autofill,
