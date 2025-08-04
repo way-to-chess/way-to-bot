@@ -60,4 +60,18 @@ export abstract class BaseDTOEvent {
       };
     });
   }
+
+  countParticipants(eventLeagues: IEventLeagueEntity[]) {
+    const uniqueUserIds = new Set<number>();
+    
+    eventLeagues.forEach(eventLeague => {
+      if (eventLeague.participants?.length) {
+        eventLeague.participants.forEach(participant => {
+          uniqueUserIds.add(participant.userId);
+        });
+      }
+    });
+    
+    return uniqueUserIds.size;
+  }
 }

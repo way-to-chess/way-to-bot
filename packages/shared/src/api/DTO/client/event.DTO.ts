@@ -1,7 +1,5 @@
 import { BaseDTOEvent } from "@way-to-bot/shared/api/DTO/base/event.DTO.js";
 import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
-import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
-import { IEventLeagueEntity } from "@way-to-bot/shared/api/interfaces/entities/event-league-entity.interface.js";
 import { GetManyWithPaginationDTO } from "@way-to-bot/shared/api/DTO/common/get-many-with-pagination.DTO.js";
 import { IPagination } from "@way-to-bot/shared/api/interfaces/pagination.interface.js";
 import { GetOneDTO } from "@way-to-bot/shared/api/DTO/common/get-one.DTO.js";
@@ -27,24 +25,13 @@ export class ClientDTOEventGetMany extends BaseDTOEvent {
     super(data);
     this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
   }
-
-  countParticipants(eventLeagues: IEventLeagueEntity[]) {
-    const uniqueUserIds = new Set<number>();
-    
-    eventLeagues.forEach(eventLeague => {
-      if (eventLeague.participants?.length) {
-        eventLeague.participants.forEach(participant => {
-          uniqueUserIds.add(participant.userId);
-        });
-      }
-    });
-    
-    return uniqueUserIds.size;
-  }
 }
 
 export class ClientDTOEventGetOne extends BaseDTOEvent {
+  readonly participantsCount: number;
+
   constructor(data: IEventEntity) {
     super(data);
+    this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
   }
 }
