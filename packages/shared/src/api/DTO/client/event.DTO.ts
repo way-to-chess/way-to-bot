@@ -29,12 +29,17 @@ export class ClientDTOEventGetMany extends BaseDTOEvent {
   }
 
   countParticipants(eventLeagues: IEventLeagueEntity[]) {
-    return eventLeagues.reduce((pr, curr) => {
-      if (curr.participants?.length) {
-        pr += curr.participants.length;
+    const uniqueUserIds = new Set<number>();
+    
+    eventLeagues.forEach(eventLeague => {
+      if (eventLeague.participants?.length) {
+        eventLeague.participants.forEach(participant => {
+          uniqueUserIds.add(participant.userId);
+        });
       }
-      return pr;
-    }, 0);
+    });
+    
+    return uniqueUserIds.size;
   }
 }
 
