@@ -9,6 +9,7 @@ import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
 import {SubmitResults} from "./SubmitResults";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
+import {AddLeagueToEvent} from "./AddLeagueToEvent";
 
 const convertFileToFileList = (file: IFileEntity) => {
     return [
@@ -33,7 +34,8 @@ const EventsDomain: IDomain<
     path: "events",
     url: "event",
     actions: [
-        ({id}) => <SubmitResults id={id}/>
+        ({id}) => <SubmitResults id={id}/>,
+        ({id}) => <AddLeagueToEvent id={id}/>,
     ],
     columns: [
         {
