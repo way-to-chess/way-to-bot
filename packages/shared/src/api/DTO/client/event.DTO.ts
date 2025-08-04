@@ -19,19 +19,13 @@ export class ClientDTOEventGetOneResponse extends GetOneDTO<ClientDTOEventGetOne
 
 // returning data DTO
 export class ClientDTOEventGetMany extends BaseDTOEvent {
-  readonly participantsCount: number;
-
   constructor(data: IEventEntity) {
     super(data);
-    this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
   }
 }
 
 export class ClientDTOEventGetOne extends BaseDTOEvent {
-  readonly participantsCount: number;
-
   constructor(data: IEventEntity) {
     super(data);
-    this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
   }
 }
