@@ -68,7 +68,7 @@ const CreateForm: FC<ICreateFormProps> = (
                 {
                     firstName: user?.firstName ?? undefined,
                     lastName: user?.lastName ?? undefined,
-                    birthDate: user?.birthDate,
+                    birthDate: user?.birthDate ?? "1999-07-13",
                     tgId,
                     elIds: []
                 }

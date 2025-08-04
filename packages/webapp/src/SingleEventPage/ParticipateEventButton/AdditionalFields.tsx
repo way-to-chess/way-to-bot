@@ -20,7 +20,11 @@ const AdditionalFields = () => {
         <TextField label={"Фамилия"} inputProps={{placeholder: "Введите вашу фамилию", type: "text"}}
                    controllerProps={{name: "additionalUsers[0].lastName"}} required/>
         <TextField label={"Дата рождения"}
-                   inputProps={{placeholder: "Введите дату рождения", type: "date",}}
+                   inputProps={{
+                       placeholder: "Введите дату рождения",
+                       type: "date",
+                       min: "1900-01-01",
+                   }}
                    controllerProps={{name: "additionalUsers[0].birthDate"}} required/>
         <TextField label={"Город"}
                    inputProps={{placeholder: "Введите ваш город",}}
