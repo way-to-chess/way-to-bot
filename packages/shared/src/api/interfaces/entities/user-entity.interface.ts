@@ -10,6 +10,7 @@ export interface IUserEntity {
   firstName?: string | null;
   lastName?: string | null;
   email?: string | null;
+  phoneNumber?: string | null;
   birthDate?: Date;
   age?: number;
   roles: EUserRole[];

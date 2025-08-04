@@ -8,6 +8,7 @@ export abstract class BaseDTOUser {
   readonly firstName?: string | null;
   readonly lastName?: string | null;
   readonly email?: string | null;
+  readonly phoneNumber?: string | null;
   readonly birthDate?: Date;
   readonly age?: number;
   readonly photo?: IFileEntity | null;
@@ -25,6 +26,7 @@ export abstract class BaseDTOUser {
     this.firstName = user.firstName;
     this.lastName = user.lastName;
     this.email = user.email;
+    this.phoneNumber = user.phoneNumber;
     this.birthDate = user.birthDate;
     this.age = user.age;
     this.photo = user.photo;
