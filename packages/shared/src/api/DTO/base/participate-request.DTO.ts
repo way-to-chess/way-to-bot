@@ -2,9 +2,9 @@ import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/ent
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface.js";
 import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-entity.interface.js";
-import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index.js";
 import { EParticipateRequestPaymentType } from "../../enums/EParticipateRequestPaymentType.js";
 import { EParticipateRequestStatus } from "../../enums/EParticipateRequestStatus.js";
+import { TPrAdditionalUser } from "../../zod/common/base/participate-request.schema.js";
 
 export class BaseDTOParticipateRequest {
   readonly id: number;
@@ -18,7 +18,7 @@ export class BaseDTOParticipateRequest {
   readonly createdAt: string;
   readonly message: string | null;
   readonly paymentType: EParticipateRequestPaymentType;
-  readonly additionalUsers: TCommonParticipateRequestAdditionalUser[];
+  readonly additionalUsers: TPrAdditionalUser[];
 
   constructor(request: IParticipateRequestEntity) {
     this.id = request.id;

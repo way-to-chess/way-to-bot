@@ -1,6 +1,7 @@
-import {FC, PropsWithChildren, useEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 import {Location, useLocation, useNavigate} from "react-router";
 import YM from 'react-yandex-metrika';
+import {authApi} from "@way-to-bot/shared/redux/authApi";
 
 const useBackButton = () => {
     const location = useLocation()
@@ -48,18 +49,19 @@ const useBackButton = () => {
 
 }
 
-const WithTelegram: FC<PropsWithChildren> = ({children}) => {
+const WithTelegram = () => {
     useBackButton()
 
     useEffect(() => {
-        // if (Telegram.WebApp.platform === "unknown") {
-        //     document.body.setAttribute("data-dev", "true");
-        // }
         document.documentElement.style.setProperty("--safe-area-inset-bottom", Telegram.WebApp.safeAreaInset.bottom + "px")
     }, []);
 
+    authApi.useAuthByTelegramQuery({
+        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+        username: Telegram.WebApp.initDataUnsafe.user?.username,
+    })
 
-    return children
+    return null
 }
 
 export {WithTelegram}

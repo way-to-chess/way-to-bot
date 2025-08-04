@@ -14,6 +14,10 @@ AdminParticipateRequestRouter.get("/", getManyOptionsMddw, (req, res) =>
   adminParticipateRequestController.getMany(req, res),
 );
 
+AdminParticipateRequestRouter.get("/:id", (req, res) =>
+  adminParticipateRequestController.getById(req, res),
+);
+
 AdminParticipateRequestRouter.patch(
   "/:id",
   validatePayloadMddw(AdminSchemaParticipateRequestUpdate),

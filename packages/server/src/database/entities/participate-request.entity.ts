@@ -12,9 +12,9 @@ import { FileEntity } from "@way-to-bot/server/database/entities/file.entity";
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface";
 import { EventEntity } from "@way-to-bot/server/database/entities/event.entity";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity";
-import { TCommonParticipateRequestAdditionalUser } from "@way-to-bot/shared/api/types/index";
 import { EParticipateRequestPaymentType } from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { TPrAdditionalUser } from "@way-to-bot/shared/api/zod/common/base/participate-request.schema";
 
 @Entity("participate_requests")
 export class ParticipateRequestEntity implements IParticipateRequestEntity {
@@ -36,7 +36,7 @@ export class ParticipateRequestEntity implements IParticipateRequestEntity {
   user!: Relation<UserEntity>;
 
   @Column({ type: "jsonb", default: [], name: "additional_users" })
-  additionalUsers!: TCommonParticipateRequestAdditionalUser[];
+  additionalUsers!: TPrAdditionalUser[];
 
   @Column({ name: "file_id", nullable: true, type: "int" })
   fileId?: number | null;

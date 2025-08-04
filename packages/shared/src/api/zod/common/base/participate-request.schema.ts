@@ -8,14 +8,16 @@ export const ClientSchemaParticipateRequestAdditionalUserSchema = z
         ...ClientSchemaUserBase,
         birthDate: z.coerce.date(),
         email: z.string().optional(),
+        elIds: z.array(z.number()),
     })
     .catchall(z.any());
 
 export const baseShape = {
+    tgId: z.string(),
     eventId: z.number(),
     fileId: z.number().optional(),
-    additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema),
-    paymentType: z.nativeEnum(EParticipateRequestPaymentType),
+    additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema).min(1),
+    paymentType: z.enum(EParticipateRequestPaymentType),
 };
 
 export const validateFileIdForReceipt = (schema: z.ZodObject<any>) =>
@@ -34,3 +36,5 @@ export const validateFileIdForReceipt = (schema: z.ZodObject<any>) =>
 export const ClientSchemaParticipateRequestBase = validateFileIdForReceipt(
     z.object(baseShape),
 );
+
+export type TPrAdditionalUser = z.infer<typeof ClientSchemaParticipateRequestAdditionalUserSchema>;

@@ -3,7 +3,7 @@ import {eventApi} from "../Store/Event/EventApi";
 import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import classes from "./SingleEventPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
-import {Typography} from "../Typography/Typography";
+import {getTypographyClassName, Typography} from "../Typography/Typography";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
 import {CalendarIcon} from "../Icons/CalendarIcon";
 import {ClockIcon} from "../Icons/ClockIcon";
@@ -12,17 +12,16 @@ import dayjs from "dayjs";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
 import {MessageIcon} from "../Icons/MessageIcon";
 import {Button} from "../Button/Button";
-import {UserListItem} from "../UserListItem/UserListItem";
 import {FC} from "react";
 import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
 import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
 import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventButton";
-import {BottomSheet} from "../BottomSheet/BottomSheet";
-import {IUserEntity} from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {CameraIcon, CoffeeIcon, MapPinIcon, MartiniIcon, ToiletIcon, TvIcon, UtensilsIcon} from "lucide-react";
 import {ELocationBenefits} from "@way-to-bot/shared/api/enums/ELocationBenefits";
+import clsx from "clsx";
+import {EventParticipants} from "./EventParticipants/EventParticipants";
 
 
 const BENEFIT_ICONS_MAP = {
@@ -73,64 +72,6 @@ const Loading = () => {
     </div>
 }
 
-const AllParticipants: FC<{ users: IUserEntity[] }> = ({users}) => {
-    const trigger = (
-        <button className={classes.all}>
-            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
-        </button>
-    )
-
-    return <BottomSheet trigger={trigger} title={"Все участники"}>
-        <div className={classes.participants}>
-            {users.map((user) => (
-                <UserListItem
-                    {...user}
-                    className={classes.participant}
-                    key={user.id}
-                />
-            ))}
-        </div>
-    </BottomSheet>
-}
-
-
-const Participants: FC<{ eventId: string }> = ({eventId}) => {
-    const {data} = eventApi.useGetEventByIdQuery(eventId);
-
-    const event = getNotNil(data, "SingleEventPage -> Participants -> event can't be null")
-
-    const {
-        participantsLimit,
-        users
-    } = event
-
-
-    const sliced = users.slice(0, 5)
-
-    return <div className={classes.block}>
-        <div className={classes.participantBlock}>
-            <Typography type={"title4"} value={"Участники"}/>
-            <EventParticipantCount
-                currentCount={users.length}
-                maxCount={participantsLimit}
-            />
-            {users.length > 5 ? <AllParticipants users={users}/> : null}
-
-        </div>
-        {
-            sliced.length > 0 ?
-                <div className={classes.participants}>
-                    {sliced.map((user) => (
-                        <UserListItem
-                            {...user}
-                            className={classes.participant}
-                            key={user.id}
-                        />
-                    ))}
-                </div> : null
-        }
-    </div>
-}
 
 const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
     return <div className={classes.block}>
@@ -149,6 +90,12 @@ const BenefitsBlock: FC<{ benefits: ELocationBenefits[] }> = ({benefits}) => {
         </div>
     </div>
 }
+
+
+const Description: FC<{ description: string }> = ({description}) => description.split("\n").map((item, index) => (
+    <span key={index}>{item}<br/></span>))
+
+const text2ClassName = getTypographyClassName({type: "text2"})
 
 const SingleEventPage = () => {
     const {id} = useParams();
@@ -180,9 +127,9 @@ const SingleEventPage = () => {
         location,
         host,
         description,
-        users,
         duration,
         linkToStream,
+        participantsCount
     } = event;
 
     const date = dayjs(dateTime);
@@ -207,12 +154,16 @@ const SingleEventPage = () => {
                                 type={"title3"}
                                 value={name ?? "Турнир без названия"}
                             />
+
                             {/*<button className={classes.shareLink}>{ShareIcon}</button>*/}
                         </div>
-                        <EventParticipantCount
-                            currentCount={users.length}
-                            maxCount={participantsLimit}
-                        />
+                        <div className={classes.infoGroup}>
+                            <EventParticipantCount
+                                currentCount={participantsCount}
+                                maxCount={participantsLimit}
+                            />
+
+                        </div>
                     </div>
                     <div className={classes.infoBlock}>
                         <div className={classes.infoGroup}>
@@ -226,10 +177,27 @@ const SingleEventPage = () => {
                                 {durationTime}
                             </Typography>
                         </div>
-                        <Typography type={"text2"} className={classes.infoItem}>
-                            {PriceIcon}
-                            {price}
-                        </Typography>
+                        <div className={classes.infoGroup}>
+                            <Typography type={"text2"} className={classes.infoItem}>
+                                {PriceIcon}
+                                {price}
+                            </Typography>
+                            {
+                                linkToStream ?
+                                    <a
+                                        className={clsx(classes.infoItem, text2ClassName, classes.stream)}
+                                        href={linkToStream ?? undefined}
+                                        target={"_blank"}
+                                        rel={"noreferrer noopener"}
+                                    >
+                                        <TvIcon color={"var(--main-color)"} size={20}/>
+
+                                        {"Трансляция"}
+                                    </a>
+                                    : null
+                            }
+                        </div>
+
                     </div>
                 </div>
                 {location ? (
@@ -255,30 +223,16 @@ const SingleEventPage = () => {
 
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Как всё будет"}/>
-                    <Typography type={"text2"}>{description ?? "Описание не добавлено"}</Typography>
+                    <Typography type={"text2"}>{description ?
+                        <Description description={description}/> : "Описание не добавлено"}</Typography>
                 </div>
-                <Participants eventId={notNilId}/>
+
+                <EventParticipants eventId={notNilId}/>
+
                 <div className={classes.block}>
                     <Typography type={"title4"} value={"Организатор"}/>
                     <Host {...host}/>
                 </div>
-
-                {
-                    linkToStream ?
-                        <a
-                            className={classes.block}
-                            href={linkToStream ?? undefined}
-                            target={"_blank"}
-                            rel={"noreferrer noopener"}
-                        >
-                            <Typography type={"text2"} className={classes.infoItem}>
-                                <TvIcon/>
-                                {"Ссылка на трансляцию"}
-                            </Typography>
-                        </a>
-                        : null
-                }
-
 
                 <ParticipateEventButton eventId={notNilId}/>
             </div>

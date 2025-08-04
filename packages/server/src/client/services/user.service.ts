@@ -49,26 +49,27 @@ export class ClientUserService {
     return data;
   }
 
-  async getByTgIdOrUsername(tgId: string, username: string) {
-    const whereConditions: FindOptionsWhere<UserEntity> = {
-      firstName: Not(IsNull()),
-      lastName: Not(IsNull()),
-    };
-
+  async getByTgIdOrUsername(tgId?: string, username?: string | null) {
     const userByTgId =
       tgId &&
       (await this._userRepository.getOne({
-        where: { ...whereConditions, tgId: String(tgId) },
+        where: { tgId: String(tgId) },
       }));
 
     if (userByTgId) {
+      if (username && userByTgId.username !== `@${username}`) {
+        userByTgId.username = `@${username}`;
+        await this._userRepository.update(userByTgId.id, {
+          username: `@${username}`,
+        });
+      }
       return userByTgId;
     }
 
     const userByUsername =
       username &&
       (await this._userRepository.getOne({
-        where: { ...whereConditions, username: `@${username}` },
+        where: { username: `@${username}` },
       }));
 
     if (!userByUsername) {
@@ -95,7 +96,7 @@ export class ClientUserService {
 
   async update(id: number, payload: TClientUserUpdatePayload) {
     const data = await this._userRepository.update(id, payload);
-    if (!data) throw new InternalError(`User was not created`);
+    if (!data) throw new InternalError(`User was not updated`);
     return data;
   }
 }

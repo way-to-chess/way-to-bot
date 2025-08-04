@@ -40,19 +40,8 @@ export class AdminDTOEventDeleteResponse extends DeleteDTO {
 
 // returning data DTO
 export class AdminDTOEventGetMany extends BaseDTOEvent {
-  readonly participantsCount: number;
   constructor(data: IEventEntity) {
     super(data);
-    this.participantsCount = this.countParticipants(data.eventLeagues ?? []);
-  }
-
-  countParticipants(eventLeagues: IEventLeagueEntity[]) {
-    return eventLeagues.reduce((pr, curr) => {
-      if (curr.participants?.length) {
-        pr += curr.participants.length;
-      }
-      return pr;
-    }, 0);
   }
 }
 

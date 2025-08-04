@@ -12,27 +12,30 @@ interface IBaseFieldProps extends ControllerProps {
     label?: string;
     description?: string;
     className?: string;
+    required?: boolean
 }
 
-interface IFieldProps<InputProps> extends Pick<IBaseFieldProps, "label" | "className" | "description"> {
+interface IFieldProps<InputProps> extends Pick<IBaseFieldProps, "label" | "className" | "description" | "required"> {
     inputProps: InputProps;
     controllerProps: Omit<ControllerProps, "render">
 }
 
-const Error: FC<Pick<ControllerProps, "name">> = ({name}) => {
+const FieldError: FC<Pick<ControllerProps, "name">> = ({name}) => {
     const form = useFormContext()
 
     return <ErrorMessage name={name} errors={form.formState.errors}
                          render={({message}) => <div className={classes.error}>{message}</div>}/>
 }
 
-const Field: FC<IBaseFieldProps> = ({label, description, className, ...controllerProps}) => {
+const Field: FC<IBaseFieldProps> = ({label, description, className, required, ...controllerProps}) => {
+
 
     return (
         <div className={clsx(classes.container, className)}>
-            {label ? <label htmlFor={controllerProps.name} className={classes.label}>{label}</label> : null}
+            {label ? <label htmlFor={controllerProps.name}
+                            className={classes.label}>{label + (required ? " *" : "")}</label> : null}
             <Controller {...controllerProps} />
-            <Error name={controllerProps.name}/>
+            <FieldError name={controllerProps.name}/>
             {description ? <Typography type={"text2"} color={"textColor2"} value={description}/> : null}
         </div>
     );
@@ -44,6 +47,7 @@ const TextField: FC<IFieldProps<IInputProps>> = (
         description,
         className,
         inputProps,
+        required,
         controllerProps
     }) => {
 
@@ -52,7 +56,8 @@ const TextField: FC<IFieldProps<IInputProps>> = (
                       invalid={invalid} {...inputProps}/>
     }
 
-    return <Field label={label} description={description} className={className} {...controllerProps} render={render}/>
+    return <Field required={required} label={label} description={description} className={className} {...controllerProps}
+                  render={render}/>
 };
 
 const SelectField = <V, >(
@@ -61,14 +66,16 @@ const SelectField = <V, >(
         inputProps,
         description,
         label,
-        className
+        className,
+        required
     }: IFieldProps<ISelectProps<V>>) => {
 
     const render: ControllerProps["render"] = ({field, fieldState: {invalid}}) => {
         return <Select {...field} invalid={invalid} {...inputProps}/>
     }
 
-    return <Field label={label} description={description} className={className} {...controllerProps} render={render}/>
+    return <Field required={required} label={label} description={description} className={className} {...controllerProps}
+                  render={render}/>
 }
 
-export {TextField, SelectField};
+export {TextField, SelectField, Field};

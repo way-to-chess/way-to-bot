@@ -1,5 +1,3 @@
-import {Button} from "../../Button/Button";
-import classes from "./ParticipateEventButton.module.css";
 import {FC, memo} from "react";
 import {eventApi} from "../../Store/Event/EventApi";
 import {useSelector} from "react-redux";
@@ -14,7 +12,7 @@ interface IWithEventId {
 }
 
 
-const Participate: FC<{ authId: number } & IWithEventId> = ({eventId}) => {
+const Participate: FC<IWithEventId> = ({eventId}) => {
     const {data, isLoading} = participateRequestApi.useGetAllParticipateRequestsQuery();
 
     const lastRequest = data?.find(
@@ -44,18 +42,7 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
         return null;
     }
 
-    if (!authId) {
-        return (
-            <Button
-                as={"link"}
-                className={classes.button}
-                value={"Создать профиль"}
-                to={"/profile"}
-            />
-        );
-    }
-
-    return <Participate eventId={eventId} authId={authId}/>;
+    return <Participate eventId={eventId}/>;
 });
 
 export {ParticipateEventButton};

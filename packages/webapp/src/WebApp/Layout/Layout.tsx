@@ -7,7 +7,9 @@ import {WithTelegram} from "../Telegram/Telegram";
 
 
 const Layout = () => (
-    <WithTelegram>
+    <>
+        <WithTelegram/>
+        
         <ScrollArea.Root className={classes.main} render={<main/>}>
             <ScrollAreaViewport>
                 <Outlet/>
@@ -15,7 +17,7 @@ const Layout = () => (
             <ScrollThumb/>
         </ScrollArea.Root>
         <BottomNavBar/>
-    </WithTelegram>
+    </>
 )
 
 export {Layout};

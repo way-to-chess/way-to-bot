@@ -15,6 +15,7 @@ import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/se
 import { TgBotService } from "@way-to-bot/server/services/tg_bot/index";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity";
 import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
+import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -65,7 +66,7 @@ export class AdminParticipateRequestService {
 
       const elRepo = this._eventLeagueRepository.getRepository(queryRunner);
       const allEventLeaguesForEvent = await elRepo.find({
-        relations: { league: true },
+        relations: { league: true, participants: true },
         where: { eventId: updatedParticipateRequest.eventId },
       });
 
@@ -80,37 +81,20 @@ export class AdminParticipateRequestService {
       }
 
       const additionalUsers = updatedParticipateRequest.additionalUsers;
-      const allParticipantsIds: Set<number> = new Set();
-      if (additionalUsers.length) {
-        for (const user of additionalUsers) {
-          const userId = await this._userRepository.findOrCreateByIdOrEmail( 
-            user,
-            queryRunner,
-          );
-          allParticipantsIds.add(userId);
-        }
-      }
-
       const eluList: EventLeagueUserEntity[] = [];
-      const eventLeagueIds = allEventLeaguesForEvent.map((el) => el.id);
 
-      for (const pid of allParticipantsIds) {
-        const existingElu = await this._eventLeagueUserRepository.getOne(
-          {
-            where: {
-              userId: pid,
-              eventLeagueId: In(eventLeagueIds),
-            },
-          },
-          queryRunner,
-        );
+      for (const u of additionalUsers) {
+        const userJoiningLeagues = u.elIds?.length ? u.elIds : [defaultEventLeague.id];
 
-        if (existingElu) continue;
-
-        const elu = new EventLeagueUserEntity();
-        elu.eventLeagueId = defaultEventLeague.id;
-        elu.userId = pid;
-        eluList.push(elu);
+        userJoiningLeagues.forEach(elId => {
+          const existingElu = allEventLeaguesForEvent.find(el => el.id === elId && el.participants.includes(u.id));
+          if (!existingElu) {
+            const elu = new EventLeagueUserEntity();
+            elu.eventLeagueId = elId;
+            elu.userId = u.id;
+            eluList.push(elu);
+          }
+        })
       }
 
       await this._eventLeagueUserRepository.addRows(eluList, queryRunner);
@@ -137,6 +121,18 @@ export class AdminParticipateRequestService {
 
   async getMany(options?: TCommonGetManyOptions) {
     return this._participateRequestRepository.getMany(options);
+  }
+
+  async getById(id: number) {
+    const data = await this._participateRequestRepository.getOne({
+      where: { id },
+    });
+
+    if (!data) {
+      throw new NotFoundError(`Participate request with id ${id} not found`);
+    }
+
+    return data;
   }
 
   private sendMessageToUser(pr: ParticipateRequestEntity) {

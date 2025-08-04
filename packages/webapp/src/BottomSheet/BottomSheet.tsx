@@ -1,7 +1,7 @@
 import {Dialog,} from "@base-ui-components/react";
 import {Typography} from "../Typography/Typography";
 import classes from "./BottomSheet.module.css";
-import {CloseIcon} from "../Icons/CloseIcon";
+import {XIcon} from "lucide-react";
 import {FC, Fragment, PropsWithChildren, ReactNode} from "react";
 import clsx from "clsx";
 
@@ -49,7 +49,7 @@ const BottomSheet: FC<IBottomSheetProps> = (
                                     : null
                             }
                         </Wrapper>
-                        <Dialog.Close className={classes.close}>{CloseIcon}</Dialog.Close>
+                        <Dialog.Close className={classes.close}><XIcon/></Dialog.Close>
                     </div>
                     {children}
                 </Dialog.Popup>

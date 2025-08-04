@@ -1,15 +1,16 @@
-import {createBrowserRouter, Navigate, redirect} from "react-router";
+import {createBrowserRouter, redirect} from "react-router";
 import {Layout} from "./Layout/Layout";
-import {Domains} from "./Domains/Domains";
+import {Domains, IDomain} from "./Domains/Domains";
+import {Page} from "./Components/Page";
 
 const ROUTER = createBrowserRouter([
     {
         Component: Layout,
-        errorElement: <Navigate to="/admin"/>,
         children: [
             {
                 path: "/",
                 element: null,
+
                 loader: () => redirect("/admin"),
             },
             {
@@ -21,10 +22,10 @@ const ROUTER = createBrowserRouter([
                         loader: () => redirect("users"),
                     },
 
-                    ...Domains.map(({path, Component}) => ({
-                        path,
+                    ...Domains.map((domain) => ({
+                        path: domain.path,
                         index: true,
-                        Component,
+                        element: <Page {...domain as IDomain}/>
                     })),
                 ],
             },

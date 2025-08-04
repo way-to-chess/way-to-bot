@@ -4,59 +4,32 @@ import {Provider} from "react-redux";
 import "../Assets/Style/Global.css";
 import "../Assets/SDK/TelegramWebApp.min.js";
 import {store} from "../Store/Store";
-import {authApi} from "@way-to-bot/shared/redux/authApi";
-import {FC, PropsWithChildren} from "react";
 import {ErrorBoundary} from "../Error/Error";
 import {z} from "zod";
+import {YMInitializer} from "react-yandex-metrika";
 
 z.config({
     customError: () => "Неверное значение"
 });
 
 
-const WithAuth: FC<PropsWithChildren> = ({children}) => {
-    authApi.useAuthByTelegramQuery({
-        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
-        username: Telegram.WebApp.initDataUnsafe.user?.username,
-    })
-
-    return children
+const YMInitializerProps = {
+    accounts: [103541945],
+    options: {
+        clickmap: true,
+        trackLinks: true,
+        accurateTrackBounce: true
+    }
 }
 
-// const WithHeight: FC<PropsWithChildren> = ({children}) => {
-//     useLayoutEffect(() => {
-//         document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-//
-//         const handler = ({isStateStable}: { isStateStable: boolean }) => {
-//             if (!isStateStable) {
-//                 document.body.style.height = `${Telegram.WebApp.viewportHeight}px`;
-//
-//                 return;
-//             }
-//
-//             document.body.style.height = `${Telegram.WebApp.viewportStableHeight}px`;
-//         }
-//
-//         Telegram.WebApp.onEvent("viewportChanged", handler);
-//
-//         return () => {
-//             Telegram.WebApp.onEvent("viewportChanged", handler)
-//         }
-//
-//     }, []);
-//
-//
-//     return children
-// }
+const App = () => (<>
+    <YMInitializer {...YMInitializerProps}  />
 
-const App = () => (
     <ErrorBoundary>
         <Provider store={store}>
-            <WithAuth>
-                <RouterProvider router={WEB_APP_ROUTER}/>
-            </WithAuth>
+            <RouterProvider router={WEB_APP_ROUTER}/>
         </Provider>
     </ErrorBoundary>
-);
+</>)
 
 export {App};

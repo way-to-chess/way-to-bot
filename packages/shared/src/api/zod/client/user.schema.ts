@@ -2,7 +2,7 @@ import { z } from "zod";
 import { EContactType } from "../../enums/EContactType.js";
 
 export const ClientSchemaUserContactInfo = z.object({
-  type: z.nativeEnum(EContactType),
+  type: z.enum(EContactType),
   url: z.string(),
 });
 
@@ -22,14 +22,14 @@ export const ClientSchemaUserBase = {
   email: z.string().nullable().optional(),
   birthDate: z.date().optional(),
   contactInfo: z.array(ClientSchemaUserContactInfo).optional(),
-  tgId: z.string().optional().nullable(),
+  tgId: z.string().optional(),
+  phoneNumber: z.string().optional(),
 };
 
 export const ClientSchemaUserCreate = z
   .object({
     ...ClientSchemaUserBase,
     tgId: z.string().optional(),
-    username: z.string().optional(),
   })
   .strict();
 
