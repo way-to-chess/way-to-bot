@@ -2,6 +2,8 @@ import {IDomain} from "../Domains";
 import {EOperandPredicate} from "@way-to-bot/shared/api/enums/EOperandPredicate";
 import {EPredicate} from "@way-to-bot/shared/api/enums/EPredicate";
 import {AdminDTOLeagueGetMany, AdminDTOLeagueGetOne} from "@way-to-bot/shared/api/DTO/admin/league.DTO";
+import {CreateLeague} from "./Create";
+import {EditLeague} from "./Edit";
 
 const LeaguesDomain: IDomain<AdminDTOLeagueGetMany, AdminDTOLeagueGetOne, unknown, unknown> = {
     title: "Лиги",
@@ -27,12 +29,12 @@ const LeaguesDomain: IDomain<AdminDTOLeagueGetMany, AdminDTOLeagueGetOne, unknow
     },
     create: {
         title: "Создать лигу",
-        definition: null,
+        definition: <CreateLeague/>,
     },
     searchFields: ["name"],
     edit: {
         title: "Изменить лигу",
-        definition: null,
+        definition: <EditLeague/>,
         getInitialValues: ({name}) => ({
             name,
         }),

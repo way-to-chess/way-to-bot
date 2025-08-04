@@ -84,7 +84,7 @@ const adminApi = createApi({
                 method: "PATCH",
                 body: payload,
             }),
-            invalidatesTags: (result, error, arg) => [{type: arg.url, id: "ALL"}],
+            invalidatesTags: (result, error, arg) => [{type: arg.url, id: "ALL"}, {type: arg.url, id: arg.id}],
         }),
     }),
 });

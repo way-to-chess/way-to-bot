@@ -56,7 +56,7 @@ const EditForm: FC<IWithId> = ({id}) => {
     const {url, edit: {definition, normalize, getInitialValues}} = useDomainContext()
     const {clearId} = useEditContext()
 
-    const {data} = adminApi.useGetOneQuery({url, id})
+    const {data} = adminApi.useGetOneQuery({url, id},)
 
     const [update, {isLoading}] = adminApi.useUpdateMutation()
 
