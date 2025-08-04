@@ -67,6 +67,7 @@ const SubmitResults: FC<IWithId> = ({id}) => {
             </Form>
         </Drawer>
         <Button
+            disabled
             onClick={setTrue}
             icon={<FilePlus2Icon size={16}/>}
             type={"text"}
