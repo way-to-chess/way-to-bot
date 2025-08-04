@@ -25,6 +25,7 @@ export abstract class BaseDTOEvent {
     link?: string | null;
     participants: IUserEntity[] & { points?: number; place?: number };
   }[];
+  readonly participantsCount: number;
 
   protected constructor(event: IEventEntity) {
     this.id = event.id;
@@ -41,6 +42,7 @@ export abstract class BaseDTOEvent {
     this.host = event.host;
     this.additionalInfo = event.additionalInfo;
     this.eventLeagues = this.mapEventLeagues(event.eventLeagues ?? []);
+    this.participantsCount = this.countParticipants(event.eventLeagues ?? []);
   }
 
   private mapEventLeagues(eventLeagues: IEventLeagueEntity[]) {
