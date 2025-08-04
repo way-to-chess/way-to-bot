@@ -127,9 +127,9 @@ const SingleEventPage = () => {
         location,
         host,
         description,
-        users,
         duration,
         linkToStream,
+        participantsCount
     } = event;
 
     const date = dayjs(dateTime);
@@ -159,7 +159,7 @@ const SingleEventPage = () => {
                         </div>
                         <div className={classes.infoGroup}>
                             <EventParticipantCount
-                                currentCount={users.length}
+                                currentCount={participantsCount}
                                 maxCount={participantsLimit}
                             />
 
