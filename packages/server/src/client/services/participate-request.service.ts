@@ -83,6 +83,15 @@ export class ClientParticipateRequestService {
             if (!user) {
               return reject(`Error while creating user ${u}`);
             }
+          } else {
+            await this._userRepository.update(user.id, {
+              ...(u.firstName && { firstName: u.firstName }),
+              ...(u.lastName && { lastName: u.lastName }),
+              ...(u.birthDate && { birthDate: u.birthDate }),
+              ...(u.username && { username: u.username }),
+              ...(u.email && { email: u.email }),
+              ...(u.phoneNumber && { phoneNumber: u.phoneNumber }),
+            }, queryRunner);
           }
 
           if (user.tgId === payload.tgId) {
