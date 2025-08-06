@@ -16,6 +16,7 @@ import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/p
 import type { IEventEntity } from "@way-to-bot/shared/api/interfaces/entities/event-entity.interface";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity";
 import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus";
+import { EEventType } from "@way-to-bot/shared/api/enums/EEventType";
 
 @Entity("events")
 export class EventEntity implements IEventEntity {
@@ -43,6 +44,12 @@ export class EventEntity implements IEventEntity {
     enum: EEventStatus,
   })
   status!: EEventStatus;
+
+  @Column({ type: "enum", enum: EEventType, default: EEventType.OTHER })
+  type!: EEventType;
+
+  @Column({ type: "varchar", nullable: true })
+  city?: string | null;
 
   @Column({ type: "int", nullable: true, name: "participants_limit" })
   participantsLimit?: number | null;

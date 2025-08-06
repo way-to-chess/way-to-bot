@@ -4,10 +4,13 @@ import { IFileEntity } from "@way-to-bot/shared/api/interfaces/entities/file-ent
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { EEventStatus } from "../../enums/EEventStatus";
 import { IEventLeagueEntity } from "../../interfaces/entities/event-league-entity.interface";
+import { EEventType } from "../../enums/EEventType";
 
 export abstract class BaseDTOEvent {
   readonly id: number;
   readonly name: string;
+  readonly type: EEventType;
+  readonly city?: string | null;
   readonly dateTime: string;
   readonly linkToStream?: string | null;
   readonly location?: ILocationEntity | null;
@@ -27,11 +30,14 @@ export abstract class BaseDTOEvent {
   }[];
   readonly participantsCount: number;
 
+  
   protected constructor(event: IEventEntity) {
     this.id = event.id;
     this.name = event.name;
+    this.type = event.type;
     this.dateTime = event.dateTime.toISOString();
     this.linkToStream = event.linkToStream;
+    this.city = event.city;
     this.location = event.location;
     this.participantsLimit = event.participantsLimit;
     this.price = event.price;
@@ -43,6 +49,7 @@ export abstract class BaseDTOEvent {
     this.additionalInfo = event.additionalInfo;
     this.eventLeagues = this.mapEventLeagues(event.eventLeagues ?? []);
     this.participantsCount = this.countParticipants(event.eventLeagues ?? []);
+
   }
 
   private mapEventLeagues(eventLeagues: IEventLeagueEntity[]) {
