@@ -6,6 +6,7 @@ export const AdminSchemaParticipateRequestUpdate = z
   .object({
     status: z.enum(EParticipateRequestStatus),
     message: z.string().optional().nullable(),
+    notify: z.boolean().optional(),
   })
   .strict();
 

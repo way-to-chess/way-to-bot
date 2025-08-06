@@ -39,19 +39,21 @@ export class AdminEventService {
       throw new InternalError(`Event was not created`);
     }
 
-    const userRepo = this._userRepository.getRepository();
-    const users = await userRepo.find({
-      where: {
-        tgId: Not(IsNull()),
-      },
-    });
+    if (event.notify) {
+      const userRepo = this._userRepository.getRepository();
+      const users = await userRepo.find({
+        where: {
+          tgId: Not(IsNull()),
+        },
+      });
 
-    const { message, options } = botMessageNewEvent(createdEvent);
+      const { message, options } = botMessageNewEvent(createdEvent);
 
-    // TODO: use some queue
-    setImmediate(async () => {
-      this._tgBotService.sendMessagesToUsers(users, message, options);
-    });
+      // TODO: use some queue
+      setImmediate(async () => {
+        this._tgBotService.sendMessagesToUsers(users, message, options);
+      });
+    }
 
     return createdEvent;
   }

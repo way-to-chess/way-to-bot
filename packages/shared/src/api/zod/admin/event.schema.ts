@@ -22,6 +22,7 @@ const AdminSchemaEventBase = {
 export const AdminSchemaEventCreate = z
   .object({
     ...AdminSchemaEventBase,
+    notify: z.boolean().optional(),
   })
   .strict();
 
