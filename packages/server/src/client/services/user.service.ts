@@ -11,6 +11,7 @@ import { FindOptionsWhere, IsNull, Not } from "typeorm";
 import { UserEntity } from "@way-to-bot/server/database/entities/user.entity";
 import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicate";
 import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate";
+import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error";
 
 @injectable()
 export class ClientUserService {
@@ -49,7 +50,11 @@ export class ClientUserService {
     return data;
   }
 
-  async getByTgIdOrUsername(tgId?: string, username?: string | null) {
+  async getOrCreate(tgId?: string, username?: string | null) {
+    if (!tgId && !username) {
+      throw new BadRequestError(`TgId or username is required`);
+    }
+
     const userByTgId =
       tgId &&
       (await this._userRepository.getOne({
@@ -72,20 +77,27 @@ export class ClientUserService {
         where: { username: `@${username}` },
       }));
 
-    if (!userByUsername) {
-      throw new NotFoundError(
-        `User with tgId: ${tgId} and username: ${username} not found`,
-      );
+    if (userByUsername) {
+      if (!userByUsername.tgId && tgId) {
+        userByUsername.tgId = String(tgId);
+        await this._userRepository.update(userByUsername.id, {
+          tgId: String(tgId),
+        });
+      }
+
+      return userByUsername;
     }
 
-    if (tgId && !userByUsername.tgId) {
-      userByUsername.tgId = String(tgId);
-      await this._userRepository.update(userByUsername.id, {
-        tgId: String(tgId),
-      });
-    }
+    const userRepo = this._userRepository.getRepository();
 
-    return userByUsername;
+    const newUser = userRepo.create({
+      ...(tgId && { tgId }),
+      ...(username && { username: `@${username}` }),
+    });
+
+    await userRepo.save(newUser);
+
+    return newUser;
   }
 
   async create(payload: TClientUserCreatePayload) {
