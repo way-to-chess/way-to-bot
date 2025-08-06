@@ -53,7 +53,7 @@ const WithTelegram = () => {
     useBackButton()
 
     useEffect(() => {
-        document.documentElement.style.setProperty("--safe-area-inset-bottom", Telegram.WebApp.safeAreaInset.bottom + "px")
+        document.documentElement.style.setProperty("--bottom-bar-height", 56 + Telegram.WebApp.safeAreaInset.bottom + "px")
     }, []);
 
     authApi.useAuthByTelegramQuery({
