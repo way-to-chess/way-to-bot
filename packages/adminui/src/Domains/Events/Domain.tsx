@@ -61,12 +61,12 @@ const EventsDomain: IDomain<
                 : Number(participantsLimit),
             ...rest,
         }),
-        initialValues: {status: EEventStatus.WAITING}
+        initialValues: {status: EEventStatus.WAITING, notify: true}
     },
     searchFields: ["name"],
     edit: {
         title: "Изменить событие",
-        definition: <BaseForm/>,
+        definition: <BaseForm isEdit/>,
         getInitialValues: (
             {
                 participantsLimit,
@@ -94,8 +94,9 @@ const EventsDomain: IDomain<
             description,
             hostId: host?.id,
             linkToStream,
+
         }),
-        normalize: ({dateTime, file, participantsLimit, ...rest}: IFormValues) => ({
+        normalize: ({dateTime, file, participantsLimit, ...rest}: Omit<IFormValues, "notify">) => ({
             fileId: getFileId(file[0]),
             duration: dateTime[1] ? dateTime[1].diff(dateTime[0]) : null,
             participantsLimit: isNaN(Number(participantsLimit))
