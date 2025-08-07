@@ -14,6 +14,7 @@ interface IBottomSheetProps extends PropsWithChildren, Pick<Dialog.Root.Props, "
     className?: string
     open?: boolean;
     titleNode?: ReactNode
+    overflow?: boolean
 }
 
 const BottomSheet: FC<IBottomSheetProps> = (
@@ -25,7 +26,8 @@ const BottomSheet: FC<IBottomSheetProps> = (
         className,
         open,
         onOpenChange,
-        titleNode
+        titleNode,
+        overflow
     }) => {
     const Wrapper = title && description ? "div" : Fragment
 
@@ -34,7 +36,7 @@ const BottomSheet: FC<IBottomSheetProps> = (
             <Dialog.Trigger render={trigger}/>
             <Dialog.Portal>
                 <Dialog.Backdrop className={classes.backdrop}/>
-                <Dialog.Popup className={clsx(classes.popup, className)}>
+                <Dialog.Popup className={clsx(classes.popup, overflow && classes.overflow, className)}>
                     <div className={classes.top}>
                         <Wrapper>
                             {titleNode}

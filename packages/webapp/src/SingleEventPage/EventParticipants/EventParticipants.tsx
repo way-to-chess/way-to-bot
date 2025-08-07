@@ -10,6 +10,7 @@ import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {TrophyIcon} from "lucide-react";
 import {sortByKey} from "../../Utils/SortByKey";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
+import {Button} from "../../Button/Button";
 
 const POSTFIX_BY_PLACE: Record<number, ReactNode> = {
     1: <TrophyIcon size={14} color={"rgb(255, 204, 0)"}/>,
@@ -19,9 +20,9 @@ const POSTFIX_BY_PLACE: Record<number, ReactNode> = {
 
 const AllParticipants: FC<{ users: IUserEntity[], title: string }> = ({users, title}) => {
     const trigger = (
-        <button className={classes.all}>
-            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
-        </button>
+        <Button variant={"secondary"} size={"S"}>
+            {"Все"}
+        </Button>
     )
 
     return <BottomSheet trigger={trigger} title={title}>
@@ -61,7 +62,7 @@ const EventParticipants: FC<{ eventId: string }> = ({eventId}) => {
     const maxCount = eventLeagues.length === 1 ? participantsLimit : null
 
 
-    return leagues.map(({participants, name}) => {
+    return leagues.map(({participants, name, link}) => {
         const sorted = sortByKey(participants, "place", ESortDirection.DESC)
 
         const sliced = sorted.slice(0, 5)
@@ -71,10 +72,20 @@ const EventParticipants: FC<{ eventId: string }> = ({eventId}) => {
         return (
             <div className={classes.block}>
                 <div className={classes.participantBlock}>
-                    <Typography type={"title4"} value={leagueName}/>
+                    {
+                        link ? <div className={classes.name}>
+                                <Typography type={"title4"} value={leagueName}/>
+                                <a href={link} rel={"noreferrer noopener"} target={"_blank"}>
+                                    <Typography className={classes.link} type={"text2"} color={"mainColor"}
+                                                value={"Ссылка на таблицу"}/>
+                                </a>
+                            </div> :
+                            <Typography type={"title4"} value={leagueName}/>
+                    }
+
                     <EventParticipantCount currentCount={sorted.length} maxCount={maxCount}/>
-                    {sorted.length > 5 ? <AllParticipants users={sorted} title={leagueName}/> : null}
                 </div>
+
                 {
                     sliced.length > 0 ?
                         <div className={classes.participants}>
@@ -94,6 +105,8 @@ const EventParticipants: FC<{ eventId: string }> = ({eventId}) => {
                             })}
                         </div> : null
                 }
+                {sorted.length > 5 ? <AllParticipants users={sorted} title={leagueName}/> : null}
+
             </div>
         )
     })

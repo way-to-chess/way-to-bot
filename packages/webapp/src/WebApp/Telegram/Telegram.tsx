@@ -1,7 +1,6 @@
 import {useEffect, useRef} from "react";
 import {Location, useLocation, useNavigate} from "react-router";
 import YM from 'react-yandex-metrika';
-import {authApi} from "@way-to-bot/shared/redux/authApi";
 
 const useBackButton = () => {
     const location = useLocation()
@@ -55,11 +54,6 @@ const WithTelegram = () => {
     useEffect(() => {
         document.documentElement.style.setProperty("--bottom-bar-height", 56 + Telegram.WebApp.safeAreaInset.bottom + "px")
     }, []);
-
-    authApi.useAuthByTelegramQuery({
-        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
-        username: Telegram.WebApp.initDataUnsafe.user?.username,
-    })
 
     return null
 }

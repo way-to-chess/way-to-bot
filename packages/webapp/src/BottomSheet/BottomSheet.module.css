@@ -17,7 +17,7 @@
     display: flex;
     flex-direction: column;
     gap: 12px;
-    padding: 16px 16px 32px 16px;
+    padding: 0 16px 32px 16px;
     border-radius: 16px 16px 0 0;
     background: var(--background-color-1);
     width: 100%;
@@ -42,9 +42,16 @@
 }
 
 .top {
+    padding-top: 16px;
+    position: sticky;
+    top: 0;
+    left: 0;
+    z-index: 2;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    flex: 0 0 60px;
+    background: inherit;
 }
 
 .close {
@@ -54,4 +61,8 @@
     justify-content: center;
     align-items: center;
     flex-shrink: 0;
+}
+
+.popup.overflow {
+    overflow: auto;
 }

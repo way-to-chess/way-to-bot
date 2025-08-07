@@ -5,7 +5,7 @@ import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import {userApi} from "../Store/User/UserApi";
 import {TTypographyProps, Typography} from "../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import {FC, PropsWithChildren, ReactNode, useRef, useState} from "react";
+import {FC, PropsWithChildren, ReactNode, useState} from "react";
 import {ChartIcon} from "../Icons/ChartIcon";
 import {TrophyIcon} from "../Icons/TrophyIcon";
 import {GamePadIcon} from "../Icons/GamePadIcon";
@@ -18,11 +18,10 @@ import {sortByKey} from "../Utils/SortByKey";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {useSelector} from "react-redux";
-import clsx from "clsx";
-import {EditIcon, EyeIcon, TrashIcon} from "lucide-react";
+import {EditIcon} from "lucide-react";
 import {BottomSheet} from "../BottomSheet/BottomSheet";
-import {IOption, Options} from "../Options/Options";
-import {useUploadFile} from "../Hooks/UseUploadFile";
+import {ProfileForm} from "../ProfilePage/ProfileForm";
+import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
 
 interface IStatItem {
     icon: ReactNode;
@@ -95,72 +94,19 @@ const Loading = () => {
     </div>
 }
 
-const OPTIONS: IOption<"preview" | "edit" | "delete">[] = [
-    {
-        title: "Посмотреть фото",
-        value: 'preview',
-        indicator: <EyeIcon size={16}/>,
-    },
-    {
-        title: "Изменить фото",
-        value: 'edit',
-        indicator: <EditIcon size={16}/>
-    },
-    {
-        title: "Удалить фото",
-        value: 'delete',
-        indicator: <TrashIcon size={16} color={"var(--red-color)"}/>,
-        danger: true,
-        className: classes.danger,
-    }
-]
-
-const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = ({photo, id}) => {
-    const [update] = userApi.useUpdateUserMutation()
+const Edit: FC<IWithId> = ({id}) => {
     const [open, setOpen] = useState(false)
 
-    const {onChange, isLoading: fileUploadLoading} = useUploadFile(({id: fileId}) => {
-        update({fileId, id})
-        setOpen(false)
-    })
-
-    const inputRef = useRef<HTMLInputElement>(null)
-
-    const Wrapper = photo?.id ? "button" : "label"
-
-    const content = (
-        <Wrapper>
-            <ImgWithContainer previewUrl={photo?.previewUrl} className={clsx(classes.img, classes.owner)}/>
-            <div className={classes.edit}>
-                <EditIcon size={16} color={"#fff"}/>
-            </div>
-            <input ref={inputRef} onChange={onChange} type={"file"} style={{display: "none"}}/>
-        </Wrapper>
+    const trigger = (
+        <button className={classes.edit}>
+            <EditIcon size={16} color={"#fff"}/>
+        </button>
     )
 
-    const onValueChange = (value: "preview" | "edit" | "delete") => {
-        if (value === "preview") {
-            window.open(getPreviewSrc(photo?.url), "_blank",)
-        }
 
-        if (value === "edit") {
-            inputRef.current?.click()
-        }
-
-        if (value === "delete") {
-            update({fileId: null, id})
-        }
-    }
-
-
-    if (!photo?.id) {
-        return content
-    }
-
-    return <BottomSheet open={open} onOpenChange={setOpen} trigger={content}
-                        title={"Выберите действие"}>
-        {fileUploadLoading ? <Skeleton style={{width: "100%", height: 40, borderRadius: 16}}/> :
-            <Options options={OPTIONS} onValueChange={onValueChange}/>}
+    return <BottomSheet className={classes.popup} overflow open={open} onOpenChange={setOpen} trigger={trigger}
+                        title={"Редактировать профиль"}>
+        <ProfileForm id={id}/>
     </BottomSheet>
 
 }
@@ -168,9 +114,9 @@ const Edit: FC<Pick<ClientDTOUserGetOne, "photo" | "id"> & PropsWithChildren> = 
 const AllEvents: FC<{ events: ClientDTOUserGetOne["events"] }> = ({events}) => {
 
     const trigger = (
-        <button>
-            <Typography type={"text1"} value={"Все"} color={"mainColor"}/>
-        </button>
+        <Button variant={"secondary"} size={"S"}>
+            {"Все"}
+        </Button>
     )
 
     return <BottomSheet trigger={trigger} title={"Все события"}>
@@ -230,16 +176,14 @@ const SingleUserPage = () => {
         rating,
         winRate,
         total,
-        events
     } = user
 
     return <div className={classes.page}>
         <div className={classes.top}>
-            {
-                isOwner ? <Edit photo={photo} id={user.id}/> :
-                    <ImgWithContainer previewUrl={photo?.previewUrl} link={getPreviewSrc(photo?.url)}
-                                      className={classes.img}/>
-            }
+            <ImgWithContainer previewUrl={photo?.previewUrl} link={getPreviewSrc(photo?.url)}
+                              className={classes.img}/>
+
+            {isOwner ? <Edit id={user.id}/> : null}
 
             <div className={classes.name}>
                 <Typography type={"title3"} value={getUserFullName(firstName, lastName)}/>

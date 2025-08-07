@@ -44,11 +44,12 @@
 
 .name {
     display: flex;
-    gap: 20px;
+    flex-direction: column;
+    gap: 6px;
 }
 
-.name :first-child {
-    flex: 1;
+.link {
+    text-decoration: underline;
 }
 
 .shareLink {
@@ -101,10 +102,7 @@
     display: flex;
     align-items: center;
     gap: 8px;
-}
-
-.all {
-    margin: 0 0 0 auto;
+    justify-content: space-between;
 }
 
 .participants {

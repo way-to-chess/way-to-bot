@@ -3,7 +3,7 @@ const getUserFullName = (name?: string | null, surname?: string | null) => {
         return `${name} ${surname}`;
     }
 
-    return name ?? "No Name";
+    return name ?? "Без Имени";
 };
 
 export {getUserFullName};

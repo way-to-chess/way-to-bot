@@ -13,7 +13,7 @@ import {Link} from "react-router";
 
 interface IButtonBaseProps {
     variant?: "primary" | "secondary";
-    size?: "L";
+    size?: "L" | "S";
     as?: "button" | "a" | "link" | "label";
     to?: string;
     textAlign?: CSSProperties["textAlign"];
@@ -21,6 +21,7 @@ interface IButtonBaseProps {
     value?: ReactNode;
     loading?: boolean;
     disabled?: boolean
+    danger?: boolean
 }
 
 type IButtonProps = IButtonBaseProps &
@@ -43,6 +44,7 @@ const Button: FC<IButtonProps> = (
         value,
         loading,
         disabled,
+        danger,
         ...props
     }) => {
     const buttonProps = loading ? {...props, disabled: true} : props;
@@ -53,6 +55,7 @@ const Button: FC<IButtonProps> = (
         classes[size],
         loading && classes.loading,
         (disabled || loading) && classes.disabled,
+        danger && classes.danger,
         className,
     );
 
