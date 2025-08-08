@@ -33,7 +33,6 @@ COMPONENT="all"
 ENVIRONMENT="dev"
 if [ $# -eq 1 ]; then
     COMMIT_HASH=$1
-    ENVIRONMENT="dev"
     log_warn "Environment not specified, using default: ${ENVIRONMENT}"
 elif [ $# -eq 2 ]; then
     COMMIT_HASH=$1
@@ -41,7 +40,6 @@ elif [ $# -eq 2 ]; then
     case "$ARG2" in
         server|web|all)
             COMPONENT=$ARG2
-            ENVIRONMENT="dev"
             ;;
         dev|prod)
             ENVIRONMENT=$ARG2
