@@ -29,16 +29,43 @@ error_handler() {
 
 trap 'error_handler ${LINENO} $?' ERR
 
+COMPONENT="all"
 if [ $# -eq 1 ]; then
     COMMIT_HASH=$1
     ENVIRONMENT="dev"
     log_warn "Environment not specified, using default: ${ENVIRONMENT}"
 elif [ $# -eq 2 ]; then
     COMMIT_HASH=$1
-    ENVIRONMENT=$2
+    ARG2=$2
+    case "$ARG2" in
+        server|web|all)
+            COMPONENT=$ARG2
+            ENVIRONMENT="dev"
+            ;;
+        dev|prod)
+            ENVIRONMENT=$ARG2
+            ;;
+        *)
+            log_error "Invalid second argument: $ARG2"
+            log_error "Usage: $0 <commit-hash> [server|web|all|dev|prod]"
+            exit 1
+            ;;
+    esac
+elif [ $# -eq 3 ]; then
+    COMMIT_HASH=$1
+    COMPONENT=$2
+    ENVIRONMENT=$3
+    if [ "$COMPONENT" != "server" ] && [ "$COMPONENT" != "web" ] && [ "$COMPONENT" != "all" ]; then
+        log_error "Component should be 'server', 'web' or 'all'"
+        exit 1
+    fi
+    if [ "$ENVIRONMENT" != "dev" ] && [ "$ENVIRONMENT" != "prod" ]; then
+        log_error "Environment should be 'dev' or 'prod'"
+        exit 1
+    fi
 else
-    log_error "Usage: $0 <commit-hash> [environment]"
-    log_error "Environment should be 'dev' or 'prod', defaults to 'dev' if not specified"
+    log_error "Usage: $0 <commit-hash> [server|web|all] [environment]"
+    log_error "If only one optional arg is provided, it can be component (server|web|all) or environment (dev|prod). Defaults: component=all, environment=dev"
     exit 1
 fi
 
@@ -69,46 +96,45 @@ check_docker() {
 build_and_push() {
     local start_time=$(date +%s)
 
-    log_info "Starting build process for commit: ${COMMIT_HASH} in ${ENVIRONMENT} environment"
+    log_info "Starting build process for commit: ${COMMIT_HASH} in ${ENVIRONMENT} environment (component: ${COMPONENT})"
 
-    # Build server image
-    log_info "Building server image..."
-    if ! docker build \
-        --platform ${PLATFORM} \
-        --target server \
-        --build-arg ENV=${ENVIRONMENT} \
-        -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
-        log_error "Server image build failed"
-        exit 1
+    if [ "$COMPONENT" = "server" ] || [ "$COMPONENT" = "all" ]; then
+        log_info "Building server image..."
+        if ! docker build \
+            --platform ${PLATFORM} \
+            --target server \
+            --build-arg ENV=${ENVIRONMENT} \
+            -t "${IMAGE_NAME}:${SERVER_TAG}" .; then
+            log_error "Server image build failed"
+            exit 1
+        fi
+        log_info "Server image built successfully"
+        log_info "Pushing server image..."
+        if ! docker push "${IMAGE_NAME}:${SERVER_TAG}"; then
+            log_error "Server image push failed"
+            exit 1
+        fi
+        log_info "Server image pushed successfully"
     fi
-    log_info "Server image built successfully"
 
-    # Build web image
-    log_info "Building web image..."
-    if ! docker build \
-        --platform ${PLATFORM} \
-        --target web \
-        --build-arg ENV=${ENVIRONMENT} \
-        -t "${IMAGE_NAME}:${WEB_TAG}" .; then
-        log_error "Web image build failed"
-        exit 1
+    if [ "$COMPONENT" = "web" ] || [ "$COMPONENT" = "all" ]; then
+        log_info "Building web image..."
+        if ! docker build \
+            --platform ${PLATFORM} \
+            --target web \
+            --build-arg ENV=${ENVIRONMENT} \
+            -t "${IMAGE_NAME}:${WEB_TAG}" .; then
+            log_error "Web image build failed"
+            exit 1
+        fi
+        log_info "Web image built successfully"
+        log_info "Pushing web image..."
+        if ! docker push "${IMAGE_NAME}:${WEB_TAG}"; then
+            log_error "Web image push failed"
+            exit 1
+        fi
+        log_info "Web image pushed successfully"
     fi
-    log_info "Web image built successfully"
-
-    # Push images
-    log_info "Pushing server image..."
-    if ! docker push "${IMAGE_NAME}:${SERVER_TAG}"; then
-        log_error "Server image push failed"
-        exit 1
-    fi
-    log_info "Server image pushed successfully"
-
-    log_info "Pushing web image..."
-    if ! docker push "${IMAGE_NAME}:${WEB_TAG}"; then
-        log_error "Web image push failed"
-        exit 1
-    fi
-    log_info "Web image pushed successfully"
 
     local end_time=$(date +%s)
     local duration=$((end_time - start_time))
@@ -123,17 +149,19 @@ build_and_push() {
 cleanup_images() {
     log_info "Starting cleanup of local images..."
     
-    # Remove server image
-    if docker images "${IMAGE_NAME}:${SERVER_TAG}" --quiet | grep -q .; then
-        if ! docker rmi "${IMAGE_NAME}:${SERVER_TAG}"; then
-            log_warn "Failed to remove server image"
+    if [ "$COMPONENT" = "server" ] || [ "$COMPONENT" = "all" ]; then
+        if docker images "${IMAGE_NAME}:${SERVER_TAG}" --quiet | grep -q .; then
+            if ! docker rmi "${IMAGE_NAME}:${SERVER_TAG}"; then
+                log_warn "Failed to remove server image"
+            fi
         fi
     fi
 
-    # Remove web image
-    if docker images "${IMAGE_NAME}:${WEB_TAG}" --quiet | grep -q .; then
-        if ! docker rmi "${IMAGE_NAME}:${WEB_TAG}"; then
-            log_warn "Failed to remove web image"
+    if [ "$COMPONENT" = "web" ] || [ "$COMPONENT" = "all" ]; then
+        if docker images "${IMAGE_NAME}:${WEB_TAG}" --quiet | grep -q .; then
+            if ! docker rmi "${IMAGE_NAME}:${WEB_TAG}"; then
+                log_warn "Failed to remove web image"
+            fi
         fi
     fi
 

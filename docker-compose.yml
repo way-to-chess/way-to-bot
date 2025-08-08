@@ -1,6 +1,6 @@
 services:
-  app:
-    container_name: wtb_app
+  server:
+    container_name: wtb_server
     image: traktirwik/way_to_bot:server_${TAG:?err}_${ENV:?err}
     ports:
       - "3000:3000"
@@ -30,7 +30,25 @@ services:
       - ./docker_data/uploads:/usr/share/nginx/html/uploads
       - ./docker_data/certbot/www/:/var/www/certbot/:ro
       - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
+      - ./docker_data/nginx/logs:/var/log/nginx
     restart: on-failure:3
+
+  nginx-log-cleaner:
+    container_name: wtb_nginx_log_cleaner
+    image: alpine:3
+    restart: unless-stopped
+    environment:
+      - LOG_RETENTION_DAYS=3
+      - LOG_CLEAN_INTERVAL_SEC=21600
+    volumes:
+      - ./docker_data/nginx/logs:/var/log/nginx
+    command: >
+      sh -c "while true; do \
+        if [ -d /var/log/nginx ]; then \
+          find /var/log/nginx -type f -mtime +${LOG_RETENTION_DAYS:-7} -print -delete; \
+        fi; \
+        sleep ${LOG_CLEAN_INTERVAL_SEC:-21600}; \
+      done"    
 
   certbot:
     container_name: wtb_certbot

@@ -1,0 +1,92 @@
+services:
+  pg:
+    container_name: wtb_pg
+    image: postgres:15
+    env_file:
+      - ./.env
+    restart: on-failure:3
+    user: "999:999"
+    volumes:
+      - wtb_pg_data:/var/lib/postgresql/data
+      - ./docker_data/postgres/config/postgresql.conf:/etc/postgresql/postgresql.conf:ro
+      - ./docker_data/postgres/config/pg_hba.conf:/etc/postgresql/pg_hba.conf:ro
+    ports:
+      - "5432:5432"
+    command: ["postgres", "-c", "config_file=/etc/postgresql/postgresql.conf", "-c", "hba_file=/etc/postgresql/pg_hba.conf"]
+    deploy:
+      resources:
+        limits:
+          cpus: '2'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    security_opt:
+      - no-new-privileges:true
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - FOWNER
+      - SETGID
+      - SETUID
+    healthcheck:
+      test:
+        ["CMD", "pg_isready", "-d", "${POSTGRES_DB}", "-U", "${POSTGRES_USER}"]
+      interval: 5s
+      timeout: 5s
+      retries: 3
+      start_period: 5s
+
+  web:
+    container_name: wtb_web
+    build:
+      context: .
+      target: web
+      args:
+        ENV: dev
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx-local.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/service_unavailable:/usr/share/nginx/html/service_unavailable:ro
+      - ./docker_data/uploads:/usr/share/nginx/html/uploads
+      - ./docker_data/nginx/logs:/var/log/nginx
+    restart: on-failure:3
+    healthcheck:
+      test: ["CMD-SHELL", "if [ -f /var/run/nginx.pid ] && kill -0 $(cat /var/run/nginx.pid) 2>/dev/null; then exit 0; else exit 1; fi"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+
+  ngrok:
+    container_name: wtb_ngrok
+    image: ngrok/ngrok:latest
+    restart: on-failure:3
+    depends_on:
+      web:
+        condition: service_healthy
+    volumes:
+      - ./docker_data/ngrok/ngrok.yml:/etc/ngrok/ngrok.yml:ro
+    command: ["start", "--all", "--config", "/etc/ngrok/ngrok.yml", "--log", "stdout"]
+
+  nginx-log-cleaner:
+    container_name: wtb_nginx_log_cleaner
+    image: alpine:3
+    restart: unless-stopped
+    environment:
+      - LOG_RETENTION_DAYS=3
+      - LOG_CLEAN_INTERVAL_SEC=21600
+    volumes:
+      - ./docker_data/nginx/logs:/var/log/nginx
+    command: >
+      sh -c "while true; do \
+        if [ -d /var/log/nginx ]; then \
+          find /var/log/nginx -type f -mtime +${LOG_RETENTION_DAYS:-7} -print -delete; \
+        fi; \
+        sleep ${LOG_CLEAN_INTERVAL_SEC:-21600}; \
+      done"
+
+volumes:
+  wtb_pg_data: 
