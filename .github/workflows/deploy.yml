@@ -100,11 +100,19 @@ jobs:
               echo "Rolling back..."
               if [ -n "$PREV_SERVER_IMG" ]; then
                 docker pull "$PREV_SERVER_IMG" || true
-                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate --image "$PREV_SERVER_IMG" server || true
+                prev_tag_part="${PREV_SERVER_IMG##*:}"
+                prev_tag_part="${prev_tag_part#server_}"
+                PREV_TAG_SERVER="${prev_tag_part%_*}"
+                export TAG="$PREV_TAG_SERVER"
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate server || true
               fi
               if [ -n "$PREV_WEB_IMG" ]; then
                 docker pull "$PREV_WEB_IMG" || true
-                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate --image "$PREV_WEB_IMG" web || true
+                prev_tag_part="${PREV_WEB_IMG##*:}"
+                prev_tag_part="${prev_tag_part#web_}"
+                PREV_TAG_WEB="${prev_tag_part%_*}"
+                export TAG="$PREV_TAG_WEB"
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate web || true
               fi
             }
 
