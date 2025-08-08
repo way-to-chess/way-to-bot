@@ -60,6 +60,8 @@ jobs:
           username: ${{ steps.vars.outputs.ssh_username }}
           key: ${{ steps.vars.outputs.ssh_key }}
           script: |
+            cd /home/way-to-bot
+            git pull origin ${{ steps.vars.outputs.branch }}
             bash ./docker/login.sh
 
             export TAG=${{ github.event.inputs.commit_hash }}
