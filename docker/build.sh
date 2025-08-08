@@ -30,6 +30,7 @@ error_handler() {
 trap 'error_handler ${LINENO} $?' ERR
 
 COMPONENT="all"
+ENVIRONMENT="dev"
 if [ $# -eq 1 ]; then
     COMMIT_HASH=$1
     ENVIRONMENT="dev"
