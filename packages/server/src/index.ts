@@ -8,6 +8,7 @@ import { TgBotService } from "@way-to-bot/server/services/tg_bot/index";
 import { validateConstants } from "@way-to-bot/server/utils/helpers";
 
 const emptyConstants = validateConstants();
+emptyConstants.push("API_PORT");
 if (emptyConstants.length) {
   logger.error(
     `No values in env vars for keys:\n\n ${emptyConstants.join("\n")}`,
