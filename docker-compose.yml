@@ -11,6 +11,12 @@ services:
       - ./docker_data/uploads:/app/docker_data/uploads
       - ./docker_data/api_logs:/app/docker_data/api_logs
     restart: on-failure:3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
     command: >
       sh -c "
         cd packages/server &&
@@ -32,6 +38,12 @@ services:
       - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
       - ./docker_data/nginx/logs:/var/log/nginx
     restart: on-failure:3
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost/"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+      start_period: 10s
 
   nginx-log-cleaner:
     container_name: wtb_nginx_log_cleaner

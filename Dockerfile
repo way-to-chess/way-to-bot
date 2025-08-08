@@ -8,11 +8,17 @@ RUN npm install -g pnpm@latest
 WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
+COPY packages/server/package.json ./packages/server/
+COPY packages/adminui/package.json ./packages/adminui/
+COPY packages/webapp/package.json ./packages/webapp/
+COPY packages/shared/package.json ./packages/shared/
+
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm fetch
+
 COPY packages ./packages
 COPY typescript ./typescript
 
-RUN --mount=type=cache,target=/root/.pnpm-store \
-    pnpm install --frozen-lockfile
+RUN --mount=type=cache,target=/root/.pnpm-store pnpm install --frozen-lockfile
 
 FROM base AS build-shared
 RUN pnpm --filter @way-to-bot/shared build
@@ -29,6 +35,7 @@ RUN pnpm --filter @way-to-bot/adminui build && \
 FROM node:20.17.0-slim AS server
 
 RUN npm install -g pnpm@latest
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 WORKDIR /app
 
 COPY package.json pnpm-workspace.yaml pnpm-lock.yaml ./
@@ -45,6 +52,7 @@ RUN --mount=type=cache,target=/root/.pnpm-store \
 EXPOSE 3000
 
 FROM nginx:stable AS web
+RUN apt-get update && apt-get install -y curl && rm -rf /var/lib/apt/lists/*
 COPY --from=build-web /app/packages/adminui/dist /usr/share/nginx/html/admin
 COPY --from=build-web /app/packages/webapp/dist /usr/share/nginx/html/webapp
 EXPOSE 80

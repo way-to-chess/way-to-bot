@@ -126,12 +126,12 @@ jobs:
             fi
 
             curl_host() {
-              curl -fsS --max-time 8 --retry 2 --retry-delay 1 \
+              curl -fsS --max-time 8 --retry 3 --retry-delay 1 \
                 --resolve "$HOST:443:127.0.0.1" "https://$HOST$1" -o /dev/null
             }
 
             if [ "$COMPONENT" = "server" ] || [ "$COMPONENT" = "all" ]; then
-              curl_host "/api/ping" || { echo "Server ping failed"; rollback; exit 1; }
+              curl_host "/api/ping" || { echo "Server ping failed"; echo "=== wtb_server logs (last 200 lines) ==="; docker logs --tail 200 wtb_server || true; echo "========================================"; rollback; exit 1; }
             fi
             if [ "$COMPONENT" = "web" ] || [ "$COMPONENT" = "all" ]; then
               curl_host "/" || { echo "Web root check failed"; rollback; exit 1; }
