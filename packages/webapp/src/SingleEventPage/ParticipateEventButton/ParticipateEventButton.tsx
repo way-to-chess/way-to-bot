@@ -38,7 +38,7 @@ const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {
         return null;
     }
 
-    if (event.users.length >= Number(event.participantsLimit)) {
+    if (event.participantsCount >= Number(event.participantsLimit)) {
         return null;
     }
 
