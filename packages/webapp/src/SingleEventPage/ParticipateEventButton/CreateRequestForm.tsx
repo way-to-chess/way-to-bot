@@ -61,7 +61,6 @@ const CreateForm: FC<ICreateFormProps> = (
                 ...VALIDATION_EXTENSION,
                 elIds: z.array(z.number()).min(hasEventLeagues ? 1 : 0),
             })),
-            fileId: z.number()
         })),
         defaultValues: {
             paymentType: EParticipateRequestPaymentType.CASH,
