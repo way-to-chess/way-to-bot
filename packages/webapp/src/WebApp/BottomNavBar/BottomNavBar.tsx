@@ -1,11 +1,10 @@
 import classes from "./BottomNavBar.module.css";
 import {EventsIcon} from "../../Icons/EventsIcon";
 import {LeaderboardIcon} from "../../Icons/LeaderboardIcon";
-import {ProfileIcon} from "../../Icons/ProfileIcon";
 import {NavLink} from "react-router";
 import {FC, ReactNode} from "react";
-import {useSelector} from "react-redux";
-import {authSlice} from "@way-to-bot/shared/redux/authSlice";
+import {authApi} from "@way-to-bot/shared/redux/authApi";
+import {UserIcon} from "lucide-react";
 
 interface INavBarItem {
     title: string;
@@ -36,14 +35,24 @@ const NavBarItem: FC<INavBarItem> = ({title, icon, path}) => {
 };
 
 const ProfileNavBarItem = () => {
-    const authId = useSelector(authSlice.selectors.id)
+    const {data: auth} = authApi.useAuthByTelegramQuery({
+        tgId: Telegram.WebApp.initDataUnsafe.user?.id,
+        username: Telegram.WebApp.initDataUnsafe.user?.username,
+    })
 
-    const path = authId ? `/users/${authId}` : "/profile"
 
-    return <NavBarItem path={path} icon={ProfileIcon} title={"Профиль"}/>
+    if (auth?.id) {
+        const path = `/users/${auth.id}`
+
+        return <NavBarItem path={path} icon={<UserIcon width={29} height={28}/>} title={"Профиль"}/>
+
+    }
+
+    return <span className={classes.item}><UserIcon width={29} height={28}/>{"Профиль"}</span>
 }
 
 const BottomNavBar = () => {
+
     return (
         <nav className={classes.bottom}>
             {NAV_BAR_ITEMS.map((item, index) => (

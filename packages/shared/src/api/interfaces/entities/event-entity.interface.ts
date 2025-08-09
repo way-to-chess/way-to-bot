@@ -4,6 +4,7 @@ import { IEventLeagueEntity } from "@way-to-bot/shared/api/interfaces/entities/e
 import { IParticipateRequestEntity } from "@way-to-bot/shared/api/interfaces/entities/participate-request-entity.interface.js";
 import { IUserEntity } from "@way-to-bot/shared/api/interfaces/entities/user-entity.interface.js";
 import { EEventStatus } from "../../enums/EEventStatus";
+import { EEventType } from "../../enums/EEventType";
 
 export interface IEventEntity {
   id: number;
@@ -26,4 +27,6 @@ export interface IEventEntity {
   additionalInfo?: Record<string, unknown> | null;
   createdAt: Date;
   updatedAt: Date;
+  type: EEventType;
+  city?: string | null;
 }

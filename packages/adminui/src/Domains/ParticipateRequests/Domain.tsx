@@ -31,6 +31,7 @@ const ParticipateRequestsDomain: IDomain<AdminDTOParticipateRequestGetMany, Admi
         getInitialValues: ({status, message}) => ({
             status,
             message,
+            notify: true
         }),
     }
 }

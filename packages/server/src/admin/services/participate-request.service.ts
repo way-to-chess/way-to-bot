@@ -101,7 +101,9 @@ export class AdminParticipateRequestService {
 
       await queryRunner.commitTransaction();
 
-      this.sendMessageToUser(updatedParticipateRequest);
+      if (payload.notify) {
+        this.sendMessageToUser(updatedParticipateRequest);
+      }
 
       return updatedParticipateRequest;
     } catch (e: any) {

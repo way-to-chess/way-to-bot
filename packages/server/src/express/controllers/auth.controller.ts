@@ -11,7 +11,7 @@ export class CommonAuthController {
   ) {}
 
   async tg(payload: TCommonAuthTg) {
-    const user = await this._clientUserService.getByTgIdOrUsername(
+    const user = await this._clientUserService.getOrCreate(
       payload.tgId,
       payload.username,
     );

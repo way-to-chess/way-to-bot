@@ -7,6 +7,15 @@ on:
         description: 'Commit hash to deploy'
         required: true
         type: string
+      component:
+        description: 'What to deploy (server, web, all)'
+        required: false
+        type: choice
+        options:
+          - all
+          - server
+          - web
+        default: 'all'
       environment:
         description: 'Environment to deploy to'
         required: true
@@ -42,6 +51,7 @@ jobs:
             echo "${{ secrets.DEV_SSH_PRIVATE_KEY }}" >> "$GITHUB_OUTPUT"
             echo "EOF" >> "$GITHUB_OUTPUT"
           fi
+          echo "component=${{ github.event.inputs.component }}" >> "$GITHUB_OUTPUT"
 
       - name: SSH Remote Commands
         uses: appleboy/ssh-action@v1.0.3
@@ -52,23 +62,83 @@ jobs:
           script: |
             cd /home/way-to-bot
             git pull origin ${{ steps.vars.outputs.branch }}
-            
             bash ./docker/login.sh
 
             export TAG=${{ github.event.inputs.commit_hash }}
             export ENV=${{ github.event.inputs.environment }}
+            export COMPONENT=${{ steps.vars.outputs.component }}
+            export DOCKER_COMPOSE_FILE=${{ steps.vars.outputs.docker_compose_file }}
             
             echo "=== Deployment Info ==="
             echo "Environment: $ENV"
             echo "Tag: $TAG"
+            echo "Component: $COMPONENT"
             echo "===================="
-            
-            docker compose -f ${{ steps.vars.outputs.docker_compose_file }} pull app web
-            docker compose -f ${{ steps.vars.outputs.docker_compose_file }} up -d app web
+
+            set -euo pipefail
+
+            # Snapshot previous images to allow rollback
+            get_image() { cid=$(docker compose -f "$DOCKER_COMPOSE_FILE" ps -q "$1" 2>/dev/null || true); [ -n "$cid" ] && docker inspect -f '{{.Config.Image}}' "$cid" 2>/dev/null || true; }
+            PREV_SERVER_IMG="$(get_image server || true)"
+            PREV_WEB_IMG="$(get_image web || true)"
+
+            # Deploy selected components
+            deploy_services() {
+              if [ "$COMPONENT" = "server" ]; then
+                docker compose -f "$DOCKER_COMPOSE_FILE" pull server || true
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --wait server
+              elif [ "$COMPONENT" = "web" ]; then
+                docker compose -f "$DOCKER_COMPOSE_FILE" pull web || true
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --wait web
+              else
+                docker compose -f "$DOCKER_COMPOSE_FILE" pull server web || true
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --wait server web
+              fi
+            }
+
+            rollback() {
+              echo "Rolling back..."
+              if [ -n "$PREV_SERVER_IMG" ]; then
+                docker pull "$PREV_SERVER_IMG" || true
+                prev_tag_part="${PREV_SERVER_IMG##*:}"
+                prev_tag_part="${prev_tag_part#server_}"
+                PREV_TAG_SERVER="${prev_tag_part%_*}"
+                export TAG="$PREV_TAG_SERVER"
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate server || true
+              fi
+              if [ -n "$PREV_WEB_IMG" ]; then
+                docker pull "$PREV_WEB_IMG" || true
+                prev_tag_part="${PREV_WEB_IMG##*:}"
+                prev_tag_part="${prev_tag_part#web_}"
+                PREV_TAG_WEB="${prev_tag_part%_*}"
+                export TAG="$PREV_TAG_WEB"
+                docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate web || true
+              fi
+            }
+
+            deploy_services
+
+            # HTTP checks against domain
+            if [ "$ENV" = "prod" ]; then
+              HOST=waytochess.site
+            else
+              HOST=waytochess.space
+            fi
+
+            curl_host() {
+              curl -fsS --max-time 8 --retry 3 --retry-delay 1 \
+                --resolve "$HOST:443:127.0.0.1" "https://$HOST$1" -o /dev/null
+            }
+
+            if [ "$COMPONENT" = "server" ] || [ "$COMPONENT" = "all" ]; then
+              curl_host "/api/ping" || { echo "Server ping failed"; echo "=== wtb_server logs (last 200 lines) ==="; docker logs --tail 200 wtb_server || true; echo "========================================"; rollback; exit 1; }
+            fi
+            if [ "$COMPONENT" = "web" ] || [ "$COMPONENT" = "all" ]; then
+              curl_host "/" || { echo "Web root check failed"; rollback; exit 1; }
+            fi
 
             echo "=== Containers Status ==="
             docker ps --format "table {{.Names}}\t{{.Status}}\t{{.Image}}"
             echo "===================="
 
-            # Cleanup
             docker image prune -a -f

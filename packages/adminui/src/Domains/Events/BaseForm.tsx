@@ -1,4 +1,4 @@
-import {Badge, BadgeProps, Col, DatePicker, Form, Input, Row, Select, SelectProps, UploadFile} from "antd";
+import {Badge, BadgeProps, Col, DatePicker, Form, Input, Row, Select, SelectProps, Switch, UploadFile} from "antd";
 import {LocationSelect} from "../Locations/LocationSelect";
 import {UserSelect} from "../Users/UserSelect";
 import {TAdminEventCreatePayload} from "@way-to-bot/shared/api/zod/admin/event.schema";
@@ -7,6 +7,7 @@ import {REQUIRED_RULE} from "../../Utils/WithRequiredRule";
 import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
 import {UploadFileInput} from "../../Components/UploadFileInput";
 import {EFileAssigment} from "@way-to-bot/shared/api/enums/EFileAssigment";
+import {FC} from "react";
 
 interface IFormValues
     extends Omit<TAdminEventCreatePayload, "dateTime" | "fileId" | "duration"> {
@@ -44,7 +45,7 @@ const labelRender: SelectProps["labelRender"] = ({label, value}) => (
     <Badge status={STATUS_MAP[String(value)]} text={label} offset={[4, 0]}/>
 );
 
-const BaseForm = () => {
+const BaseForm: FC<{ isEdit?: boolean }> = ({isEdit}) => {
     return (
         <>
             <Form.Item name={"file"} valuePropName={"fileList"}>
@@ -113,6 +114,16 @@ const BaseForm = () => {
                     </Form.Item>
                 </Col>
             </Row>
+            {
+                isEdit ? null : <Row gutter={16}>
+                    <Col span={24}>
+                        <Form.Item name={"notify"} label={"Оповестить пользователей"}>
+                            <Switch/>
+                        </Form.Item>
+                    </Col>
+                </Row>
+            }
+
         </>
     );
 };

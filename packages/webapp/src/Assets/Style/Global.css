@@ -2,7 +2,7 @@
 @import url('./Reset.css');
 
 :root {
-    --bottom-bar-height: calc(56px + var(--save-area-inset-bottom));
+    --bottom-bar-height: 56px;
     --main-color: #007AFF;
     --red-color: #FF4848;
     --green-color: #0FB000;

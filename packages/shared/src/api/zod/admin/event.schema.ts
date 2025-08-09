@@ -1,14 +1,13 @@
 import { z } from "zod";
 
 import { EEventStatus } from "../../enums/EEventStatus.js";
-
-const eventStatusSchema = z.nativeEnum(EEventStatus);
+import { EEventType } from "../../enums/EEventType.js";
 
 const AdminSchemaEventBase = {
   name: z.string(),
   dateTime: z.coerce.date(),
   price: z.string().nullable().optional(),
-  status: eventStatusSchema.optional(),
+  status: z.enum(EEventStatus).optional(),
   participantsLimit: z.number().nullable().optional(),
   linkToStream: z.string().nullable().optional(),
   locationId: z.number().nullable().optional(),
@@ -17,11 +16,14 @@ const AdminSchemaEventBase = {
   duration: z.number().nullable().optional(),
   hostId: z.number(),
   additionalInfo: z.record(z.string(), z.unknown()).nullable().optional(),
+  type: z.enum(EEventType),
+  city: z.string().nullable().optional(),
 };
 
 export const AdminSchemaEventCreate = z
   .object({
     ...AdminSchemaEventBase,
+    notify: z.boolean().optional(),
   })
   .strict();
 

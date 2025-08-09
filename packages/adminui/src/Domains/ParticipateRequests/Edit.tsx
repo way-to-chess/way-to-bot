@@ -1,4 +1,4 @@
-import {Form, Input, Select} from "antd";
+import {Form, Input, Select, Switch} from "antd";
 import {STATUS_OPTIONS} from "./StatusOptions";
 
 const EditParticipateRequest = () => {
@@ -9,6 +9,10 @@ const EditParticipateRequest = () => {
 
         <Form.Item name={"message"} label={"Сообщение"}>
             <Input.TextArea/>
+        </Form.Item>
+
+        <Form.Item name={"notify"} label={"Оповестить пользователя"}>
+            <Switch/>
         </Form.Item>
     </>;
 };

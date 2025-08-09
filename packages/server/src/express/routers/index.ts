@@ -7,6 +7,8 @@ import { adminRoleMddw } from "@way-to-bot/server/express/middlewares/admin-role
 
 export const MainRouter = Router();
 
+MainRouter.get('/ping', (req, res) => res.send('pong'));
+
 MainRouter.use("/auth", AuthRouter);
 MainRouter.use("/admin", authMddw, adminRoleMddw, AdminRouter);
 MainRouter.use("/client", ClientRouter);

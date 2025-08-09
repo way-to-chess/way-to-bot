@@ -23,22 +23,16 @@ const optionsBase = (): TelegramBot.SendMessageOptions => {
               url: `${WEB_URL}/tutorial`,
             },
           },
+        ],
+        [
           {
             text: "Контакты",
             callback_data: "show_contacts",
           },
-        ],
-        [
           {
-            text: "Открыть события",
+            text: "Cобытия",
             web_app: {
               url: `${WEB_URL}/events`,
-            },
-          },
-          {
-            text: "Открыть таблицу лидеров",
-            web_app: {
-              url: `${WEB_URL}/leaderboard`,
             },
           },
         ],
@@ -70,22 +64,20 @@ const optionsGoToEvent = (eventId: number): TelegramBot.SendMessageOptions => {
 };
 
 export const botMessageStart = () => {
-  const message = `♟️ <b>Добро пожаловать в WAY TO CHESS BOT!</b>
+  const message = `🎯 <b>Добро пожаловать в WAY TO EVENT!</b>
 
-У нас ты найдёшь <b>турниры для всех уровней</b> — как для уверенных профессионалов, так и для начинающих любителей. Участвуй в тех, которые подходят именно тебе!
+✨ <b>Откройте для себя мир интересных событий</b>
+От спортивных турниров до культурных фестивалей — у нас есть всё для вашего досуга!
 
-<b>Вот что тебя ждёт:</b>
+<b>Что вас ждёт:</b>
 
-✅ <b>Записывайся на турниры</b> — выбирай формат и уровень сложности  
+✅ <b>Регистрация на события</b> — простой выбор и запись
+📈 <b>Отслеживание прогресса</b> — ваша статистика в профиле
+🏆 <b>Рейтинги участников</b> — соревнуйтесь и развивайтесь
 
-📈 <b>Следи за своим прогрессом и статистикой</b> — всё это доступно в твоём профиле  
+<b>Готовы начать?</b> Нажмите <b>«WAY TO EVENT»</b> или выберите команду из меню.
 
-🏆 <b>Смотри таблицу лидеров</b> — вдохновляйся и стремись к вершине  
-
-<b>Готов начать?</b> Нажми <b>«WAY TO CHESS»</b> или выбери команду из меню.  
-Если возникнут вопросы — мы всегда рядом и поможем!
-
-♜ <b>Вперёд к новым шахматным вершинам!</b>`;
+🚀 <b>Вперёд к новым впечатлениям!</b>`;
 
   return {
     message,
@@ -96,21 +88,18 @@ export const botMessageStart = () => {
 export const botMessageNewEvent = (event: EventEntity): TBotMessage => {
   moment.locale("ru");
   const date = moment(event.dateTime).add(3, "hours");
-  const message = `📢 <b>Новое шахматное событие!</b>
+  const message = `📢 <b>Новое событие!</b>
 
-Открыта регистрация на турнир: <b>${event.name}</b>
+<b>${event.name}</b>
 
-📅 <b>Дата:</b> <i>${date.format("DD MMMM YYYY, HH:mm")} (МСК)</i>
+📅 <b>Когда:</b> ${date.format("DD MMMM YYYY, HH:mm")} (МСК)
+💰 <b>Стоимость:</b> ${event.price}
+📍 <b>Где:</b> <a href="${event.location?.url}">${event.location?.title}</a>
 
-💰 <b>Стоимость участия:</b> ${event.price}
+📝 <b>О событии:</b>
+<i>${event.description}</i>
 
-🔢 <b>Количество туров и контроль времени:\n</b> <i>${event.description}</i>
-
-📍 <b>Адрес:</b> <a href="${event.location?.url}">${event.location?.title}: ${event.location?.address}</a>
-
-🎯 <b>Успей зарегистрироваться — места ограничены!</b>
-
-Нажми <b>"Перейти к событию"</b> или выбери соответствующую кнопку в меню.`;
+🎯 <b>Успейте записаться!</b>`;
 
   return {
     message,
@@ -120,17 +109,17 @@ export const botMessageNewEvent = (event: EventEntity): TBotMessage => {
 
 export const botMessageNotify = (event: EventEntity): TBotMessage => {
   const date = moment(event.dateTime).add(3, "hours");
-  const message = `⏰ <b>Напоминание о предстоящем турнире!</b>
+  const message = `⏰ <b>Напоминание!</b>
 
-Ты записан(а) на турнир <b>«${event.name}»</b> — не пропусти!
+<b>${event.name}</b>
 
-📅 <b>Дата:</b> <i>${date.format("DD MMMM YYYY, HH:mm")} (МСК)</i>
+📅 <b>Когда:</b> ${date.format("DD MMMM YYYY, HH:mm")} (МСК)
+📍 <b>Где:</b> <a href="${event.location?.url}">${event.location?.title}</a>
 
-📍 <b>Адрес:</b> <a href="${event.location?.url}">${event.location?.title}: ${event.location?.address}</a>
+📝 <b>О событии:</b>
+<i>${event.description}</i>
 
-🔢 <b>Количество туров и контроль времени:\n</b> <i>${event.description}</i>
-
-🎯 Приходи заранее, чтобы спокойно можно было настроиться на игру!`;
+🎯 <b>Ждём вас!</b>`;
 
   return {
     message,
@@ -144,24 +133,19 @@ export const botMessageParticipateRequestStatusChanged = (
   const date = moment(pr.event.dateTime).add(3, "hours");
   const message =
     pr.status === EParticipateRequestStatus.APPROVED
-      ? `✅ <b>Заявка принята</b>
+      ? `✅ <b>Заявка принята!</b>
 
-<b>Ваша заявка на участие в турнире подтверждена!</b> 🎉
+<b>${pr.event.name}</b>
 
-🗓 <b>${pr.event.name}</b>
-${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>\n\n«${pr.message.trimEnd().trimStart()}»\n` : ""}
-📍 <b>Адрес:</b> <a href="${pr.event.location?.url}">${pr.event.location?.title}: ${pr.event.location?.address}</a>
-
-🕒 <b>Начало:</b> <i>${date.format("DD MMMM YYYY, HH:mm")} (МСК)</i>
-
-Рекомендуем прийти <b>немного заранее</b>, чтобы спокойно зарегистрироваться и подготовиться. Удачи в турнире! ♟️ `
+📅 <b>Когда:</b> ${date.format("DD MMMM YYYY, HH:mm")} (МСК)
+📍 <b>Где:</b> <a href="${pr.event.location?.url}">${pr.event.location?.title}</a>
+${pr.message?.trim() ? `\n💬 <b>Сообщение:</b>\n«${pr.message.trimEnd().trimStart()}»\n` : ""}
+🎯 <b>Ждём вас!</b>`
       : pr.status === EParticipateRequestStatus.REJECTED
         ? `❌ <b>Заявка отклонена</b>
 
-<b>К сожалению, ваша заявка на участие в турнире отклонена.</b>
-
-🗓 <b>${pr.event.name}</b>
-${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</b>«${pr.message.trimEnd().trimStart()}»` : ""}`
+<b>${pr.event.name}</b>
+${pr.message?.trim() ? `\n💬 <b>Сообщение:</b>\n«${pr.message.trimEnd().trimStart()}»` : ""}`
         : null;
 
   if (!message) {
@@ -175,19 +159,14 @@ ${pr.message?.trim() ? `\n💬 <b>Сообщение организатора:</
 };
 
 export const botMessageDefault = (): TBotMessage => {
-  const message = `<b>🤖 Нажми на кнопку "WAY TO CHESS", чтобы начать, или выбери один из пунктов ниже:</b>
+  const message = `🤖 <b>WAY TO EVENT</b>
 
-📘 <b>Как пользоваться?</b> — краткая инструкция по работе с ботом
+📘 <b>Инструкция</b> — как пользоваться ботом
+📞 <b>Контакты</b> — свяжитесь с нами
+📅 <b>События</b> — предстоящие мероприятия
+👤 <b>Профиль</b> — ваша статистика
 
-📞 <b>Контакты</b> — как с нами связаться
-
-📅 <b>События</b> — предстоящие турниры и активности
-
-🏆 <b>Таблица лидеров</b> — смотри, кто в топе
-
-👤 <b>Профиль</b> — статистика и твой прогресс
-
-Если возникнут вопросы — всегда пиши нам в поддержку, мы с радостью поможем! 💬`;
+💬 <b>Есть вопросы?</b> Пишите в поддержку!`;
   return {
     message,
     options: optionsBase(),

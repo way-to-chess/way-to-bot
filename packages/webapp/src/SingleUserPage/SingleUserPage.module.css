@@ -1,3 +1,7 @@
+.popup {
+    background: var(--background-color-3);
+}
+
 .page {
     display: flex;
     flex-direction: column;
@@ -23,17 +27,13 @@
     overflow: hidden;
 }
 
-.img.owner {
-    border-color: var(--main-color);
-}
-
 .edit {
-    position: absolute;
-    left: 50%;
+    position: fixed;
+    right: 44px;
     transform: translateX(30px);
-    top: 110px;
-    width: 32px;
-    height: 32px;
+    top: 12px;
+    width: 40px;
+    height: 40px;
     flex-shrink: 0;
     background: var(--main-color);
     border-radius: 50%;
