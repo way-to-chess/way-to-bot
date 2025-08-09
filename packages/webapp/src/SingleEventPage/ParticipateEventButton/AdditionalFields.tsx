@@ -14,22 +14,24 @@ const VALIDATION_EXTENSION = {
 const AdditionalFields = () => {
 
     return <>
-        <TextField label={"Имя"} inputProps={{placeholder: "Введите ваше имя", type: "text"}}
+        <TextField label={"Имя"} inputProps={{placeholder: "Введите ваше имя", type: "text", enterKeyHint: "next"}}
                    controllerProps={{name: "additionalUsers[0].firstName"}} required/>
-        <TextField label={"Фамилия"} inputProps={{placeholder: "Введите вашу фамилию", type: "text"}}
+        <TextField label={"Фамилия"}
+                   inputProps={{placeholder: "Введите вашу фамилию", type: "text", enterKeyHint: "next"}}
                    controllerProps={{name: "additionalUsers[0].lastName"}} required/>
         <TextField label={"Дата рождения"}
                    inputProps={{
                        placeholder: "Введите дату рождения",
                        type: "date",
                        min: "1900-01-01",
+                       enterKeyHint: "next"
                    }}
                    controllerProps={{name: "additionalUsers[0].birthDate"}} required/>
         <TextField label={"Город"}
-                   inputProps={{placeholder: "Введите ваш город",}}
+                   inputProps={{placeholder: "Введите ваш город", enterKeyHint: "next"}}
                    controllerProps={{name: "additionalUsers[0].city"}}/>
         <TextField label={"Клуб"}
-                   inputProps={{placeholder: "Ваш шахматный клуб",}}
+                   inputProps={{placeholder: "Ваш шахматный клуб", enterKeyHint: "next"}}
                    controllerProps={{name: "additionalUsers[0].club"}}/>
         <SelectField inputProps={{
             options: LEVEL_OPTIONS,
@@ -38,7 +40,8 @@ const AdditionalFields = () => {
         }}
                      label={"Спортивный разряд"}
                      controllerProps={{name: "additionalUsers[0].level"}} required/>
-        <TextField label={"Номер телефона"} inputProps={{placeholder: "Введите номер телефона", type: "tel"}}
+        <TextField label={"Номер телефона"}
+                   inputProps={{placeholder: "Введите номер телефона", type: "tel", enterKeyHint: "next"}}
                    controllerProps={{name: "additionalUsers[0].phoneNumber"}}
                    description={"9 цифр номера телефона в формате: 29XXXXXXX, 33XXXXXXX, 25XXXXXXX, 44XXXXXXX"}
                    required/>

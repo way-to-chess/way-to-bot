@@ -44,7 +44,7 @@ const FileInput: FC<Pick<ClientDTOUserGetOne, "photo">> = ({photo}) => {
 
                 <input
                     type={"file"}
-                    accept={"image/png, image/jpeg"}
+                    accept={"image/*"}
                     onChange={onChange}
                 />
             </label>
