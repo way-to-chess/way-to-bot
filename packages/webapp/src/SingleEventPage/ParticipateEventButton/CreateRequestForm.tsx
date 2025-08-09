@@ -34,11 +34,6 @@ interface IWithEventId {
     eventId: string;
 }
 
-const shema = ClientSchemaParticipateRequestCreate.extend({
-    additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend(VALIDATION_EXTENSION)),
-    fileId: z.number()
-})
-
 interface ICreateFormProps extends IWithEventId {
     closeModal: VoidFunction;
     user?: ClientDTOUserGetOne
@@ -58,10 +53,18 @@ const CreateForm: FC<ICreateFormProps> = (
 
     const tgId = Telegram.WebApp.initDataUnsafe.user?.id ? String(Telegram.WebApp.initDataUnsafe.user?.id) : undefined
 
+    const hasEventLeagues = event?.eventLeagues && event.eventLeagues.filter((it) => it.name !== "DEFAULT").length > 0
+
     const form = useForm({
-        resolver: zodResolver(shema),
+        resolver: zodResolver(ClientSchemaParticipateRequestCreate.extend({
+            additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend({
+                ...VALIDATION_EXTENSION,
+                elIds: z.array(z.number()).min(hasEventLeagues ? 1 : 0),
+            })),
+            fileId: z.number()
+        })),
         defaultValues: {
-            paymentType: EParticipateRequestPaymentType.RECEIPT,
+            paymentType: EParticipateRequestPaymentType.CASH,
             eventId: Number(eventId),
             tgId,
             additionalUsers: [
@@ -78,7 +81,6 @@ const CreateForm: FC<ICreateFormProps> = (
     })
 
     const dispatch = useDispatch()
-
 
     const send = (values: TClientParticipateRequestCreatePayload) => {
         createParticipateRequest(values)
@@ -100,9 +102,13 @@ const CreateForm: FC<ICreateFormProps> = (
 
     return <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(send)} className={classes.form}>
-            <div className={classes.block}>
-                <EventLeaguesSelect eventId={eventId}/>
-            </div>
+            {
+                event?.eventLeagues && event.eventLeagues.filter((it) => it.name !== "DEFAULT").length > 0 ?
+                    <div className={classes.block}>
+                        <EventLeaguesSelect eventId={eventId}/>
+                    </div> :
+                    null
+            }
 
             <div className={clsx(classes.block, classes.paymentMethod)}>
                 <AdditionalFields/>

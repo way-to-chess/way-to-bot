@@ -5,16 +5,16 @@ import {SelectField} from "../../Field/Field";
 
 const PAYMENT_TYPES: IOption<EParticipateRequestPaymentType>[] = [
     {
-        value: EParticipateRequestPaymentType.RECEIPT,
-        title: "Банковский перевод",
-        description: "Пришлите фото чека после перевода",
-        icon: <PaperclipIcon color={"#007AFF"}/>,
-    },
-    {
         value: EParticipateRequestPaymentType.CASH,
         title: "Наличными на месте",
         description: "Оплата при встрече на месте",
         icon: <BanknoteIcon color={"#007AFF"}/>,
+    },
+    {
+        value: EParticipateRequestPaymentType.RECEIPT,
+        title: "Банковский перевод",
+        description: "Пришлите фото чека после перевода",
+        icon: <PaperclipIcon color={"#007AFF"}/>,
         disabled: true,
     },
     {
