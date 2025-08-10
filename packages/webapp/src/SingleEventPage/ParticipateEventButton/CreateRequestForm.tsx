@@ -82,8 +82,6 @@ const CreateForm: FC<ICreateFormProps> = (
         }
     })
 
-    console.log(form.formState.errors, 123)
-
     const dispatch = useDispatch()
 
     const send = (values: TClientParticipateRequestCreatePayload) => {
@@ -144,7 +142,12 @@ const CreateForm: FC<ICreateFormProps> = (
     </FormProvider>
 }
 
-const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
+interface ICreateRequestFormProps extends IWithEventId {
+    title: string
+    className?: string
+}
+
+const CreateRequestForm: FC<ICreateRequestFormProps> = ({eventId, title, className}) => {
     const [open, {toggle, setFalse}] = useBoolean(false)
 
     const authId = useSelector(authSlice.selectors.id)
@@ -159,11 +162,12 @@ const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
 
     const {isFetching: eventIsFetching} = eventApi.useGetEventByIdQuery(eventId);
 
+
     return <BottomSheet
-        title={"Отправить заявку"}
+        title={title}
         onOpenChange={toggle}
         open={open}
-        trigger={<Button className={classes.button} value={"Участвовать"}/>}
+        trigger={<Button className={clsx(classes.button, className)} value={title}/>}
         className={classes.popup}
     >
         {eventIsFetching || userIsFetching ? <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/> :

@@ -6,6 +6,8 @@ import {participateRequestApi} from "../../Store/ParticipateRequest/ParticipateR
 import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
 import {HasRequestView} from "./HasRequestView";
 import {CreateRequestForm} from "./CreateRequestForm";
+import {sortByKey} from "../../Utils/SortByKey";
+import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 
 interface IWithEventId {
     eventId: string;
@@ -15,15 +17,16 @@ interface IWithEventId {
 const Participate: FC<IWithEventId> = ({eventId}) => {
     const {data, isLoading} = participateRequestApi.useGetAllParticipateRequestsQuery();
 
-    const lastRequest = data?.find(
+    const lastRequest = data ? sortByKey(data, "createdAt", ESortDirection.ASC)?.find(
         (request) => String(request.eventId) === eventId,
-    );
+    ) : null
 
     if (isLoading) {
         return null;
     }
 
-    return lastRequest ? <HasRequestView {...lastRequest}/> : <CreateRequestForm eventId={eventId}/>
+    return lastRequest ? <HasRequestView {...lastRequest}/> :
+        <CreateRequestForm eventId={eventId} title={"Отправить заявку"}/>
 };
 
 const ParticipateEventButton = memo<IWithEventId>(({eventId}) => {

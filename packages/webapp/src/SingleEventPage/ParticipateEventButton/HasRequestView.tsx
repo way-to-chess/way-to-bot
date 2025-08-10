@@ -12,6 +12,7 @@ import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {ImgWithContainer} from "../../ImgWithContainer/ImgWithContainer";
 import {BottomSheet} from "../../BottomSheet/BottomSheet";
 import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
+import {CreateRequestForm} from "./CreateRequestForm";
 
 const ICON_BY_STATUS: Record<EParticipateRequestStatus, ReactNode> = {
     [EParticipateRequestStatus.WAITING]: (
@@ -99,8 +100,17 @@ const Cash = () => {
     </div>
 }
 
-const HasRequestView: FC<ClientDTOParticipateRequestGetMany> = ({message, status, createdAt, receipt, paymentType}) => {
+const HasRequestView: FC<ClientDTOParticipateRequestGetMany> = (
+    {
+        message,
+        status,
+        createdAt,
+        receipt,
+        paymentType,
+        eventId
+    }) => {
     const [open, {toggle}] = useBoolean(false)
+
 
     return <BottomSheet
         className={classes.popup}
@@ -121,6 +131,12 @@ const HasRequestView: FC<ClientDTOParticipateRequestGetMany> = ({message, status
             {paymentType === EParticipateRequestPaymentType.RECEIPT ? <Receipt receipt={receipt}/> : null}
             {paymentType === EParticipateRequestPaymentType.CASH ? <Cash/> : null}
         </div>
+
+        {
+            status === EParticipateRequestStatus.REJECTED ?
+                <CreateRequestForm eventId={String(eventId)} title={"Отправить повторно"}
+                                   className={classes.send}/> : null
+        }
     </BottomSheet>
 }
 

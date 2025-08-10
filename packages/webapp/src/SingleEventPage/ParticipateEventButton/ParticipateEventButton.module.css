@@ -18,7 +18,7 @@ div.popup {
 
 .send {
     position: sticky;
-    left: 20px;
+    left: 16px;
     bottom: 0;
     max-width: calc(100% - 32px);
 }
