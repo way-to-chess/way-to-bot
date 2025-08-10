@@ -1,16 +1,25 @@
-import {useParams} from "react-router";
+import {Navigate, useParams} from "react-router";
 import {eventApi} from "../Store/Event/EventApi";
 import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import classes from "./SingleEventPage.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {getTypographyClassName, Typography} from "../Typography/Typography";
 import {EventParticipantCount} from "../EventParticipantCount/EventParticipantCount";
-import {CalendarIcon} from "../Icons/CalendarIcon";
-import {ClockIcon} from "../Icons/ClockIcon";
-import {PriceIcon} from "../Icons/PriceIcon";
+import {
+    CalendarIcon,
+    CameraIcon,
+    CircleDollarSignIcon,
+    ClockIcon,
+    CoffeeIcon,
+    MapPinIcon,
+    MartiniIcon,
+    SendIcon,
+    ToiletIcon,
+    TvIcon,
+    UtensilsIcon
+} from "lucide-react";
 import dayjs from "dayjs";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import {MessageIcon} from "../Icons/MessageIcon";
 import {Button} from "../Button/Button";
 import {FC} from "react";
 import {ClientDTOEventGetOne} from "@way-to-bot/shared/api/DTO/client/event.DTO";
@@ -18,7 +27,6 @@ import {Skeleton} from "../Skeleton/Skeleton";
 import {Error, RefetchError} from "../Error/Error";
 import {ParticipateEventButton} from "./ParticipateEventButton/ParticipateEventButton";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
-import {CameraIcon, CoffeeIcon, MapPinIcon, MartiniIcon, ToiletIcon, TvIcon, UtensilsIcon} from "lucide-react";
 import {ELocationBenefits} from "@way-to-bot/shared/api/enums/ELocationBenefits";
 import clsx from "clsx";
 import {EventParticipants} from "./EventParticipants/EventParticipants";
@@ -56,7 +64,9 @@ const Host: FC<ClientDTOEventGetOne["host"]> = ({firstName, lastName, username, 
                 <Typography type={"text2"} value={"Написать"} color={"textColor2"}/>
             </div>
 
-            {MessageIcon}
+            <div className={classes.hostSend}>
+                <SendIcon color={"var(--main-color)"} size={20}/>
+            </div>
         </a>
     );
 };
@@ -98,7 +108,7 @@ const Description: FC<{ description: string }> = ({description}) => description.
 const text2ClassName = getTypographyClassName({type: "text2"})
 
 const SingleEventPage = () => {
-    const {id} = useParams();
+    const {id, type} = useParams();
 
     const notNilId = getNotNil(id, "SingleEventPage -> id");
 
@@ -116,6 +126,10 @@ const SingleEventPage = () => {
         return <Error title={"Ой!"} text={"Похоже такого события нет"}>
             <Button as={"link"} to={"/events"}>{"Вернуться к событиям"}</Button>
         </Error>
+    }
+
+    if (event.type !== type) {
+        return <Navigate to={`/${type}/events`}/>
     }
 
     const {
@@ -168,18 +182,18 @@ const SingleEventPage = () => {
                     <div className={classes.infoBlock}>
                         <div className={classes.infoGroup}>
                             <Typography type={"text2"} className={classes.infoItem}>
-                                {CalendarIcon}
+                                <CalendarIcon color={"var(--main-color)"} size={20}/>
                                 {formattedDate}
                             </Typography>
                             <Typography type={"text2"} className={classes.infoItem}>
-                                {ClockIcon}
+                                <ClockIcon color={"var(--main-color)"} size={20}/>
                                 {formattedTime}
                                 {durationTime}
                             </Typography>
                         </div>
                         <div className={classes.infoGroup}>
                             <Typography type={"text2"} className={classes.infoItem}>
-                                {PriceIcon}
+                                <CircleDollarSignIcon color={"var(--main-color)"} size={20}/>
                                 {price}
                             </Typography>
                             {

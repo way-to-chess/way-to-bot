@@ -10,6 +10,7 @@ import {TAdminEventCreatePayload, TAdminEventUpdatePayload} from "@way-to-bot/sh
 import {SubmitResults} from "./SubmitResults";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 import {AddLeagueToEvent} from "./AddLeagueToEvent";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
 const convertFileToFileList = (file: IFileEntity) => {
     return [
@@ -61,7 +62,7 @@ const EventsDomain: IDomain<
                 : Number(participantsLimit),
             ...rest,
         }),
-        initialValues: {status: EEventStatus.WAITING, notify: true}
+        initialValues: {status: EEventStatus.WAITING, type: EEventType.CHESS, city: "Минск", notify: true}
     },
     searchFields: ["name"],
     edit: {
@@ -80,6 +81,8 @@ const EventsDomain: IDomain<
                 host,
                 linkToStream,
                 preview,
+                type,
+                city
             }) => ({
             file: preview ? convertFileToFileList(preview) : [],
             participantsLimit,
@@ -94,7 +97,8 @@ const EventsDomain: IDomain<
             description,
             hostId: host?.id,
             linkToStream,
-
+            type,
+            city
         }),
         normalize: ({dateTime, file, participantsLimit, ...rest}: Omit<IFormValues, "notify">) => ({
             fileId: getFileId(file[0]),

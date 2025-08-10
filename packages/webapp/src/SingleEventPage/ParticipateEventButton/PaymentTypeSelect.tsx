@@ -8,20 +8,20 @@ const PAYMENT_TYPES: IOption<EParticipateRequestPaymentType>[] = [
         value: EParticipateRequestPaymentType.CASH,
         title: "Наличными на месте",
         description: "Оплата при встрече на месте",
-        icon: <BanknoteIcon color={"#007AFF"}/>,
+        icon: <BanknoteIcon color={"var(--main-color)"}/>,
     },
     {
         value: EParticipateRequestPaymentType.RECEIPT,
         title: "Банковский перевод",
         description: "Пришлите фото чека после перевода",
-        icon: <PaperclipIcon color={"#007AFF"}/>,
+        icon: <PaperclipIcon color={"var(--main-color)"}/>,
         disabled: true,
     },
     {
         value: EParticipateRequestPaymentType.ONLINE,
         title: "Карта",
         description: "Оплата онлайн через приложение",
-        icon: <CreditCardIcon color={"#007AFF"}/>,
+        icon: <CreditCardIcon color={"var(--main-color)"}/>,
         disabled: true,
     },
 ]

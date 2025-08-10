@@ -29,6 +29,7 @@ import {userApi} from "../../Store/User/UserApi";
 import {ClientDTOUserGetOne} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
 interface IWithEventId {
     eventId: string;
@@ -55,10 +56,12 @@ const CreateForm: FC<ICreateFormProps> = (
 
     const hasEventLeagues = event?.eventLeagues && event.eventLeagues.filter((it) => it.name !== "DEFAULT").length > 0
 
+    const validationExtension = event?.type === EEventType.CHESS ? VALIDATION_EXTENSION : {}
+
     const form = useForm({
         resolver: zodResolver(ClientSchemaParticipateRequestCreate.extend({
             additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend({
-                ...VALIDATION_EXTENSION,
+                ...validationExtension,
                 elIds: z.array(z.number()).min(hasEventLeagues ? 1 : 0),
             })),
         })),
@@ -78,6 +81,8 @@ const CreateForm: FC<ICreateFormProps> = (
 
         }
     })
+
+    console.log(form.formState.errors, 123)
 
     const dispatch = useDispatch()
 
@@ -110,7 +115,7 @@ const CreateForm: FC<ICreateFormProps> = (
             }
 
             <div className={clsx(classes.block, classes.paymentMethod)}>
-                <AdditionalFields/>
+                <AdditionalFields type={event?.type}/>
             </div>
 
             <div className={classes.block}>

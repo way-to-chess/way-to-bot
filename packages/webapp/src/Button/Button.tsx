@@ -9,7 +9,7 @@ import {
 } from "react";
 import classes from "./Button.module.css";
 import clsx from "clsx";
-import {Link} from "react-router";
+import {AppLink} from "../AppLink";
 
 interface IButtonBaseProps {
     variant?: "primary" | "secondary";
@@ -65,14 +65,14 @@ const Button: FC<IButtonProps> = (
 
     if (as === "link" && to) {
         return (
-            <Link
+            <AppLink
                 to={to}
                 className={buttonClassName}
                 style={style}
                 {...(buttonProps as AnchorHTMLAttributes<HTMLAnchorElement>)}
             >
                 {children || value}
-            </Link>
+            </AppLink>
         );
     }
 

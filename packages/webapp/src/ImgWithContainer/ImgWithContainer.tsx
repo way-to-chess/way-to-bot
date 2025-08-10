@@ -1,8 +1,8 @@
 import classes from "./ImgWithContainer.module.css";
-import {CameraIcon} from "../Icons/CameraIcon";
 import {FC, PropsWithChildren, useEffect, useState} from "react";
 import clsx from "clsx";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
+import {CameraIcon} from "lucide-react";
 
 interface IImgWithContainerProps extends PropsWithChildren {
     previewUrl?: string | null;

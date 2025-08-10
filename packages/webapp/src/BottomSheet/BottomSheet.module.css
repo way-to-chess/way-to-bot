@@ -52,11 +52,10 @@
     align-items: center;
     flex: 0 0 60px;
     background: inherit;
-    transition: opacity 150ms;
 }
 
 [data-nested-dialog-open] .top {
-    opacity: 0;
+    display: none;
 }
 
 .close {

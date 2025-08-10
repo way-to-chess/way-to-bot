@@ -1,0 +1,16 @@
+.header {
+    flex: 0 0 var(--header-height);
+    padding: 0 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.title {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    cursor: pointer;
+    width: fit-content;
+}
+

@@ -69,7 +69,7 @@ const Receipt: FC<Pick<ClientDTOParticipateRequestGetMany, "receipt">> = ({recei
         rel={"noreferrer noopener"}
         className={clsx(classes.paymentMethodSelect, classes.selected)}
     >
-        <PaperclipIcon color={"#007AFF"}/>
+        <PaperclipIcon color={"var(--main-color)"}/>
 
         <Typography
             type={"title5"}
@@ -89,7 +89,7 @@ const Cash = () => {
     return <div
         className={clsx(classes.paymentMethodSelect, classes.selected)}
     >
-        <BanknoteIcon color={"#007AFF"}/>
+        <BanknoteIcon color={"var(--main-color)"}/>
         <Typography
             type={"title5"}
             color={"mainColor"}
