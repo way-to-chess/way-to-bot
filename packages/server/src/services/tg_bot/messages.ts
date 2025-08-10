@@ -5,7 +5,7 @@ import moment from "moment";
 import "moment/locale/ru.js";
 import TelegramBot from "node-telegram-bot-api";
 import {EParticipateRequestStatus} from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
-import {EEventType} from "@way-to-bot/shared/api/enums/EEventType.ts";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
 type TBotMessage = {
     message: string;
@@ -33,7 +33,7 @@ const optionsBase = (): TelegramBot.SendMessageOptions => {
                     {
                         text: "Cобытия",
                         web_app: {
-                            url: `${WEB_URL}/events`,
+                            url: `${WEB_URL}/`,
                         },
                     },
                 ],
