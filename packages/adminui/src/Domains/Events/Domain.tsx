@@ -62,7 +62,7 @@ const EventsDomain: IDomain<
                 : Number(participantsLimit),
             ...rest,
         }),
-        initialValues: {status: EEventStatus.WAITING, type: EEventType.CHESS, city: "Минск", notify: true}
+        initialValues: {status: EEventStatus.WAITING, type: EEventType.CHESS, city: "Минск", notify: true, file: []}
     },
     searchFields: ["name"],
     edit: {
@@ -100,14 +100,16 @@ const EventsDomain: IDomain<
             type,
             city
         }),
-        normalize: ({dateTime, file, participantsLimit, ...rest}: Omit<IFormValues, "notify">) => ({
-            fileId: getFileId(file[0]),
-            duration: dateTime[1] ? dateTime[1].diff(dateTime[0]) : null,
-            participantsLimit: isNaN(Number(participantsLimit))
-                ? 0
-                : Number(participantsLimit),
-            ...rest,
-        })
+        normalize: ({dateTime, file, participantsLimit, ...rest}: Omit<IFormValues, "notify">) => {
+            return ({
+                fileId: getFileId(file[0]),
+                duration: dateTime[1] ? dateTime[1].diff(dateTime[0]) : null,
+                participantsLimit: isNaN(Number(participantsLimit))
+                    ? 0
+                    : Number(participantsLimit),
+                ...rest,
+            })
+        }
     }
 }
 
