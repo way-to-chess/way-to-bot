@@ -91,8 +91,9 @@ const BaseForm: FC<{ isEdit?: boolean }> = ({isEdit}) => {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name={"participantsLimit"} label={"Количество участников"}>
-                        <Input style={{width: "100%"}} type={"number"} placeholder={"0"}/>
+                    <Form.Item name={"participantsLimit"} label={"Количество участников"}
+                               rules={REQUIRED_RULE}>
+                        <Input style={{width: "100%"}} type={"number"} placeholder={"0"} min={1}/>
                     </Form.Item>
                 </Col>
             </Row>
