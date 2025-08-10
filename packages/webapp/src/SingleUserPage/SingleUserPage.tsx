@@ -141,7 +141,11 @@ const AllEvents: FC<{ events: ClientDTOUserGetOne["events"] }> = ({events}) => {
 const History: FC<{ id: string }> = ({id}) => {
     const {data: user} = userApi.useGetUserByIdQuery(id)
 
-    const sorted = sortByKey(user?.events || [], "dateTime")
+    const eventType = useEventType()
+
+    const filtered = user?.events.filter(({type}) => type === eventType) ?? []
+
+    const sorted = sortByKey(filtered, "dateTime")
 
     const sliced = sorted.slice(0, 5)
 
