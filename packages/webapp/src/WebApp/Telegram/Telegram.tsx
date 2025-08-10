@@ -26,7 +26,7 @@ const useBackButton = () => {
     useEffect(() => {
         const stack = historyStack.current
 
-        if (stack[stack.length - 1]?.pathname !== location.pathname) {
+        if (stack[stack.length - 1]?.pathname !== location.pathname && location.pathname !== "/") {
             stack.push(location)
         }
 

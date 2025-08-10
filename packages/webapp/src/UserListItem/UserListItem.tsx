@@ -4,7 +4,6 @@ import classes from "./UserListItem.module.css";
 import {ImgWithContainer} from "../ImgWithContainer/ImgWithContainer";
 import {Typography} from "../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import {generatePath} from "react-router";
 import {ClientDTOUserGetMany} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {AppLink} from "../AppLink";
 
@@ -26,10 +25,9 @@ const UserListItem: FC<IUserListItemProps> = (
         postfix,
         rating,
     }) => {
-    const pathToUser = generatePath("/users/:id", {id: id.toString()});
-
+    
     return (
-        <AppLink to={pathToUser} className={clsx(classes.user, className)}>
+        <AppLink to={`/:type/users/${id}/`} className={clsx(classes.user, className)}>
             {prefix}
 
             <ImgWithContainer className={classes.userImg} previewUrl={photo?.previewUrl}/>
