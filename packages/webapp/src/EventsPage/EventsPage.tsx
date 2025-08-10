@@ -14,7 +14,7 @@ import {ClientDTOEventGetMany} from "@way-to-bot/shared/api/DTO/client/event.DTO
 import {Error, RefetchError} from "../Error/Error";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
 import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
-import {CalendarIcon, CircleDollarSignIcon, ClockIcon, MapPinIcon} from "lucide-react";
+import {Building2Icon, CalendarIcon, CircleDollarSignIcon, ClockIcon, MapPinIcon} from "lucide-react";
 import {useEventType} from "../Hooks/UseEventType";
 import {EPredicate} from "@way-to-bot/shared/api/enums/EPredicate";
 import {EOperandPredicate} from "@way-to-bot/shared/api/enums/EOperandPredicate";
@@ -53,7 +53,8 @@ const Event: FC<IEventProps> = (
         participantsCount,
         type,
         duration,
-        dateTime
+        dateTime,
+        city
     }) => {
     const eventPath = generatePath("/:type/events/:id", {id: id.toString(), type});
 
@@ -108,13 +109,23 @@ const Event: FC<IEventProps> = (
                         {durationTime}
                     </Typography>
                 </div>
+                <div className={classes.infoGroup}>
+                    {
+                        city ?
+                            <Typography type={"text2"} className={classes.infoItem}>
+                                <Building2Icon color={"var(--main-color)"} size={20}/>
+                                {city}
+                            </Typography> :
+                            null
+                    }
+                    <Typography type={"text2"} className={classes.infoItem}>
+                        <MapPinIcon color={"var(--main-color)"} size={20}/>
+                        {location?.title}
+                    </Typography>
+                </div>
                 <Typography type={"text2"} className={classes.infoItem}>
                     <CircleDollarSignIcon color={"var(--main-color)"} size={20}/>
                     {price}
-                </Typography>
-                <Typography type={"text2"} className={classes.infoItem}>
-                    <MapPinIcon color={"var(--main-color)"} size={20}/>
-                    {location?.title}
                 </Typography>
             </div>
 
