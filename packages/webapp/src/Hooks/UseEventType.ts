@@ -31,4 +31,4 @@ const useEventType = () => {
 
 }
 
-export {useEventType, EVENT_TYPES, EVENT_TYPE_NAME_MAP, EVENT_TYPE_COLOR_MAP}
+export {useEventType, isEventType, EVENT_TYPES, EVENT_TYPE_NAME_MAP, EVENT_TYPE_COLOR_MAP}

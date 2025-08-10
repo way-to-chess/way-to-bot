@@ -1,10 +1,10 @@
 import classes from "./RootPage.module.css";
 import {Typography} from "../Typography/Typography";
 import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
-import {Link} from "react-router";
-import {FC} from "react";
+import {Link, useNavigate} from "react-router";
+import {FC, useEffect} from "react";
 import {ChevronRightIcon} from "lucide-react";
-import {EVENT_TYPE_NAME_MAP, EVENT_TYPES} from "../Hooks/UseEventType";
+import {EVENT_TYPE_NAME_MAP, EVENT_TYPES, isEventType} from "../Hooks/UseEventType";
 
 
 interface IEventTypeProps {
@@ -16,7 +16,11 @@ const EventType: FC<IEventTypeProps> = ({type}) => {
 
     const title = EVENT_TYPE_NAME_MAP[type]
 
-    return <Link to={to} className={classes.type}>
+    const store = () => {
+        localStorage.setItem("lastSelectedType", type)
+    }
+
+    return <Link to={to} className={classes.type} onClick={store}>
 
         <Typography type={"title4"} value={title} className={classes.typeTitle}/>
 
@@ -26,6 +30,18 @@ const EventType: FC<IEventTypeProps> = ({type}) => {
 
 
 const RootPage = () => {
+    const navigate = useNavigate()
+
+    useEffect(() => {
+        const lastSelectedType = localStorage.getItem("lastSelectedType")
+
+        if (lastSelectedType && isEventType(lastSelectedType)) {
+            navigate(`/${lastSelectedType}/events`, {replace: true})
+        }
+
+    }, [navigate]);
+
+
     return <div className={classes.page}>
         <Typography type={"title2"} value={"Выберите события"}/>
 

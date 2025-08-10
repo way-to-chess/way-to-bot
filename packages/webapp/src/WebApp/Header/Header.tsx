@@ -29,6 +29,7 @@ const TypeSwitch: FC<{ eventType: EEventType }> = ({eventType}) => {
             : `/${newType}`;
 
         navigate(newPath);
+        localStorage.setItem("lastSelectedType", newType)
         setFalse()
     };
 
