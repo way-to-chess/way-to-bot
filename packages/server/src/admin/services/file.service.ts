@@ -281,7 +281,9 @@ export class AdminFileService {
       const user = usersByFullName.get(`${nameSplitted[0]} ${nameSplitted[1]}`);
 
       if (!user) {
-        continue;
+        throw new BadRequestError(
+          `User with name ${result.Name} not found in db`,
+        );
       }
 
       const eventLeagueUser = participantByUserId.get(user.id);
@@ -403,7 +405,9 @@ export class AdminFileService {
       const user = usersByFullName.get(`${nameSplitted[0]} ${nameSplitted[1]}`);
 
       if (!user) {
-        continue;
+        throw new BadRequestError(
+          `User with name ${result.Имя} not found in db`,
+        );
       }
 
       const eventLeagueUser = participantByUserId.get(user.id);

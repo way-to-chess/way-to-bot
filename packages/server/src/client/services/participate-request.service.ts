@@ -83,12 +83,12 @@ export class ClientParticipateRequestService {
         }
       } else {
         await this._userRepository.update(user.id, {
-          ...(u.firstName && { firstName: u.firstName }),
-          ...(u.lastName && { lastName: u.lastName }),
-          ...(u.birthDate && { birthDate: u.birthDate }),
-          ...(u.username && { username: u.username }),
-          ...(u.email && { email: u.email }),
-          ...(u.phoneNumber && { phoneNumber: u.phoneNumber }),
+          ...(!user.firstName?.trim() && u.firstName && { firstName: u.firstName }),
+          ...(!user.lastName?.trim() && u.lastName && { lastName: u.lastName }),
+          ...(!user.birthDate && u.birthDate && { birthDate: u.birthDate }),
+          ...(!user.username && u.username && { username: u.username }),
+          ...(!user.email && u.email && { email: u.email }),
+          ...(!user.phoneNumber && u.phoneNumber && { phoneNumber: u.phoneNumber }),
         });
       }
 
