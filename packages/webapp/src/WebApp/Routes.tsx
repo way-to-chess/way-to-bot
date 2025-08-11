@@ -7,6 +7,7 @@ import {LeaderboardPage} from "../LeaderboardPage/LeaderboardPage";
 import {SingleUserPage} from "../SingleUserPage/SingleUserPage";
 import {Error} from "../Error/Error"
 import {TutorialPage} from "../Tutorial/TutorialPage";
+import {RootPage} from "../RootPage/RootPage";
 
 const WEB_APP_ROUTER = createBrowserRouter([
     {
@@ -15,11 +16,10 @@ const WEB_APP_ROUTER = createBrowserRouter([
         children: [
             {
                 path: WEBAPP_ROUTES.emptyRoute,
-                element: null,
-                loader: () => redirect("/events"),
+                Component: RootPage,
             },
             {
-                path: "/events",
+                path: "/:type/events",
                 children: [
                     {
                         index: true,
@@ -32,11 +32,11 @@ const WEB_APP_ROUTER = createBrowserRouter([
                 ],
             },
             {
-                path: "/leaderboard",
+                path: "/:type/leaderboard",
                 Component: LeaderboardPage,
             },
             {
-                path: "/users",
+                path: "/:type/users",
                 children: [
                     {
                         path: ":id",
@@ -45,7 +45,7 @@ const WEB_APP_ROUTER = createBrowserRouter([
                 ],
             },
             {
-                path: "/tutorial",
+                path: "/:type/tutorial",
                 Component: TutorialPage,
             },
             {

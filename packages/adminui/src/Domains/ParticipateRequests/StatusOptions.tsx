@@ -15,6 +15,7 @@ const STATUS_OPTIONS: NonNullable<SelectProps["options"]> = [
         label: (
             <Badge offset={[4, 0]} status={"processing"} text={"На рассмотрении"}/>
         ),
+        disabled: true
     },
 ];
 

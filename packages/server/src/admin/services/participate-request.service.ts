@@ -7,8 +7,6 @@ import { EventLeagueUserRepository } from "@way-to-bot/server/database/repositor
 import { EventLeagueRepository } from "@way-to-bot/server/database/repositories/event-league.repository";
 import { TAdminParticipateRequestUpdatePayload } from "@way-to-bot/shared/api/zod/admin/participate-request.schema";
 import { logger } from "@way-to-bot/server/services/logger.service";
-import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository";
-import { In } from "typeorm";
 import { DEFAULT_LEAGUE_NAME } from "@way-to-bot/server/utils/constants";
 import { TCommonGetManyOptions } from "@way-to-bot/shared/api/zod/common/get-many-options.schema";
 import { botMessageParticipateRequestStatusChanged } from "@way-to-bot/server/services/tg_bot/messages";
@@ -28,8 +26,6 @@ export class AdminParticipateRequestService {
     private readonly _eventLeagueUserRepository: EventLeagueUserRepository,
     @inject(EventLeagueRepository)
     private readonly _eventLeagueRepository: EventLeagueRepository,
-    @inject(UserRepository)
-    private readonly _userRepository: UserRepository,
     @inject(TgBotService)
     private readonly _tgBotService: TgBotService,
   ) {}
@@ -66,7 +62,7 @@ export class AdminParticipateRequestService {
 
       const elRepo = this._eventLeagueRepository.getRepository(queryRunner);
       const allEventLeaguesForEvent = await elRepo.find({
-        relations: { league: true, participants: true },
+        relations: { league: true },
         where: { eventId: updatedParticipateRequest.eventId },
       });
 
@@ -84,20 +80,25 @@ export class AdminParticipateRequestService {
       const eluList: EventLeagueUserEntity[] = [];
 
       for (const u of additionalUsers) {
-        const userJoiningLeagues = u.elIds?.length ? u.elIds : [defaultEventLeague.id];
+        const userJoiningLeagues = u.elIds?.length
+          ? u.elIds
+          : [defaultEventLeague.id];
 
-        userJoiningLeagues.forEach(elId => {
-          const existingElu = allEventLeaguesForEvent.find(el => el.id === elId && el.participants.includes(u.id));
-          if (!existingElu) {
-            const elu = new EventLeagueUserEntity();
-            elu.eventLeagueId = elId;
-            elu.userId = u.id;
-            eluList.push(elu);
-          }
-        })
+        userJoiningLeagues.forEach((elId) => {
+          const elu = new EventLeagueUserEntity();
+          elu.eventLeagueId = elId;
+          elu.userId = u.id;
+          eluList.push(elu);
+        });
       }
 
-      await this._eventLeagueUserRepository.addRows(eluList, queryRunner);
+      eluList.sort(
+        (a, b) => a.eventLeagueId - b.eventLeagueId || a.userId - b.userId,
+      );
+      await this._eventLeagueUserRepository.addRowsIgnoreConflicts(
+        eluList,
+        queryRunner,
+      );
 
       await queryRunner.commitTransaction();
 

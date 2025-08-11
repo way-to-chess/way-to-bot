@@ -8,6 +8,7 @@ import {EEventStatus} from "@way-to-bot/shared/api/enums/EEventStatus";
 import {UploadFileInput} from "../../Components/UploadFileInput";
 import {EFileAssigment} from "@way-to-bot/shared/api/enums/EFileAssigment";
 import {FC} from "react";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
 interface IFormValues
     extends Omit<TAdminEventCreatePayload, "dateTime" | "fileId" | "duration"> {
@@ -35,6 +36,21 @@ const STATUS_MAP: Record<string, BadgeProps["status"]> = {
     [EEventStatus.WAITING]: "warning",
     [EEventStatus.STARTED]: "processing",
 };
+
+const TYPE_OPTIONS: SelectProps["options"] = [
+    {
+        value: EEventType.CHESS,
+        label: "Шахматы",
+    },
+    {
+        value: EEventType.FESTIVAL,
+        label: "Фестивали",
+    },
+    {
+        value: EEventType.OTHER,
+        label: "Другое",
+    },
+]
 
 
 const optionRender: SelectProps["optionRender"] = ({label, value}) => (
@@ -75,8 +91,9 @@ const BaseForm: FC<{ isEdit?: boolean }> = ({isEdit}) => {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name={"participantsLimit"} label={"Количество участников"}>
-                        <Input style={{width: "100%"}} type={"number"} placeholder={"0"}/>
+                    <Form.Item name={"participantsLimit"} label={"Количество участников"}
+                               rules={REQUIRED_RULE}>
+                        <Input style={{width: "100%"}} type={"number"} placeholder={"ВВедите количество"} min={1}/>
                     </Form.Item>
                 </Col>
             </Row>
@@ -87,8 +104,8 @@ const BaseForm: FC<{ isEdit?: boolean }> = ({isEdit}) => {
                     </Form.Item>
                 </Col>
                 <Col span={12}>
-                    <Form.Item name={"linkToStream"} label={"Ссылка на трансляцию"}>
-                        <Input style={{width: "100%"}} placeholder={"https://youtube.com"}/>
+                    <Form.Item name={"type"} label={"Тип события"} rules={REQUIRED_RULE}>
+                        <Select options={TYPE_OPTIONS} placeholder={"Выберите тип"}/>
                     </Form.Item>
                 </Col>
             </Row>
@@ -103,6 +120,19 @@ const BaseForm: FC<{ isEdit?: boolean }> = ({isEdit}) => {
                 <Col span={12}>
                     <Form.Item name={"hostId"} label={"Организатор"} rules={REQUIRED_RULE}>
                         <UserSelect placeholder={"Выберите пользователя"}/>
+                    </Form.Item>
+                </Col>
+            </Row>
+
+            <Row gutter={16}>
+                <Col span={12}>
+                    <Form.Item name={"linkToStream"} label={"Ссылка на трансляцию"}>
+                        <Input style={{width: "100%"}} placeholder={"https://youtube.com"}/>
+                    </Form.Item>
+                </Col>
+                <Col span={12}>
+                    <Form.Item name={"city"} label={"Город проведения"}>
+                        <Input style={{width: "100%"}} placeholder={"Укажите город"}/>
                     </Form.Item>
                 </Col>
             </Row>

@@ -29,6 +29,7 @@ import {userApi} from "../../Store/User/UserApi";
 import {ClientDTOUserGetOne} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {zodResolver} from "@hookform/resolvers/zod";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
 interface IWithEventId {
     eventId: string;
@@ -55,10 +56,12 @@ const CreateForm: FC<ICreateFormProps> = (
 
     const hasEventLeagues = event?.eventLeagues && event.eventLeagues.filter((it) => it.name !== "DEFAULT").length > 0
 
+    const validationExtension = event?.type === EEventType.CHESS ? VALIDATION_EXTENSION : {}
+
     const form = useForm({
         resolver: zodResolver(ClientSchemaParticipateRequestCreate.extend({
             additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend({
-                ...VALIDATION_EXTENSION,
+                ...validationExtension,
                 elIds: z.array(z.number()).min(hasEventLeagues ? 1 : 0),
             })),
         })),
@@ -71,6 +74,7 @@ const CreateForm: FC<ICreateFormProps> = (
                     firstName: user?.firstName ?? undefined,
                     lastName: user?.lastName ?? undefined,
                     birthDate: user?.birthDate ?? "1999-07-13",
+                    phoneNumber: user?.phoneNumber ?? undefined,
                     tgId,
                     elIds: []
                 }
@@ -110,7 +114,7 @@ const CreateForm: FC<ICreateFormProps> = (
             }
 
             <div className={clsx(classes.block, classes.paymentMethod)}>
-                <AdditionalFields/>
+                <AdditionalFields type={event?.type}/>
             </div>
 
             <div className={classes.block}>
@@ -139,7 +143,12 @@ const CreateForm: FC<ICreateFormProps> = (
     </FormProvider>
 }
 
-const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
+interface ICreateRequestFormProps extends IWithEventId {
+    title: string
+    className?: string
+}
+
+const CreateRequestForm: FC<ICreateRequestFormProps> = ({eventId, title, className}) => {
     const [open, {toggle, setFalse}] = useBoolean(false)
 
     const authId = useSelector(authSlice.selectors.id)
@@ -154,11 +163,12 @@ const CreateRequestForm: FC<IWithEventId> = ({eventId}) => {
 
     const {isFetching: eventIsFetching} = eventApi.useGetEventByIdQuery(eventId);
 
+
     return <BottomSheet
-        title={"Отправить заявку"}
+        title={title}
         onOpenChange={toggle}
         open={open}
-        trigger={<Button className={classes.button} value={"Участвовать"}/>}
+        trigger={<Button className={clsx(classes.button, className)} value={title}/>}
         className={classes.popup}
     >
         {eventIsFetching || userIsFetching ? <Skeleton style={{width: "100%", height: "100dvh", borderRadius: 16}}/> :

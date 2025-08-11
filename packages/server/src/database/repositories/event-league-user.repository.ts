@@ -51,6 +51,25 @@ export class EventLeagueUserRepository {
     return repo.save(eluList);
   }
 
+  addRowsIgnoreConflicts(
+    eluList: EventLeagueUserEntity[],
+    queryRunner?: QueryRunner,
+  ) {
+    const repo = this.getRepository(queryRunner);
+    return repo
+      .createQueryBuilder()
+      .insert()
+      .into(EventLeagueUserEntity)
+      .values(
+        eluList.map((elu) => ({
+          userId: elu.userId,
+          eventLeagueId: elu.eventLeagueId,
+        })),
+      )
+      .orIgnore()
+      .execute();
+  }
+
   async deleteRows(
     whereOptions: FindOptionsWhere<EventLeagueUserEntity>,
     queryRunner?: QueryRunner,

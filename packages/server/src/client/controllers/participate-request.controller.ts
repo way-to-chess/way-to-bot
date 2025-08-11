@@ -49,7 +49,7 @@ export class ClientParticipateRequestController {
   async create(req: Request, res: Response) {
     const result = await this._participateRequestService.create({
       ...req.body,
-    });
+    }, req.user!.tgId);
     const data = new ClientDTOParticipateRequestCreateResponse(
       new ClientDTOParticipateRequestGetOne(result),
     );

@@ -127,7 +127,7 @@ export class AdminFileService {
         where: { eventLeagueId },
       });
 
-    if (!existingEventLeagueResult?.ratingFileId) {
+    if (existingEventLeagueResult?.ratingFileId) {
       throw new BadRequestError(
         "Event league result has been already imported",
       );
@@ -259,9 +259,17 @@ export class AdminFileService {
         lastName: In(Array.from(participantsData.lastNames)),
       },
     });
+    const usersByFullName = new Map<string, UserEntity>();
+    for (const u of users) {
+      usersByFullName.set(`${u.lastName} ${u.firstName}`, u);
+    }
 
-    const usersToUpdate: UserEntity[] = [];
-    const updatedEluList: EventLeagueUserEntity[] = [];
+    const usersToUpdate = new Map<number, UserEntity>();
+    const updatedEluMap = new Map<number, EventLeagueUserEntity>();
+    const participantByUserId = new Map<number, EventLeagueUserEntity>();
+    for (const p of eventLeague.participants) {
+      participantByUserId.set(p.userId, p);
+    }
 
     for (const result of results) {
       const nameSplitted = result.Name.split(" ");
@@ -270,10 +278,7 @@ export class AdminFileService {
         throw new BadRequestError(`Invalid participant name ${result.Name}`);
       }
 
-      const user = users.find(
-        (u) =>
-          u.firstName === nameSplitted[1] && u.lastName === nameSplitted[0],
-      );
+      const user = usersByFullName.get(`${nameSplitted[0]} ${nameSplitted[1]}`);
 
       if (!user) {
         throw new BadRequestError(
@@ -281,9 +286,7 @@ export class AdminFileService {
         );
       }
 
-      const eventLeagueUser = eventLeague.participants.find(
-        (elu) => elu.userId === user.id,
-      );
+      const eventLeagueUser = participantByUserId.get(user.id);
 
       if (!eventLeagueUser) {
         throw new BadRequestError(
@@ -299,7 +302,7 @@ export class AdminFileService {
             eventLeagueUser.points = newRating - user.rating;
           }
           user.rating = newRating;
-          usersToUpdate.push(user);
+          usersToUpdate.set(user.id, user);
         }
       }
 
@@ -311,19 +314,18 @@ export class AdminFileService {
       }
 
       this.processSSPlayerRounds(result, user);
-      usersToUpdate.push(user);
-
-      updatedEluList.push(eventLeagueUser);
+      usersToUpdate.set(user.id, user);
+      updatedEluMap.set(user.id, eventLeagueUser);
     }
 
-    if (usersToUpdate.length > 0) {
+    if (usersToUpdate.size > 0) {
       const userRepo = queryRunner.manager.getRepository(UserEntity);
-      await userRepo.save(usersToUpdate);
+      await userRepo.save(Array.from(usersToUpdate.values()));
     }
 
-    if (updatedEluList.length > 0) {
+    if (updatedEluMap.size > 0) {
       await this._eventLeagueUserRepository.addRows(
-        updatedEluList,
+        Array.from(updatedEluMap.values()),
         queryRunner,
       );
     }
@@ -381,9 +383,17 @@ export class AdminFileService {
         lastName: In(Array.from(participantsData.lastNames)),
       },
     });
+    const usersByFullName = new Map<string, UserEntity>();
+    for (const u of users) {
+      usersByFullName.set(`${u.lastName} ${u.firstName}`, u);
+    }
 
-    const usersToUpdate: UserEntity[] = [];
-    const updatedEluList: EventLeagueUserEntity[] = [];
+    const usersToUpdate = new Map<number, UserEntity>();
+    const updatedEluMap = new Map<number, EventLeagueUserEntity>();
+    const participantByUserId = new Map<number, EventLeagueUserEntity>();
+    for (const p of eventLeague.participants) {
+      participantByUserId.set(p.userId, p);
+    }
 
     for (const result of results) {
       const nameSplitted = result.Имя.split(" ");
@@ -392,10 +402,7 @@ export class AdminFileService {
         throw new BadRequestError(`Invalid participant name ${result.Имя}`);
       }
 
-      const user = users.find(
-        (u) =>
-          u.firstName === nameSplitted[1] && u.lastName === nameSplitted[0],
-      );
+      const user = usersByFullName.get(`${nameSplitted[0]} ${nameSplitted[1]}`);
 
       if (!user) {
         throw new BadRequestError(
@@ -403,9 +410,7 @@ export class AdminFileService {
         );
       }
 
-      const eventLeagueUser = eventLeague.participants.find(
-        (elu) => elu.userId === user.id,
-      );
+      const eventLeagueUser = participantByUserId.get(user.id);
 
       if (!eventLeagueUser) {
         throw new BadRequestError(
@@ -413,15 +418,15 @@ export class AdminFileService {
         );
       }
 
-      if (result.Рейт) {
-        const newRating = Number(result.Рейт.trim());
+      if (result["Рейт."]) {
+        const newRating = Number(result["Рейт."].trim());
 
         if (!isNaN(newRating)) {
           if (user.rating) {
             eventLeagueUser.points = newRating - user.rating;
           }
           user.rating = newRating;
-          usersToUpdate.push(user);
+          usersToUpdate.set(user.id, user);
         }
       }
 
@@ -435,19 +440,18 @@ export class AdminFileService {
       }
 
       this.processCRPlayerRounds(result, user);
-      usersToUpdate.push(user);
-
-      updatedEluList.push(eventLeagueUser);
+      usersToUpdate.set(user.id, user);
+      updatedEluMap.set(user.id, eventLeagueUser);
     }
 
-    if (usersToUpdate.length > 0) {
+    if (usersToUpdate.size > 0) {
       const userRepo = queryRunner.manager.getRepository(UserEntity);
-      await userRepo.save(usersToUpdate);
+      await userRepo.save(Array.from(usersToUpdate.values()));
     }
 
-    if (updatedEluList.length > 0) {
+    if (updatedEluMap.size > 0) {
       await this._eventLeagueUserRepository.addRows(
-        updatedEluList,
+        Array.from(updatedEluMap.values()),
         queryRunner,
       );
     }

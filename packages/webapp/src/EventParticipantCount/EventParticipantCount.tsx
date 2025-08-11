@@ -1,7 +1,7 @@
 import clsx from "clsx";
 import classes from "./EventParticipantCount.module.css";
-import {ParticipantsIcon} from "../Icons/ParticipantsIcon";
 import {FC} from "react";
+import {UsersIcon} from "lucide-react";
 
 const getClassName = (
     participantsCount: number,
@@ -40,7 +40,7 @@ const EventParticipantCount: FC<IEventParticipantCount> = (
 
     return (
         <div className={clsx(classes.count, className)}>
-            {ParticipantsIcon}
+            <UsersIcon color={"currentColor"} size={16}/>
             {maxCount ? `${currentCount} / ${maxCount}` : currentCount}
         </div>
     );

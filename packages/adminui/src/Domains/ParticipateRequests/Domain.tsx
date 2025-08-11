@@ -7,6 +7,7 @@ import {COLUMNS} from "./Columns";
 import {EditParticipateRequest} from "./Edit";
 import {EXPANDABLE_CONFIG} from "./Expandable";
 import {ESortDirection} from "@way-to-bot/shared/api/enums/ESortDirection";
+import {EParticipateRequestStatus} from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
 
 const ParticipateRequestsDomain: IDomain<AdminDTOParticipateRequestGetMany, AdminDTOParticipateRequestGetOne, unknown, unknown> = {
     title: "Запросы",
@@ -28,8 +29,8 @@ const ParticipateRequestsDomain: IDomain<AdminDTOParticipateRequestGetMany, Admi
     edit: {
         title: "Изменить запрос",
         definition: <EditParticipateRequest/>,
-        getInitialValues: ({status, message}) => ({
-            status,
+        getInitialValues: ({message}) => ({
+            status: EParticipateRequestStatus.APPROVED,
             message,
             notify: true
         }),

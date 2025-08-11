@@ -5,10 +5,7 @@ import {getNotNil} from "@way-to-bot/shared/utils/getNotNil";
 import {userApi} from "../Store/User/UserApi";
 import {TTypographyProps, Typography} from "../Typography/Typography";
 import {getUserFullName} from "@way-to-bot/shared/utils/GetUserFullName";
-import {FC, PropsWithChildren, ReactNode, useState} from "react";
-import {ChartIcon} from "../Icons/ChartIcon";
-import {TrophyIcon} from "../Icons/TrophyIcon";
-import {GamePadIcon} from "../Icons/GamePadIcon";
+import {FC, PropsWithChildren, ReactNode} from "react";
 import {ClientDTOUserGetOne} from "@way-to-bot/shared/api/DTO/client/user.DTO";
 import dayjs from "dayjs";
 import {Skeleton} from "../Skeleton/Skeleton";
@@ -18,10 +15,14 @@ import {sortByKey} from "../Utils/SortByKey";
 import {getPreviewSrc} from "@way-to-bot/shared/utils/GetPreviewSrc";
 import {authSlice} from "@way-to-bot/shared/redux/authSlice";
 import {useSelector} from "react-redux";
-import {EditIcon} from "lucide-react";
+import {ChartLineIcon, EditIcon, Gamepad2Icon, TrophyIcon} from "lucide-react";
 import {BottomSheet} from "../BottomSheet/BottomSheet";
 import {ProfileForm} from "../ProfilePage/ProfileForm";
 import {IWithId} from "@way-to-bot/shared/interfaces/with.interface";
+import {useEventType} from "../Hooks/UseEventType";
+import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
+import {createPortal} from "react-dom";
+import {useBoolean} from "@way-to-bot/shared/utils/UseBoolean";
 
 interface IStatItem {
     icon: ReactNode;
@@ -52,8 +53,17 @@ const Block: FC<IBlockProps> = ({title, children}) => {
     </div>
 }
 
-const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = ({preview, name, dateTime, location, id, points}) => {
-    const to = generatePath("/events/:id", {id: id.toString()})
+const HistoryItem: FC<ClientDTOUserGetOne["events"][number]> = (
+    {
+        preview,
+        name,
+        dateTime,
+        location,
+        id,
+        points,
+        type
+    }) => {
+    const to = generatePath("/:type/events/:id", {id: id.toString(), type})
     const date = dayjs(dateTime);
     const formattedDate = date.format("D MMMM, dd").toLowerCase();
 
@@ -95,19 +105,21 @@ const Loading = () => {
 }
 
 const Edit: FC<IWithId> = ({id}) => {
-    const [open, setOpen] = useState(false)
-
-    const trigger = (
-        <button className={classes.edit}>
-            <EditIcon size={16} color={"#fff"}/>
-        </button>
-    )
+    const [open, {toggle, setTrue}] = useBoolean(false)
 
 
-    return <BottomSheet className={classes.popup} overflow open={open} onOpenChange={setOpen} trigger={trigger}
-                        title={"Редактировать профиль"}>
-        <ProfileForm id={id}/>
-    </BottomSheet>
+    return <>
+        {createPortal(
+            <button className={classes.edit} onClick={setTrue}>
+                <EditIcon size={16} color={"#fff"}/>
+            </button>,
+            getNotNil(document.getElementById("header"), "header must be presented")
+        )}
+        <BottomSheet className={classes.popup} overflow open={open} onOpenChange={toggle}
+                     title={"Редактировать профиль"}>
+            <ProfileForm id={id}/>
+        </BottomSheet>
+    </>
 
 }
 
@@ -129,7 +141,11 @@ const AllEvents: FC<{ events: ClientDTOUserGetOne["events"] }> = ({events}) => {
 const History: FC<{ id: string }> = ({id}) => {
     const {data: user} = userApi.useGetUserByIdQuery(id)
 
-    const sorted = sortByKey(user?.events || [], "dateTime")
+    const eventType = useEventType()
+
+    const filtered = user?.events.filter(({type}) => type === eventType) ?? []
+
+    const sorted = sortByKey(filtered, "dateTime")
 
     const sliced = sorted.slice(0, 5)
 
@@ -138,6 +154,36 @@ const History: FC<{ id: string }> = ({id}) => {
             sliced.map((event) => <HistoryItem {...event} key={event.id}/>) :
             <Typography type={"text2"} value={"Нет событий"}/>}
         {sorted.length > 5 ? <AllEvents events={sorted}/> : null}
+    </Block>
+}
+
+const Stats: FC<{ id: string }> = ({id}) => {
+    const eventType = useEventType()
+    const {data: user,} = userApi.useGetUserByIdQuery(id)
+
+    if (eventType !== EEventType.CHESS || !user) {
+        return null
+    }
+
+    return <div className={classes.stats}>
+        <StatItem icon={<ChartLineIcon size={20}/>} title={"Рейтинг"} value={user.rating}
+                  color={"mainColor"}/>
+        <StatItem icon={<TrophyIcon size={20}/>} title={"Побед"}
+                  value={`${user.winRate}%`} color={"greenColor"}/>
+        <StatItem icon={<Gamepad2Icon size={20}/>} title={"Игр"} value={user.total} color={"textColor1"}/>
+    </div>
+}
+
+const Achievements: FC<{ id: string }> = ({id}) => {
+    const eventType = useEventType()
+    const {data: user,} = userApi.useGetUserByIdQuery(id)
+
+    if (eventType !== EEventType.CHESS || !user) {
+        return null
+    }
+
+    return <Block title={"Награды"}>
+        <Typography type={"text2"} value={"Нет наград"}/>
     </Block>
 }
 
@@ -173,9 +219,6 @@ const SingleUserPage = () => {
         firstName,
         lastName,
         username,
-        rating,
-        winRate,
-        total,
     } = user
 
     return <div className={classes.page}>
@@ -195,15 +238,9 @@ const SingleUserPage = () => {
             </div>
         </div>
         <div className={classes.content}>
-            <div className={classes.stats}>
-                <StatItem icon={ChartIcon} title={"Рейтинг"} value={rating} color={"mainColor"}/>
-                <StatItem icon={TrophyIcon} title={"Побед"} value={`${winRate}%`} color={"greenColor"}/>
-                <StatItem icon={GamePadIcon} title={"Игр"} value={total} color={"textColor1"}/>
-            </div>
-            <Block title={"Награды"}>
-                <Typography type={"text2"} value={"Нет наград"}/>
-            </Block>
+            <Stats id={notNilId}/>
 
+            <Achievements id={notNilId}/>
 
             <History id={notNilId}/>
         </div>

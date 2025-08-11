@@ -1,7 +1,7 @@
 .viewport {
     height: 100%;
     width: 100%;
-    min-height: calc(100vh - var(--bottom-bar-height));
+    min-height: calc(100vh - var(--bottom-bar-height) - var(--header-height));
     display: flex;
     flex-direction: column;
 }
