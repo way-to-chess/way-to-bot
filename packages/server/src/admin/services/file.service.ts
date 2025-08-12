@@ -470,16 +470,23 @@ export class AdminFileService {
       const roundResult = playerResult[roundCol];
       const result = roundResult.trim();
 
-      const match = result.match(/^(\d+)([wb])([01½])$/);
+      if (result === "-1") {
+        player.losses++;
+        continue;
+      }
+
+      const match = result.match(/^(\d+)([wb])([01½+-])$/);
 
       if (match) {
         const [, , color, gameResult] = match;
 
         switch (gameResult) {
           case "1":
+          case "+":
             player.wins++;
             break;
           case "0":
+          case "-":
             player.losses++;
             break;
           case "½":
