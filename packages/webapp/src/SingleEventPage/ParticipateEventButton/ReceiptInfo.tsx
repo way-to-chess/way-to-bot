@@ -42,6 +42,32 @@ const BLACK_PAW_INFO = (
     </>
 )
 
+const INFO_2 = (
+    <>
+        <Typography type={"title4"} value={"Как оплатить"}/>
+        <Typography
+            type={"text2"}
+            value={
+                'ЕРИП — Банковские, финансовые услуги — Банки, НКФО — БСБ Банк — Пополнение счета — BY52UNBS30150032900080000933'
+            }
+        />
+        <Typography
+            type={"text2"}
+            value={
+                'После оплаты, сохраните чек и отправьте его с помощью кнопки "Загрузить документ".'
+            }
+        />
+        <Typography
+            type={"text2"}
+            color={"textColor2"}
+            value={
+                '"ООО Белорусская федерация шахмат" УНП 100376428'
+            }
+        />
+
+    </>
+)
+
 const ReceiptInfo = () => {
     const paymentType = useWatch({name: "paymentType"})
 
@@ -51,7 +77,7 @@ const ReceiptInfo = () => {
 
     return <div className={classes.block}>
         <div className={classes.total}>
-            {BLACK_PAW_INFO}
+            {INFO_2}
         </div>
     </div>
 }
