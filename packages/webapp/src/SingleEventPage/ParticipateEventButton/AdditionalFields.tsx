@@ -44,6 +44,9 @@ const AdditionalFields: FC<Partial<Pick<ClientDTOEventGetOne, "type">>> = ({type
             }}
                          label={"Спортивный разряд"}
                          controllerProps={{name: "additionalUsers[0].level"}} required/>
+            <TextField label={"FIDE ID (ecли есть)"}
+                       inputProps={{placeholder: "Введите ID", type: "text", enterKeyHint: "next"}}
+                       controllerProps={{name: "additionalUsers[0].fideId"}}/>
             <TextField label={"Номер телефона"}
                        inputProps={{placeholder: "Введите номер телефона", type: "tel", enterKeyHint: "next"}}
                        controllerProps={{name: "additionalUsers[0].phoneNumber"}}
