@@ -66,7 +66,7 @@ const CreateForm: FC<ICreateFormProps> = (
             })),
         })),
         defaultValues: {
-            paymentType: EParticipateRequestPaymentType.CASH,
+            paymentType: EParticipateRequestPaymentType.RECEIPT,
             eventId: Number(eventId),
             tgId,
             additionalUsers: [

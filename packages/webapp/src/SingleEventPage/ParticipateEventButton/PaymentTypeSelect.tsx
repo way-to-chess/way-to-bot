@@ -5,16 +5,16 @@ import {SelectField} from "../../Field/Field";
 
 const PAYMENT_TYPES: IOption<EParticipateRequestPaymentType>[] = [
     {
-        value: EParticipateRequestPaymentType.CASH,
-        title: "Наличными на месте",
-        description: "Оплата при встрече на месте",
-        icon: <BanknoteIcon color={"var(--main-color)"}/>,
-    },
-    {
         value: EParticipateRequestPaymentType.RECEIPT,
         title: "Банковский перевод",
         description: "Пришлите фото чека после перевода",
         icon: <PaperclipIcon color={"var(--main-color)"}/>,
+    },
+    {
+        value: EParticipateRequestPaymentType.CASH,
+        title: "Наличными на месте",
+        description: "Оплата при встрече на месте",
+        icon: <BanknoteIcon color={"var(--main-color)"}/>,
         disabled: true,
     },
     {
@@ -27,8 +27,6 @@ const PAYMENT_TYPES: IOption<EParticipateRequestPaymentType>[] = [
 ]
 
 const PaymentTypeSelect = () => {
-
-
     return <SelectField
         label={"Способ оплаты"}
         inputProps={{

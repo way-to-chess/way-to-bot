@@ -20,7 +20,9 @@ const EventLeague: FC<{ eventId: number, elIds: number[] }> = ({eventId, elIds =
     if (isFetching) {
         return "..."
     }
-
+    if ((event as AdminDTOEventGetOne)?.eventLeagues.length === 1) {
+        return (event as AdminDTOEventGetOne).name
+    }
 
     return (event as AdminDTOEventGetOne)?.eventLeagues.filter(({id}) => elIds.includes(id)).map(({name}) => name).join(", ")
 
@@ -33,7 +35,7 @@ const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandab
         return (
             <Flex vertical gap={20}>
                 {
-                    additionalUsers.map((user, index) => <Descriptions layout={"vertical"} key={index}
+                    additionalUsers.map((user, index) => <Descriptions key={index}
                                                                        title={`Участник ${index + 1}`}>
                             <Descriptions.Item label={"Имя"}>{user.firstName}</Descriptions.Item>
                             <Descriptions.Item label={"Фамилия"}>{user.lastName}</Descriptions.Item>
@@ -74,6 +76,13 @@ const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandab
                                     null
                             }
 
+                            {
+                                user.fideId ?
+                                    <Descriptions.Item
+                                        label={"FIDE ID"}>{user.fideId}</Descriptions.Item> :
+                                    null
+                            }
+
                             <Descriptions.Item label={"Турнир/Турниры"}>
                                 <EventLeague eventId={eventId} elIds={user.elIds}/>
                             </Descriptions.Item>
@@ -84,13 +93,15 @@ const EXPANDABLE_CONFIG: TableProps<AdminDTOParticipateRequestGetMany>["expandab
 
                             {paymentType === EParticipateRequestPaymentType.RECEIPT ? (
                                 <Descriptions.Item
-                                    label={"Подтверждение оплаты"}><Typography.Link
-                                    href={getPreviewSrc(receipt?.url)}
-                                    target={"_blank"}
-                                    rel="noreferrer"
-                                >
-                                    {"Показать файл"}
-                                </Typography.Link></Descriptions.Item>
+                                    label={"Подтверждение оплаты"}>
+                                    {receipt ? <Typography.Link
+                                        href={getPreviewSrc(receipt?.url)}
+                                        target={"_blank"}
+                                        rel="noreferrer"
+                                    >
+                                        {"Показать файл"}
+                                    </Typography.Link> : <Typography.Text type={"danger"}>Нет</Typography.Text>}
+                                </Descriptions.Item>
 
                             ) : null}
 
