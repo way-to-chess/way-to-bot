@@ -14,6 +14,7 @@ import { TgBotService } from "@way-to-bot/server/services/tg_bot/index";
 import { ParticipateRequestEntity } from "@way-to-bot/server/database/entities/participate-request.entity";
 import { EParticipateRequestStatus } from "@way-to-bot/shared/api/enums/EParticipateRequestStatus";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error";
+import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error";
 
 @injectable()
 export class AdminParticipateRequestService {
@@ -65,6 +66,7 @@ export class AdminParticipateRequestService {
         relations: { league: true },
         where: { eventId: updatedParticipateRequest.eventId },
       });
+      const allElForEventIds = allEventLeaguesForEvent.map((el) => el.id);
 
       const defaultEventLeague = allEventLeaguesForEvent.find(
         (l) => l.league.name === DEFAULT_LEAGUE_NAME,
@@ -85,6 +87,10 @@ export class AdminParticipateRequestService {
           : [defaultEventLeague.id];
 
         userJoiningLeagues.forEach((elId) => {
+          if (!allElForEventIds.includes(elId)) {
+            throw new BadRequestError(`League with id ${elId} not found in event`);
+          }
+
           const elu = new EventLeagueUserEntity();
           elu.eventLeagueId = elId;
           elu.userId = u.id;
@@ -152,5 +158,9 @@ export class AdminParticipateRequestService {
         logger.error(e);
       }
     });
+  }
+
+  async delete(id: number) {
+    return this._participateRequestRepository.delete(id);
   }
 }

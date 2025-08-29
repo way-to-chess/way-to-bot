@@ -23,3 +23,7 @@ AdminParticipateRequestRouter.patch(
   validatePayloadMddw(AdminSchemaParticipateRequestUpdate),
   (req, res) => adminParticipateRequestController.update(req, res),
 );
+
+AdminParticipateRequestRouter.delete("/:id", (req, res) =>
+  adminParticipateRequestController.delete(req, res),
+);

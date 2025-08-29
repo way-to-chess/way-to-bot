@@ -58,7 +58,7 @@ export class ClientUserService {
     const userByTgId =
       tgId &&
       (await this._userRepository.getOne({
-        where: { tgId: String(tgId) },
+        where: { tgId },
       }));
 
     if (userByTgId) {
@@ -79,9 +79,9 @@ export class ClientUserService {
 
     if (userByUsername) {
       if (!userByUsername.tgId && tgId) {
-        userByUsername.tgId = String(tgId);
+        userByUsername.tgId = tgId;
         await this._userRepository.update(userByUsername.id, {
-          tgId: String(tgId),
+          tgId,
         });
       }
 

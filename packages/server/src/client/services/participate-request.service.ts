@@ -7,6 +7,8 @@ import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicat
 import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error";
+import { EventRepository } from "@way-to-bot/server/database/repositories/event.repository";
+import { EEventStatus } from "@way-to-bot/shared/api/enums/EEventStatus";
 
 @injectable()
 export class ClientParticipateRequestService {
@@ -15,6 +17,8 @@ export class ClientParticipateRequestService {
     private readonly _participateRequestRepository: ParticipateRequestRepository,
     @inject(UserRepository)
     private readonly _userRepository: UserRepository,
+    @inject(EventRepository)
+    private readonly _eventRepository: EventRepository,
   ) {}
 
   async getMany(userId: number, options?: TCommonGetManyOptions) {
@@ -50,6 +54,19 @@ export class ClientParticipateRequestService {
     payload: TClientParticipateRequestCreatePayload,
     tgId: string,
   ) {
+    const event = await this._eventRepository.getOne({
+      where: { id: payload.eventId },
+      relations: { eventLeagues: true },
+    });
+
+    if (!event) {
+      throw new NotFoundError(`Event with id ${payload.eventId} not found`);
+    }
+
+    if (event.status !== EEventStatus.WAITING) {
+      throw new BadRequestError(`Registration is closed for this event`);
+    }
+
     let mainUserId: number | null = null; 
 
     const users = [...payload.additionalUsers].sort((a, b) => {

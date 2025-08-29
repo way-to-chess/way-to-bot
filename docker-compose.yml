@@ -44,6 +44,14 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+    command: >
+      sh -c "
+        ( while true; do 
+          sleep \$(( (\$(date -d '03:00 tomorrow' +%s) - \$(date +%s)) % 86400 ));
+          nginx -s reload;
+        done ) &
+        nginx -g 'daemon off;'
+      "
 
   nginx-log-cleaner:
     container_name: wtb_nginx_log_cleaner
@@ -68,10 +76,17 @@ services:
     volumes:
       - ./docker_data/certbot/www/:/var/www/certbot/:rw
       - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
-    entrypoint: |
+    entrypoint: >
       sh -c "
-        certbot certonly --webroot -w /var/www/certbot -d waytochess.site --email ignatmustafin77@gmail.com --agree-tos --non-interactive --keep-until-expiring &&
-        sleep 1d &&
-        exit 0
+        if [ ! -f /etc/letsencrypt/live/waytochess.site/fullchain.pem ]; then
+          certbot certonly --webroot -w /var/www/certbot \
+            -d waytochess.site \
+            --email ignatmustafin77@gmail.com \
+            --agree-tos --non-interactive --keep-until-expiring;
+        fi;
+        while true; do
+          certbot renew --webroot -w /var/www/certbot --quiet || true;
+          sleep 12h;
+        done
       "
-    restart: on-failure:3
+    restart: unless-stopped

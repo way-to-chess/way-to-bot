@@ -1,6 +1,7 @@
 import { inject, injectable } from "inversify";
 import { AdminParticipateRequestService } from "@way-to-bot/server/admin/services/participate-request.service";
 import {
+  AdminDTOParticipateRequestDeleteResponse,
   AdminDTOParticipateRequestGetMany,
   AdminDTOParticipateRequestGetManyResponse,
   AdminDTOParticipateRequestGetOne,
@@ -48,6 +49,12 @@ export class AdminParticipateRequestController {
     const data = new AdminDTOParticipateRequestGetOneResponse(
       new AdminDTOParticipateRequestGetOne(result),
     );
+    res.status(200).send(data);
+  }
+
+  async delete(req: Request, res: Response) {
+    const result = await this._participateRequestService.delete(+req.params.id!);
+    const data = new AdminDTOParticipateRequestDeleteResponse(result);
     res.status(200).send(data);
   }
 }

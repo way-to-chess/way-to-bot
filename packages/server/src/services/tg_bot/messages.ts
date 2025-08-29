@@ -96,10 +96,7 @@ export const botMessageNewEvent = (event: EventEntity): TBotMessage => {
 📅 <b>Когда:</b> ${date.format("DD MMMM YYYY, HH:mm")} (МСК)
 💰 <b>Стоимость:</b> ${event.price}
 📍 <b>Где:</b> <a href="${event.location?.url}">${event.location?.title}</a>
-
-📝 <b>О событии:</b>
-<i>${event.description}</i>
-
+${event.description ? `\n📝 <b>О событии:</b>\n<i>${event.description}</i>\n` : ""}
 🎯 <b>Успейте записаться!</b>`;
 
     return {
@@ -116,10 +113,7 @@ export const botMessageNotify = (event: EventEntity): TBotMessage => {
 
 📅 <b>Когда:</b> ${date.format("DD MMMM YYYY, HH:mm")} (МСК)
 📍 <b>Где:</b> <a href="${event.location?.url}">${event.location?.title}</a>
-
-📝 <b>О событии:</b>
-<i>${event.description}</i>
-
+${event.description ? `\n📝 <b>О событии:</b>\n<i>${event.description}</i>\n` : ""}
 🎯 <b>Ждём вас!</b>`;
 
     return {

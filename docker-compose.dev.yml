@@ -79,6 +79,14 @@ services:
       - ./docker_data/certbot/conf/:/etc/nginx/ssl/:ro
       - ./docker_data/nginx/logs:/var/log/nginx
     restart: on-failure:3
+    command: >
+      sh -c "
+        ( while true; do 
+          sleep \$(( (\$(date -d '03:00 tomorrow' +%s) - \$(date +%s)) % 86400 ));
+          nginx -s reload;
+        done ) &
+        nginx -g 'daemon off;'
+      "
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost/"]
       interval: 5s
@@ -109,13 +117,20 @@ services:
     volumes:
       - ./docker_data/certbot/www/:/var/www/certbot/:rw
       - ./docker_data/certbot/conf/:/etc/letsencrypt/:rw
-    entrypoint: |
+    entrypoint: >
       sh -c "
-        certbot certonly --webroot -w /var/www/certbot -d waytochess.space --email ignatmustafin77@gmail.com --agree-tos --non-interactive --keep-until-expiring &&
-        sleep 1d &&
-        exit 0
+        if [ ! -f /etc/letsencrypt/live/waytochess.space/fullchain.pem ]; then
+          certbot certonly --webroot -w /var/www/certbot \
+            -d waytochess.space \
+            --email ignatmustafin77@gmail.com \
+            --agree-tos --non-interactive --keep-until-expiring;
+        fi;
+        while true; do
+          certbot renew --webroot -w /var/www/certbot --quiet || true;
+          sleep 12h;
+        done
       "
-    restart: on-failure:3
+    restart: unless-stopped
 
 volumes:
   pg_data:
