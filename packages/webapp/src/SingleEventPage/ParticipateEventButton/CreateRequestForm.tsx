@@ -66,7 +66,7 @@ const CreateForm: FC<ICreateFormProps> = (
             })),
         })),
         defaultValues: {
-            paymentType: EParticipateRequestPaymentType.RECEIPT,
+            paymentType: EParticipateRequestPaymentType.CASH,
             eventId: Number(eventId),
             tgId,
             additionalUsers: [
@@ -103,6 +103,8 @@ const CreateForm: FC<ICreateFormProps> = (
             });
     };
 
+    console.log(form.formState.errors, 123)
+
     return <FormProvider {...form}>
         <form onSubmit={form.handleSubmit(send)} className={classes.form}>
             {
@@ -117,21 +119,21 @@ const CreateForm: FC<ICreateFormProps> = (
                 <AdditionalFields type={event?.type}/>
             </div>
 
-            <div className={classes.block}>
-                <PaymentTypeSelect/>
-            </div>
+            {/*<div className={classes.block}>*/}
+            {/*    <PaymentTypeSelect/>*/}
+            {/*</div>*/}
 
             <ReceiptInfo/>
 
-            <div className={clsx(classes.block, classes.total)}>
+            {/*<div className={clsx(classes.block, classes.total)}>*/}
 
-                <div className={classes.totalItem}>
-                    <Typography type={"title4"} value={"К оплате"}/>
-                    <Typography type={"title4"} value={event?.price}/>
-                </div>
+            {/*    <div className={classes.totalItem}>*/}
+            {/*        <Typography type={"title4"} value={"К оплате"}/>*/}
+            {/*        <Typography type={"title4"} value={event?.price}/>*/}
+            {/*    </div>*/}
 
-                <ReceiptInput/>
-            </div>
+            {/*    <ReceiptInput/>*/}
+            {/*</div>*/}
 
             <Button
                 className={classes.send}

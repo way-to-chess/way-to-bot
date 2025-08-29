@@ -2,6 +2,7 @@ import classes from "./ParticipateEventButton.module.css";
 import {useWatch} from "react-hook-form";
 import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 import {Typography} from "../../Typography/Typography";
+import {Button} from "../../Button/Button";
 
 const _ = (
     <>
@@ -68,11 +69,33 @@ const INFO_2 = (
     </>
 )
 
+const INFO_EZHA = (
+    <div className={classes.block}>
+        <div className={classes.total}>
+            <Typography type={"title4"} value={"Участие в турнире бесплатное, но проход на само мероприятие платный!"}/>
+
+            <Typography
+                type={"text2"}
+            >
+                {'Узнать стоймость и купить билет можно на официальном сайте '}
+                <a style={{color: "var(--main-color)", textDecoration: "underline"}}
+                   href={"https://vulitsaezha.by/ticket"}
+                   target={"_blank"}
+                   rel={"noopener noreferer"}>
+                    {"https://vulitsaezha.by/ticket"}
+                </a>
+            </Typography>
+        </div>
+
+    </div>
+)
+
+
 const ReceiptInfo = () => {
     const paymentType = useWatch({name: "paymentType"})
 
     if (paymentType !== EParticipateRequestPaymentType.RECEIPT) {
-        return null
+        return INFO_EZHA
     }
 
     return <div className={classes.block}>
