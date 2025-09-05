@@ -2,7 +2,6 @@ import classes from "./ParticipateEventButton.module.css";
 import {useWatch} from "react-hook-form";
 import {EParticipateRequestPaymentType} from "@way-to-bot/shared/api/enums/EParticipateRequestPaymentType";
 import {Typography} from "../../Typography/Typography";
-import {Button} from "../../Button/Button";
 
 const _ = (
     <>
@@ -95,7 +94,7 @@ const ReceiptInfo = () => {
     const paymentType = useWatch({name: "paymentType"})
 
     if (paymentType !== EParticipateRequestPaymentType.RECEIPT) {
-        return INFO_EZHA
+        return null
     }
 
     return <div className={classes.block}>
