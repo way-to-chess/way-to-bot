@@ -47,8 +47,7 @@ export class ClientParticipateRequestService {
   }
 
   async create(
-    payload: TClientParticipateRequestCreatePayload,
-    tgId: string,
+    payload: TClientParticipateRequestCreatePayload
   ) {
     let mainUserId: number | null = null; 
 
@@ -92,7 +91,7 @@ export class ClientParticipateRequestService {
         });
       }
 
-      if (user.tgId === tgId) {
+      if (user.tgId === payload.tgId) {
         mainUserId = user.id;
       }
 
