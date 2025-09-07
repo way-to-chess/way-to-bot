@@ -13,9 +13,9 @@ services:
     restart: on-failure:3
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/ping"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      interval: 60s
+      timeout: 2s
+      retries: 3
       start_period: 10s
     command: >
       sh -c "

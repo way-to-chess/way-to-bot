@@ -53,10 +53,10 @@ services:
       - ./docker_data/uploads:/app/docker_data/uploads
       - ./docker_data/api_logs:/app/docker_data/api_logs
     healthcheck:
-      test: ["CMD", "sh", "/app/health-check.sh"]
-      interval: 5s
-      timeout: 5s
-      retries: 10
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/ping"]
+      interval: 60s
+      timeout: 2s
+      retries: 3
       start_period: 10s
     command: >
       sh -c "

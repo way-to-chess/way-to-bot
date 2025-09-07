@@ -45,7 +45,6 @@ COPY --from=build-server /app/packages/server/package.json ./packages/server/
 COPY --from=build-server /app/packages/server/dist ./packages/server/dist
 COPY --from=build-server /app/packages/server/bin ./packages/server/bin
 COPY --from=build-server /app/packages/server/scripts ./packages/server/scripts
-COPY --from=build-server /app/packages/server/health-check.sh ./packages/server/health-check.sh
 
 RUN --mount=type=cache,target=/root/.pnpm-store \
     pnpm install --frozen-lockfile --prod
