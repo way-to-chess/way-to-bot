@@ -58,6 +58,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+      disable: true
     command: >
       sh -c "
         cd packages/server &&
@@ -93,6 +94,7 @@ services:
       timeout: 5s
       retries: 10
       start_period: 10s
+      disable: true
 
   nginx-log-cleaner:
     container_name: wtb_nginx_log_cleaner
