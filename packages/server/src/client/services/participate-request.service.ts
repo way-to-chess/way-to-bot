@@ -51,8 +51,7 @@ export class ClientParticipateRequestService {
   }
 
   async create(
-    payload: TClientParticipateRequestCreatePayload,
-    tgId: string,
+    payload: TClientParticipateRequestCreatePayload
   ) {
     const event = await this._eventRepository.getOne({
       where: { id: payload.eventId },
@@ -109,7 +108,7 @@ export class ClientParticipateRequestService {
         });
       }
 
-      if (user.tgId === tgId) {
+      if (user.tgId === payload.tgId) {
         mainUserId = user.id;
       }
 
