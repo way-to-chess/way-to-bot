@@ -53,7 +53,7 @@ services:
       - ./docker_data/uploads:/app/docker_data/uploads
       - ./docker_data/api_logs:/app/docker_data/api_logs
     healthcheck:
-      test: [["CMD", "sh", "/app/health-check.sh"]]
+      test: ["CMD", "sh", "/app/health-check.sh"]
       interval: 5s
       timeout: 5s
       retries: 10
