@@ -90,6 +90,37 @@ const INFO_EZHA = (
 )
 
 
+const DOUBLE_STRIKE_INFO = (
+    <>
+        <Typography type={"title4"} value={"Как оплатить"}/>
+        <Typography
+            type={"text2"}
+            value={
+                '«Двойной удар» УНП 193891945'
+            }
+        />
+        <Typography
+            type={"text2"}
+            value={
+                ' BY53 ALFA 3012 2H31 0200 1027 0000'
+            }
+        />
+        <Typography
+            type={"text2"}
+            value={
+                'Наименование платежа: турнирный взнос.'
+            }
+        />
+        <Typography
+            type={"text2"}
+            value={
+                'После оплаты, сохраните чек и отправьте его с помощью кнопки "Загрузить документ".'
+            }
+        />
+    </>
+)
+
+
 const ReceiptInfo = () => {
     const paymentType = useWatch({name: "paymentType"})
 
@@ -99,7 +130,7 @@ const ReceiptInfo = () => {
 
     return <div className={classes.block}>
         <div className={classes.total}>
-            {INFO_2}
+            {DOUBLE_STRIKE_INFO}
         </div>
     </div>
 }

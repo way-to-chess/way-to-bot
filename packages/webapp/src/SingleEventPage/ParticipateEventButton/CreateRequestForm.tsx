@@ -31,6 +31,12 @@ import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
+const EVENT_IDS_WITH_CASH = [
+    "56",
+    "57",
+    "58"
+]
+
 interface IWithEventId {
     eventId: string;
 }
@@ -58,6 +64,10 @@ const CreateForm: FC<ICreateFormProps> = (
 
     const validationExtension = event?.type === EEventType.CHESS ? VALIDATION_EXTENSION : {}
 
+    const paymentType = EVENT_IDS_WITH_CASH.includes(eventId) ?
+        EParticipateRequestPaymentType.CASH :
+        EParticipateRequestPaymentType.RECEIPT
+
     const form = useForm({
         resolver: zodResolver(ClientSchemaParticipateRequestCreate.extend({
             additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend({
@@ -66,7 +76,7 @@ const CreateForm: FC<ICreateFormProps> = (
             })),
         })),
         defaultValues: {
-            paymentType: EParticipateRequestPaymentType.CASH,
+            paymentType,
             eventId: Number(eventId),
             tgId,
             additionalUsers: [
@@ -120,7 +130,7 @@ const CreateForm: FC<ICreateFormProps> = (
             </div>
 
             <div className={classes.block}>
-                <PaymentTypeSelect/>
+                <PaymentTypeSelect availableType={paymentType}/>
             </div>
 
             <ReceiptInfo/>
