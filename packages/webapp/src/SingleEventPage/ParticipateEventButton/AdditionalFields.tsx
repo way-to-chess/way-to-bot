@@ -10,7 +10,7 @@ const LEVELS = ["Без разряда", "4 разряд", "3 разряд", "2 
 const LEVEL_OPTIONS: IOption<string>[] = LEVELS.map((level) => ({title: level, value: level}))
 
 const VALIDATION_EXTENSION = {
-    // phoneNumber: z.templateLiteral([z.enum(["25", "29", "33", "44"]), z.string().length(7)]),
+    phoneNumber: z.templateLiteral([z.enum(["25", "29", "33", "44"]), z.string().length(7)]),
     level: z.enum(LEVELS),
 }
 
@@ -47,11 +47,11 @@ const AdditionalFields: FC<Partial<Pick<ClientDTOEventGetOne, "type">>> = ({type
             {/*<TextField label={"FIDE ID (ecли есть)"}*/}
             {/*           inputProps={{placeholder: "Введите ID", type: "text", enterKeyHint: "next"}}*/}
             {/*           controllerProps={{name: "additionalUsers[0].fideId"}}/>*/}
-            {/*<TextField label={"Номер телефона"}*/}
-            {/*           inputProps={{placeholder: "Введите номер телефона", type: "tel", enterKeyHint: "next"}}*/}
-            {/*           controllerProps={{name: "additionalUsers[0].phoneNumber"}}*/}
-            {/*           description={"9 цифр номера телефона в формате: 29XXXXXXX, 33XXXXXXX, 25XXXXXXX, 44XXXXXXX"}*/}
-            {/*           required/>*/}
+            <TextField label={"Номер телефона"}
+                       inputProps={{placeholder: "Введите номер телефона", type: "tel", enterKeyHint: "next"}}
+                       controllerProps={{name: "additionalUsers[0].phoneNumber"}}
+                       description={"9 цифр номера телефона в формате: 29XXXXXXX, 33XXXXXXX, 25XXXXXXX, 44XXXXXXX"}
+                       required/>
         </>
     }
 

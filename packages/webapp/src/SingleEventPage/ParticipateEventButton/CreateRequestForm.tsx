@@ -68,12 +68,15 @@ const CreateForm: FC<ICreateFormProps> = (
         EParticipateRequestPaymentType.CASH :
         EParticipateRequestPaymentType.RECEIPT
 
+    const fileIdValidation = paymentType === EParticipateRequestPaymentType.RECEIPT ? z.number() : z.number().optional().nullable()
+
     const form = useForm({
         resolver: zodResolver(ClientSchemaParticipateRequestCreate.extend({
             additionalUsers: z.array(ClientSchemaParticipateRequestAdditionalUserSchema.extend({
                 ...validationExtension,
                 elIds: z.array(z.number()).min(hasEventLeagues ? 1 : 0),
             })),
+            fileId: fileIdValidation,
         })),
         defaultValues: {
             paymentType,
