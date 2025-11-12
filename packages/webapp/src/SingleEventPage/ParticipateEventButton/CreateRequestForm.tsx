@@ -31,10 +31,8 @@ import {authApi} from "@way-to-bot/shared/redux/authApi";
 import {zodResolver} from "@hookform/resolvers/zod";
 import {EEventType} from "@way-to-bot/shared/api/enums/EEventType";
 
-const EVENT_IDS_WITH_CASH = [
-    "56",
-    "57",
-    "58"
+const EVENT_IDS_WITH_RECEIPT = [
+    "59"
 ]
 
 interface IWithEventId {
@@ -64,9 +62,10 @@ const CreateForm: FC<ICreateFormProps> = (
 
     const validationExtension = event?.type === EEventType.CHESS ? VALIDATION_EXTENSION : {}
 
-    const paymentType = EVENT_IDS_WITH_CASH.includes(eventId) ?
-        EParticipateRequestPaymentType.CASH :
-        EParticipateRequestPaymentType.RECEIPT
+    const paymentType = EVENT_IDS_WITH_RECEIPT.includes(eventId) ?
+        EParticipateRequestPaymentType.RECEIPT :
+        EParticipateRequestPaymentType.CASH
+
 
     const fileIdValidation = paymentType === EParticipateRequestPaymentType.RECEIPT ? z.number() : z.number().optional().nullable()
 
