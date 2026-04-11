@@ -1,4 +1,5 @@
 import { inject, injectable } from "inversify";
+import { FindOptionsWhere } from "typeorm";
 import { ParticipateRequestRepository } from "@way-to-bot/server/database/repositories/participate-request.repository";
 import { TClientParticipateRequestCreatePayload } from "@way-to-bot/shared/api/zod/client/participate-request.schema";
 import { NotFoundError } from "@way-to-bot/server/common/errors/not-found.error";
@@ -7,6 +8,7 @@ import { EOperandPredicate } from "@way-to-bot/shared/api/enums/EOperandPredicat
 import { EPredicate } from "@way-to-bot/shared/api/enums/EPredicate";
 import { UserRepository } from "@way-to-bot/server/database/repositories/user.repository";
 import { BadRequestError } from "@way-to-bot/server/common/errors/bad-request.error";
+import { UserEntity } from "@way-to-bot/server/database/entities/user.entity";
 
 @injectable()
 export class ClientParticipateRequestService {
@@ -62,21 +64,34 @@ export class ClientParticipateRequestService {
         (x) => x === u,
       );
 
-      let user = await this._userRepository.getOne({
-        where: [
-          { id: u.id },
-          { tgId: u.tgId },
-          ...(u.username ? [{ username: u.username }] : []),
-          ...(u.email ? [{ email: u.email }] : []),
-          ...(u.phoneNumber ? [{ phoneNumber: u.phoneNumber }] : []),
-        ],
-        relations: undefined,
-      });
+      const orConditions: FindOptionsWhere<UserEntity>[] = [];
+      if (u.id !== undefined && u.id !== null) {
+        orConditions.push({ id: u.id });
+      }
+      if (u.tgId) {
+        orConditions.push({ tgId: u.tgId });
+      }
+      if (u.username) {
+        orConditions.push({ username: u.username });
+      }
+      if (u.email) {
+        orConditions.push({ email: u.email });
+      }
+      if (u.phoneNumber) {
+        orConditions.push({ phoneNumber: u.phoneNumber });
+      }
+
+      let user =
+        orConditions.length > 0
+          ? await this._userRepository.getOne({
+              where: orConditions,
+              relations: undefined,
+            })
+          : null;
 
       if (!user) {
-        user = await this._userRepository.create({
-          ...u,
-        });
+        const { elIds, id, ...createPayload } = u;
+        user = await this._userRepository.create(createPayload);
         if (!user) {
           throw new NotFoundError(`User was not created`);
         }
@@ -97,6 +112,16 @@ export class ClientParticipateRequestService {
 
       if (index !== -1) {
         payload.additionalUsers[index]!.id = user.id;
+      }
+    }
+
+    if (!mainUserId && payload.tgId) {
+      const mainUser = await this._userRepository.getOne({
+        where: { tgId: payload.tgId },
+        relations: undefined,
+      });
+      if (mainUser) {
+        mainUserId = mainUser.id;
       }
     }
 
