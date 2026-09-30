@@ -46,15 +46,6 @@ services:
       start_period: 10s
     command: >
       sh -c "
-        ( last=;
-          while true; do
-            cur=\$(readlink -f /etc/nginx/ssl/live/waytochess.site/fullchain.pem 2>/dev/null || true);
-            if [ -n \"\$cur\" ] && [ \"\$cur\" != \"\$last\" ]; then
-              if [ -n \"\$last\" ]; then nginx -s reload || true; fi;
-              last=\$cur;
-            fi;
-            sleep 60;
-          done ) &
         ( while true; do
             sleep \$(( (\$(date -d '03:00 tomorrow' +%s) - \$(date +%s)) % 86400 ));
             nginx -s reload;
