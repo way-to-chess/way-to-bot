@@ -120,20 +120,25 @@ jobs:
 
             if [ "$ENV" = "prod" ]; then
               docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate certbot || true
-              echo "Waiting for certificate names..."
+              echo "Waiting until HTTPS certificate is served for api, tg and admin..."
               cert_ready=0
-              for _ in $(seq 1 24); do
-                san=$(openssl x509 -in ./docker_data/certbot/conf/live/waytochess.site/fullchain.pem -noout -ext subjectAltName 2>/dev/null || true)
-                if echo "$san" | grep -q 'api.waytochess.site' && echo "$san" | grep -q 'tg.waytochess.site' && echo "$san" | grep -q 'admin.waytochess.site'; then
-                  docker exec wtb_web nginx -s reload || true
+              for _ in $(seq 1 30); do
+                docker exec wtb_web nginx -s reload || true
+                if curl -fsS --max-time 8 --resolve "api.waytochess.site:443:127.0.0.1" "https://api.waytochess.site/api/ping" -o /dev/null \
+                  && curl -fsS --max-time 8 --resolve "tg.waytochess.site:443:127.0.0.1" "https://tg.waytochess.site/" -o /dev/null \
+                  && curl -fsS --max-time 8 --resolve "admin.waytochess.site:443:127.0.0.1" "https://admin.waytochess.site/admin/" -o /dev/null; then
                   cert_ready=1
                   break
                 fi
                 sleep 10
               done
               if [ "$cert_ready" != 1 ]; then
-                echo "Certificate is missing api, tg or admin name"
-                docker logs --tail 80 wtb_certbot || true
+                echo "HTTPS is not ready: certificate is still not served for the new names"
+                echo "=== certificate on disk ==="
+                openssl x509 -in ./docker_data/certbot/conf/live/waytochess.site/fullchain.pem -noout -ext subjectAltName || true
+                echo "=== wtb_certbot logs ==="
+                docker logs --tail 120 wtb_certbot || true
+                exit 1
               fi
             fi
 
