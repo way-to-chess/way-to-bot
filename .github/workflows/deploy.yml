@@ -118,23 +118,48 @@ jobs:
 
             deploy_services
 
-            # HTTP checks against domain
             if [ "$ENV" = "prod" ]; then
-              HOST=waytochess.site
-            else
-              HOST=waytochess.space
+              docker compose -f "$DOCKER_COMPOSE_FILE" up -d --no-deps --force-recreate certbot || true
+              echo "Waiting for certificate names..."
+              cert_ready=0
+              for _ in $(seq 1 24); do
+                san=$(openssl x509 -in ./docker_data/certbot/conf/live/waytochess.site/fullchain.pem -noout -ext subjectAltName 2>/dev/null || true)
+                if echo "$san" | grep -q 'api.waytochess.site' && echo "$san" | grep -q 'tg.waytochess.site' && echo "$san" | grep -q 'admin.waytochess.site'; then
+                  docker exec wtb_web nginx -s reload || true
+                  cert_ready=1
+                  break
+                fi
+                sleep 10
+              done
+              if [ "$cert_ready" != 1 ]; then
+                echo "Certificate is missing api, tg or admin name"
+                docker logs --tail 80 wtb_certbot || true
+              fi
             fi
 
             curl_host() {
               curl -fsS --max-time 8 --retry 3 --retry-delay 1 \
-                --resolve "$HOST:443:127.0.0.1" "https://$HOST$1" -o /dev/null
+                --resolve "$1:443:127.0.0.1" "https://$1$2" -o /dev/null
             }
 
+            if [ "$ENV" = "prod" ]; then
+              API_HOST=api.waytochess.site
+              WEB_HOST=tg.waytochess.site
+              ADMIN_HOST=admin.waytochess.site
+            else
+              API_HOST=waytochess.space
+              WEB_HOST=waytochess.space
+              ADMIN_HOST=waytochess.space
+            fi
+
             if [ "$COMPONENT" = "server" ] || [ "$COMPONENT" = "all" ]; then
-              curl_host "/api/ping" || { echo "Server ping failed"; echo "=== wtb_server logs (last 200 lines) ==="; docker logs --tail 200 wtb_server || true; echo "========================================"; rollback; exit 1; }
+              curl_host "$API_HOST" "/api/ping" || { echo "Server ping failed"; echo "=== wtb_server logs (last 200 lines) ==="; docker logs --tail 200 wtb_server || true; echo "========================================"; rollback; exit 1; }
             fi
             if [ "$COMPONENT" = "web" ] || [ "$COMPONENT" = "all" ]; then
-              curl_host "/" || { echo "Web root check failed"; rollback; exit 1; }
+              curl_host "$WEB_HOST" "/" || { echo "Web root check failed"; rollback; exit 1; }
+              if [ "$ENV" = "prod" ]; then
+                curl_host "$ADMIN_HOST" "/admin/" || { echo "Admin check failed"; rollback; exit 1; }
+              fi
             fi
 
             echo "=== Containers Status ==="
